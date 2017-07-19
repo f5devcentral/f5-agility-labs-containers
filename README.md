@@ -9,6 +9,6 @@ The purpose of this lab is to give you more visibility on
 
 We consider that you have access to the internet to perform this lab. If not, you may review the pre-requisites about our lab setup .
 
-The lab guide is hosted here: http://101-lab-kubernetes-agility17.readthedocs.io
+The lab guide is hosted here: http://f5-agility-labs-kubernetes.readthedocs.io/en/latest/
 
 We also have the option to use a script to automatically deploy the F5 solutions
