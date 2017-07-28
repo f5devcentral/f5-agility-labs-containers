@@ -5,10 +5,10 @@
 # ------------
 #
 # REQUIRED: Your class/lab name
-classname = "F5 Solutions for Kubernetes"
+classname = "F5 Solutions for Container Infrastructures"
 
 # OPTIONAL: The URL to the GitHub Repository for this class
-github_repo = "https://github.com/f5devcentral/f5-agility-labs-kubernetes"
+github_repo = "https://github.com/f5devcentral/f5-agility-labs-containers"
 
 # OPTIONAL: Google Analytics
 # googleanalytics_id = 'UA-85156643-4'

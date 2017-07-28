@@ -1,5 +1,5 @@
-Class - |classname|
-===================
+Class 1: F5 101 Kubernetes
+==========================
 
 .. toctree::
    :maxdepth: 1
