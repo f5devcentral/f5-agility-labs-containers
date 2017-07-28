@@ -1,4 +1,4 @@
-#Introduction to F5 solution for Kubernetes
+# Introduction to F5 solution for Kubernetes
 
 The purpose of this lab is to give you more visibility on
 
@@ -9,6 +9,6 @@ The purpose of this lab is to give you more visibility on
 
 We consider that you have access to the internet to perform this lab. If not, you may review the pre-requisites about our lab setup .
 
-The lab guide is hosted here: http://f5-agility-labs-kubernetes.readthedocs.io/en/latest/
+The lab guide is hosted here: http://f5-agility-labs-containers.readthedocs.io/en/latest/
 
 We also have the option to use a script to automatically deploy the F5 solutions
