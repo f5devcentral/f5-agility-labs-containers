@@ -23,7 +23,7 @@ The purpose of these labs is to give you better understanding of...
 - RedHat OpenShift Enterprise
 
   - Understanding the relationship between RedHat Openshift Router and BIG-IP
-  - How to launch applications node members and auto-scale to the BIG-IP via the Container Connecot
+  - How to launch applications node members and auto-scale to the BIG-IP via the Container Connector
 
 
 .. toctree::
