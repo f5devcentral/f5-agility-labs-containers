@@ -34,3 +34,4 @@ The purpose of these labs is to give you better understanding of...
 
    class1/*
    class2/*
+   class3/*
