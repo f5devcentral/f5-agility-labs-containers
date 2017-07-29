@@ -22,6 +22,8 @@ You need to setup a partition that will be used by F5 Container Connector.
 
 To do so go to : System > Users > Partition List. Create a new partition called "kubernetes"
 
+(enter the name "kubernetes" and take all the default settings and click Finished)
+
 .. image:: /_static/f5-container-connector-bigip-partition-setup.png
 	 :align: center
 
@@ -34,7 +36,9 @@ Here we consider you have already retrieved the F5 container connector image and
 
 .. NOTE::
 
-   If you haven't loaded it in your environment, you have two choices :
+   Because we have already loaded docker images for this environment, this can be skipped.
+
+   Normally if you haven't loaded it in your environment, you have a few choices to load the images i.e.:
 
    #. load it on **all your systems** with the docker load -i <file_name.tar>
    #. load it on a system and push it into your registry
@@ -45,11 +49,22 @@ On the **master** , we need to setup a deployment file to load our container and
 
 .. NOTE::
 
-	 You can access it by running PUTTY in the RDP session, a session is already setup there
+   Utilizing a wrapper called MRemoteNG for Putty and other services.
+   MRNG hold credentials and allows for multiple protocols (i.e. SSH, RDP, etc.), makes jumping in and out of SSH connections easier
 
-	 .. image:: /_static/f5-container-connector-launch-ssh.png
-	  	:align: center
-	  	:scale: 50%
+   On your desktop select **MRemoteNG**, once launched you'll see a few tabs similar to the example below, please open up Kubernetes tab
+
+   .. image:: /_static/MRemoteNG2.png
+ 	  	:align: center
+ 	  	:scale: 100%
+
+
+   Select the **"KUBERNETES-CLUSTER and K8s Master** and double click to connect"
+
+
+   .. image:: /_static/MRemoteNG1.png
+      :align: center
+      :scale: 100%
 
 To setup the secret containing your BIG-IP login and password, you can run the following command:
 
@@ -64,6 +79,8 @@ you should see something like this:
 
 
 create a file called ``f5-cc-deployment.yaml``. Here is its content: ---> Please use the file in /home/ubuntu/f5-demo
+
+If you're not used to using Linux/Unix, please ask for help and we'll come over and show you how to create and edit files in the CLI
 
 .. code-block:: yaml
 
@@ -108,7 +125,7 @@ create a file called ``f5-cc-deployment.yaml``. Here is its content: ---> Please
 
 .. NOTE::
 
-   You can use the templates on your jumpbox desktop or the Kubernetes Master under /honme/ubuntu/f5-demo. If you use those files, you'll need to :
+   You can use the templates on your jumpbox desktop or the Kubernetes Master under /home/ubuntu/f5-demo. If you use those files, you'll need to :
 
 	 * check the container image path in the deployment file is accurate
 	 * Update the "bindAddr" in the configMap for an IP you want to use in this blueprint.
