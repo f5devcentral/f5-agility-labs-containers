@@ -54,6 +54,7 @@ Contents:
    f5-asp-and-controller/f5-asp-and-controller-installation.rst
    f5-asp-and-controller/f5-asp-and-controller-usage.rst
    f5-asp-and-controller/f5-asp-and-controller-asp-review.rst
+   f5-asp-and-controller/f5-asp-and-controller-final.rst
 
 .. toctree::
    :maxdepth: 2
@@ -81,5 +82,3 @@ Contents:
 
    setup-mesos-dns/setup-mesos-dns.rst
    setup-mesos-dns/test-mesos-dns.rst
-
-
