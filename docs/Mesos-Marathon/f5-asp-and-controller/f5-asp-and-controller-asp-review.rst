@@ -151,9 +151,3 @@ Here you can see that we got two SRV records for our DNS name asp-my-backend. If
 	;; MSG SIZE  rcvd: 72
 
 So by leveraging the SRV records, we can avoid facing port restrictions
-
-
-End of Mesos Marathon lab
--------------------------
-
-The items starting at 2.11 and beyond is the steps required to build out this lab manually in your own environment for installing Mesos, Mesos-DNS, Marathon, Zookeeper, etc.  You are welcome to review these steps at any time to build your own environment.
