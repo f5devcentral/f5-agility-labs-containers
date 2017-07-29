@@ -23,7 +23,7 @@ To deploy ASP, we will need to add the following configuration to our Kubernetes
 
 To setup those components, connect to the **master** and do the following:
 
-create a yaml file called *f5-asp-configmap.yaml* and here is the content to copy/paste into it.  ---> Please use the file in /home/ubuntu/f5-demo
+create a yaml file called ``f5-asp-configmap.yaml`` and here is the content to copy/paste into it.  ---> Please use the file in /home/ubuntu/f5-demo
 
 ::
 
@@ -48,7 +48,7 @@ create a yaml file called *f5-asp-configmap.yaml* and here is the content to cop
 
 
 
-After the configmap file, we can setup the daemonset file. Create a file called *f5-asp-daemonset.yaml* and here is the content to copy/paste into it.  ---> Please use the file in /home/ubuntu/f5-demo
+After the configmap file, we can setup the daemonset file. Create a file called ``f5-asp-daemonset.yaml`` and here is the content to copy/paste into it.  ---> Please use the file in /home/ubuntu/f5-demo
 
 ::
 
@@ -126,13 +126,13 @@ It should launch a VI editor, save the configuration with the following command 
 
 	:w /tmp/kube-proxy-origin.yaml
 
-Exit the VI editor with 
+Exit the VI editor with
 
 ::
 
 	:q
 
-Now, we can create our new daemonset to launch the F5-kube-proxy. create a new deamonset yaml called *f5-kube-proxy-ds.yaml*
+Now, we can create our new daemonset to launch the F5-kube-proxy. create a new deamonset yaml called ``f5-kube-proxy-ds.yaml``
 
 ::
 
@@ -232,9 +232,8 @@ You can check that the kube-proxy instances have been removed from Kubernetes wi
 ::
 
 	kubectl get pods -n kube-system
-	
-or 
 
+or
 
 ::
 
@@ -243,7 +242,7 @@ or
 .. image:: /_static/f5-asp-and-kube-proxy-delete-origin-kube-proxy.png
 	:align:	center
 
-Note that the entries starting with "kube-proxy-" in the table. 
+Note that the entries starting with "kube-proxy-" in the table.
 
 We can deploy the updated daemonset:
 
