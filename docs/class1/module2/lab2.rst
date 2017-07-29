@@ -16,7 +16,7 @@ App Deployment
 
 On the **master** we will create all the required files:
 
-Create a file called my-frontend-deployment.yaml: ---> Please use the file in /home/ubuntu/f5-demo
+Create a file called ``my-frontend-deployment.yaml``  ---> Please use the file in /home/ubuntu/f5-demo
 
 ::
 
@@ -44,7 +44,7 @@ Create a file called my-frontend-deployment.yaml: ---> Please use the file in /h
 	        - containerPort: 80
 	          protocol: TCP
 
-Create a file called my-frontend-configmap.yaml:    ---> Please use the file in /home/ubuntu/f5-demo
+Create a file called ``my-frontend-configmap.yaml``  ---> Please use the file in /home/ubuntu/f5-demo
 
 ::
 
@@ -76,7 +76,7 @@ Create a file called my-frontend-configmap.yaml:    ---> Please use the file in 
 	      }
 	    }
 
-Create a file called my-frontend-service.yaml:   ---> Please use the file in /home/ubuntu/f5-demo
+Create a file called ``my-frontend-service.yaml``   ---> Please use the file in /home/ubuntu/f5-demo
 
 ::
 
@@ -137,10 +137,12 @@ Now that we have deployed our application sucessfully, we can check our BIG-IP c
 .. image:: /_static/f5-container-connector-check-app-bigipconfig.png
 	:align: center
 
+Look at the Pool_list to see the Pool members
+Local Traffic -> Pools -> "default_my_frontend" -> Members
+
 .. image:: /_static/f5-container-connector-check-app-bigipconfig2.png
 	:align: center
 	:scale: 50%
-
 
 Here you can see that the pool members listed are all the kubernetes nodes.
 
@@ -156,6 +158,7 @@ Hit Refresh many times and go to your **BIG-IP** UI, go to Local Traffic > Pools
    :align: center
    :scale: 50%
 
+
 How is traffic forwarded in Kubernetes from the <node IP>:32402 to the <container IP>:80 ? This is done via iptables that is managed via the kube-proxy instances:
 
 On **any nodes** (master/nodes), run the following command:
@@ -169,4 +172,3 @@ This will list the different iptables rules that were created regarding our fron
 .. image:: /_static/f5-container-connector-list-frontend-iptables.png
    :align: center
    :scale: 50%
-

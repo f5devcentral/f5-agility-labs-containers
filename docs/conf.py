@@ -5,7 +5,7 @@
 # ------------
 #
 # REQUIRED: Your class/lab name
-classname = "F5 Solutions for Container Infrastructures"
+classname = "F5 Solutions for Containers"
 
 # OPTIONAL: The URL to the GitHub Repository for this class
 github_repo = "https://github.com/f5devcentral/f5-agility-labs-containers"
@@ -256,6 +256,4 @@ texinfo_documents = [
      author, classname, classname,
      'Training'),
 ]
-
-
 
