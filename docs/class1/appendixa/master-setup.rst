@@ -21,7 +21,7 @@ Here we specify:
 
 When running the command you should see something like this:
 
-.. image:: /_static/cluster-setup-guide-kubeadm-init-master.png
+.. image:: /_static/class1/cluster-setup-guide-kubeadm-init-master.png
 	:align: center
 
 The initialization is successful if you see "Kubernetes master initialised successfully!"
@@ -45,7 +45,7 @@ You can monitor that the services start to run by using the command:
 
 	kubectl get pods --all-namespaces
 
-.. image:: /_static/cluster-setup-guide-kubeadmin-init-check.png
+.. image:: /_static/class1/cluster-setup-guide-kubeadmin-init-check.png
 	:align: center
 
 kube-dns won't start until the network pod is setup.
@@ -112,7 +112,7 @@ If everything runs as expected you should have kube-dns that started successfull
 
 The output should show all services as running
 
-.. image:: /_static/cluster-setup-guide-kubeadmin-init-check-cluster-get-pods.png
+.. image:: /_static/class1/cluster-setup-guide-kubeadmin-init-check-cluster-get-pods.png
 	:align: center
 
 
@@ -123,7 +123,7 @@ kubectl get pods --all-namespaces
 
 	kubectl get cs
 
-.. image:: /_static/cluster-setup-guide-kubeadmin-init-check-cluster.png
+.. image:: /_static/class1/cluster-setup-guide-kubeadmin-init-check-cluster.png
 	:align: center
 
 
@@ -131,7 +131,7 @@ kubectl get pods --all-namespaces
 
 	kubectl cluster-info
 
-.. image:: /_static/cluster-setup-guide-kubeadmin-init-check-cluster-info.png
+.. image:: /_static/class1/cluster-setup-guide-kubeadmin-init-check-cluster-info.png
 	:align: center
 
 The next step will be to have our *nodes* join the *master*

@@ -106,7 +106,7 @@ We can now launch our application :
 	kubectl create -f my-frontend-configmap.yaml
 
 
-.. image:: /_static/f5-container-connector-launch-app.png
+.. image:: /_static/class1/f5-container-connector-launch-app.png
 	:align: center
 
 
@@ -118,7 +118,7 @@ to check the status of our deployment, you can run the following commands:
 
 	kubectl describe svc -n default
 
-.. image:: /_static/f5-container-connector-check-app-definition.png
+.. image:: /_static/class1/f5-container-connector-check-app-definition.png
 	:align: center
 	:scale: 50%
 
@@ -134,13 +134,13 @@ Now that we have deployed our application sucessfully, we can check our BIG-IP c
    Don't forget to select the "kubernetes" partition or you'll see nothing
 
 
-.. image:: /_static/f5-container-connector-check-app-bigipconfig.png
+.. image:: /_static/class1/f5-container-connector-check-app-bigipconfig.png
 	:align: center
 
 Look at the Pool_list to see the Pool members
 Local Traffic -> Pools -> "default_my_frontend" -> Members
 
-.. image:: /_static/f5-container-connector-check-app-bigipconfig2.png
+.. image:: /_static/class1/f5-container-connector-check-app-bigipconfig2.png
 	:align: center
 	:scale: 50%
 
@@ -148,13 +148,13 @@ Here you can see that the pool members listed are all the kubernetes nodes.
 
 Now you can try to access your application via your BIG-IP VIP: 10.1.10.81 :
 
-.. image:: /_static/f5-container-connector-access-app.png
+.. image:: /_static/class1/f5-container-connector-access-app.png
 	:align: center
 	:scale: 50%
 
 Hit Refresh many times and go to your **BIG-IP** UI, go to Local Traffic > Pools > Pool list > my-frontend_10.1.10.81_80 > Statistics to see that traffic is distributed as expected
 
-.. image:: /_static/f5-container-connector-check-app-bigip-stats.png
+.. image:: /_static/class1/f5-container-connector-check-app-bigip-stats.png
    :align: center
    :scale: 50%
 
@@ -169,6 +169,6 @@ On **any nodes** (master/nodes), run the following command:
 
 This will list the different iptables rules that were created regarding our frontend service.
 
-.. image:: /_static/f5-container-connector-list-frontend-iptables.png
+.. image:: /_static/class1/f5-container-connector-list-frontend-iptables.png
    :align: center
    :scale: 50%

@@ -16,7 +16,7 @@ to join the master we need to run the command highlighted during the master init
 
 the output should be like this :
 
-.. image:: /_static/cluster-setup-guide-node-setup-join-master.png
+.. image:: /_static/class1/cluster-setup-guide-node-setup-join-master.png
 	:align: center
 
 
@@ -28,7 +28,7 @@ to make sure that your *nodes* have joined, you can run this command on the *mas
 
 You should see your cluster (ie *master* + *nodes*)
 
-.. image:: /_static/cluster-setup-guide-node-setup-check-nodes.png
+.. image:: /_static/class1/cluster-setup-guide-node-setup-check-nodes.png
 	:align: center
 
 
@@ -38,14 +38,14 @@ Check that all the services are started as expected (run on the **master**):
 
 	kubectl get pods --all-namespaces
 
-.. image:: /_static/cluster-setup-guide-node-setup-check-services.png
+.. image:: /_static/class1/cluster-setup-guide-node-setup-check-services.png
 	:align: center
 
 Here we see that some weave net containers keep restarting. This is due to our multi nic setup. Check this link: `Deploying Kubernetes 1.4 on Ubuntu Xenial with Kubeadm <https://dickingwithdocker.com/deploying-kubernetes-1-4-on-ubuntu-xenial-with-kubeadm/>`_
 
 You can validate this by connecting to a node and check the logs for the relevant container
 
-.. image:: /_static/cluster-setup-guide-node-setup-crash-weave.png
+.. image:: /_static/class1/cluster-setup-guide-node-setup-crash-weave.png
 	:align: center
 
 to fix this, you need to run the following command on the **master**:
@@ -56,7 +56,7 @@ to fix this, you need to run the following command on the **master**:
 
 	kubectl -n kube-system get ds -l 'component=kube-proxy' -o json | jq '.items[0].spec.template.spec.containers[0].command |= .+ ["--cluster-cidr=10.32.0.0/12"]' | kubectl apply -f - && kubectl -n kube-system delete pods -l 'component=kube-proxy'
 
-.. image:: /_static/cluster-setup-guide-node-setup-crash-weave-fix.png
+.. image:: /_static/class1/cluster-setup-guide-node-setup-crash-weave-fix.png
 	:align: center
 	:scale: 50%
 
@@ -66,7 +66,7 @@ Once this is done, you may check that everything is in a stable "Running" state:
 
 	kubectl get pods --all-namespaces
 
-.. image:: /_static/cluster-setup-guide-node-setup-check-all-ok.png
+.. image:: /_static/class1/cluster-setup-guide-node-setup-check-all-ok.png
 	:align: center
 
 If you want to enable Kubernetes UI, you may install the dashboard. Run the following command on the **master**
@@ -107,13 +107,13 @@ to access the dashboard, you need to see on which port it is listening. You can 
 
 	kubectl describe svc kubernetes-dashboard -n kube-system
 
-.. image:: /_static/cluster-setup-guide-check-port-ui.png
+.. image:: /_static/class1/cluster-setup-guide-check-port-ui.png
 	:align: center
 
 Here we can see that it is listening on port: 31578 (NodePort)
 
 We can now access the dashboard by connecting to the following uri http://<master IP>:31578
 
-.. image:: /_static/cluster-setup-guide-access-ui.png
+.. image:: /_static/class1/cluster-setup-guide-access-ui.png
 	:align: center
 	:scale: 50%
