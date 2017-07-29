@@ -1,5 +1,8 @@
-Lab - Mesos / Marathon
-==================================================
+Welcome to F5 Agility 2017 Mesos Marathon 101 Lab documentation!
+================================================================
+
+Introduction
+============
 
 The purpose of this lab is to give you more visibility on
 
@@ -82,3 +85,4 @@ Contents:
 
    setup-mesos-dns/setup-mesos-dns.rst
    setup-mesos-dns/test-mesos-dns.rst
+

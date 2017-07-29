@@ -9,7 +9,7 @@ The F5 Marathon ASP Controller instance has been deployed. Now we need to test o
 
   Make sure that mesos-dns is running. To check you may go to the Marathon UI and check the status of the application "mesos-dns". If it's not running, click on restart to re-initialize it
 
-  .. image:: ../images/f5-asp-and-controller-check-mesos-dns-state.png
+  .. image:: /_static/class2/f5-asp-and-controller-check-mesos-dns-state.png
     :align: center
     :scale: 50%
 
@@ -58,19 +58,19 @@ You should see the following applications be created:
 1. Your "my-backend" application
 2. Another application created with 2 instances called : asp-my-backend. This is your ASP instances deployed in front of your application. You can see that 2 instances were deployed (done via the *ASP_COUNT_PER_APP label*)
 
-.. image:: ../images/f5-asp-and-controller-check-backend-and-asp-deployment.png
+.. image:: /_static/class2/f5-asp-and-controller-check-backend-and-asp-deployment.png
   :align: center
   :scale: 50%
 
 To test your ASP instances, go to the Marathon UI > Application > asp-my-backend. Here you will see that 2 instances are deployed, click on the link specified for each of them:
 
-.. image:: ../images/f5-asp-and-controller-check-asp-instances-deployed.png
+.. image:: /_static/class2/f5-asp-and-controller-check-asp-instances-deployed.png
   :align: center
   :scale: 50%
 
 If you are connected to the backend instances, it works as expected:
 
-.. image:: ../images/f5-asp-and-controller-access-asp.png
+.. image:: /_static/class2/f5-asp-and-controller-access-asp.png
   :align: center
   :scale: 50%
 
@@ -84,7 +84,7 @@ Go back to your frontend application on http://10.2.10.80. On this page you have
 
 You should see something like this:
 
-.. image:: ../images/f5-asp-and-controller-access-backend.png
+.. image:: /_static/class2/f5-asp-and-controller-access-backend.png
   :align: center
   :scale: 50%
 

@@ -1,7 +1,7 @@
 Install Mesos
 =============
 
-All the steps mentioned below are to be done on **ALL THE AGENTS** 
+All the steps mentioned below are to be done on **ALL THE AGENTS**
 
 * Slave1
 * Slave2
@@ -9,17 +9,17 @@ All the steps mentioned below are to be done on **ALL THE AGENTS**
 Update the system
 -----------------
 
-Before doing anything related to this exercise, we need to make sure that the system is up to date. 
+Before doing anything related to this exercise, we need to make sure that the system is up to date.
 
-:: 
+::
 
 	sudo apt-get -y update
 
-Once this is done, we need to install the required packages to execute the mesos and marathon processes. 
+Once this is done, we need to install the required packages to execute the mesos and marathon processes.
 
-:: 
+::
 
-	sudo apt-get install -y openjdk-8-jdk 
+	sudo apt-get install -y openjdk-8-jdk
 
 	sudo apt-get install -y build-essential python-dev libcurl4-nss-dev libsasl2-dev libsasl2-modules maven libapr1-dev libsvn-dev unzip
 
@@ -29,7 +29,7 @@ Install Mesos
 
 Now we need to let apt-get have access to the relevant repo (based on our distro name : ubuntu and our version: xenial)
 
-Do the following commands: 
+Do the following commands:
 
 ::
 
@@ -37,7 +37,7 @@ Do the following commands:
 	sudo apt-key adv --keyserver keyserver.ubuntu.com --recv E56151BF
 
 	#this command identify the distro: ie ubuntu (a line starting with # is a comment, don't execute)
-	DISTRO=$(lsb_release -is | tr '[:upper:]' '[:lower:]') 
+	DISTRO=$(lsb_release -is | tr '[:upper:]' '[:lower:]')
 
 	#this command will identify the version for the distro. For example #xenial  ubuntu version)
 	CODENAME=$(lsb_release -cs)
