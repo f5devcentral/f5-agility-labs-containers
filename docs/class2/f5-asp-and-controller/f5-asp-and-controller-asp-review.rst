@@ -45,7 +45,7 @@ Here we can see that our asp instances also have a DNS name that we can resolve.
 
 In our frontend application deployment, we also forced the "ServicePort" to 31899 so that we knew on which port our ASP would be listening to. This works well but also create some issues: What would happen if we want to deploy more than 2 ASP instances ? In our setup it won't work: We have only 2 agents, so we have only 2 ports available to listen on 31899. Marathon would be able to deploy 2 instances and then would fail allocating more instances:
 
-.. image:: ../images/f5-asp-and-controller-deploy-4-asp-instances-fail.png
+.. image:: /_static/class2/f5-asp-and-controller-deploy-4-asp-instances-fail.png
 	:align: center
 	:scale: 50%
 
@@ -77,8 +77,9 @@ Here we can see that the issue is related to port allocation.
 
 	The above queue detail is an example only and entirely based on the running state of what is being built.  If the lab is running normal and everything has been deployed, you may only see the following:
 
-	.. code-block::
-	{"queue":[]}
+	.. code-block:: json
+
+	   {"queue":[]}
 
 How can we bypass this kind of restriction ? by leveraging even more mesos-dns with SRV records. Let's try to do a few more things around mesos-dns:
 

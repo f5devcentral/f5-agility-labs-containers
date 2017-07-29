@@ -6,7 +6,7 @@ Overview
 
 The F5 Application Service Proxy provides load balancing and telemetry for containerized applications, serving East-West traffic. The F5 Marathon ASP Controller deploys ASP instances ‘on-demand’ for Marathon Applications.
 
-.. image:: ../images/F5-container-connector-overview-f5-solution-architecture.png
+.. image:: /_static/class2/F5-container-connector-overview-f5-solution-architecture.png
 	:align: center
 
 The F5 Application Service Proxy (ASP) provides container-to-container load balancing, traffic visibility, and inline programmability for applications. Its light form factor allows for rapid deployment in datacenters and across cloud services. The ASP integrates with container environment management and orchestration systems and enables application delivery service automation.

@@ -50,7 +50,7 @@ To test that it was launched successfully, you may use the command **on one or a
 
 This will download a test image automatically and launch it. You should have things appearing on your terminal. Once it is done, the container will stop automatically and be deleted (done by the --rm parameter)
 
-.. image:: ../images/setup-slave-test-docker.png
+.. image:: /_static/class2/setup-slave-test-docker.png
 	:align: center
 
 We need to allow mesos and docker containers in mesos. Execute the following commands on **all agents**

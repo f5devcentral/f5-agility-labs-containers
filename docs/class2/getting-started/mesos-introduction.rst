@@ -1,7 +1,7 @@
 Intro to Mesos / Marathon
 ===========================================
 
-Before working on the installation itself, you need to understand the different components involved in this setup: 
+Before working on the installation itself, you need to understand the different components involved in this setup:
 
 * Master / Agent functions
 * The different components involved in the Master / Agent architecture
@@ -13,11 +13,11 @@ Mesos Architecture
 
 This is an extract from `Mesos Architecture <http://mesos.apache.org/documentation/latest/architecture/>`_
 
-.. image:: ../images/Mesos_Architecture.png
+.. image:: /_static/class2/Mesos_Architecture.png
 	:align: center
 	:scale: 50%
 
-Some of the involved components: 
+Some of the involved components:
 
 * Master: aggregates resource offers from all agent nodes and provides them to registered frameworks.
 
@@ -40,7 +40,7 @@ Example of resource offer
 
 This is an extract from Apache Mesos website `Mesos Architecture <http://mesos.apache.org/documentation/latest/architecture/>`_
 
-.. image:: ../images/mesos-framework-example.jpg
+.. image:: /_static/class2/mesos-framework-example.jpg
 	:align: center
 	:scale: 50%
 
@@ -75,9 +75,9 @@ Marathon supports high availability be leveraging Zookeeper. High availability a
 
 If you want to learn more about Zookeeper, refer to their website `Zookeeper <http://zookeeper.apache.org/>`_
 
-With Zookeeper, it is recommended to have an odd number of servers. 
+With Zookeeper, it is recommended to have an odd number of servers.
 
-Marathon 
+Marathon
 --------
 
 Marathon is a production-proven Apache Mesos framework for container orchestration. the github project can be found here: `Github Marathon <https://github.com/mesosphere/marathon>`_ , documentation is `here <http://mesosphere.github.io/marathon/>`_

@@ -29,12 +29,12 @@ We can validate that it works by connecting to mesos and marathon. Mesos runs on
 
 Mesos:
 
-.. image:: ../images/setup-master-check-UI-mesos-master.png
+.. image:: /_static/class2/setup-master-check-UI-mesos-master.png
 	:align: center
 
 Marathon:
 
-.. image:: ../images/setup-master-check-UI-marathon.png
+.. image:: /_static/class2/setup-master-check-UI-marathon.png
 	:align: center
 
 if you want to check whether the service started as expected, you can use the following commands:
@@ -47,22 +47,22 @@ if you want to check whether the service started as expected, you can use the fo
 
 you should see something like this:
 
-.. image:: ../images/setup-master-check-service-mesos-master.png
+.. image:: /_static/class2/setup-master-check-service-mesos-master.png
 	:align: center
 
 
-.. image:: ../images/setup-master-check-service-marathon.png
+.. image:: /_static/class2/setup-master-check-service-marathon.png
 	:align: center
 
 
 Check the *about* section in marathon to have the information about the service.
 
-.. image:: ../images/setup-master-about-marathon.png
+.. image:: /_static/class2/setup-master-about-marathon.png
 	:align: center
 
 You can do the following to test the high availability of marathon:
 	• Find on which mesos is running the framework marathon (here based on our screenshot above, it is available on master1)
 	• Restart this master and you should see the framework was restarted automatically on another host
 
-.. image:: ../images/setup-master-test-HA-marathon.png
+.. image:: /_static/class2/setup-master-test-HA-marathon.png
 	:align: center

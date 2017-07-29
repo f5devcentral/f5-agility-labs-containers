@@ -20,13 +20,13 @@ Connecting to LAB
    * Click on the start menu button and type 'Language' in the search field.
    * Click on 'Language' option in the search list
 
-   .. image:: ../images/select-region-language.png
+   .. image:: /_static/class2/select-region-language.png
       :scale: 50 %
       :align: center
 
    * Click on 'Add a language'
 
-   .. image:: ../images/select-change-keyboard.png
+   .. image:: /_static/class2/select-change-keyboard.png
       :scale: 50 %
       :align: center
 
@@ -40,7 +40,7 @@ Once you have established remote access to your lab environment, launch Google C
 
   * mRemoteNG has shortcuts pre-defined within the application. To open terminal access to everything in the lab, right click on the Mesos-Marathon-LAB folder and click 'Connect'.
 
-  .. image:: ../images/mesos-lab-mremoteng.png
+  .. image:: /_static/class2/mesos-lab-mremoteng.png
 
 
 
