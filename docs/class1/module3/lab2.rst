@@ -12,7 +12,10 @@ We need to create two configuration to deploy our backend application:
 * The service: will define our access our application. It will also contains annotations to leverage the ASP Lightweight proxy
 
 
-Create a file called *my-backend-deployment.yaml*. Here is its content:    ---> Please use the file in /home/ubuntu/f5-demo
+Testing ASP
+-----------
+
+Create a file called ``my-backend-deployment.yaml``  Here is its content:    ---> Please use the file in /home/ubuntu/f5-demo
 
 ::
 
@@ -40,7 +43,7 @@ Create a file called *my-backend-deployment.yaml*. Here is its content:    ---> 
 
 
 
-Create another file called *my-backend-service.yaml*. Here is its content:    ---> Please use the file in /home/ubuntu/f5-demo
+Create another file called ``my-backend-service.yaml`` Here is its content:    ---> Please use the file in /home/ubuntu/f5-demo
 
 ::
 
@@ -89,6 +92,8 @@ You can check if the deployment was successful with the commands:
 .. image:: /_static/f5-asp-and-kube-proxy-deploy-app.png
   :align: center
 
+Testing Kube Proxy
+------------------
 
 To test our application, access the frontend app with your browser. It is available via the BIG-IP with the URL: http://10.1.10.81
 
