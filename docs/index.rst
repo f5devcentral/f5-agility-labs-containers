@@ -28,10 +28,10 @@ The purpose of these labs is to give you better understanding of...
 
 .. toctree::
    :maxdepth: 1
-   :numbered:
    :caption: Contents:
    :glob:
 
-   class1/*
-   class2/*
-   class3/*
+   intro
+   class1/class1
+   class2/index
+   class3/class3
