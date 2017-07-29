@@ -1,19 +1,35 @@
 F5 Application Service Proxy deployment review
 ----------------------------------------------
 
-We have successfully deployed our F5 North-South (Marathon BIG-IP Controller) and F5 East-West solutions (Application Service Proxy and Marathon ASP Controller)
+We have successfully deployed our F5 North-South (Marathon BIG-IP Controller)
+and F5 East-West solutions (Application Service Proxy and Marathon ASP
+Controller)
 
-How does the Frontend has been able to go automatically through our ASP instances to access the backend application.
+How does the Frontend has been able to go automatically through our ASP
+instances to access the backend application.
 
 Here are the different key things we did to make it happen:
 
-#. When we deployed our frontend application, we specified a label called: "F5DEMO_BACKEND_URL" with the value "http://asp-my-backend.marathon.mesos:31899/". This was explaining to our frontend application where the "Backend App" link on the page should be redirected to: :ref:`frontend_definition`.
-#. When we deployed our backend application, we specified the following  information: "servicePort" set to the value 31899. This information was to say to ASP on which port it should be listening to load balance the traffic: :ref:`backend_definition.
-#. The last thing is how does our frontend connect to the ASP(s) that is dynamically generated ? this is done by leveraging mesos-dns.
+#. When we deployed our frontend application, we specified a label called:
+   ``F5DEMO_BACKEND_URL`` with the value
+   ``http://asp-my-backend.marathon.mesos:31899/``. This was explaining
+   to our frontend application where the "Backend App" link on the page
+   should be redirected to: :ref:`frontend_definition`.
 
-Every application that gets created in marathon will have automatically a DNS name setup in mesos-dns. it will have the following format : <application id>.maraton.mesos
+#. When we deployed our backend application, we specified the following
+   information: ``servicePort`` set to the value ``31899``. This information
+   was to say to ASP on which port it should be listening to load balance the
+   traffic: :ref:`backend_definition`.
 
-to test it, we can try a few queries against our mesos dns. Connect to either **Agent1** or **Agent2** (their DNS nameserver is mesos-dns)
+#. The last thing is how does our frontend connect to the ASP(s) that is
+   dynamically generated? This is done by leveraging mesos-dns.
+
+Every application that gets created in marathon will have automatically a DNS
+name setup in mesos-dns. it will have the following format:
+``<application id>`` maraton.mesos
+
+To test it, we can try a few queries against our mesos dns. Connect to either
+**Agent1** or **Agent2** (their DNS nameserver is mesos-dns)
 
 ::
 
@@ -41,9 +57,16 @@ to test it, we can try a few queries against our mesos dns. Connect to either **
 	Name:	asp-my-backend.marathon.mesos
 	Address: 10.2.10.40
 
-Here we can see that our asp instances also have a DNS name that we can resolve. This is this hostname we specified when we started our frontend application with the backend link.
+Here we can see that our asp instances also have a DNS name that we can
+resolve. This is this hostname we specified when we started our frontend
+application with the backend link.
 
-In our frontend application deployment, we also forced the "ServicePort" to 31899 so that we knew on which port our ASP would be listening to. This works well but also create some issues: What would happen if we want to deploy more than 2 ASP instances ? In our setup it won't work: We have only 2 agents, so we have only 2 ports available to listen on 31899. Marathon would be able to deploy 2 instances and then would fail allocating more instances:
+In our frontend application deployment, we also forced the ``ServicePort`` to
+31899 so that we knew on which port our ASP would be listening to. This works
+well but also create some issues: What would happen if we want to deploy more
+than 2 ASP instances ? In our setup it won't work: We have only 2 agents, so
+we have only 2 ports available to listen on 31899. Marathon would be able to
+deploy 2 instances and then would fail allocating more instances:
 
 .. image:: /_static/class2/f5-asp-and-controller-deploy-4-asp-instances-fail.png
 	:align: center
@@ -73,15 +96,16 @@ This is something we can validate also via the marathon queue information access
 
 Here we can see that the issue is related to port allocation.
 
-.. note::
+.. NOTE:: The above queue detail is an example only and entirely based on the
+   running state of what is being built.  If the lab is running normal and
+   everything has been deployed, you may only see the following:
 
-	The above queue detail is an example only and entirely based on the running state of what is being built.  If the lab is running normal and everything has been deployed, you may only see the following:
+   .. code-block:: json
 
-	.. code-block:: json
+	  {"queue":[]}
 
-	   {"queue":[]}
-
-How can we bypass this kind of restriction ? by leveraging even more mesos-dns with SRV records. Let's try to do a few more things around mesos-dns:
+How can we bypass this kind of restriction ? by leveraging even more mesos-dns
+with SRV records. Let's try to do a few more things around mesos-dns:
 
 ::
 
@@ -109,7 +133,8 @@ How can we bypass this kind of restriction ? by leveraging even more mesos-dns w
 	;; WHEN: Wed Mar 29 14:57:43 UTC 2017
 	;; MSG SIZE  rcvd: 173
 
-Here you can see that we got two SRV records for our DNS name asp-my-backend. If we review the related hostname :
+Here you can see that we got two SRV records for our DNS name asp-my-backend.
+If we review the related hostname :
 
 ::
 
