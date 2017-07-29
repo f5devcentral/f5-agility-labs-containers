@@ -2,7 +2,7 @@ Welcome to F5 Agility 2017 Mesos Marathon 101 Lab documentation!
 ================================================================
 
 Introduction
-============
+------------
 
 The purpose of this lab is to give you more visibility on
 
