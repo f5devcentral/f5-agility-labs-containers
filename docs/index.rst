@@ -1,8 +1,7 @@
 Welcome to F5 101 Containers lab's documentation!
 ==================================================
 
-The purpose of these labs is to give you better understanding of...
--------------------------------------------------------------------
+**The purpose of these labs is to give you better understanding of...**
 
 - Kubernetes
 
