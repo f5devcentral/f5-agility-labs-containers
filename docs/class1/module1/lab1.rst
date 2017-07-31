@@ -20,7 +20,7 @@ A Kubernetes cluster consists of two types of resources:
 * The *Master* coordinates the cluster
 * *Nodes* are the workers that run applications
 
-.. image:: /_static/getting-started-cluster-diagram.png
+.. image:: /_static/class1/getting-started-cluster-diagram.png
 	:align: center
 
 

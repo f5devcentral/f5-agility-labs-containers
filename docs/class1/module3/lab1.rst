@@ -103,7 +103,7 @@ Here the ASP should be deployed automatically. You should have as many ASP insta
 
 	kubectl get pods -n kube-system
 
-.. image:: /_static/f5-asp-and-kube-proxy-deploy-asp.png
+.. image:: /_static/class1/f5-asp-and-kube-proxy-deploy-asp.png
 	:align: center
 
 There should be three entries in the table returned by the command above that start with "f5-asp-".  The ASP instances are deployed. Now we need to update the kube-proxy with the F5-kube-proxy instances so that we can leverage our ASP.
@@ -239,7 +239,7 @@ or
 
 	kubectl get pods --all-namespaces
 
-.. image:: /_static/f5-asp-and-kube-proxy-delete-origin-kube-proxy.png
+.. image:: /_static/class1/f5-asp-and-kube-proxy-delete-origin-kube-proxy.png
 	:align:	center
 
 Note that the entries starting with "kube-proxy-" in the table.
@@ -256,5 +256,5 @@ You can check that the deployment was successful with the command:
 
 	kubectl get pods -n kube-system
 
-.. image:: /_static/f5-asp-and-kube-proxy-create-f5-kube-proxy.png
+.. image:: /_static/class1/f5-asp-and-kube-proxy-create-f5-kube-proxy.png
 	:align: center
