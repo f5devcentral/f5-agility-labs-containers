@@ -34,9 +34,15 @@ The BIG-IP we are working on has been licensed, and only these following command
 
   tmsh create net tunnel tunnel ose-tunnel {key 0 local-address 10.10.199.98 profile ose-vxlan}
 
-  tmsh create net self 10.131.0.98/14 vlan ose-tunnel
-
   tmsh save sys config
+
+**NOTE typically the command below is entered after running the ''oc create -f f5-hostsubnet.yaml'' command coming up in the next section (This is the range the self ip should come from, to make this lab quicker we have already done this tmsh command)**
+
+::
+
+  tmsh create net self <IP>/subnet vlan <tunnel>
+
+  tmsh create net self <IP>10.131.0.98/14 vlan ose-tunnel
 
 
 Let's validate your BIG-IP is just configured with VLANs, Self-IPs.  No no Virtual Servers and no Pools
