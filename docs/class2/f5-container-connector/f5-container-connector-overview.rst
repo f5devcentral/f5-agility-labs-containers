@@ -1,5 +1,3 @@
-.. _container-connector:
-
 Overview of F5® Container Connector (CC)
 ========================================
 

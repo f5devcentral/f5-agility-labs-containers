@@ -171,4 +171,4 @@ The DNS server watches the Kubernetes API for new *Services* and creates a set o
 
 For example, if you have a *Service* called "my-service" in Kubernetes Namespace "my-ns" a DNS record for "my-service.my-ns" is created. *Pods* which exist in the "my-ns" Namespace should be able to find it by simply doing a name lookup for "my-service". *Pods* which exist in other Namespaces must qualify the name as "my-service.my-ns". The result of these name lookups is the *cluster IP*.
 
-Kubernetes also supports DNS SRV (service) records for named ports. If the "my-service.my-ns" *Servic*e has a port named "http" with protocol TCP, you can do a DNS SRV query for "_http._tcp.my-service.my-ns" to discover the port number for "http"
+Kubernetes also supports DNS SRV (service) records for named ports. If the "my-service.my-ns" *Service* has a port named "http" with protocol TCP, you can do a DNS SRV query for "_http._tcp.my-service.my-ns" to discover the port number for "http"
