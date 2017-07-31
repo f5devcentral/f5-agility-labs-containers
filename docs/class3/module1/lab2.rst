@@ -27,7 +27,7 @@ Next let's explore the f5-hostsubnet.yaml file
 You'll see a config file similar to this:
 
 .. image:: /_static/class3/F5-HOSTSUBNET-YAML.png
-  :align: center
+   :align: center
 
 This YAML file create an OpenShift Node and the host is the BIG-IP "with /23 subnet of IP's (3 images down)"
 
@@ -50,7 +50,7 @@ Let create the connector to the BIG-IP device, then look before and after at the
 You should see a successful creation a new OpenShift Node
 
 .. image:: /_static/class3/F5-OS-NODE.png
-     :align: center
+   :align: center
 
 Nothing has been done yet to the BIG-IP, this only was done in the OpenShift environment.
 
@@ -125,13 +125,13 @@ As ContainerCreating is dependent on many factors i.e. first download remotely, 
 
 As we watch it change from ContainerCreating...
 
-  .. image:: /_static/class3/F5-CTRL-CREATING.png
-    :align: center
+.. image:: /_static/class3/F5-CTRL-CREATING.png
+   :align: center
 
 To *Running* state, once you see this go ahead and CTRL-D out of the watch routine
 
-  .. image:: /_static/class3/F5-CTRL-RUNNING.png
-      :align: center
+.. image:: /_static/class3/F5-CTRL-RUNNING.png
+   :align: center
 
 Last step - create a virtual server and pool
 --------------------------------------------
