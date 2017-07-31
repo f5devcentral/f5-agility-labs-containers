@@ -1,67 +1,73 @@
-Using the F5 Router Plug-in
----------------------------
+F5 Container Connector with RedHat OpenShift
+============================================
 
-The F5 router plug-in is available starting in OpenShift Container
-Platform 3.0.2.
+F5 OpenShift Origin Container Integration
 
-The F5 router plug-in is provided as a container image and run as a pod.
-Deploying the F5 router is done using the a config file saved on the OC-Master.
-``f5-hostsubnet.yaml`` is used to specify the following parameters for the
-F5 BIG-IP® host:
+Red Hat’s OpenShift Origin is a containerized application platform with a native Kubernetes integration. The BIG-IP Controller for Kubernetes enables use of a BIG-IP device as an edge load balancer, proxying traffic from outside networks to pods inside an OpenShift cluster. OpenShift Origin uses a pod network defined by the OpenShift SDN.
 
-::
+The F5 Integration for Kubernetes overview describes how the BIG-IP Controller works with Kubernetes. Because OpenShift has a native Kubernetes integration, the BIG-IP Controller works essentially the same in both environments. It does have a few OpenShift-specific prerequisites.
 
-  Flag	                        Description
-  --------------------------------------------------------------------------------
-  --type=f5-router              Specifies that an F5 router should be launched (the default --type is haproxy-router).
-  --external-host               Specifies the F5 BIG-IP® host’s management interface’s host name or IP address.
-  --external-host-username      Specifies the F5 BIG-IP® user name (typically admin).
-  --external-host-password      Specifies the F5 BIG-IP® password.
-  --external-host-http-vserver  Specifies the name of the F5 virtual server for HTTP connections.
-  --external-host-https-vserver Specifies the name of the F5 virtual server for HTTPS connections.
-  --external-host-private-key   Specifies the path to the SSH private key file for the F5 BIG-IP® host. Required \
-                                to upload and delete key and certificate files for routes.
-  --external-host-insecure      A Boolean flag that indicates that the F5 router should skip strict certificate
-                                verification with the F5 BIG-IP® host. As with the HAProxy router, the oadm
-                                router command creates the service and deployment configuration objects, and thus the
-                                replication controllers and pod(s) in which the F5 router itself runs
-                                . The replication controller restarts the F5 router in case of
-                                crashes. Because the F5 router is only watching routes and endpoints
-                                and configuring F5 BIG-IP® accordingly, running the F5 router in
-                                this way along with an appropriately configured F5 BIG-IP®
-                                deployment should satisfy high-availability requirements.
+Today we are going to go through a prebuilt OpenShift environment with some locally deployed yaml files.  The detailed OpenShift-specifics: please view F5 documentation http://clouddocs.f5.com/containers/v1/openshift/index.html#openshift-origin-prereqs
+
+
 
 Review BIG-IP configuration
 ---------------------------
 
-Create OSE Router Connector
----------------------------
+The BIG-IP we are working on has been licensed, and only these following commands below has been issued in the CLI so we have a very new/basic BIG-IP configured.
 
-Configuration steps done on the BIGIP
+::
 
-License BIG-IP
+  License BIG-IP
 
-tmsh create net vlan internal interfaces add {1.2}
-tmsh create net self 10.10.199.98/24 vlan internal
-tmsh create net vlan external interfaces add {1.1}
-tmsh create net self 10.10.201.98/24 vlan external
-tmsh create auth partition kubernetes
-tmsh create net tunnel vxlan ose-vxlan {app-service none flooding-type multipoint}
-tmsh create net tunnel tunnel ose-tunnel {key 0 local-address 10.10.199.98 profile ose-vxlan}
-tmsh save sys config
+  tmsh create net vlan internal interfaces add {1.2}
+
+  tmsh create net self 10.10.199.98/24 vlan internal
+
+  tmsh create net vlan external interfaces add {1.1}
+
+  tmsh create net self 10.10.201.98/24 vlan external
+
+  tmsh create auth partition kubernetes
+
+  tmsh create net tunnel vxlan ose-vxlan {app-service none flooding-type multipoint}
+
+  tmsh create net tunnel tunnel ose-tunnel {key 0 local-address 10.10.199.98 profile ose-vxlan}
+
+  tmsh create net self 10.131.0.98/14 vlan ose-tunnel
+
+  tmsh save sys config
 
 
-Configuration steps on ose-mstr01(steps 4 and 5 are done on the BIGIP)
-oc login -u demouser
-oc create -f f5-hostsubnet.yaml
-oc get hostsubnet (This will return the IP space that can be used to setup a self on the ose-tunnel on the BIGIP)
-tmsh create net self 10.131.0.98/14 vlan ose-vlan
-tmsh save sys config
-oc create -f f5-cc.yaml
-oc create -f f5-vs2.yaml
+Let's validate your BIG-IP is just configured with VLANs, Self-IPs.  No no Virtual Servers and no Pools
 
-Yaml files needed for OSE configuration
-https://www.dropbox.com/s/jy7ed961l554g30/f5-vs2.yaml?dl=0
-https://www.dropbox.com/s/sqb2pv2bbwbp2an/f5-hostsubnet.yaml?dl=0
-https://www.dropbox.com/s/3mwmesf9lf206qq/f5-cc.yaml?dl=0
+Connect to your BIG-IP on https://10.10.200.98 and familiarize yourself with the the current VLAN's.  Proceed to Network -> VLAN.
 
+
+.. image:: /_static/class3/F5-BIG-IP-NETWORK-VLAN.png
+   :align: center
+   :scale: 60%
+
+
+Go to Local Traffic -> Network -> Self-IP.  You should have an internal and external SELF-IPs
+
+.. image:: /_static/class3/F5-BIG-IP-NETWORK-SELFIP.png
+   :align: center
+   :scale: 60%
+
+
+Jump to Local Traffic -> Network -> Tunnel.  You should see something similar to this:
+
+.. image:: /_static/class3/f5-BIG-IP-NETWORK-TUNNEL.png
+   :align: center
+   :scale: 60%
+
+Lastly, validate there are no Virtual Servers and no Pools.  Go to Local Traffic -> Virtual Servers and then Pools.
+
+Last example we can see that there is no pool members defined.
+
+.. image:: /_static/class3/F5-BIG-IP-LOCAL_TRAFFIC-POOL.png
+   :align: center
+   :scale: 60%
+
+Great let's jump to the next section to work on the OpenShift CLI

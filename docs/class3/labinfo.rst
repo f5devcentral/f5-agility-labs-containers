@@ -1,8 +1,7 @@
 Lab Setup
 ~~~~~~~~~
 
-Here is the setup we will leverage to work on the RedHat OpenShift environment
-or to connect to an existing environment on the Ravello F5 Blueprint
+Here is the setup we will leverage to work on the RedHat OpenShift environment.  
 
 In the existing environment, here is the setup you're working within:
 
