@@ -64,7 +64,7 @@ Go to Local Traffic -> Network -> Self-IP.  You should have an internal and exte
 
 Jump to Local Traffic -> Network -> Tunnel.  You should see something similar to this:
 
-.. image:: /_static/class3/f5-BIG-IP-NETWORK-TUNNEL.png
+.. image:: /_static/class3/F5-BIG-IP-NETWORK-TUNNEL.png
    :align: center
    :scale: 60%
 
