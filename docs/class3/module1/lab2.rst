@@ -128,7 +128,7 @@ As we watch it change from ContainerCreating...
 .. image:: /_static/class3/F5-CTRL-CREATING.png
    :align: center
 
-To *Running* state, once you see this go ahead and CTRL-D out of the watch routine
+To *Running* state, once you see this go ahead and CTRL-C out of the watch routine
 
 .. image:: /_static/class3/F5-CTRL-RUNNING.png
    :align: center
