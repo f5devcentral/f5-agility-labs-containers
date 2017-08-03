@@ -1,5 +1,5 @@
-Lab - RedHat OpenShift Router
-=============================
+Lab - RedHat OpenShift
+======================
 
 
 Welcome to the |classbold| lab at F5 Agility |year|
