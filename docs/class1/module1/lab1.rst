@@ -1,6 +1,8 @@
 Kubernetes overview
 ===================
 
+Vince Test 2018
+
 Kubernetes has a lot of documentation available at this location: `Kubernetes docs <http://kubernetes.io/docs/>`_
 
 On this page, we will try to provide all the relevant information to deploy successfully a cluster (Master + nodes)
@@ -73,4 +75,3 @@ Kubernetes *pods* are mortal. They are born and they die, and they are **not res
 A Kubernetes *service* is an abstraction which defines a logical set of *pods* and a policy by which to access them - sometimes called a micro-service. The set of *pods* targeted by a *service* is (usually) determined by a *label selector*
 
 **Volume**: `Kuebernetes volume <https://kubernetes.io/docs/user-guide/volumes/>`_ A volume is a directory, possibly with some data in it, which is accessible to a Container as part of its filesystem. Kubernetes volumes build upon Docker Volumes, adding provisioning of the volume directory and/or device.
-
