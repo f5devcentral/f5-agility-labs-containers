@@ -1,4 +1,5 @@
-docs/_build
-media
+docs/_build/*
+media/
 *.docx
 .DS_Store
+pdf/
