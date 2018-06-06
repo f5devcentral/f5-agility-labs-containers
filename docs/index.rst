@@ -3,6 +3,13 @@ Welcome to F5 101 Containers lab's documentation!
 
 **The purpose of these labs is to give you better understanding of...**
 
+- Docker
+
+  - What is Docker?
+  - How does Docker work?
+  - Different flavors of Docker (I.e. Linux, Windows)
+  - Lab getting comfortable with Docker
+
 - Kubernetes
 
   - Overview of Kubernetes and its key components
@@ -31,6 +38,7 @@ Welcome to F5 101 Containers lab's documentation!
    :glob:
 
    intro
+   class0/class0
    class1/class1
    class2/index
    class3/class3
