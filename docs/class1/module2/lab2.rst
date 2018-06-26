@@ -105,10 +105,8 @@ We can now launch our application :
 
 	kubectl create -f my-frontend-configmap.yaml
 
-
 .. image:: /_static/class1/f5-container-connector-launch-app.png
 	:align: center
-
 
 to check the status of our deployment, you can run the following commands:
 
@@ -157,7 +155,6 @@ Hit Refresh many times and go to your **BIG-IP** UI, go to Local Traffic > Pools
 .. image:: /_static/class1/f5-container-connector-check-app-bigip-stats.png
    :align: center
    :scale: 50%
-
 
 How is traffic forwarded in Kubernetes from the <node IP>:32402 to the <container IP>:80 ? This is done via iptables that is managed via the kube-proxy instances:
 

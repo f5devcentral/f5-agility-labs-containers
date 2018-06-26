@@ -48,7 +48,6 @@ Do the following commands:
 	#Update our local package cache to have access to mesosphere packages
 	sudo apt-get -y update
 
-
 Finally we can install mesos on our agents
 
 ::

@@ -1,5 +1,5 @@
 Intro to Mesos / Marathon
-===========================================
+=========================
 
 Before working on the installation itself, you need to understand the different components involved in this setup:
 
@@ -53,7 +53,6 @@ Let’s walk through the events in the figure.
 
 In addition, this resource offer process repeats when tasks finish and new resources become free.
 
-
 Service Discovery
 -----------------
 
@@ -66,7 +65,6 @@ Running tasks can be discovered by looking up A and, optionally, SRV records wit
 * An A record associates a hostname to an IP address
 
 * An SRV record associates a service name to a hostname and an IP port
-
 
 High Availability
 -----------------
@@ -98,7 +96,3 @@ Main features
 8. Event Subscription. Supply an HTTP endpoint to receive notifications - for example to integrate with an external load balancer.
 9. Metrics. Query them at /metrics in JSON format or push them to systems like graphite, statsd and Datadog.
 10. Complete REST API for easy integration and scriptability.
-
-
-
-

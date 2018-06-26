@@ -8,7 +8,8 @@ The purpose of this lab is to give you more visibility on
 * How to launch application on Docker
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
+   :caption: Contents:
    :glob:
 
    module*/*

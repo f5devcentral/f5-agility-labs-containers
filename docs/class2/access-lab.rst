@@ -7,11 +7,8 @@ Connecting to LAB
 
    * For this lab, all activities will be performed from the Jumpbox.
 
-
-
 .. warning::
   For MAC user, it is recommended to use Microsoft Remote Desktop. You may not be able to access your jumpbox otherwise. It is available in the App store (FREE).
-
 
 .. topic:: Change keyboard input
 
@@ -32,7 +29,6 @@ Connecting to LAB
 
    * Add the language you want to have for your keyboard mapping.
 
-
 Applications used during lab exercises
 --------------------------------------
 
@@ -41,7 +37,3 @@ Once you have established remote access to your lab environment, launch Google C
   * mRemoteNG has shortcuts pre-defined within the application. To open terminal access to everything in the lab, right click on the Mesos-Marathon-LAB folder and click 'Connect'.
 
   .. image:: /_static/class2/mesos-lab-mremoteng.png
-
-
-
-Next, you can go directly to the container connector section: :ref:`container-connector`

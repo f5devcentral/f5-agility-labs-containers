@@ -1,4 +1,4 @@
-Appendix: Cluster Setup Guide
+Cluster Setup Guide
 =============================
 
 .. toctree::

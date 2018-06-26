@@ -22,3 +22,4 @@ annotation configured
    :glob:
 
    lab*
+   

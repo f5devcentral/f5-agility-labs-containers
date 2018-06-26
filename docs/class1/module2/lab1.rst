@@ -77,7 +77,6 @@ you should see something like this:
 .. image:: /_static/class1/f5-container-connector-bigip-secret.png
 	 :align: center
 
-
 create a file called ``f5-cc-deployment.yaml``. Here is its content: ---> Please use the file in /home/ubuntu/f5-demo
 
 If you're not used to using Linux/Unix, please ask for help and we'll come over and show you how to create and edit files in the CLI
@@ -120,8 +119,6 @@ If you're not used to using Linux/Unix, please ask for help and we'll come over 
                     "--bigip-partition=kubernetes",
                     "--namespace=default"
                   ]
-
-
 
 .. NOTE::
 

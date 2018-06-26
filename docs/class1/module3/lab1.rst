@@ -11,7 +11,6 @@ The first step will be to load the relevant F5 container images into our system.
 
 Official F5 ASP documentation can be found here: `Install the F5 Kubernetes Application Service Proxy <http://clouddocs.f5.com/containers/v1/kubernetes/asp-install-k8s.html>`_  and `Deploy the F5 Application Service Proxy with the F5 Kubernetes Prox <http://clouddocs.f5.com/containers/v1/kubernetes/asp-k-deploy.html>`_
 
-
 Deploy ASP
 ----------
 
@@ -19,7 +18,6 @@ To deploy ASP, we will need to add the following configuration to our Kubernetes
 
 * A configmap: The ConfigMap contains the configurations you want to apply to each LWP instance.
 * A daemonset: The DaemonSet ensures one Application Services Proxy runs per node in the Kubernetes cluster.
-
 
 To setup those components, connect to the **master** and do the following:
 
@@ -45,8 +43,6 @@ create a yaml file called ``f5-asp-configmap.yaml`` and here is the content to c
 	        }
 	      }
 	    }
-
-
 
 After the configmap file, we can setup the daemonset file. Create a file called ``f5-asp-daemonset.yaml`` and here is the content to copy/paste into it.  ---> Please use the file in /home/ubuntu/f5-demo
 
@@ -85,7 +81,6 @@ After the configmap file, we can setup the daemonset file. Create a file called 
 	        - name: asp-config
 	          configMap:
 	            name: f5-asp-config
-
 
 Once our files are created, we can use them to create the relevant ConfigMap and Daemonset to start our ASP instances.
 
@@ -219,7 +214,6 @@ Here is the content of the file, copy/paste it.  ---> Please use the file in /ho
 	  desiredNumberScheduled: 0
 	  numberMisscheduled: 0
 	  numberReady: 0
-
 
 Now that we have the legacy ds config and the updated one, we can delete the existing kube-proxy ds with the following command:
 
