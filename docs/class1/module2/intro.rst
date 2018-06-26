@@ -4,7 +4,7 @@ Overview of F5® Container Connector (CC)
 Overview
 --------
 
-The  Container Connector makes L4-L7 services available to users deploying
+The Container Connector makes L4-L7 services available to users deploying
 microservices-based applications in a containerized infrastructure. The
 CC - Kubernetes allows you to expose a Kubernetes Service outside the cluster
 as a virtual server on a BIG-IP® device entirely through the Kubernetes API.
