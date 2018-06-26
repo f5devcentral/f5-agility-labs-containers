@@ -47,7 +47,6 @@ To deploy our Marathon BIG-IP Controller, we need to either use Marathon UI or u
 
 **REPLACE** the 8 lines of default JSON code shown with the following JSON config:
 
-
 ::
 
   {
@@ -71,7 +70,6 @@ To deploy our Marathon BIG-IP Controller, we need to either use Marathon UI or u
     }
   }
 
-
 * After a few seconds you should have a 2nd application folder labeled “F5” as shown in this picture.
 
 .. image:: /_static/class2/f5-container-connector-clickF5folder.png
@@ -80,7 +78,6 @@ To deploy our Marathon BIG-IP Controller, we need to either use Marathon UI or u
 
 .. image:: /_static/class2/f5-container-connector-f5-folder-shown.png
 
-
 .. note::
 
   If you're running the lab outside of Agility, you need may need to update the field *image* with the appropriate path to your image:
@@ -88,9 +85,6 @@ To deploy our Marathon BIG-IP Controller, we need to either use Marathon UI or u
   * Load it on **all your agents/slaves** with the docker load -i <file_name.tar> command. If you haven't retrieved it, you can also do a **sudo docker pull docker pull f5networks/marathon-bigip-ctlr** for the latest version.
   * Load it on a system and push it into your registry if needed.
 	* If your Mesos environment use authentication, here is a link explaining how to handle authentication with the Marathon BIG-IP Controller: `Set up authentication to your secure DC/OS cluster <http://clouddocs.f5.com/containers/v1/marathon/mctlr-authenticate-dcos.html#mesos-authentication>`_
-
-
-
 
 If you need to check the Marathon BIG-IP Controller you can do the following:
 
@@ -126,11 +120,8 @@ To check the logs of our Controller:
 
   sudo docker logs 20b39baccfba
 
-
-
 .. image:: /_static/class2/f5-container-connector-check-logs-bigip-ctlr.png
   :align: center
-
 
 To connect to our container with a Shell:
 

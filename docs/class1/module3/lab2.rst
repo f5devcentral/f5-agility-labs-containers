@@ -3,14 +3,12 @@ Test ASP and F5 Kube Proxy
 
 The F5 ASP instances and F5 kube proxy instances have been deployed. Now we need to test our setup. To do so we will setup a backend application that will be reached by the frontend application we created earlier.
 
-
 To deploy the backend application, connect to the **master**
 
 We need to create two configuration to deploy our backend application:
 
 * The deployment: it will define the application to deploy
 * The service: will define our access our application. It will also contains annotations to leverage the ASP Lightweight proxy
-
 
 Testing ASP
 -----------
@@ -41,8 +39,6 @@ Create a file called ``my-backend-deployment.yaml``  Here is its content:    ---
           - containerPort: 80
             protocol: TCP
 
-
-
 Create another file called ``my-backend-service.yaml`` Here is its content:    ---> Please use the file in /home/ubuntu/f5-demo
 
 ::
@@ -71,7 +67,6 @@ Create another file called ``my-backend-service.yaml`` Here is its content:    -
       targetPort: 80
     selector:
       run: my-backend
-
 
 Once our files are created, we can deploy our backend application with the following commands:
 

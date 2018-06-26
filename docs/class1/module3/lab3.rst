@@ -7,7 +7,6 @@ For more detailed instructions about all the yaml files used related to F5 and K
 
 http://clouddocs.f5.com/containers/v1/kubernetes/index.html
 
-
 Additional links available:
 
 - F5 BIG-IP Controller for Kubernetes and OpenShift

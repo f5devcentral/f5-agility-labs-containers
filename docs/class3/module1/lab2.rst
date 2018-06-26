@@ -2,7 +2,6 @@
 Create OpenShift Router Connector
 =================================
 
-
 Configuration steps on ose-mstr01
 ---------------------------------
 
@@ -53,7 +52,6 @@ You should see a successful creation a new OpenShift Node
    :align: center
 
 Nothing has been done yet to the BIG-IP, this only was done in the OpenShift environment.
-
 
 ::
 

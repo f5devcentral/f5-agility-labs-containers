@@ -9,8 +9,6 @@ The F5 Integration for Kubernetes overview describes how the BIG-IP Controller w
 
 Today we are going to go through a prebuilt OpenShift environment with some locally deployed yaml files.  The detailed OpenShift-specifics: please view F5 documentation http://clouddocs.f5.com/containers/v1/openshift/index.html#openshift-origin-prereqs
 
-
-
 Review BIG-IP configuration
 ---------------------------
 
@@ -44,11 +42,9 @@ The BIG-IP we are working on has been licensed, and only these following command
 
   tmsh create net self <IP>10.131.0.98/14 vlan ose-tunnel
 
-
 Let's validate your BIG-IP is just configured with VLANs, Self-IPs.  No no Virtual Servers and no Pools
 
 Connect to your BIG-IP on https://10.10.200.98 and familiarize yourself with the the current VLAN's.  Proceed to Network -> VLAN.
-
 
 .. image:: /_static/class3/F5-BIG-IP-NETWORK-VLAN.png
    :align: center
@@ -60,7 +56,6 @@ Go to Local Traffic -> Network -> Self-IP.  You should have an internal and exte
 .. image:: /_static/class3/F5-BIG-IP-NETWORK-SELFIP.png
    :align: center
    :scale: 60%
-
 
 Jump to Local Traffic -> Network -> Tunnel.  You should see something similar to this:
 

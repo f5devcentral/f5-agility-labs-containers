@@ -54,7 +54,6 @@ you should see something like this:
 .. image:: /_static/class2/setup-master-check-service-marathon.png
 	:align: center
 
-
 Check the *about* section in marathon to have the information about the service.
 
 .. image:: /_static/class2/setup-master-about-marathon.png

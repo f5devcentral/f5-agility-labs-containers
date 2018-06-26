@@ -35,6 +35,5 @@ For example:
 	Application name: “app1” +
 	Domain name: “marathon.mesos” =
 
-
 	ASP DNS name: “ASP-app1.marathon.mesos”
 

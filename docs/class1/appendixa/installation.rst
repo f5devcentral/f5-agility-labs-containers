@@ -1,5 +1,3 @@
-.. _my-cluster-setup:
-
 Cluster installation
 ====================
 

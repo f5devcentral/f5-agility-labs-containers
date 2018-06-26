@@ -65,7 +65,6 @@ Now setup the binary in a proper location:
 
   	sudo chmod +x /usr/local/mesos-dns/mesos-dns
 
-
 if you want to test your setup you can do the following:
 
 ::
@@ -103,8 +102,6 @@ you can now test your dns setup:
 	Name:	master1.mesos
 	Address: 10.2.10.10
 
-
-
 launch the mesos-dns image in marathon. Connect to marathon, click on *Create an application* and enable *json mode*
 
 .. code-block:: none
@@ -117,7 +114,6 @@ launch the mesos-dns image in marathon. Connect to marathon, click on *Create an
 		"instances": 1,
 		"constraints": [["hostname", "CLUSTER", "10.2.10.40"]]
 	}
-
 
 Last thing is to update /etc/resolv.conf on **all slaves/agents**: we add our mesos dns into our /etc/resolv.conf file
 

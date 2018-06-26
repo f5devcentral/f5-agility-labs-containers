@@ -89,6 +89,3 @@ Use your browser to connect to the application:
 
 .. image:: /_static/class2/setup-slave-test-create-container-access.png
    :align: center
-
-
-
