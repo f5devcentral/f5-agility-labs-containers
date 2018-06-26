@@ -1,14 +1,14 @@
 Container Connector(CC) Setup
 =============================
 
-the official CC documentation is here: `Install the F5 Kubernetes BIG-IP Controller <http://clouddocs.f5.com/containers/v1/kubernetes/kctlr-app-install.html>`_
+The official CC documentation is here: `Install the F5 Kubernetes BIG-IP Controller <http://clouddocs.f5.com/containers/v1/kubernetes/kctlr-app-install.html>`_
 
 BIG-IP setup
 ------------
 
 To use F5 Container connector, you'll need a BIG-IP up and running first.
 
-Through the Jumpbox, you should have a BIG-IP available at the following URL: https://10.1.10.60
+Through the Jumpbox, you should have a BIG-IP available at the following URL: https://10.1.1.245
 
 .. WARNING::
 
