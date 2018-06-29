@@ -1,20 +1,44 @@
-Lab Setup
-~~~~~~~~~
+Open Shift Lab Setup
+====================
 
 Here is the setup we will leverage to work on the RedHat OpenShift environment.
 
 In the existing environment, here is the setup you're working within:
 
-==================   ==================  =============================
-    Hostname              Mgt IP            Login / Password
-==================   ==================  =============================
-    Master 1              10.10.199.100     ssh: root/default
-    Agent  1              10.10.199.101     ssh: root/default
-    Agent  2              10.10.199.102     ssh: root/default
- Windows Jumpbox          10.10.200.199     student/Student!Agility!
-    BIG-IP                10.10.200.98      GUI: admin/admin
-    BIG-IP                10.10.200.98      ssh: root/admin
-==================   ==================  =============================
+.. list-table::
+  :header-rows: 1
+
+  * - **Hostname**
+    - **IP-ADDR**
+    - **VLAN**
+    - **Credentials**
+  * - jumphost
+    - 10.1.1.250
+    - mgmt: 10.1.1.0/24
+    - user/Student!Agility!
+  * - bigip1
+    - 10.1.1.245
+
+      10.10.199.60
+
+    - mgmt: 10.1.1.0/24
+
+      external-ose 10.10.199.0/24
+    - GUI: admin/admin
+
+      SSH: root/default
+  * - ose-master01
+    - 10.10.199.100
+    - external-ose: 10.10.199.0/24
+    - SSH: root/default
+  * - ose-agent01
+    - 10.10.199.101
+    - external-ose: 10.10.199.0/24
+    - SSH: root/default
+  * - ose-agent02
+    - 10.10.199.102
+    - external-ose: 10.10.199.0/24
+    - SSH: root/default
 
 In case you don't use the Ravello BluePrint, here are a few things to know
 that could be useful (if you want to reproduce this in another environment)
