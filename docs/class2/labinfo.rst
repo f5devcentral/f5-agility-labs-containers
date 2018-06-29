@@ -1,21 +1,52 @@
-Lab Setup
-==============
+Mesos Lab Setup
+===============
 
 Here is the setup we will leverage to either create a new environment or to connect to an existing environment (F5 UDF)
 
 In the existing environment, here is the setup you'll get:
 
-==================   ==================  =========================
-  System               Network             Gateway
-==================   ==================  =========================
-    Master 1           10.2.10.10/24       10.2.10.254
-    Master 2           10.2.10.20/24       10.2.10.254
-    Master 3           10.2.10.30/24       10.2.10.254
-    Agent  1           10.2.10.40/24       10.2.10.254
-    Agent  2           10.2.10.50/24       10.2.10.254
- Windows Jumpbox       10.10.200.199/24      10.10.200.1
-    BIG-IP             10.2.10.60/24       10.2.10.254
-==================   ==================  =========================
+.. list-table::
+  :header-rows: 1
+
+  * - **Hostname**
+    - **IP-ADDR**
+    - **VLAN**
+    - **Credentials**
+  * - jumphost
+    - 10.1.1.250
+    - mgmt: 10.1.1.0/24
+    - user/Student!Agility!
+  * - bigip1
+    - 10.1.1.245
+
+      10.2.10.60
+
+    - mgmt: 10.1.1.0/24
+
+      external-mesos 10.2.10.0/24
+    - GUI: admin/admin
+
+      SSH: root/default
+  * - f5-mesos-master1
+    - 10.2.10.10
+    - external-mesos: 10.2.10.0/24
+    - SSH: root/default
+  * - f5-mesos-master2
+    - 10.2.10.20
+    - external-mesos: 10.2.10.0/24
+    - SSH: root/default
+  * - f5-mesos-master3
+    - 10.2.10.30
+    - external-mesos: 10.2.10.0/24
+    - SSH: root/default
+  * - f5-mesos-agent1
+    - 10.2.10.40
+    - external-mesos: 10.2.10.0/24
+    - SSH: root/default
+  * - f5-mesos-agent2
+    - 10.2.10.50
+    - external-mesos: 10.2.10.0/24
+    - SSH: root/default
 
 Here are a few things to know that could be useful (if you want to reproduce this in another environment)
 

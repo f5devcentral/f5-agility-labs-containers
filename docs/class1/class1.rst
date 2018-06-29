@@ -6,5 +6,6 @@ Lab - Kubernetes
    :caption: Contents:
    :glob:
 
+   labinfo
    module*/intro*
    appendixa/appendixa

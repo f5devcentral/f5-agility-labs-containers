@@ -33,7 +33,7 @@ We also provide some ansible playbooks if you need to setup a Mesos/Marathon env
    :maxdepth: 1
    :glob:
    
+   labinfo
    intro
-   lab-setup
    access-lab
    module*/*
