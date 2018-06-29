@@ -1,74 +1,137 @@
-ASP and Marathon ASP Controller setup
-=====================================
+Setup master
+============
 
-To use ASP, we will need setup first the F5 Marathon ASP Controller.
+Master initialization
+---------------------
 
-The first step will be to load the relevant F5 container images into our system. if you use the UDF blueprint, it's already done in our private registry (10.2.10.10:5000). You can also retrieve the version we use with the following command: **sudo docker pull f5networks/marathon-asp-ctlr:1.0.0**
+The master is the system where the "control plane" components run, including etcd (the cluster database) and the API server (which the kubectl CLI communicates with). All of these components run in pods started by kubelet (which is why we had to setup docker first even on the master node)
 
-The official F5 ASP documentation is here: `Install the F5 Kubernetes Application Service Proxy <http://clouddocs.f5.com/containers/v1/kubernetes/asp-install-k8s.html>`_  and `Deploy the F5 Application Service Proxy with the F5 Kubernetes Prox <http://clouddocs.f5.com/containers/v1/kubernetes/asp-k-deploy.html>`_
+we will setup our master node on **master**, connect to it.
 
-Deploy F5 Marathon ASP Controller
----------------------------------
-
-To deploy the ASP Controller, connect to the Marathon UI and click on "Create Application", switch to "JSON Mode"
-
-Copy/Paste the following JSON blob:
+to setup **master** as a Kubernetes *master*, run the following command:
 
 ::
 
-	{
-  		"id": "f5/marathon-asp-ctlr",
-  		"cpus": 0.5,
-  		"mem": 128,
-  		"instances": 1,
-  		"container": {
-			"type": "DOCKER",
-			"docker": {
-			  "image": "f5networks/marathon-asp-ctlr:1.0.0",
-			  "network": "BRIDGE",
-			  "forcePullImage": true,
-			  "privileged": false,
-			  "portMappings": []
-    	},
-			"volumes": []
-  		},
-		"env": {
-			"MARATHON_URL": "http://10.2.10.10:8080",
-			"ASP_DEFAULT_CONTAINER": "10.2.10.10:5000/asp:1.0.0",
-			"ASP_ENABLE_LABEL": "asp",
-			"ASP_DEFAULT_CPU": "0.2",
-			"ASP_DEFAULT_MEM": "128",
-			"ASP_DEFAULT_LOG_LEVEL": "debug",
-			"ASP_DEFAULT_STATS_FLUSH_INTERVAL": "10000"
-		}
-	}
+	sudo kubeadm init --api-advertise-addresses=10.1.10.11  --use-kubernetes-version=v1.5.3 --pod-network-cidr=10.244.0.0/16
 
-A few things to consider:
+Here we specify:
 
-#. If you're not running this lab at Agility, make sure to update the image attribute and ASP_DEFAULT_CONTAINER attributes with the relevant images in your environment
-#. You can see that we specified the resources that will be assigned to ASP
-#. You have the capabilities to have ASP send logs to a remote solution like Splunk
+* The IP address that should be used to advertise the master. 10.1.10.0/24 is the network for our control plane. if you don't specify the --api-advertise-addresses argument, kubeadm will pick the first interface with a default gateway (because it needs internet access).
+
+
+When running the command you should see something like this:
+
+.. image:: /_static/class1/cluster-setup-guide-kubeadm-init-master.png
+	:align: center
+
+The initialization is successful if you see "Kubernetes master initialised successfully!"
+
+you should see a line like this:
+
+::
+
+	sudo kubeadm join --token=62468f.9dfb3fc97a985cf9 10.1.10.11
+
+
+This is the command to run on the node so that it registers itself with the master. Keep the secret safe since anyone with this token can add authenticated node to your cluster. This is used for mutual auth between the master and the nodes
 
 .. warning::
 
-	When using Marathon, you cannot use UPPERCASE for the application ID. Otherwise the application deployment will fail
+	**save this command somewhere since you'll need it later**
 
-Check deployment
-----------------
+You can monitor that the services start to run by using the command:
 
-You can check the deployment of your container the same way that we check the deployment of the F5 Marathon BIG-IP Controller:
+::
 
-#. Via the Marathon UI, go to Application > f5 > marathon-asp-ctlr and check the agent used to deploy the controller
+	kubectl get pods --all-namespaces
 
-.. image:: /_static/class2/f5-asp-and-controller-check-agent-asp-ctlr.png
+.. image:: /_static/class1/cluster-setup-guide-kubeadmin-init-check.png
 	:align: center
-	:scale: 50%
 
-In this example, we can see that the ASP Controller container was deployed on *10.2.10.50*
+kube-dns won't start until the network pod is setup.
 
-#. SSH to the relevant agent
-#. Use **sudo docker ps** to identify the container ID and run **sudo docker logs <container ID>**
+Network pod
+-----------
 
-.. image:: /_static/class2/f5-asp-and-controller-check-logs-asp-ctlr.png
+You must install a *pod* network add-on so that your *pods* can communicate with each other.
+
+**It is necessary to do this before you try to deploy any applications to your cluster**, and before* kube-dns* will start up. Note also that *kubeadm* only supports CNI based networks and therefore kubenet based networks will not work.
+
+Here is the list of add-ons available:
+
+* Calico
+* Canal
+* Flannel
+* Romana
+* Weave net
+
+
+We will use Flannel as mentioned previously. To set Flannel as a network pod, we need to first modify the flannel deployment.  First download the YAML deployment file.
+
+::
+
+	wget https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
+
+
+Change "vxlan" to "host-gw" for Type.
+
+::
+
+	net-conf.json: |
+		{
+		"Network": "10.244.0.0/16",
+		"Backend": {
+			"Type": "host-gw"
+		}
+		}
+
+Also specify the correct interface (only necessary if you multiple interfaces)
+
+::
+
+	command: [ "/opt/bin/flanneld", "--ip-masq", "--kube-subnet-mgr", "--iface=ens4" ]
+
+Now deploy flannel.
+::
+
+	kubectl apply -f ./kube-flannel.yml
+
+
+
+
+
+
+check master state
+------------------
+
+If everything runs as expected you should have kube-dns that started successfully. To check the status of the different service, you can run the command:
+
+::
+
+	kubectl get pods --all-namespaces
+
+The output should show all services as running
+
+.. image:: /_static/class1/cluster-setup-guide-kubeadmin-init-check-cluster-get-pods.png
 	:align: center
-	:scale: 50%
+
+
+
+kubectl get pods --all-namespaces
+
+::
+
+	kubectl get cs
+
+.. image:: /_static/class1/cluster-setup-guide-kubeadmin-init-check-cluster.png
+	:align: center
+
+
+::
+
+	kubectl cluster-info
+
+.. image:: /_static/class1/cluster-setup-guide-kubeadmin-init-check-cluster-info.png
+	:align: center
+
+The next step will be to have our *nodes* join the *master*
