@@ -1,5 +1,5 @@
-Class 2: Kubernetes
-===================
+Class 4: RedHat OpenShift
+=========================
 
 .. toctree::
    :maxdepth: 1
@@ -7,4 +7,4 @@ Class 2: Kubernetes
    :glob:
 
    labinfo
-   module*/intro*
+   module*/*

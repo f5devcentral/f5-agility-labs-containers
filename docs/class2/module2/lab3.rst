@@ -1,95 +1,119 @@
-.. _backend_definition:
+Node setup
+==========
 
-ASP and Marathon ASP Controller Usage
-=====================================
+Once the master is setup and running, we need to connect our *nodes* to it.
 
-The F5 Marathon ASP Controller instance has been deployed. Now we need to test our setup. To do so, we will setup a backend application that will be reached by the frontend application.
 
-.. warning::
+Join the master
+---------------
 
-  Make sure that mesos-dns is running. To check you may go to the Marathon UI and check the status of the application "mesos-dns". If it's not running, click on restart to re-initialize it
-
-  .. image:: /_static/class2/f5-asp-and-controller-check-mesos-dns-state.png
-    :align: center
-    :scale: 50%
-
-To deploy the backend application, connect to the Marathon UI and click on "Create Application"
+to join the master we need to run the command highlighted during the master initialization. In our setup it was:
 
 ::
 
-  {
-    "container": {
-      "docker": {
-        "portMappings": [
-          {
-            "servicePort": 31899,
-            "protocol": "tcp",
-            "containerPort": 80,
-            "hostPort": 0
-          }
-        ],
-        "privileged": false,
-        "image": "10.2.10.10:5000/f5-demo-app",
-        "network": "BRIDGE",
-        "forcePullImage": true
-      },
-      "type": "DOCKER",
-      "volumes": []
-    },
-    "mem": 128,
-    "labels": {
-      "asp": "enable",
-      "ASP_COUNT_PER_APP": "2"
-    },
-    "env": {
-        "F5DEMO_APP": "backend"
-    },
-    "cpus": 0.25,
-    "instances": 1,
-    "upgradeStrategy": {
-      "maximumOverCapacity": 1,
-      "minimumHealthCapacity": 1
-    },
-    "id": "my-backend"
-  }
+	sudo kubeadm join --token=62468f.9dfb3fc97a985cf9 10.1.10.11
 
-You should see the following applications be created:
 
-1. Your "my-backend" application
-2. Another application created with 2 instances called : asp-my-backend. This is your ASP instances deployed in front of your application. You can see that 2 instances were deployed (done via the *ASP_COUNT_PER_APP label*)
+the output should be like this :
 
-.. image:: /_static/class2/f5-asp-and-controller-check-backend-and-asp-deployment.png
-  :align: center
-  :scale: 50%
+.. image:: /_static/class1/cluster-setup-guide-node-setup-join-master.png
+	:align: center
 
-To test your ASP instances, go to the Marathon UI > Application > asp-my-backend. Here you will see that 2 instances are deployed, click on the link specified for each of them:
 
-.. image:: /_static/class2/f5-asp-and-controller-check-asp-instances-deployed.png
-  :align: center
-  :scale: 50%
+to make sure that your *nodes* have joined, you can run this command on the *master*:
 
-If you are connected to the backend instances, it works as expected:
+::
 
-.. image:: /_static/class2/f5-asp-and-controller-access-asp.png
-  :align: center
-  :scale: 50%
+	 kubectl get nodes
 
-.. note::
+You should see your cluster (ie *master* + *nodes*)
 
-  Notice that the user-agent is your browser's agent as expected.
+.. image:: /_static/class1/cluster-setup-guide-node-setup-check-nodes.png
+	:align: center
 
-Now that our backend is deployed and fronted successfully by ASP, we should try to access it from the frontend application.
 
-Go back to your frontend application on http://10.2.10.80. On this page you have a link to the backend, click on it.
+Check that all the services are started as expected (run on the **master**):
 
-You should see something like this:
+::
 
-.. image:: /_static/class2/f5-asp-and-controller-access-backend.png
-  :align: center
-  :scale: 50%
+	kubectl get pods --all-namespaces
 
-On this page you may see the following information:
+.. image:: /_static/class1/cluster-setup-guide-node-setup-check-services.png
+	:align: center
 
-#. host header: the host is asp-my-backend. This is the DNS name for our cluster of ASP instances.
-#. user-agent: We can see that the request came from the frontend application
-#. x-forwarded-for: the request was coming from the BIG-IP (it does SNAT)
+Here we see that some weave net containers keep restarting. This is due to our multi nic setup. Check this link: `Deploying Kubernetes 1.4 on Ubuntu Xenial with Kubeadm <https://dickingwithdocker.com/deploying-kubernetes-1-4-on-ubuntu-xenial-with-kubeadm/>`_
+
+You can validate this by connecting to a node and check the logs for the relevant container
+
+.. image:: /_static/class1/cluster-setup-guide-node-setup-crash-weave.png
+	:align: center
+
+to fix this, you need to run the following command on the **master**:
+
+::
+
+	sudo apt-get install -y jq
+
+	kubectl -n kube-system get ds -l 'component=kube-proxy' -o json | jq '.items[0].spec.template.spec.containers[0].command |= .+ ["--cluster-cidr=10.32.0.0/12"]' | kubectl apply -f - && kubectl -n kube-system delete pods -l 'component=kube-proxy'
+
+.. image:: /_static/class1/cluster-setup-guide-node-setup-crash-weave-fix.png
+	:align: center
+	:scale: 50%
+
+Once this is done, you may check that everything is in a stable "Running" state:
+
+::
+
+	kubectl get pods --all-namespaces
+
+.. image:: /_static/class1/cluster-setup-guide-node-setup-check-all-ok.png
+	:align: center
+
+If you want to enable Kubernetes UI, you may install the dashboard. Run the following command on the **master**
+
+First download a copy of the YAML file to deploy the dashboard.
+::
+
+	wget https://git.io/kube-dashboard-no-rbac -O kube-dashboard-no-rbac.yml
+
+Modify the service to be type NodePort
+
+::
+
+	spec:
+	  ports:
+	  - port: 80
+	    targetPort: 9090
+	  type: NodePort
+	  selector:
+	    k8s-app: kubernetes-dashboard
+
+Now run
+
+::
+
+	kubectl create -f kube-dashboard-no-rbac.yml
+
+You should see the following output:
+
+::
+
+	deployment "kubernetes-dashboard" created
+	service "kubernetes-dashboard" created
+
+to access the dashboard, you need to see on which port it is listening. You can find this information with the following command (on the **master**):
+
+::
+
+	kubectl describe svc kubernetes-dashboard -n kube-system
+
+.. image:: /_static/class1/cluster-setup-guide-check-port-ui.png
+	:align: center
+
+Here we can see that it is listening on port: 31578 (NodePort)
+
+We can now access the dashboard by connecting to the following uri http://<master IP>:31578
+
+.. image:: /_static/class1/cluster-setup-guide-access-ui.png
+	:align: center
+	:scale: 50%
