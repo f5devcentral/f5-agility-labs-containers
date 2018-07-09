@@ -12,7 +12,7 @@ The purpose of this lab is to give you more visibility on
    :caption: Contents:
    :glob:
 
-   module*/intro*
+   module*/module*
 
 Lab Setup
 ---------

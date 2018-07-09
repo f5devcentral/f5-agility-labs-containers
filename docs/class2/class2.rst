@@ -6,7 +6,7 @@ Class 2: Kubernetes
    :caption: Contents:
    :glob:
 
-   module*/intro*
+   module*/module*
 
 Lab Setup
 ---------
