@@ -1,6 +1,12 @@
 Class 4: RedHat OpenShift
 =========================
 
+The purpose of this lab is to give you more visibility on
+
+* Overview of OpenShift and its key components
+* How to launch application from OpenShift
+* How to install and setup F5 solutions for Openshift
+
 .. toctree::
    :maxdepth: 1
    :caption: Contents:

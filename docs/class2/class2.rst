@@ -1,6 +1,13 @@
 Class 2: Kubernetes
 ===================
 
+The purpose of this lab is to give you more visibility on
+
+* Overview of Kubernetes and its key components
+* How to install an Kubernetes cluster on Ubuntu
+* How to launch application from Kubernetes
+* How to install and setup F5 solutions for Kubernetes
+
 .. toctree::
    :maxdepth: 1
    :caption: Contents:
