@@ -24,7 +24,7 @@ To do so go to : System > Users > Partition List. Create a new partition called 
 
 (enter the name "kubernetes" and take all the default settings and click Finished)
 
-.. image:: /_static/class1/f5-container-connector-bigip-partition-setup.png
+.. image:: /_static/class2/f5-container-connector-bigip-partition-setup.png
 	 :align: center
 
 Once your partition is created, we can go back to Kubernetes to setup the F5 Container connector
@@ -54,7 +54,7 @@ On the **master** , we need to setup a deployment file to load our container and
 
    On your desktop select **MRemoteNG**, once launched you'll see a few tabs similar to the example below, please open up Kubernetes tab
 
-   .. image:: /_static/class1/MRemoteNG2.png
+   .. image:: /_static/class2/MRemoteNG2.png
  	  	:align: center
  	  	:scale: 100%
 
@@ -62,7 +62,7 @@ On the **master** , we need to setup a deployment file to load our container and
    Select the **"KUBERNETES-CLUSTER and K8s Master** and double click to connect"
 
 
-   .. image:: /_static/class1/MRemoteNG1.png
+   .. image:: /_static/class2/MRemoteNG1.png
       :align: center
       :scale: 100%
 
@@ -74,7 +74,7 @@ To setup the secret containing your BIG-IP login and password, you can run the f
 
 you should see something like this:
 
-.. image:: /_static/class1/f5-container-connector-bigip-secret.png
+.. image:: /_static/class2/f5-container-connector-bigip-secret.png
 	 :align: center
 
 create a file called ``f5-cc-deployment.yaml``. Here is its content: ---> Please use the file in /home/ubuntu/f5-demo
@@ -137,7 +137,7 @@ Once you have your yaml file setup, you can try to launch your deployment. It wi
 
 	kubectl get deployment k8s-bigip-ctlr-deployment --namespace kube-system
 
-.. image:: /_static/class1/f5-container-connector-launch-deployment-controller.png
+.. image:: /_static/class2/f5-container-connector-launch-deployment-controller.png
 	:align: center
 
 FYI, To locate on which node the container connector is running, you can use the following command:
@@ -146,7 +146,7 @@ FYI, To locate on which node the container connector is running, you can use the
 
 	kubectl get pods -o wide -n kube-system
 
-.. image:: /_static/class1/f5-container-connector-locate-controller-container.png
+.. image:: /_static/class2/f5-container-connector-locate-controller-container.png
 	:align: center
 
 We can see that our container is running on the nodes
@@ -162,7 +162,7 @@ If you want to use kubectl command: you need to use the full name of your pod as
 
 	 kubectl logs k8s-bigip-ctlr-deployment-710074254-b9dr8 -n kube-system
 
-.. image:: /_static/class1/f5-container-connector-check-logs-kubectl.png
+.. image:: /_static/class2/f5-container-connector-check-logs-kubectl.png
    :align: center
    :scale: 50%
 
@@ -174,7 +174,7 @@ On Node1 (or another node depending on the previous command):
 
 	sudo docker ps
 
-.. image:: /_static/class1/f5-container-connector-find-dockerID--controller-container.png
+.. image:: /_static/class2/f5-container-connector-find-dockerID--controller-container.png
 	 :align: center
 
 Here we can see our container ID: 7a774293230b
@@ -185,7 +185,7 @@ Now we can check our container logs:
 
 	sudo docker logs 7a774293230b
 
-.. image:: /_static/class1/f5-container-connector-check-logs-controller-container.png
+.. image:: /_static/class2/f5-container-connector-check-logs-controller-container.png
 	 :align: center
 
 

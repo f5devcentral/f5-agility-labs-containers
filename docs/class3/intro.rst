@@ -13,7 +13,7 @@ Mesos Architecture
 
 This is an extract from `Mesos Architecture <http://mesos.apache.org/documentation/latest/architecture/>`_
 
-.. image:: /_static/class2/Mesos_Architecture.png
+.. image:: /_static/class3/Mesos_Architecture.png
 	:align: center
 	:scale: 50%
 
@@ -40,7 +40,7 @@ Example of resource offer
 
 This is an extract from Apache Mesos website `Mesos Architecture <http://mesos.apache.org/documentation/latest/architecture/>`_
 
-.. image:: /_static/class2/mesos-framework-example.jpg
+.. image:: /_static/class3/mesos-framework-example.jpg
 	:align: center
 	:scale: 50%
 

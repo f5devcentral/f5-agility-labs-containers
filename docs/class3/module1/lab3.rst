@@ -67,17 +67,17 @@ To deploy our front-end application, we will need to do the following:
 
 Wait for your application to be successfully deployed and be in a running state.
 
-.. image:: /_static/class2/f5-container-connector-check-application-running.png
+.. image:: /_static/class3/f5-container-connector-check-application-running.png
 	:align: center
 
 Click on "my-frontend". Here you will see the instance deployed and how to access it (here it's 10.2.10.40:31109 - you may have something else)
 
-.. image:: /_static/class2/f5-container-connector-check-application-instance.png
+.. image:: /_static/class3/f5-container-connector-check-application-instance.png
 	:align: center
 
 Click on the <IP:Port> assigned to be redirect there:
 
-.. image:: /_static/class2/f5-container-connector-access-application-instance.png
+.. image:: /_static/class3/f5-container-connector-access-application-instance.png
 	:align: center
 	:scale: 50%
 
@@ -85,17 +85,17 @@ We can check whether the Marathon BIG-IP Controller has updated our BIG-IP confi
 
 Connect to your BIG-IP on https://10.2.10.60 and go to Local Traffic > Virtual Server. Select the Partition called "**mesos**" from the top-right corner in the GUI. You should have something like this:
 
-.. image:: /_static/class2/f5-container-connector-check-app-on-BIG-IP-VS.png
+.. image:: /_static/class3/f5-container-connector-check-app-on-BIG-IP-VS.png
 	:align: center
 
 Go to Local Traffic > Pool > "my-frontend_10.2.10.80_80" > Members. Here we can see that a single pool member is defined.
 
-.. image:: /_static/class2/f5-container-connector-check-app-on-BIG-IP-Pool_members.png
+.. image:: /_static/class3/f5-container-connector-check-app-on-BIG-IP-Pool_members.png
 	:align: center
 
 In your browser try to connect to http://10.2.10.80. You should be able to access the application (You have a bookmark for the Frontend application in your Chrome browser):
 
-.. image:: /_static/class2/f5-container-connector-access-BIGIP-VS.png
+.. image:: /_static/class3/f5-container-connector-access-BIGIP-VS.png
 	:align: center
 	:scale: 50%
 
@@ -110,14 +110,14 @@ We can try to increase the number of containers delivering our application. To d
 
 Once it is done, you should see 10 "healthy instances" running in Marathon UI. You can also check your pool members list on your BIG-IP.
 
-.. image:: /_static/class2/f5-container-connector-scale-application-UI.png
+.. image:: /_static/class3/f5-container-connector-scale-application-UI.png
 	:align: center
 	:scale: 50%
 
-.. image:: /_static/class2/f5-container-connector-scale-application-UI-10-done.png
+.. image:: /_static/class3/f5-container-connector-scale-application-UI-10-done.png
 	:align: center
 
-.. image:: /_static/class2/f5-container-connector-scale-application-BIGIP-10-done.png
+.. image:: /_static/class3/f5-container-connector-scale-application-BIGIP-10-done.png
 	:align: center
 
 As we can see, the Marathon BIG-IP Controller is adapting the pool members setup based on the number of instances delivering this application automatically.

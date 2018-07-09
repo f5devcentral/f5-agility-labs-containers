@@ -20,6 +20,6 @@ We enable/start the agent process called mesos-slave
 
 Check on one of your master with mesos interface (port 5050) if your agents registered successfully. You should see both slave1 and slave2 in the agent page
 
-.. image:: /_static/class2/setup-slave-check-agent-registration.png
+.. image:: /_static/class3/setup-slave-check-agent-registration.png
 	:align: center
 

@@ -84,7 +84,7 @@ You can check if the deployment was successful with the commands:
 
   kubectl describe svc my-backend
 
-.. image:: /_static/class1/f5-asp-and-kube-proxy-deploy-app.png
+.. image:: /_static/class2/f5-asp-and-kube-proxy-deploy-app.png
   :align: center
 
 Testing Kube Proxy
@@ -92,10 +92,10 @@ Testing Kube Proxy
 
 To test our application, access the frontend app with your browser. It is available via the BIG-IP with the URL: http://10.1.10.81
 
-.. image:: /_static/class1/f5-asp-and-kube-proxy-test-app-backend.png
+.. image:: /_static/class2/f5-asp-and-kube-proxy-test-app-backend.png
   :align: center
 
 click on "Backend App". Here you should see that the client is frontend app and not your browser anymore. It is because we did Client -> Frontend App -> Backend App
 
-.. image:: /_static/class1/f5-asp-and-kube-proxy-test-app-backend2.png
+.. image:: /_static/class2/f5-asp-and-kube-proxy-test-app-backend2.png
   :align: center

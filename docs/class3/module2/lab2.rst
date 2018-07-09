@@ -60,7 +60,7 @@ You can check the deployment of your container the same way that we check the de
 
 #. Via the Marathon UI, go to Application > f5 > marathon-asp-ctlr and check the agent used to deploy the controller
 
-.. image:: /_static/class2/f5-asp-and-controller-check-agent-asp-ctlr.png
+.. image:: /_static/class3/f5-asp-and-controller-check-agent-asp-ctlr.png
 	:align: center
 	:scale: 50%
 
@@ -69,6 +69,6 @@ In this example, we can see that the ASP Controller container was deployed on *1
 #. SSH to the relevant agent
 #. Use **sudo docker ps** to identify the container ID and run **sudo docker logs <container ID>**
 
-.. image:: /_static/class2/f5-asp-and-controller-check-logs-asp-ctlr.png
+.. image:: /_static/class3/f5-asp-and-controller-check-logs-asp-ctlr.png
 	:align: center
 	:scale: 50%

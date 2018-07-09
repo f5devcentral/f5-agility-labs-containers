@@ -46,20 +46,20 @@ Let's validate your BIG-IP is just configured with VLANs, Self-IPs.  No no Virtu
 
 Connect to your BIG-IP on https://10.10.200.98 and familiarize yourself with the the current VLAN's.  Proceed to Network -> VLAN.
 
-.. image:: /_static/class3/F5-BIG-IP-NETWORK-VLAN.png
+.. image:: /_static/class4/F5-BIG-IP-NETWORK-VLAN.png
    :align: center
    :scale: 60%
 
 
 Go to Local Traffic -> Network -> Self-IP.  You should have an internal and external SELF-IPs
 
-.. image:: /_static/class3/F5-BIG-IP-NETWORK-SELFIP.png
+.. image:: /_static/class4/F5-BIG-IP-NETWORK-SELFIP.png
    :align: center
    :scale: 60%
 
 Jump to Local Traffic -> Network -> Tunnel.  You should see something similar to this:
 
-.. image:: /_static/class3/F5-BIG-IP-NETWORK-TUNNEL.png
+.. image:: /_static/class4/F5-BIG-IP-NETWORK-TUNNEL.png
    :align: center
    :scale: 60%
 
@@ -67,7 +67,7 @@ Lastly, validate there are no Virtual Servers and no Pools.  Go to Local Traffic
 
 Last example we can see that there is no pool members defined.
 
-.. image:: /_static/class3/F5-BIG-IP-LOCAL_TRAFFIC-POOL.png
+.. image:: /_static/class4/F5-BIG-IP-LOCAL_TRAFFIC-POOL.png
    :align: center
    :scale: 60%
 

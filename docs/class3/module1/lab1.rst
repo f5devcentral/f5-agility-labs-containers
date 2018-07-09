@@ -18,7 +18,7 @@ You can manage BIG-IP objects directly, or deploy iApps, with the F5 Marathon BI
 Architecture
 ------------
 
-.. image:: /_static/class2/F5-container-connector-overview-f5-solution-architecture.png
+.. image:: /_static/class3/F5-container-connector-overview-f5-solution-architecture.png
 	:align: center
 
 In Marathon, you can associate labels with Application tasks for tracking/reporting purposes. F5 has developed a set of custom “F5 Application Labels” as a way notify the F5 Marathon BIG-IP Controller and F5 Marathon ASP Controller that they have work to do.
