@@ -23,7 +23,7 @@ You can monitor the deployment of the application with the command:
 
 	kubectl get pods -n sock-shop
 
-.. image:: /_static/class1/cluster-setup-guide-test-sock-shop-status.png
+.. image:: /_static/class2/cluster-setup-guide-test-sock-shop-status.png
 	:align: center
 
 .. warning::
@@ -36,12 +36,12 @@ Once all the containers are in a "Running" state, we can try to access our appli
 
 	kubectl describe svc front-end -n sock-shop
 
-.. image:: /_static/class1/cluster-setup-guide-test-sock-shop-find-IP.png
+.. image:: /_static/class2/cluster-setup-guide-test-sock-shop-find-IP.png
 	:align: center
 
 You can now access your application with the following URL: http://<master IP>:<NodePort>
 
-.. image:: /_static/class1/cluster-setup-guide-test-sock-shop-access-ui.png
+.. image:: /_static/class2/cluster-setup-guide-test-sock-shop-access-ui.png
 	:align: center
 
 

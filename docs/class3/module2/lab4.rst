@@ -68,7 +68,7 @@ than 2 ASP instances ? In our setup it won't work: We have only 2 agents, so
 we have only 2 ports available to listen on 31899. Marathon would be able to
 deploy 2 instances and then would fail allocating more instances:
 
-.. image:: /_static/class2/f5-asp-and-controller-deploy-4-asp-instances-fail.png
+.. image:: /_static/class3/f5-asp-and-controller-deploy-4-asp-instances-fail.png
 	:align: center
 	:scale: 50%
 

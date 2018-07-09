@@ -25,10 +25,10 @@ Start a new app in marathon:
 
 Once it's running, go to one of your slaves and run ping app-test-dns.marathon.mesos. It should work
 
-.. image:: /_static/class2/setup-mesos-dns-test-create-app.png
+.. image:: /_static/class3/setup-mesos-dns-test-create-app.png
   :align: center
 
 If you don't try to ping from Slave1 or slave2, make sure that your client reach our mesos-dns server first (10.2.10.40)
 
-.. image:: /_static/class2/setup-mesos-dns-test-ping-app.png
+.. image:: /_static/class3/setup-mesos-dns-test-ping-app.png
   :align: center

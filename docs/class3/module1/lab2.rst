@@ -24,7 +24,7 @@ You need to setup a partition that will be used by F5 Container Connector.
 
 To do so, go to : System > Users > Partition List. Create a new partition called "mesos"
 
-.. image:: /_static/class2/f5-container-connector-bigip-partition-setup.png
+.. image:: /_static/class3/f5-container-connector-bigip-partition-setup.png
   :align: center
   :scale: 50%
 
@@ -37,13 +37,13 @@ To deploy our Marathon BIG-IP Controller, we need to either use Marathon UI or u
 
 * Connect to the Marathon UI on `http://10.2.10.10:8080 <http://10.2.10.10:8080>`_ and click on "Create Application".
 
-.. image:: /_static/class2/f5-container-connector-create-application-button.png
+.. image:: /_static/class3/f5-container-connector-create-application-button.png
 
 
 * Click on "JSON mode" in the top-right corner
 
 
-.. image:: /_static/class2/f5-container-connector-json-mode.png
+.. image:: /_static/class3/f5-container-connector-json-mode.png
 
 **REPLACE** the 8 lines of default JSON code shown with the following JSON config:
 
@@ -72,11 +72,11 @@ To deploy our Marathon BIG-IP Controller, we need to either use Marathon UI or u
 
 * After a few seconds you should have a 2nd application folder labeled “F5” as shown in this picture.
 
-.. image:: /_static/class2/f5-container-connector-clickF5folder.png
+.. image:: /_static/class3/f5-container-connector-clickF5folder.png
 
 * Click on the “F5” folder and you should have running the BIG-IP North/South Controller labeled marathon-bigip-ctrl
 
-.. image:: /_static/class2/f5-container-connector-f5-folder-shown.png
+.. image:: /_static/class3/f5-container-connector-f5-folder-shown.png
 
 .. note::
 
@@ -99,7 +99,7 @@ To check the logs, you need to identify where is the Controller running. In Mara
 
 you should see something like this :
 
-.. image:: /_static/class2/f5-container-connector-locate-bigip-controller.png
+.. image:: /_static/class3/f5-container-connector-locate-bigip-controller.png
   :align: center
   :scale: 50%
 
@@ -111,7 +111,7 @@ Here we can see that the Controller is running on 10.2.10.50 (which is **f5-meso
 
 This command will give us the ID of our Controller container ID, here it is : 20b39baccfba. We need this ID for the next few commands
 
-.. image:: /_static/class2/f5-container-connector-get-bigip-ctlr-container-id.png
+.. image:: /_static/class3/f5-container-connector-get-bigip-ctlr-container-id.png
   :align: center
 
 To check the logs of our Controller:
@@ -120,7 +120,7 @@ To check the logs of our Controller:
 
   sudo docker logs 20b39baccfba
 
-.. image:: /_static/class2/f5-container-connector-check-logs-bigip-ctlr.png
+.. image:: /_static/class3/f5-container-connector-check-logs-bigip-ctlr.png
   :align: center
 
 To connect to our container with a Shell:
@@ -129,5 +129,5 @@ To connect to our container with a Shell:
 
    sudo docker exec -i -t 20b39baccfba /bin/sh
 
-.. image:: /_static/class2/f5-container-connector-run-shell-bigip-ctlr.png
+.. image:: /_static/class3/f5-container-connector-run-shell-bigip-ctlr.png
   :align: center

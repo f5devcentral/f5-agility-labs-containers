@@ -73,7 +73,7 @@ if you want to test your setup you can do the following:
 
 This will start your mesos-dns app and you can test it.
 
-.. image:: /_static/class2/setup-mesos-dns-test.png
+.. image:: /_static/class3/setup-mesos-dns-test.png
 	:align: center
 	:scale: 50%
 

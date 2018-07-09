@@ -8,7 +8,7 @@ Connect to Marathon through one of the master (:8080) and launch an application
 
 #.  Click on *create application*
 
-    .. image:: /_static/class2/setup-slave-test-create-application-button.png
+    .. image:: /_static/class3/setup-slave-test-create-application-button.png
        :align: center
 
 #.  ID: Test
@@ -18,25 +18,25 @@ Connect to Marathon through one of the master (:8080) and launch an application
 
 #.  Click on *Create Application*
 
-    .. image:: /_static/class2/setup-slave-test-create-application-command-def.png
+    .. image:: /_static/class3/setup-slave-test-create-application-command-def.png
        :align: center
 
 Once it runs, if you connect to the mesos framework, you should see more and
 more completed tasks. Name of the task should be "Test" (our ID).
 
-.. image:: /_static/class2/setup-slave-test-create-application-command-exec1.png
+.. image:: /_static/class3/setup-slave-test-create-application-command-exec1.png
    :align: center
 
 If you let it run for a while, you'll see more and more "Completed Tasks". You
 can see that the Host being selected to run those tasks is not always the same.
 
-.. image:: /_static/class2/setup-slave-test-create-application-command-exec2.png
+.. image:: /_static/class3/setup-slave-test-create-application-command-exec2.png
   :align: center
 
 Go Back to Marathon, click on our application *test* and click on the setting
 button and select *destroy* to remove it.
 
-.. image:: /_static/class2/setup-slave-test-create-application-command-delete.png
+.. image:: /_static/class3/setup-slave-test-create-application-command-delete.png
   :align: center
 
 Launch a container
@@ -67,25 +67,25 @@ to JSON mode and use the following to start an apache in a container
      }
    }
 
-.. image:: /_static/class2/setup-slave-test-create-container-def.png
+.. image:: /_static/class3/setup-slave-test-create-container-def.png
    :align: center
 
 It may take some time to switch from ``Deploying`` to ``Running``. Once it's
 in a ``Running`` state, check the port used by the container and try to access
 it (slave ``IP:port``)
 
-.. image:: /_static/class2/setup-slave-test-create-container-run.png
+.. image:: /_static/class3/setup-slave-test-create-container-run.png
    :align: center
 
 Click on your application and here you'll see the port associated to your
 instance (here it is ``31755``) and on which host it run
 (here slave1 - ``10.1.20.51``)
 
-.. image:: /_static/class2/setup-slave-test-create-container-check-port.png
+.. image:: /_static/class3/setup-slave-test-create-container-check-port.png
    :align: center
 
 
 Use your browser to connect to the application:
 
-.. image:: /_static/class2/setup-slave-test-create-container-access.png
+.. image:: /_static/class3/setup-slave-test-create-container-access.png
    :align: center

@@ -7,7 +7,7 @@ Configuration steps on ose-mstr01
 
 Using MremoteNG, go to the OpenShift folder, and connect to OSE-Master
 
-.. image:: /_static/class3/MremoteNG.png
+.. image:: /_static/class4/MremoteNG.png
    :align: center
 
 The next step logs you into Openshift Client
@@ -25,7 +25,7 @@ Next let's explore the f5-hostsubnet.yaml file
 
 You'll see a config file similar to this:
 
-.. image:: /_static/class3/F5-HOSTSUBNET-YAML.png
+.. image:: /_static/class4/F5-HOSTSUBNET-YAML.png
    :align: center
 
 This YAML file create an OpenShift Node and the host is the BIG-IP "with /23 subnet of IP's (3 images down)"
@@ -36,7 +36,7 @@ Next let's look at the current cluster,  you should see 3 members (1 master, 2 n
 
   oc get hostsubnet
 
-.. image:: /_static/class3/F5-OC-HOSTSUBNET1.png
+.. image:: /_static/class4/F5-OC-HOSTSUBNET1.png
    :align: center
 
 
@@ -48,7 +48,7 @@ Let create the connector to the BIG-IP device, then look before and after at the
 
 You should see a successful creation a new OpenShift Node
 
-.. image:: /_static/class3/F5-OS-NODE.png
+.. image:: /_static/class4/F5-OS-NODE.png
    :align: center
 
 Nothing has been done yet to the BIG-IP, this only was done in the OpenShift environment.
@@ -59,7 +59,7 @@ Nothing has been done yet to the BIG-IP, this only was done in the OpenShift env
 
 You should now see  OpenShift configured to communicate with the BIG-IP
 
-.. image:: /_static/class3/F5-OC-HOSTSUBNET2.png
+.. image:: /_static/class4/F5-OC-HOSTSUBNET2.png
    :align: center
 
 
@@ -123,12 +123,12 @@ As ContainerCreating is dependent on many factors i.e. first download remotely, 
 
 As we watch it change from ContainerCreating...
 
-.. image:: /_static/class3/F5-CTRL-CREATING.png
+.. image:: /_static/class4/F5-CTRL-CREATING.png
    :align: center
 
 To *Running* state, once you see this go ahead and CTRL-D out of the watch routine
 
-.. image:: /_static/class3/F5-CTRL-RUNNING.png
+.. image:: /_static/class4/F5-CTRL-RUNNING.png
    :align: center
 
 Last step - create a virtual server and pool
