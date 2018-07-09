@@ -3,8 +3,8 @@ Install Mesos
 
 All the steps mentioned below are to be done on **ALL THE AGENTS**
 
-* Slave1
-* Slave2
+* Agent1
+* Agent2
 
 Update the system
 -----------------
