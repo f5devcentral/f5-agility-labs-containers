@@ -1,4 +1,4 @@
-Kubernetes services overview
+Kubernetes Services Overview
 ============================
 
 Refer to `Kubernetes services <http://kubernetes.io/docs/user-guide/services/>`_ for more information
