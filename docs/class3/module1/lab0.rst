@@ -1,5 +1,5 @@
-Intro to Mesos / Marathon
-=========================
+Introduction to Mesos / Marathon
+================================
 
 Before working on the installation itself, you need to understand the different components involved in this setup:
 
