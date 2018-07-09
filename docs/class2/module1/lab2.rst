@@ -1,4 +1,4 @@
-Kubernetes networking
+Kubernetes Networking
 =====================
 
 This is an extract from `Networking in Kubernetes <http://http://kubernetes.io/docs/admin/networking/>`_

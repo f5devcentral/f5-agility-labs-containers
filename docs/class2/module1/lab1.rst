@@ -1,4 +1,4 @@
-Kubernetes overview
+Kubernetes Overview
 ===================
 
 Kubernetes has a lot of documentation available at this location: `Kubernetes docs <http://kubernetes.io/docs/>`_
