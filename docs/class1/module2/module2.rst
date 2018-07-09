@@ -1,5 +1,5 @@
-Install Docker
-==============
+Module 2: Install Docker
+========================
 
 .. toctree::
    :maxdepth: 1

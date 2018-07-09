@@ -6,7 +6,7 @@ Class 4: RedHat OpenShift
    :caption: Contents:
    :glob:
 
-   module*/*
+   module*/module*
 
 Lab Setup
 ---------
