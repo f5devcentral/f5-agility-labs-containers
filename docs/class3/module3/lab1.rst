@@ -1,13 +1,10 @@
-.. _my-mesos-setup:
+Install Mesos
+=============
 
-Install Mesos and Marathon
-==========================
+All the steps mentioned below are to be done on **ALL THE AGENTS**
 
-All the steps mentioned below are to be done on **ALL THE MASTERS**
-
-* Master1
-* Master2
-* Master3
+* Agent1
+* Agent2
 
 Update the system
 -----------------
@@ -24,11 +21,11 @@ Once this is done, we need to install the required packages to execute the mesos
 
 	sudo apt-get install -y openjdk-8-jdk
 
-	sudo apt-get -y install build-essential python-dev python-virtualenv libcurl4-nss-dev libsasl2-dev libsasl2-modules maven libapr1-dev libsvn-dev zlib1g-dev
+	sudo apt-get install -y build-essential python-dev libcurl4-nss-dev libsasl2-dev libsasl2-modules maven libapr1-dev libsvn-dev unzip
 
 
-Install Mesos and Marathon
---------------------------
+Install Mesos
+-------------
 
 Now we need to let apt-get have access to the relevant repo (based on our distro name : ubuntu and our version: xenial)
 
@@ -51,8 +48,8 @@ Do the following commands:
 	#Update our local package cache to have access to mesosphere packages
 	sudo apt-get -y update
 
-Finally we can install mesos and marathon on our masters
+Finally we can install mesos on our agents
 
 ::
 
-	sudo apt-get install -y mesos marathon
+	sudo apt-get install -y mesos

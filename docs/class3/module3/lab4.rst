@@ -1,25 +1,25 @@
-Setup Marathon
-==============
+Start your services
+===================
 
-We need to create the marathon directory structure on **each master**
-
-::
-
-	sudo mkdir -p /etc/marathon/conf
-
-	sudo cp /etc/mesos-master/hostname /etc/marathon/conf
-
-
-We need to specify the zookeeper masters that marathon will connect to (for information and things like scheduling). We can copy the previous file we setup for mesos
+We need to make sure that zookeeper and mesos-master don't run on those agents. Do this on **all agents**:
 
 ::
 
-	sudo cp /etc/mesos/zk /etc/marathon/conf/master
+	sudo  systemctl stop zookeeper
+	printf manual | sudo tee /etc/init/zookeeper.override
 
-We also need to have marathon store its own state in zookeper (since it runs on all three masters).
+	sudo systemctl stop mesos-master
+	printf manual | sudo tee /etc/init/mesos.master.override
 
-Create a file /etc/marathon/conf/zk and put the following into it:
+We enable/start the agent process called mesos-slave
 
 ::
 
-	printf "zk://10.2.10.10:2181,10.2.10.20:2181,10.2.10.30:2181/marathon" | sudo tee /etc/marathon/conf/zk
+	sudo systemctl enable mesos-slave
+	sudo systemctl start mesos-slave
+
+Check on one of your master with mesos interface (port 5050) if your agents registered successfully. You should see both slave1 and slave2 in the agent page
+
+.. image:: /_static/class3/setup-slave-check-agent-registration.png
+	:align: center
+

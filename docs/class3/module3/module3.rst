@@ -1,5 +1,5 @@
-Module 3: Setup the Masters
-===========================
+Module 3: Setup the Agents
+==========================
 
 .. toctree::
    :maxdepth: 1

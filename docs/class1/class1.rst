@@ -1,25 +1,20 @@
-Class 1: Docker
-===============
+Class 1: Introduction to Docker
+===============================
 
-The purpose of this lab is to give you more visibility on
-
-* Overview of Docker and its key components
-* How to install Docker on Ubuntu
-* How to launch application on Docker
+This introductory class covers the following topics:
 
 .. toctree::
    :maxdepth: 1
-   :caption: Contents:
    :glob:
 
    module*/module*
 
+Expected time to complete: **30 minutes**
+
 Lab Setup
 ---------
 
-Here is the setup we will leverage to work on the Kubernetes environment.
-
-In the existing environment, here is the setup you're working within:
+We will leverage the following setup to configure the Docker environment.
 
 .. list-table::
   :header-rows: 1
@@ -41,18 +36,24 @@ In the existing environment, here is the setup you're working within:
 
       external-kube 10.1.10.0/24
 
-    - GUI: admin/admin
+    - admin/admin
 
-      SSH: root/default
+      root/default
   * - kube-master1
-    - 10.1.10.11
-    - external-kube: 10.10.199.0/24
-    - SSH: root/default
-  * - kube-node1
     - 10.1.10.21
-    - external-kube: 10.10.199.0/24
-    - SSH: root/default
-  * - kube-node2
+    - external-kube: 10.1.10.0/24
+    - ubuntu/ubuntu
+
+      root/default
+  * - kube-node1
     - 10.1.10.22
-    - external-kube: 10.10.199.0/24
-    - SSH: root/default
+    - external-kube: 10.1.10.0/24
+    - ubuntu/ubuntu
+
+      root/default
+  * - kube-node2
+    - 10.1.10.23
+    - external-kube: 10.1.10.0/24
+    - ubuntu/ubuntu
+
+      root/default

@@ -1,67 +1,91 @@
-Start your services
-===================
+Test your setup
+===============
 
-When you install mesos, the master and slave services are enabled (called mesos-master and mesos-slave). Here, we want our master to focus on this tasks so we need to disable the slave service.
+Launch a command
+----------------
 
-Do this on *all the master* nodes:
+Connect to Marathon through one of the master (:8080) and launch an application
 
-::
+#.  Click on *create application*
 
-	sudo systemctl stop mesos-slave
-	printf manual | sudo tee /etc/init/mesos-slave.override
+    .. image:: /_static/class3/setup-slave-test-create-application-button.png
+       :align: center
 
+#.  ID: Test
+    CPU: 0.1
+    Memory : 32M
+    Command: echo Test; sleep 10
 
-We need to restart our zookeeper process and start mesos-master and marathon on *all master* nodes:
+#.  Click on *Create Application*
 
-::
+    .. image:: /_static/class3/setup-slave-test-create-application-command-def.png
+       :align: center
 
-	sudo systemctl restart zookeeper
+Once it runs, if you connect to the mesos framework, you should see more and
+more completed tasks. Name of the task should be "Test" (our ID).
 
-	sudo systemctl enable mesos-master
+.. image:: /_static/class3/setup-slave-test-create-application-command-exec1.png
+   :align: center
 
-	sudo systemctl start mesos-master
+If you let it run for a while, you'll see more and more "Completed Tasks". You
+can see that the Host being selected to run those tasks is not always the same.
 
-	sudo systemctl enable marathon
+.. image:: /_static/class3/setup-slave-test-create-application-command-exec2.png
+  :align: center
 
-	sudo systemctl start marathon
+Go Back to Marathon, click on our application *test* and click on the setting
+button and select *destroy* to remove it.
 
-We can validate that it works by connecting to mesos and marathon. Mesos runs on port 5050 (http) while marathon runs on port 8080.
+.. image:: /_static/class3/setup-slave-test-create-application-command-delete.png
+  :align: center
 
-Mesos:
+Launch a container
+------------------
 
-.. image:: /_static/class3/setup-master-check-UI-mesos-master.png
-	:align: center
-
-Marathon:
-
-.. image:: /_static/class3/setup-master-check-UI-marathon.png
-	:align: center
-
-if you want to check whether the service started as expected, you can use the following commands:
-
-::
-
-	sudo systemctl status mesos-master
-
-	sudo systemctl status marathon
-
-you should see something like this:
-
-.. image:: /_static/class3/setup-master-check-service-mesos-master.png
-	:align: center
+To test our containers from marathon, click on create an application, switch
+to JSON mode and use the following to start an apache in a container
 
 
-.. image:: /_static/class3/setup-master-check-service-marathon.png
-	:align: center
+.. NOTE:: This may takes some time since we will have to retrieve the image
+   first
 
-Check the *about* section in marathon to have the information about the service.
+.. code-block:: json
 
-.. image:: /_static/class3/setup-master-about-marathon.png
-	:align: center
+   {
+     "id": "my-website",
+     "cpus": 0.5,
+     "mem": 32.0,
+     "container": {
+       "type": "DOCKER",
+       "docker": {
+         "image": "eboraas/apache-php",
+         "network": "BRIDGE",
+         "portMappings": [
+           { "containerPort": 80, "hostPort": 0 }
+         ]
+       }
+     }
+   }
 
-You can do the following to test the high availability of marathon:
-	• Find on which mesos is running the framework marathon (here based on our screenshot above, it is available on master1)
-	• Restart this master and you should see the framework was restarted automatically on another host
+.. image:: /_static/class3/setup-slave-test-create-container-def.png
+   :align: center
 
-.. image:: /_static/class3/setup-master-test-HA-marathon.png
-	:align: center
+It may take some time to switch from ``Deploying`` to ``Running``. Once it's
+in a ``Running`` state, check the port used by the container and try to access
+it (slave ``IP:port``)
+
+.. image:: /_static/class3/setup-slave-test-create-container-run.png
+   :align: center
+
+Click on your application and here you'll see the port associated to your
+instance (here it is ``31755``) and on which host it run
+(here slave1 - ``10.1.20.51``)
+
+.. image:: /_static/class3/setup-slave-test-create-container-check-port.png
+   :align: center
+
+
+Use your browser to connect to the application:
+
+.. image:: /_static/class3/setup-slave-test-create-container-access.png
+   :align: center

@@ -1,5 +1,5 @@
-Module 4: Setup the Agents
-==========================
+Module 4: Setup DNS
+===================
 
 .. toctree::
    :maxdepth: 1
