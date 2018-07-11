@@ -1,5 +1,5 @@
-Welcome to F5 101 Containers lab's documentation!
-=================================================
+Welcome to F5 101 Containers lab's documentation!!
+==================================================
 
 **The purpose of these labs is to give you better understanding of...**
 
@@ -37,4 +37,3 @@ Welcome to F5 101 Containers lab's documentation!
 
    intro
    class*/class*
-   
