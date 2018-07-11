@@ -1,25 +1,20 @@
-Class 4: RedHat OpenShift
-=========================
+Class 4: Introduction to RedHat OpenShift
+=========================================
 
-The purpose of this lab is to give you more visibility on
-
-* Overview of OpenShift and its key components
-* How to launch application from OpenShift
-* How to install and setup F5 solutions for Openshift
+This introductory class covers the following topics:
 
 .. toctree::
    :maxdepth: 1
-   :caption: Contents:
    :glob:
 
    module*/module*
 
+Expected time to complete: **30 minutes**
+
 Lab Setup
 ---------
 
-Here is the setup we will leverage to work on the RedHat OpenShift environment.
-
-In the existing environment, here is the setup you're working within:
+We will leverage the following setup to configure the OpenShift environment.
 
 .. list-table::
   :header-rows: 1

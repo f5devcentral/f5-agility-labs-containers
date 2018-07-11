@@ -1,5 +1,5 @@
-(NEED TO REMOVE???) Module 2: F5 Mesos / Marathon ASP
-=====================================================
+Module 2: Setup the Masters
+===========================
 
 .. toctree::
    :maxdepth: 1
