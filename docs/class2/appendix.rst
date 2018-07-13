@@ -1,5 +1,5 @@
-Module 4: Recap of Kubernetes and additional links
-==================================================
+Appendix
+========
 
 This Kubernetes lab came from open source code on Github, Docker, Ubuntu, and was originally created by F5 Solution Architects and F5 PD.  This was updated to a RavelloSystems BluePrint to support multiple container deployments for the 2018 F5 Agility event.
 
@@ -9,13 +9,11 @@ http://clouddocs.f5.com/containers/v2/kubernetes/index.html
 
 Additional links available:
 
-- F5 BIG-IP Controller for Kubernetes and OpenShift
+- F5 BIG-IP Controller for Kubernetes
   - https://hub.docker.com/r/f5networks/k8s-bigip-ctlr
-- F5 BIG-IP Controller for Marathon
-  - https://hub.docker.com/r/f5networks/marathon-bigip-ctlr
-- Container Connector Documentation
+- F5 Container Connector Knowledge Center
   - https://support.f5.com/csp/knowledge-center/software/F5%20Container%20Connector
-- Software lifecycle policy
+- Software lifecycle policy for F5 Container Connector
   - https://support.f5.com/csp/article/K86859508
-- F5 support for Github software policy
+- F5 support for GitHub software
   - https://support.f5.com/csp/article/K80012344
