@@ -1,5 +1,5 @@
-Container Connector(CC) Setup
-=============================
+Lab 3.1 - F5 Container Connector(CC) Setup
+==========================================
 
 The official CC documentation is here: `Install the F5 Kubernetes BIG-IP Controller <http://clouddocs.f5.com/containers/v1/kubernetes/kctlr-app-install.html>`_
 
@@ -10,193 +10,204 @@ To use F5 Container connector, you'll need a BIG-IP up and running first.
 
 Through the Jumpbox, you should have a BIG-IP available at the following URL: https://10.1.1.245
 
-.. WARNING::
+.. warning:: Connect to your BIG-IP and check it is active and licensed. Its login and password are: **admin/admin**
 
-   Connect to your BIG-IP and check it is active and licensed. Its login and password are: **admin/admin**
+    If your BIG-IP has no license or its license expired, renew the license. You just need a LTM VE license for this lab. No specific add-ons are required (ask a lab instructor for eval licenses if your license has expired)
 
-.. NOTE::
+#. You need to setup a partition that will be used by F5 Container Connector.
 
-	 If your BIG-IP has no license or its license expired, renew the license. You just need a LTM VE license for this lab. No specific add-ons are required (ask a lab instructor for eval licenses if your license has expired)
+    .. code-block:: bash
 
-You need to setup a partition that will be used by F5 Container Connector.
+        From the CLI:
+        tmsh create auth partition kubernetes
 
-To do so go to : System > Users > Partition List. Create a new partition called "kubernetes"
+        From the UI:
+        GoTo System --> Users --> Partition List
+        Create a new partition called "kubernetes" (use default settings and click Finished)
 
-(enter the name "kubernetes" and take all the default settings and click Finished)
+    .. image:: images/f5-container-connector-bigip-partition-setup.png
+        :align: center
 
-.. image:: /_static/class2/f5-container-connector-bigip-partition-setup.png
-	 :align: center
+    With the new partition created, we can go back to Kubernetes to setup the F5 Container connector.
 
-Once your partition is created, we can go back to Kubernetes to setup the F5 Container connector
-
-Container Connector deployment
+Container Connector Deployment
 ------------------------------
 
-Here we consider you have already retrieved the F5 container connector image and loaded it in the environment.
+.. note:: For a more thorough explanation of all the settings and options see `F5 Container Connector - Kubernetes <https://clouddocs.f5.com/containers/v2/kubernetes/>`_
 
-.. NOTE::
+Now that BIG-IP is licensed and prepped with the "kubernetes" partition, we need to define a `Kubernetes deployment <https://kubernetes.io/docs/user-guide/deployments/>`_ and create a `Kubernetes secret <https://kubernetes.io/docs/user-guide/secrets/>`_ to hide our bigip credentials. 
 
-   Because we have already loaded docker images for this environment, this can be skipped.
+#. From the jumphost open **mRemoteNG** and start a session with Kube-master.
 
-   Normally if you haven't loaded it in your environment, you have a few choices to load the images i.e.:
+    .. note:: As a reminder we're utilizing a wrapper called **MRemoteNG** for Putty and other services. MRNG hold credentials and allows for multiple protocols(i.e. SSH, RDP, etc.), makes jumping in and out of SSH connections easier.
 
-   #. load it on **all your systems** with the docker load -i <file_name.tar>
-   #. load it on a system and push it into your registry
+    On your desktop select **MRemoteNG**, once launched you'll see a few tabs similar to the example below.  Open up the Kubernetes / kubernetes-Cluster folder and double click kube-master.
 
-Now that our container is loaded, we need to define a deployment: `Kubernetes deployments <https://kubernetes.io/docs/user-guide/deployments/>`_ and create a secret to hide our bigip credentials. `Kubernetes secrets <https://kubernetes.io/docs/user-guide/secrets/>`_
+    .. image:: images/MRemoteNG-kubernetes.png
+        :align: center
 
-On the **master** , we need to setup a deployment file to load our container and also setup a secret for our big-ip credentials
+#. "git" the demo files
 
-.. NOTE::
+    .. code-block:: bash
 
-   Utilizing a wrapper called MRemoteNG for Putty and other services.
-   MRNG hold credentials and allows for multiple protocols (i.e. SSH, RDP, etc.), makes jumping in and out of SSH connections easier
+        git clone https://github.com/vtog/f5-kube-demo.git
 
-   On your desktop select **MRemoteNG**, once launched you'll see a few tabs similar to the example below, please open up Kubernetes tab
+    .. note:: If you did the optional Kubernetes UI Lab earlier you have these files.
 
-   .. image:: /_static/class2/MRemoteNG2.png
- 	  	:align: center
- 	  	:scale: 100%
+#. Create bigip login secret
+
+    .. code-block:: bash
+
+        kubectl create secret generic bigip-login -n kube-system --from-literal=username=admin --from-literal=password=admin
+
+    You should see something similar to this:
+
+    .. image:: images/f5-container-connector-bigip-secret.png
+        :align: center
+
+#. Create kubernetes service account for bigip controller
+
+    .. code-block:: bash
+
+        kubectl create serviceaccount k8s-bigip-ctlr -n kube-system
+
+    You should see something similar to this:
+
+    .. image:: images/f5-container-connector-bigip-serviceaccount.png
+        :align: center
 
 
-   Select the **"KUBERNETES-CLUSTER and K8s Master** and double click to connect"
+#. Create cluster role for bigip service account (admin rights, but can be modified for your environment)
+
+    .. code-block:: bash
+
+        kubectl create clusterrolebinding k8s-bigip-ctlr-clusteradmin --clusterrole=cluster-admin --serviceaccount=kube-system:k8s-bigip-ctlr
+
+    You should see something similar to this:
+
+    .. image:: images/f5-container-connector-bigip-clusterrolebinding.png
+        :align: center
+
+#. At this point we have two deployment mode options, Nodeport or Cluster. For more information see `BIG-IP Controller Modes <http://clouddocs.f5.com/containers/v2/kubernetes/kctlr-modes.html>`_
+
+    .. important:: This lab will focus on **Nodeport** but both deployment options are included below.
+
+    #. **Nodeport mode** ``f5-nodeport-deployment.yaml``. 
+    
+        .. note:: For your convenience the file can be found in /home/ubuntu/f5-kube-demo (downloaded earlier in the clone git repo step).
+
+        .. note:: Or you can cut and paste the file below and create your own file.
+            If you have issues with your yaml and syntax (**identation MATTERS**), you can try to use an online parser to help you : `Yaml parser <http://codebeautify.org/yaml-validator>`_
 
 
-   .. image:: /_static/class2/MRemoteNG1.png
-      :align: center
-      :scale: 100%
+        .. code-block:: yaml
+            :linenos:
+            :emphasize-lines: 2,17,34,35,37
 
-To setup the secret containing your BIG-IP login and password, you can run the following command:
-
-::
-
-	kubectl create secret generic bigip-login --namespace kube-system --from-literal=username=admin --from-literal=password=admin
-
-you should see something like this:
-
-.. image:: /_static/class2/f5-container-connector-bigip-secret.png
-	 :align: center
-
-create a file called ``f5-cc-deployment.yaml``. Here is its content: ---> Please use the file in /home/ubuntu/f5-demo
-
-If you're not used to using Linux/Unix, please ask for help and we'll come over and show you how to create and edit files in the CLI
-
-.. code-block:: yaml
-
-        apiVersion: extensions/v1beta1
-        kind: Deployment
-        metadata:
-          name: k8s-bigip-ctlr-deployment
-          namespace: kube-system
-        spec:
-          replicas: 1
-          template:
+            apiVersion: extensions/v1beta1
+            kind: Deployment
             metadata:
-              name: k8s-bigip-ctlr
-              labels:
-                app: k8s-bigip-ctlr
+              name: k8s-bigip-ctlr-deployment
+              namespace: kube-system
             spec:
-              containers:
-                - name: k8s-bigip-ctlr
-                  image: "f5networks/k8s-bigip-ctlr:1.0.0"
-                  imagePullPolicy: IfNotPresent
-                  env:
-                    - name: BIGIP_USERNAME
-                      valueFrom:
-                        secretKeyRef:
-                          name: bigip-login
-                          key: username
-                    - name: BIGIP_PASSWORD
-                      valueFrom:
-                        secretKeyRef:
-                          name: bigip-login
-                          key: password
-                  command: ["/app/bin/k8s-bigip-ctlr"]
-                  args: [
-                    "--bigip-username=$(BIGIP_USERNAME)",
-                    "--bigip-password=$(BIGIP_PASSWORD)",
-                    "--bigip-url=10.1.10.60",
-                    "--bigip-partition=kubernetes",
-                    "--namespace=default"
-                  ]
+              replicas: 1
+              template:
+                metadata:
+                  name: k8s-bigip-ctlr
+                  labels:
+                     app: k8s-bigip-ctlr
+                spec:
+                  serviceAccountName: k8s-bigip-ctlr
+                  containers:
+                    - name: k8s-bigip-ctlr
+                      image: "f5networks/k8s-bigip-ctlr:1.5.1"
+                      imagePullPolicy: IfNotPresent
+                      env:
+                        - name: BIGIP_USERNAME
+                          valueFrom:
+                            secretKeyRef:
+                              name: bigip-login
+                              key: username
+                        - name: BIGIP_PASSWORD
+                          valueFrom:
+                            secretKeyRef:
+                              name: bigip-login
+                              key: password
+                      command: ["/app/bin/k8s-bigip-ctlr"]
+                      args: [
+                        "--bigip-username=$(BIGIP_USERNAME)",
+                        "--bigip-password=$(BIGIP_PASSWORD)",
+                        "--bigip-url=10.1.10.21",
+                        "--bigip-partition=kubernetes",
+                        "--namespace=default",
+                        "--pool-member-type=nodeport"
+                        ]
 
-.. NOTE::
+    #. Once you have your yaml file setup, you can try to launch your deployment. It will start our f5-k8s-controller container on one of our nodes (may take around 30sec to be in a running state):
 
-   You can use the templates on your jumpbox desktop or the Kubernetes Master under /home/ubuntu/f5-demo. If you use those files, you'll need to :
+        .. code-block:: bash
 
-	 * check the container image path in the deployment file is accurate
-	 * Update the "bindAddr" in the configMap for an IP you want to use in this blueprint.
+            kubectl create -f f5-nodeport-deployment.yaml
 
-If you have issues with your yaml and syntax (**identation MATTERS**), you can try to use an online parser to help you : `Yaml parser <http://codebeautify.org/yaml-validator>`_
+            kubectl get deployment k8s-bigip-ctlr-deployment --namespace kube-system
 
-Once you have your yaml file setup, you can try to launch your deployment. It will start our f5-k8s-controller container on one of our node (may take around 30sec to be in a running state):
+        .. image:: images/f5-container-connector-launch-deployment-controller.png
+            :align: center
 
-::
+    #. To locate on which node the container connector is running, you can use the following command:
 
-	kubectl create -f f5-cc-deployment.yaml
+        .. code-block:: bash
 
-	kubectl get deployment k8s-bigip-ctlr-deployment --namespace kube-system
+            kubectl get pods -o wide -n kube-system
 
-.. image:: /_static/class2/f5-container-connector-launch-deployment-controller.png
-	:align: center
+        We can see that our container is running on kube-node2 below.
+    
+        .. image:: images/f5-container-connector-locate-controller-container.png
+            :align: center
 
-FYI, To locate on which node the container connector is running, you can use the following command:
+    #. If you need to troubleshoot your container, you have two different ways to check the logs of your container:
 
-::
+        - kubectl command (recommended - easier)
+        - docker command (By connecting to the relevant node. Here you'll need to identify which node is running the container)
 
-	kubectl get pods -o wide -n kube-system
+        #. Using kubectl command: you need to use the full name of your pod as showed in the previous image
 
-.. image:: /_static/class2/f5-container-connector-locate-controller-container.png
-	:align: center
+            .. code-block:: bash
+                
+                kubectl logs k8s-bigip-ctlr-deployment-79fcf97bcc-48qs7 -n kube-system
 
-We can see that our container is running on the nodes
+            .. image:: images/f5-container-connector-check-logs-kubectl.png
+                :align: center
 
-If you need to troubleshoot your container, you have two different ways to check the logs of your container:
+        #. Using docker logs command: From the previous check we know the container is running on kube-node1.  Via mRemoteNG open a session to kube-nodel and run the following commands:
 
-	1. via kubectl command (recommended - easier)
-	2. by connecting to the relevant node and use docker command. Here you'll need to identify on which node it runs and use docker logs command:
+            .. code-block:: bash
 
-If you want to use kubectl command: you need to use the full name of your pod as showed in the previous image and run the command kubectl logs k8s-bigip-ctlr-deployment-<id> -n kube-system
+                sudo docker ps
 
-::
+            Here we can see our container ID is "b91d400df115"
+            
+            .. image:: images/f5-container-connector-find-dockerID--controller-container.png
+                :align: center
 
-	 kubectl logs k8s-bigip-ctlr-deployment-710074254-b9dr8 -n kube-system
+            Now we can check our container logs:
 
-.. image:: /_static/class2/f5-container-connector-check-logs-kubectl.png
-   :align: center
-   :scale: 50%
+            .. code-block:: bash
 
-If you want to use docker logs command
+                sudo docker logs b91d400df115
 
-On Node1 (or another node depending on the previous command):
-
-::
-
-	sudo docker ps
-
-.. image:: /_static/class2/f5-container-connector-find-dockerID--controller-container.png
-	 :align: center
-
-Here we can see our container ID: 7a774293230b
-
-Now we can check our container logs:
-
-::
-
-	sudo docker logs 7a774293230b
-
-.. image:: /_static/class2/f5-container-connector-check-logs-controller-container.png
-	 :align: center
+            .. image:: images/f5-container-connector-check-logs-controller-container.png
+                :align: center
 
 
-You can connect to your container with kubectl also:
+    #. You can connect to your container with kubectl as well:
 
-::
+        .. code-block:: bash
 
-	 kubectl exec -it k8s-bigip-ctlr-deployment-710074254-b9dr8 -n kube-system  -- /bin/sh
+            kubectl exec -it k8s-bigip-ctlr-deployment-79fcf97bcc-48qs7 -n kube-system  -- /bin/sh
 
-	 cd /app
+            cd /app
 
-	 ls -lR
+            ls -lR
 
-	 exit
+            exit

@@ -1,5 +1,5 @@
-Kubernetes Overview
-===================
+Lab 1.1 - Kubernetes Overview
+=============================
 
 Kubernetes has a lot of documentation available at this location: `Kubernetes docs <http://kubernetes.io/docs/>`_
 
@@ -20,9 +20,8 @@ A Kubernetes cluster consists of two types of resources:
 * The *Master* coordinates the cluster
 * *Nodes* are the workers that run applications
 
-.. image:: /_static/class2/getting-started-cluster-diagram.png
-	:align: center
-
+.. image:: images/getting-started-cluster-diagram.png
+    :align: center
 
 **The Master is responsible for managing the cluster**. The master coordinates all activity in your cluster, such as scheduling applications, maintaining applications' desired state, scaling applications, and rolling out new updates.
 
@@ -43,7 +42,6 @@ Extract from `Kubernetes concepts <http://kubernetes.io/docs/user-guide/>`_
 Namespaces provide a scope for names. Names of resources need to be unique within a namespace, but not across namespaces.
 Namespaces are a way to divide cluster resources between multiple uses
 
-
 **Node**: `Kubernetes Node <https://kubernetes.io/docs/admin/node/>`_ A node is a physical or virtual machine running Kubernetes, onto which *pods* can be scheduled. It was previously known as *Minion*
 
 **Pod**: `Kubernetes Pods <https://kubernetes.io/docs/user-guide/pods/>`_ A pod is a co-located group of containers and volumes. The applications in a *pod* all use the same network namespace (same IP and port space), and can thus *find* each other and communicate using **localhost**. Because of this, applications in a pod must coordinate their usage of ports. Each *pod* has an IP address in a flat shared networking space that has full communication with other physical computers and pods across the network.
@@ -63,7 +61,6 @@ A typical use case is:
 * Pause and resume a Deployment
 
 **ConfigMap**: `Kubernetes ConfigMap <https://kubernetes.io/docs/user-guide/configmap/>`_ Any applications require configuration via some combination of config files, command line arguments, and environment variables. These configuration artifacts should be decoupled from image content in order to keep containerized applications portable. The ConfigMap API resource provides mechanisms to inject containers with configuration data while keeping containers agnostic of Kubernetes. ConfigMap can be used to store fine-grained information like individual properties or coarse-grained information like entire config files or JSON blobs
-
 
 **Replication Controller**: `Kubernetes replication controller <https://kubernetes.io/docs/user-guide/replication-controller/>`_ A replication controller ensures that a specified number of *pod* replicas are running at any one time. It both allows for easy scaling of replicated systems and handles re-creation of a *pod* when the machine it is on reboots or otherwise fails.
 
