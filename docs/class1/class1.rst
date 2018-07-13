@@ -14,7 +14,7 @@ Expected time to complete: **30 minutes**
 Lab Setup
 ---------
 
-We will leverage the following setup to configure the Docker environment.
+We will leverage the kubernetes VM's to configure the Docker environment.
 
 .. list-table::
   :header-rows: 1
