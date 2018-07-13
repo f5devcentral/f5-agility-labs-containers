@@ -1,6 +1,12 @@
 Install Docker
 ==============
 
+#. To ensure the OS is up to date, run the following command
+
+    .. code-block:: bash
+
+        apt update && apt upgrade -y
+
 #. Add the docker repo
 
     .. code-block:: bash
