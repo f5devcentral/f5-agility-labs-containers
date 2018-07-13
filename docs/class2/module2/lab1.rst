@@ -57,7 +57,7 @@ Setup
     .. image:: images/disable-swap.png
         :align: center
 
-#. To ensure all the systems are up to date, run this command
+#. To ensure the OS is up to date, run the following command
 
     .. code-block:: bash
 
