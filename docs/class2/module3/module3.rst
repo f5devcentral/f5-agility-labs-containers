@@ -46,8 +46,8 @@ Prerequisites
 * Your kubernetes environment must be up and running already
 
 .. toctree::
-   :maxdepth: 1
-   :glob:
+  :maxdepth: 1
+  :glob:
 
-   lab*
+  lab*
    

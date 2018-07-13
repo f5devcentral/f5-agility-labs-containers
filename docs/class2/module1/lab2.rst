@@ -1,5 +1,5 @@
-Kubernetes Networking
-=====================
+Lab 1.2 - Kubernetes Networking Overview
+========================================
 
 This is an extract from `Networking in Kubernetes <http://http://kubernetes.io/docs/admin/networking/>`_
 
@@ -42,9 +42,9 @@ There are a number of ways that this network model can be implemented. Here is a
 * `Contiv <https://github.com/contiv/netplugin>`_
 * `Flannel <https://github.com/coreos/flannel#flannel>`_
 * `Open vswitch <http://kubernetes.io/docs/admin/ovs-networking>`_
-* L2 networks and linux bridging. You have a tutorial `here <http://blog.oddbit.com/2014/08/11/four-ways-to-connect-a-docker/>`_
 * `Project Calico <http://docs.projectcalico.org/>`_
 * `Romana <http://romana.io/>`_
 * `Weave net <https://www.weave.works/products/weave-net/>`_
+* `L2 networks and linux bridging <http://blog.oddbit.com/2014/08/11/four-ways-to-connect-a-docker/>`_
 
-For this lab, we will use Flannel.
+.. important:: For this lab, we will use **Flannel**.

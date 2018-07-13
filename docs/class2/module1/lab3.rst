@@ -1,5 +1,5 @@
-Kubernetes Services Overview
-============================
+Lab 1.3 - Kubernetes Services Overview
+======================================
 
 Refer to `Kubernetes services <http://kubernetes.io/docs/user-guide/services/>`_ for more information
 
@@ -14,70 +14,72 @@ Defining a service
 
 A *service* in Kubernetes is a REST object, similar to a *pod*. Like all of the REST objects, a *service* definition can be *POSTed* to the *apiserver* to create a new instance. For example, suppose you have a set of *pods* that each expose port 9376 and carry a *label* "app=MyApp".
 
-.. code::
+.. code-block:: yaml
+    :linenos:
 
-	{
-	    "kind": "Service",
-	    "apiVersion": "v1",
-	    "metadata": {
-	        "name": "my-service"
-	    },
-	    "spec": {
-	        "selector": {
-	            "app": "MyApp"
-	        },
-	        "ports": [
-	            {
-	                "protocol": "TCP",
-	                "port": 80,
-	                "targetPort": 9376
-	            }
-	        ]
-	    }
-	}
+    {
+        "kind": "Service",
+        "apiVersion": "v1",
+        "metadata": {
+            "name": "my-service"
+        },
+        "spec": {
+            "selector": {
+                "app": "MyApp"
+            },
+            "ports": [
+                {
+                    "protocol": "TCP",
+                    "port": 80,
+                    "targetPort": 9376
+                }
+            ]
+        }
+    }
 
 This specification will create a new *service* object named "my-service" which targets TCP port 9376 on any *pod* with the "app=MyApp" *label*.
 
 This *service* will also be assigned an IP address (sometimes called the *cluster IP*), which is used by the *service proxies* . The *service’s selector* will be evaluated continuously and the results will be POSTed to an *Endpoints* object also named “my-service”.
 
-if the service is not a native kubernetes app, then you can do a service definition without the *selector* field. In such a case you'll have to specify yourself the *endpoints*
+If the service is not a native kubernetes app, then you can do a service definition without the *selector* field. In such a case you'll have to specify yourself the *endpoints*
 
-.. code::
+.. code-block:: yaml
+    :linenos:
 
-	{
-	    "kind": "Service",
-	    "apiVersion": "v1",
-	    "metadata": {
-	        "name": "my-service"
-	    },
-	    "spec": {
-	        "ports": [
-	            {
-	                "protocol": "TCP",
-	                "port": 80,
-	                "targetPort": 9376
-	            }
-	        ]
-	    }
-	}
+    {
+        "kind": "Service",
+        "apiVersion": "v1",
+        "metadata": {
+            "name": "my-service"
+        },
+        "spec": {
+            "ports": [
+                {
+                    "protocol": "TCP",
+                    "port": 80,
+                    "targetPort": 9376
+                }
+            ]
+        }
+    }
 
-	{
-	    "kind": "Endpoints",
-	    "apiVersion": "v1",
-	    "metadata": {
-	        "name": "my-service"
-	    },
-	    "subsets": [
-	        {
-	            "addresses": [
-	                { "ip": "1.2.3.4" }
-	            ],
-	            "ports": [
-    	            { "port": 9376 }
-        	    ]
-        	}
-    	]
-	}
+    {
+        "kind": "Endpoints",
+        "apiVersion": "v1",
+        "metadata": {
+            "name": "my-service"
+        },
+        "subsets": [
+            {
+                "addresses": [
+                    { "ip": "1.2.3.4" }
+                ],
+                "ports": [
+                    { "port": 9376 }
+                ]
+            }
+        ]
+    }
 
 Note that a *service* can map an incoming port to any *targetPort*. By default the *targetPort* will be set to the same value as the *port* field. In the example above, the port for the service is 80 (HTTP) and will redirect traffic to port 9376 on the Pods
 
@@ -109,40 +111,41 @@ Service type: LoadBalancer
 
 On cloud providers which support external load balancers, setting the type field to "LoadBalancer" will provision a load balancer for your *Service*. The actual creation of the load balancer happens asynchronously, and information about the provisioned balancer will be published in the Service’s status.loadBalancer field. For example:
 
-.. code::
+.. code-block:: yaml
+    :linenos:
 
-	{
-	    "kind": "Service",
-	    "apiVersion": "v1",
-	    "metadata": {
-	        "name": "my-service"
-	    },
-	    "spec": {
-	        "selector": {
-	            "app": "MyApp"
-	        },
-	        "ports": [
-	            {
-	                "protocol": "TCP",
-	                "port": 80,
-	                "targetPort": 9376,
-	                "nodePort": 30061
-	            }
-	        ],
-	        "clusterIP": "10.0.171.239",
-	        "loadBalancerIP": "78.11.24.19",
-	        "type": "LoadBalancer"
-    	},
-	    "status": {
-	        "loadBalancer": {
-	            "ingress": [
-	                {
-	                    "ip": "146.148.47.155"
-	                }
-	            ]
-	        }
-	    }
-	}
+    {
+        "kind": "Service",
+        "apiVersion": "v1",
+        "metadata": {
+            "name": "my-service"
+        },
+        "spec": {
+            "selector": {
+                "app": "MyApp"
+            },
+            "ports": [
+                {
+                    "protocol": "TCP",
+                    "port": 80,
+                    "targetPort": 9376,
+                    "nodePort": 30061
+                }
+            ],
+            "clusterIP": "10.0.171.239",
+            "loadBalancerIP": "78.11.24.19",
+            "type": "LoadBalancer"
+        },
+        "status": {
+            "loadBalancer": {
+                "ingress": [
+                    {
+                        "ip": "146.148.47.155"
+                    }
+                ]
+            }
+        }
+    }
 
 
 Traffic from the external load balancer will be directed at the backend *Pods*, though exactly how that works depends on the cloud provider (AWS, GCE, ...). Some cloud providers allow the loadBalancerIP to be specified. In those cases, the load-balancer will be created with the user-specified loadBalancerIP. If the loadBalancerIP field is not specified, an ephemeral IP will be assigned to the loadBalancer. If the loadBalancerIP is specified, but the cloud provider does not support the feature, the field will be ignored

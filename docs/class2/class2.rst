@@ -4,10 +4,10 @@ Class 2: Introduction to Kubernetes
 This introductory class covers the following topics:
 
 .. toctree::
-   :maxdepth: 1
-   :glob:
+  :maxdepth: 1
+  :glob:
 
-   module*/module*
+  module*/module*
 
 Expected time to complete: **1 hours**
 
@@ -57,4 +57,3 @@ We will leverage the following setup to configure the Kubernetes environment.
     - ubuntu/ubuntu
 
       root/default
-
