@@ -1,5 +1,5 @@
-Lab 1.2 - Kubernetes Networking Overview
-========================================
+Kubernetes Networking Overview
+==============================
 
 This is an extract from `Networking in Kubernetes <http://http://kubernetes.io/docs/admin/networking/>`_
 
