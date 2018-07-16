@@ -32,7 +32,7 @@ The master is the system where the "control plane" components run, including etc
     .. image:: images/cluster-setup-guide-kubeadm-init-master-join.png
         :align: center
 
-    .. important:: The "kubeadm join" command is run on the nodes to register themselves with the master. Keep the secret safe since anyone with this token can add authenticated node to your cluster. This is used for mutual auth between the master and the nodes
+    .. important:: The "kubeadm join" command is run on the nodes to register themselves with the master. Keep the secret safe since anyone with this token can add an authenticated node to your cluster. This is used for mutual auth between the master and the nodes.
 
 #. Configure kubernetes administration. At this point you should be logged in as root. The following will update both root and ubuntu user accounts for kubernetes administration.
 
@@ -46,11 +46,13 @@ The master is the system where the "control plane" components run, including etc
         sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
         sudo chown $(id -u):$(id -g) $HOME/.kube/config
 
-#. Verify kubernetes is up and running.  You can monitor the services are running by using the following command:
+#. Verify kubernetes is up and running.  You can monitor the services are running by using the following command.  
 
     .. code-block:: bash
 
         kubectl get pods --all-namespaces
+
+    You'll need to run this several times until you see several containers "Running"  It should look like the following:
 
     .. image:: images/cluster-setup-guide-kubeadmin-init-check.png
         :align: center
@@ -177,7 +179,7 @@ To install the UI you have two options:
     
     .. warning:: These commands create a service account with full admin rights.  In a typical deployment this would be overkill.
 
-    Create a file called kube-dashboard.yaml
+    Create a file called kube-dashboard.yaml with the following content:
 
     .. code-block:: yaml
         :linenos:
