@@ -65,3 +65,12 @@ Step 4: Login to OpenShift master
 Use the oc login command
 
  .. code-block:: console
+ 
+* Use the following username and password
+* username: demouser
+* password: demouser
+
+Step 5: Validate the OpenShift status
+
+Use the oc status command
+
