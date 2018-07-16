@@ -3,17 +3,17 @@ Lab Setup
 
 Here is the setup we will leverage to work on the RedHat OpenShift environment.
 
-In the existing environment, here is the setup you're working within:
+In the existing environment, there is a three-node OpenShift cluster with one master and two nodes. There is a pair of BIG-IPs setup in an HA configuration:
 
 ==================   ==================  =============================
     Hostname              Mgt IP            Login / Password
 ==================   ==================  =============================
-    Master 1              10.10.199.100     ssh: root/default
-    Agent  1              10.10.199.101     ssh: root/default
-    Agent  2              10.10.199.102     ssh: root/default
- Windows Jumpbox          10.10.200.199     student/Student!Agility!
-    BIG-IP                10.10.200.98      GUI: admin/admin
-    BIG-IP                10.10.200.98      ssh: root/admin
+   ose-master           10.10.199.100       ssh: root/default
+   ose-node01           10.10.199.101       ssh: root/default
+   ose-node02           10.10.199.102       ssh: root/default
+ Windows Jumpbox        10.10.200.199       student/Student!Agility!
+    BIG-IP              10.10.200.98        GUI: admin/admin
+    BIG-IP              10.10.200.98        ssh: root/admin
 ==================   ==================  =============================
 
 In case you don't use the Ravello BluePrint, here are a few things to know
