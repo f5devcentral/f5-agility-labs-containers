@@ -6,7 +6,7 @@ Here is the setup we will leverage to work on the RedHat OpenShift environment.
 In the existing environment, there is a three-node OpenShift cluster with one master and two nodes. There is a pair of BIG-IPs setup in an HA configuration:
 
 ==================   ==================  =============================
-    Hostname              Mgt IP            Login / Password
+   Hostname             Mgt IP            Login / Password
 ==================   ==================  =============================
    ose-master           10.10.199.100       ssh: root/default
    ose-node01           10.10.199.101       ssh: root/default
@@ -38,3 +38,30 @@ guide:
 * On ose-mstr01, we created some ssh keys for user that we copied on all the
   nodes. This way you can use ose-mstr01 as needed to connect to all nodes without
   authentication if wanting to jump around using ssh i.e. ssh root@10.10.199.101 from ose-mstr01
+  
+Step 1: Access the Win7 Jump box
+
+Use the following username and password
+username: student
+password: Student!Agility!
+Note: Use the Send Text to Client option to paste the password
+
+Step 2: Access the master using an mRemoteNG client from the Win7 Jump box
+
+* Master Mgmt IP: 10.10.199.100 root/default
+* BIGIP01 – 10.10.200.98 root/default admin/admin
+* BIGIP02 – 10.10.200.99 root/default admin/admin
+ 
+Step 3: Login to OpenShift master
+
+Use the oc login command 
+
+Use the following username and password
+username: demouser
+password: demouser
+
+Step 4: Login to OpenShift master
+
+Use the oc login command
+
+ .. code-block:: console
