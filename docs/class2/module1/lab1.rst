@@ -1,5 +1,5 @@
-Lab 1.1 - Kubernetes Overview
-=============================
+Kubernetes Overview
+===================
 
 Kubernetes has a lot of documentation available at this location: `Kubernetes docs <http://kubernetes.io/docs/>`_
 
