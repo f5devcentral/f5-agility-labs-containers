@@ -234,6 +234,10 @@ You will be using these projects in the lab
      
 **Step 8:** Access OpenShift web console
 
-Navigate to the URI provided by your instructor and login with the user/password provided (if there's an icon on the Desktop, just double click that)
+Navigate to the URI provided by your instructor and login with the user/password provided (there is favorite on chrome)
 
-commit before uploading picture --- 
+Use the following username and password
+username: **demouser**
+password: **demouser**
+
+.. image:: /_static/class4/webconsole.png
