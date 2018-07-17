@@ -22,93 +22,28 @@ On the **master** we will create all the required files:
 
     .. tip:: Use the file in /home/ubuntu/f5-kube-demo
 
-    .. code-block:: bash
+    .. literalinclude:: ../../../kubernetes/f5-hello-world-deployment.yaml
+        :language: yaml
         :linenos:
         :emphasize-lines: 2,14
-
-        apiVersion: extensions/v1beta1
-        kind: Deployment
-        metadata:
-          name: f5-hello-world 
-        spec:
-          replicas: 2
-          template:
-            metadata:
-              labels:
-                run: f5-hello-world
-            spec:
-              containers:
-              - name: f5-hello-world
-                image: "f5devcentral/f5-hello-world"
-                imagePullPolicy: IfNotPresent
-                ports:
-                - containerPort: 8080
-                  protocol: TCP
 
 #. Create a file called ``f5-hello-world-configmap.yaml``
 
     .. tip:: Use the file in /home/ubuntu/f5-kube-demo
 
-    .. code-block:: bash
+    .. literalinclude:: ../../../kubernetes/f5-hello-world-configmap.yaml
+        :language: yaml
         :linenos:
         :emphasize-lines: 2,9,16,18
-
-        apiVersion: v1
-        kind: ConfigMap
-        metadata:
-          name: f5-hello-world
-          namespace: default
-          labels:
-            f5type: virtual-server
-        data:
-          schema: "f5schemadb://bigip-virtual-server_v0.1.7.json"
-          data: |
-            {
-              "virtualServer": {
-                "frontend": {
-                  "balance": "round-robin",
-                  "mode": "http",
-                  "partition": "kubernetes",
-                  "virtualAddress": {
-                    "bindAddr": "10.1.10.81",
-                    "port": 80
-                  }
-                },
-                "backend": {
-                  "serviceName": "f5-hello-world",
-                  "servicePort": 8080,
-                  "healthMonitors": [{
-                    "interval": 5,
-                    "protocol": "http",
-                    "send": "HEAD / HTTP/1.0\r\n\r\n",
-                    "timeout": 16
-                  }]
-                }
-              }
-            }
 
 #. Create a file called ``f5-hello-world-service.yaml``
 
     .. tip:: Use the file in /home/ubuntu/f5-kube-demo
 
-    .. code-block:: bash
+    .. literalinclude:: ../../../kubernetes/f5-hello-world-service.yaml
+        :language: yaml
         :linenos:
-        :emphasize-lines: 2
-
-        apiVersion: v1
-        kind: Service
-        metadata:
-          name: f5-hello-world
-          labels:
-            run: f5-hello-world
-        spec:
-          ports:
-          - port: 8080
-            protocol: TCP
-            targetPort: 8080
-          type: NodePort
-          selector:
-            run: f5-hello-world
+        :emphasize-lines: 2,12
 
 #. We can now launch our application:
 

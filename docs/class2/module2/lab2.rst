@@ -155,7 +155,7 @@ To install the UI you have two options:
 
     .. code-block:: bash
 
-        git clone https://github.com/vtog/f5-kube-demo.git
+        git clone https://github.com/iluvpcs/f5-agility-labs-containers.git
 
     .. note:: These files will be used to complete this section and needed later to complete the class.
 
@@ -180,78 +180,11 @@ To install the UI you have two options:
     .. warning:: These commands create a service account with full admin rights.  In a typical deployment this would be overkill.
 
     Create a file called kube-dashboard.yaml with the following content:
-
-    .. code-block:: yaml
+    
+    .. literalinclude:: ../../../kubernetes/kube-dashboard.yaml
+        :language: yaml
         :linenos:
         :emphasize-lines: 65
-
-        # ------------------- Dashboard Deployment ------------------- #
-
-        kind: Deployment
-        apiVersion: apps/v1beta2
-        metadata:
-        labels:
-            k8s-app: kubernetes-dashboard
-        name: kubernetes-dashboard
-        namespace: kube-system
-        spec:
-        replicas: 1
-        revisionHistoryLimit: 10
-        selector:
-            matchLabels:
-            k8s-app: kubernetes-dashboard
-        template:
-            metadata:
-            labels:
-                k8s-app: kubernetes-dashboard
-            spec:
-            containers:
-            - name: kubernetes-dashboard
-                image: k8s.gcr.io/kubernetes-dashboard-amd64:v1.8.3
-                ports:
-                - containerPort: 9090
-                protocol: TCP
-                args:
-                # Uncomment the following line to manually specify Kubernetes API server Host
-                # If not specified, Dashboard will attempt to auto discover the API server and connect
-                # to it. Uncomment only if the default does not work.
-                # - --apiserver-host=http://my-address:port
-                volumeMounts:
-                # Create on-disk volume to store exec logs
-                - mountPath: /tmp
-                name: tmp-volume
-                livenessProbe:
-                httpGet:
-                    path: /
-                    port: 9090
-                initialDelaySeconds: 30
-                timeoutSeconds: 30
-            volumes:
-            - name: tmp-volume
-                emptyDir: {}
-            serviceAccountName: kubernetes-dashboard
-            # Comment the following tolerations if Dashboard must not be deployed on master
-            tolerations:
-            - key: node-role.kubernetes.io/master
-                effect: NoSchedule
-
-        ---
-        # ------------------- Dashboard Service ------------------- #
-
-        kind: Service
-        apiVersion: v1
-        metadata:
-        labels:
-            k8s-app: kubernetes-dashboard
-        name: kubernetes-dashboard
-        namespace: kube-system
-        spec:
-        ports:
-        - port: 80
-            targetPort: 9090
-        type: NodePort
-        selector:
-            k8s-app: kubernetes-dashboard
 
 #. To access the dashboard, you need to see which port it is listening on. You can find this information with the following command:
 
