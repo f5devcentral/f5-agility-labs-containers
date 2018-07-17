@@ -1,4 +1,4 @@
-Welcome to F5 101 Containers lab's documentation!
+Welcome to F5 Containers lab's documentation!
 ==================================================
 
 **The purpose of these labs is to give you better understanding of...**
@@ -23,6 +23,8 @@ Welcome to F5 101 Containers lab's documentation!
 
   - Understanding the relationship between RedHat Openshift Router and BIG-IP
   - How to launch applications node members and auto-scale to the BIG-IP via the Container Connector
+  - How to configure BIG-IP HA with OpenShift
+  - Configure advanced OpenShift configuration working with BIG-IP
 
 
 .. toctree::
@@ -34,3 +36,4 @@ Welcome to F5 101 Containers lab's documentation!
    class1/class1
    class2/index
    class3/class3
+   class4/class4
