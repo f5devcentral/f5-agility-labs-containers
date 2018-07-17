@@ -50,8 +50,8 @@ Now that BIG-IP is licensed and prepped with the "kubernetes" partition, we need
 
     .. code-block:: bash
 
-        git clone https://github.com/vtog/f5-kube-demo.git
-
+        git clone https://github.com/iluvpcs/f5-agility-labs-containers.git
+        
     .. note:: If you did the optional Kubernetes UI Lab earlier you have these files.
 
 #. Create bigip login secret
@@ -99,49 +99,10 @@ Now that BIG-IP is licensed and prepped with the "kubernetes" partition, we need
         .. note:: Or you can cut and paste the file below and create your own file.
             If you have issues with your yaml and syntax (**identation MATTERS**), you can try to use an online parser to help you : `Yaml parser <http://codebeautify.org/yaml-validator>`_
 
-
-        .. code-block:: yaml
+        .. literalinclude:: ../../../kubernetes/f5-nodeport-deployment.yaml
+            :language: yaml
             :linenos:
             :emphasize-lines: 2,17,34,35,37
-
-            apiVersion: extensions/v1beta1
-            kind: Deployment
-            metadata:
-              name: k8s-bigip-ctlr-deployment
-              namespace: kube-system
-            spec:
-              replicas: 1
-              template:
-                metadata:
-                  name: k8s-bigip-ctlr
-                  labels:
-                     app: k8s-bigip-ctlr
-                spec:
-                  serviceAccountName: k8s-bigip-ctlr
-                  containers:
-                    - name: k8s-bigip-ctlr
-                      image: "f5networks/k8s-bigip-ctlr:1.5.1"
-                      imagePullPolicy: IfNotPresent
-                      env:
-                        - name: BIGIP_USERNAME
-                          valueFrom:
-                            secretKeyRef:
-                              name: bigip-login
-                              key: username
-                        - name: BIGIP_PASSWORD
-                          valueFrom:
-                            secretKeyRef:
-                              name: bigip-login
-                              key: password
-                      command: ["/app/bin/k8s-bigip-ctlr"]
-                      args: [
-                        "--bigip-username=$(BIGIP_USERNAME)",
-                        "--bigip-password=$(BIGIP_PASSWORD)",
-                        "--bigip-url=10.1.10.21",
-                        "--bigip-partition=kubernetes",
-                        "--namespace=default",
-                        "--pool-member-type=nodeport"
-                        ]
 
     #. Once you have your yaml file setup, you can try to launch your deployment. It will start our f5-k8s-controller container on one of our nodes (may take around 30sec to be in a running state):
 
