@@ -94,7 +94,7 @@ Now that BIG-IP is licensed and prepped with the "kubernetes" partition, we need
 
     #. **Nodeport mode** ``f5-nodeport-deployment.yaml``. 
     
-        .. note:: For your convenience the file can be found in /home/ubuntu/f5-kube-demo (downloaded earlier in the clone git repo step).
+        .. note:: For your convenience the file can be found in /home/ubuntu/f5-agility-labs-containers/kubernetes (downloaded earlier in the clone git repo step).
 
         .. note:: Or you can cut and paste the file below and create your own file.
             If you have issues with your yaml and syntax (**identation MATTERS**), you can try to use an online parser to help you : `Yaml parser <http://codebeautify.org/yaml-validator>`_

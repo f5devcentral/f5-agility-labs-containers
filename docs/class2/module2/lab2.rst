@@ -165,7 +165,7 @@ To install the UI you have two options:
 
     .. code-block:: bash
 
-        cd /home/ubuntu/f5-kube-demo
+        cd /home/ubuntu/f5-agility-labs-containers/kubernetes
 
         ./create-kube-dashboard
 

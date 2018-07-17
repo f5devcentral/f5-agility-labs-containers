@@ -20,7 +20,7 @@ On the **master** we will create all the required files:
 
 #. Create a file called ``f5-hello-world-deployment.yaml``
 
-    .. tip:: Use the file in /home/ubuntu/f5-kube-demo
+    .. tip:: Use the file in /home/ubuntu/f5-agility-labs-containers/kubernetes
 
     .. literalinclude:: ../../../kubernetes/f5-hello-world-deployment.yaml
         :language: yaml
@@ -29,7 +29,7 @@ On the **master** we will create all the required files:
 
 #. Create a file called ``f5-hello-world-configmap.yaml``
 
-    .. tip:: Use the file in /home/ubuntu/f5-kube-demo
+    .. tip:: Use the file in /home/ubuntu/f5-agility-labs-containers/kubernetes
 
     .. literalinclude:: ../../../kubernetes/f5-hello-world-configmap.yaml
         :language: yaml
@@ -38,7 +38,7 @@ On the **master** we will create all the required files:
 
 #. Create a file called ``f5-hello-world-service.yaml``
 
-    .. tip:: Use the file in /home/ubuntu/f5-kube-demo
+    .. tip:: Use the file in /home/ubuntu/f5-agility-labs-containers/kubernetes
 
     .. literalinclude:: ../../../kubernetes/f5-hello-world-service.yaml
         :language: yaml
