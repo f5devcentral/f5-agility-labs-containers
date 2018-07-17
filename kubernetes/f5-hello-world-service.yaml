@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: f5-hello-world
+  labels:
+    run: f5-hello-world
+spec:
+  ports:
+  - port: 8080
+    protocol: TCP
+    targetPort: 8080
+  type: NodePort
+  selector:
+    run: f5-hello-world
