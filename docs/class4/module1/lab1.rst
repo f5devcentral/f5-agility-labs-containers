@@ -24,9 +24,10 @@ We will be using the following terms throughout the workshop labs so here are so
 **Step 1:** Access the Win7 Jump box
 
 Use the following username and password
-username: **student**
-password: **Student!Agility!**
-Note: Use the Send Text to Client option to paste the password
+
+* username: **student**
+* password: **Student!Agility!**
+* Note: Use the Send Text to Client option to paste the password
 
 * We are using RHEL in this blueprint
 * We updated on all the nodes the /etc/hosts file so that each node is reachable via its name
