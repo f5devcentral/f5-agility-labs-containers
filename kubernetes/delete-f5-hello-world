@@ -1,0 +1,7 @@
+#!/bin/bash
+
+#delete container f5-hello-world
+kubectl delete service f5-hello-world
+kubectl delete configmap f5-hello-world
+kubectl delete deployment f5-hello-world
+

@@ -1,79 +1,38 @@
-F5 Container Connector with RedHat OpenShift
-============================================
+Overview of F5® Container Connector (CC)
+========================================
 
-F5 OpenShift Origin Container Integration
+Overview
+--------
 
-Red Hat’s OpenShift Origin is a containerized application platform with a native Kubernetes integration. The BIG-IP Controller for Kubernetes enables use of a BIG-IP device as an edge load balancer, proxying traffic from outside networks to pods inside an OpenShift cluster. OpenShift Origin uses a pod network defined by the OpenShift SDN.
+F5 Container connector in Mesos / Marathon is called: F5 Marathon BIG-IP Controller.
 
-The F5 Integration for Kubernetes overview describes how the BIG-IP Controller works with Kubernetes. Because OpenShift has a native Kubernetes integration, the BIG-IP Controller works essentially the same in both environments. It does have a few OpenShift-specific prerequisites.
+The F5 Marathon BIG-IP Controller is a container-based Marathon Application – marathon-bigip-ctlr. You can launch the F5 Marathon BIG-IP Controller in Marathon via the Marathon REST API or the Marathon Web Interface.
 
-Today we are going to go through a prebuilt OpenShift environment with some locally deployed yaml files.  The detailed OpenShift-specifics: please view F5 documentation http://clouddocs.f5.com/containers/v1/openshift/index.html#openshift-origin-prereqs
+The marathon-bigip-ctlr watches the Marathon API for special “F5 Application Labels” that tell it:
 
+* what Application we want it to manage
+* how we want to configure the BIG-IP for that specific Application.
 
+You can manage BIG-IP objects directly, or deploy iApps, with the F5 Marathon BIG-IP Controller.
 
-Review BIG-IP configuration
----------------------------
+Architecture
+------------
 
-The BIG-IP we are working on has been licensed, and only these following commands below has been issued in the CLI so we have a very new/basic BIG-IP configured.
+.. image:: /_static/class3/F5-container-connector-overview-f5-solution-architecture.png
+	:align: center
 
-::
+In Marathon, you can associate labels with Application tasks for tracking/reporting purposes. F5 has developed a set of custom “F5 Application Labels” as a way notify the F5 Marathon BIG-IP Controller and F5 Marathon ASP Controller that they have work to do.
 
-  License BIG-IP
+When the F5 Marathon BIG-IP Controller discovers Applications with new or updated F5 Application Labels, it dynamically creates iApps or virtual servers, pools, pool members, and HTTP health monitors for each of the Application’s tasks.
 
-  tmsh create net vlan internal interfaces add {1.2}
+If you want to have more details about the F5 Application Labels, you may go to the F5 official documentation here: `F5 Marathon BIG-IP Controller <http://clouddocs.f5.com/products/connectors/marathon-bigip-ctlr/v1.1/>`_
 
-  tmsh create net self 10.10.199.98/24 vlan internal
+Before being able to use the Container Connecter, you need to handle some prerequisites
 
-  tmsh create net vlan external interfaces add {1.1}
+Prerequisites
+-------------
 
-  tmsh create net self 10.10.201.98/24 vlan external
-
-  tmsh create auth partition kubernetes
-
-  tmsh create net tunnel vxlan ose-vxlan {app-service none flooding-type multipoint}
-
-  tmsh create net tunnel tunnel ose-tunnel {key 0 local-address 10.10.199.98 profile ose-vxlan}
-
-  tmsh save sys config
-
-**NOTE typically the command below is entered after running the ''oc create -f f5-hostsubnet.yaml'' command coming up in the next section (This is the range the self ip should come from, to make this lab quicker we have already done this tmsh command)**
-
-::
-
-  tmsh create net self <IP>/subnet vlan <tunnel>
-
-  tmsh create net self <IP>10.131.0.98/14 vlan ose-tunnel
-
-
-Let's validate your BIG-IP is just configured with VLANs, Self-IPs.  No no Virtual Servers and no Pools
-
-Connect to your BIG-IP on https://10.10.200.98 and familiarize yourself with the the current VLAN's.  Proceed to Network -> VLAN.
-
-
-.. image:: /_static/class3/F5-BIG-IP-NETWORK-VLAN.png
-   :align: center
-   :scale: 60%
-
-
-Go to Local Traffic -> Network -> Self-IP.  You should have an internal and external SELF-IPs
-
-.. image:: /_static/class3/F5-BIG-IP-NETWORK-SELFIP.png
-   :align: center
-   :scale: 60%
-
-
-Jump to Local Traffic -> Network -> Tunnel.  You should see something similar to this:
-
-.. image:: /_static/class3/F5-BIG-IP-NETWORK-TUNNEL.png
-   :align: center
-   :scale: 60%
-
-Lastly, validate there are no Virtual Servers and no Pools.  Go to Local Traffic -> Virtual Servers and then Pools.
-
-Last example we can see that there is no pool members defined.
-
-.. image:: /_static/class3/F5-BIG-IP-LOCAL_TRAFFIC-POOL.png
-   :align: center
-   :scale: 60%
-
-Great let's jump to the next section to work on the OpenShift CLI
+* You must have a fully active/licensed BIG-IP
+* A BIG-IP partition needs to be setup for the Container connector. You need to have access to a user with the right privileges
+* You need a user with administrative access to this partition
+* Your Mesos / Marathon environment must be up and running already
