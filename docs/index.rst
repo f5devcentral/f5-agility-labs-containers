@@ -37,3 +37,4 @@ Welcome to F5 Containers lab's documentation!
    class2/index
    class3/class3
    class4/class4
+   class4/class5
