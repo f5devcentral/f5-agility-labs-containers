@@ -1,7 +1,7 @@
 Section 1.1 Welcome to OpenShift!
 --------------------------------------------------------
 
-This lab provides a quick tour of the console to help you get familiar with the user interface along with some key terminology we will use in subsequent lab content.
+This lab guide is the F5 Advanced Labs for Red Hat OpenShift Container Platform (OCP). This lab guide and blueprint was created using OCP version 3.7. This lab provides a quick tour of the console to help you get familiar with the user interface along with some key terminology we will use in subsequent lab content.
 
 **Key Terms**
 
@@ -242,3 +242,42 @@ username: **demouser**
 password: **demouser**
 
 .. image:: /_static/class4/webconsole.png
+
+Section 1.2 Troubbleshooting OpenShift!
+--------------------------------------------------------
+
+If you have a problem in your OpenShift Container Platform 3 environment how do you investigate
+
+* How can I troubleshoot it?
+* What logs can I inspect?
+* How can I modify the log level / detail that openshift generates?
+* I need to provide supporting data to technical support for analysis. What information is needed?
+
+A starting point for data collection from an OpenShift master or node is a sosreport that includes docker and OpenShift related information. The process to collect a sosreport is the same as with any other Red Hat Enterprise Linux (RHEL) based system:
+
+.. code-block:: console
+
+     # yum update sos
+     # sosreport
+
+Openshift has five log message severities. Messages with FATAL, ERROR, WARNING and some INFO severities appear in the logs regardless of the log configuration.
+
+* 0 - Errors and warnings only
+* 2 - Normal information
+* 4 - Debugging-level information
+* 6 - API-level debugging information (request / response)
+* 8 - Body-level API debugging information 
+
+This parameter can be set in the OPTIONS for the relevant services environment file within /etc/sysconfig/.
+
+For example to set OpenShift master's log level to debug, add or edit this line in /etc/sysconfig/atomic-openshift-master:
+
+.. code-block:: console
+
+     OPTIONS='--loglevel=4'
+
+and then restart the service with systemctl restart atomic-openshift-master
+
+Key files / directories
+* /etc/origin/{node,master}/
+* /etc/origin/{node,master}/{node.master}-config.yaml
