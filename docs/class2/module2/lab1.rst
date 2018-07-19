@@ -24,7 +24,7 @@ Setup
 
 #. Once connected as ubuntu user (it's the user already setup in the MremoteNG settings), let's elivate to root:
 
-    .. code-block:: bash
+    .. code-block:: console
 
         su - ( when prompted for password enter "default" without the quotes )
 
@@ -36,7 +36,7 @@ Setup
 
 #. Edit /etc/hosts and add the following static hosts entries
 
-    .. code-block:: bash
+    .. code-block:: console
 
         vim /etc/hosts
 
@@ -55,7 +55,7 @@ Setup
 
     .. important:: Running a swap file is incompatible with Kubernetes
 
-    .. code-block:: bash
+    .. code-block:: console
 
         swapoff -a
         
@@ -68,7 +68,7 @@ Setup
 
 #. Then, to ensure the OS is up to date, run the following command
 
-    .. code-block:: bash
+    .. code-block:: console
 
         apt update && apt upgrade -y
 
@@ -82,7 +82,7 @@ Setup
 
     #. Add the kubernetes repo
 
-        .. code-block:: bash
+        .. code-block:: console
 
             curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
             
@@ -92,7 +92,7 @@ Setup
 
     #. Install the kubernetes packages
 
-        .. code-block:: bash
+        .. code-block:: console
             
             apt update && apt install kubelet kubeadm kubectl -y
 
