@@ -90,7 +90,7 @@ The purpose of this lab is not to cover BIG-IP High Availability (HA) in depth b
 
 **bigip02.f5.local**
 
-. code-block:: console
+.. code-block:: console
 
      tmsh modify sys global-settings hostname bigip02.f5.local
      tmsh modify sys global-settings mgmt-dhcp disabled
