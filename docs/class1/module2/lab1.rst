@@ -20,14 +20,13 @@ Install Docker
         :align: center
         :scale: 50 %
 
-#.  Then, to ensure the OS is up to date, run the following command
+#. Then, to ensure the OS is up to date, run the following command
 
     .. code-block:: bash
 
         apt update && apt upgrade -y
 
         (This can take a few seconds to a minute depending on demand to download the latest updates for the OS)
-
 
 #. Add the docker repo
 
