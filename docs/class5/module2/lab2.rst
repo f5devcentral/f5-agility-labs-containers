@@ -286,6 +286,68 @@ Deploy the BIG-IP Controller
 Take the steps below to deploy a contoller for each BIG-IP device in the cluster.
 
 Set up RBAC
-```````````
 
 You can create RBAC resources in the project in which you will run your BIG-IP Controller. Each Controller that manages a device in a cluster or active-standby pair can use the same Service Account, Cluster Role, and Cluster Role Binding.
+
+**Step 4.1:** Create a Service Account for the BIG-IP Controller
+
+.. code-block:: console
+
+     oc create serviceaccount bigip-ctlr [-n kube-system]
+
+**Step 4.2:** Create a Cluster Role and Cluster Role Binding with the required permissions.
+
+The following file has already being created **f5-kctlr-openshift-clusterrole.yaml** which is located in /root/agility2018/ocp
+
+.. code-block:: console
+
+     # For use in OpenShift clusters
+     apiVersion: v1
+     kind: ClusterRole
+     metadata:
+     annotations:
+         authorization.openshift.io/system-only: "true"
+     name: system:bigip-ctlr
+     rules:
+     - apiGroups: ["", "extensions"]
+     resources: ["nodes", "services", "endpoints", "namespaces", "ingresses", "routes" ]
+     verbs: ["get", "list", "watch"]
+     - apiGroups: ["", "extensions"]
+     resources: ["configmaps", "events", "ingresses/status"]
+     verbs: ["get", "list", "watch", "update", "create", "patch" ]
+     - apiGroups: ["", "extensions"]
+     resources: ["secrets"]
+     resourceNames: ["<secret-containing-bigip-login>"]
+     verbs: ["get", "list", "watch"]
+
+     ---
+
+     apiVersion: v1
+     kind: ClusterRoleBinding
+     metadata:
+         name: bigip-ctlr-role
+     userNames:
+     - system:serviceaccount:kube-system:bigip-ctlr
+     subjects:
+     - kind: ServiceAccount
+     name: bigip-ctlr
+     roleRef:
+     name: system:bigip-ctlr
+
+.. code-block:: console
+
+     oc create -f f5-kctlr-openshift-clusterrole.yaml
+
+Create Deployments
+``````````````````
+**Step 4.3:** 
+
+Create an OpenShift Deployment for each Controller (one per BIG-IP device):
+
+**Step 4.3:** Upload the Deployments
+
+Upload the Deployments to the OpenShift API server
+
+**Step 4.4:** Upload the Deployments
+
+Verify Pod creation
