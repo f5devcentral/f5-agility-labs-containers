@@ -1,25 +1,27 @@
-Install Docker
-==============
+Lab 2.1 Install Docker
+======================
 
-#. Open up mRemoteNG and select Connections -> Agility 2018 -> Kubernetes -> Kubernetes Cluster -> Kube-Master
+.. attention:: The following commands need to be run on all three nodes unless otherwise specified.
+
+#. From the jumphost open **mRemoteNG** and start a session to each of the following servers. The sessions are pre-configured to connect with the default user “ubuntu”.
+
+    - kube-master
+    - kube-node1
+    - kube-node2
 
     .. image:: images/MremoteNG-1.png
         :align: center
-        :scale: 50 %
 
-#. Once connected as ubuntu user (it's the user already setup in the MremoteNG settings), let's elivate to root
+#. Once connected as ubuntu user (it's the user already setup in the MremoteNG settings), let's elivate to root:
 
-    .. code-block:: none
+    .. code-block:: bash
 
-        su
-        ( when prompted for password enter "default" without the quotes )
-
+        su - ( when prompted for password enter "default" without the quotes )
 
     Your prompt should change to root@ at the start of the line :
 
     .. image:: images/rootuser.png
         :align: center
-        :scale: 50 %
 
 #. Then, to ensure the OS is up to date, run the following command
 
@@ -61,7 +63,6 @@ Install Docker
 
     .. image:: images/goodEOL.png
         :align: center
-        :scale: 50 %
 
 #. Verify docker is up and running
 
@@ -75,9 +76,4 @@ Install Docker
         :align: center
 
 
-If you are not a linux/unix person - don't worry.  What happened above is how the linux installs and updates software.
-This is  ALL the ugly (under the cover) steps to install apps, and in this case Docker on a Linux host.
-Please ask questions as to what really happened, but this is how with linux on ubuntu (and many other linux flavors)
-installs applications.  Linux uses a term called "package manager", and there are many: like YUM, APT, DPKG, RPM, PACMAN, etc.
-usually one is more favored by the flavor of linux (i.e. debian, ubuntu, redhat, gentoo, OpenSuse, etc.), but at the end of the
-day they all pretty much do the same thing, download and keep applications updated.
+.. note:: If you are not a linux/unix person - don't worry.  What happened above is how the linux installs and updates software. This is  ALL the ugly (under the cover steps to install apps, and in this case Docker on a Linux host. Please ask questions as to what really happened, but this is how with linux on ubuntu (and many other linux flavors) installs applications.  Linux uses a term called "package manager", and there are many: like YUM, APT, DPKG, RPM, PACMAN, etc. usually one is more favored by the flavor of linux (i.e. debian, ubuntu, redhat gentoo, OpenSuse, etc.), but at the end of the day they all pretty much do the same thing, download and keep applications updated.
