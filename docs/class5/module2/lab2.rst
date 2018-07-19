@@ -347,9 +347,130 @@ Use the oc create -f f5-kctlr-openshift-clusterrole.yaml
 Create Deployments
 ------------------
 
-**Step 4.3:** 
+**Step 4.3:** Deploy the BIG-IP Controller
 
-Create an OpenShift Deployment for each Controller (one per BIG-IP device):
+Create an OpenShift Deployment for each Controller (one per BIG-IP device). You need to deploy a controller for both f5-bigip-node01 and f5-bigip-node02
+
+* Provide a unique metadata.name for each Controller.
+* Provide a unique --bigip-url in each Deployment (each Controller manages a separate BIG-IP device).
+* Use the same --bigip-partition in all Deployments.
+
+bigip01-cc.yaml
+
+.. code-block:: console
+
+     apiVersion: extensions/v1beta1
+     kind: Deployment
+     metadata:
+       name: bigip01-ctlr
+       namespace: kube-system
+     spec:
+       replicas: 1
+       template:
+         metadata:
+           name: k8s-bigip-ctlr1
+           labels:
+             app: k8s-bigip-ctlr1
+         spec:
+           serviceAccountName: bigip-ctlr
+           containers:
+             -  name: k8s-bigip-ctlr
+                image: "f5networks/k8s-bigip-ctlr:latest"
+                env:
+                  - name: BIGIP_USERNAME
+                    valueFrom:
+                      secretKeyRef:
+                        name: bigip-login
+                        key: username
+                 - name: BIGIP_PASSWORD
+                   valueFrom:
+                      secretKeyRef:
+                      name: bigip-login
+                      key: password
+          command: ["/app/bin/k8s-bigip-ctlr"]
+          args: [
+            "--bigip-username=$(BIGIP_USERNAME)",
+            "--bigip-password=$(BIGIP_PASSWORD)",
+          **"--bigip-url=10.10.200.98",**
+          **"--bigip-partition=ocp",**
+          **"--pool-member-type=cluster",**
+            "--manage-routes=true",
+            "--node-poll-interval=5",
+            "--verify-interval=5",
+	      **"--namespace=demoproj",**
+	      **"--namespace=yelb",**
+	      **"--namespace=guestbook",**
+	        "--namespace=f5demo",
+            "--route-vserver-addr=10.10.201.120",
+            "--route-http-vserver=ocp-vserver",
+            "--route-https-vserver=ocp-https-vserver",
+            "--openshift-sdn-name=/Common/ocp-tunnel"
+          ]
+      imagePullSecrets:
+        - name: f5-docker-images
+
+bigip02-cc.yaml
+
+.. code-block:: console
+
+     apiVersion: extensions/v1beta1
+     kind: Deployment
+     metadata:
+       name: bigip02-ctlr
+       namespace: kube-system
+     spec:
+       replicas: 1
+       template:
+         metadata:
+           name: k8s-bigip-ctlr1
+           labels:
+             app: k8s-bigip-ctlr1
+         spec:
+           serviceAccountName: bigip-ctlr
+           containers:
+             -  name: k8s-bigip-ctlr
+                image: "f5networks/k8s-bigip-ctlr:latest"
+                env:
+                  - name: BIGIP_USERNAME
+                    valueFrom:
+                      secretKeyRef:
+                        name: bigip-login
+                        key: username
+                 - name: BIGIP_PASSWORD
+                   valueFrom:
+                      secretKeyRef:
+                      name: bigip-login
+                      key: password
+          command: ["/app/bin/k8s-bigip-ctlr"]
+          args: [
+            "--bigip-username=$(BIGIP_USERNAME)",
+            "--bigip-password=$(BIGIP_PASSWORD)",
+          **"--bigip-url=10.10.200.99",**
+          **"--bigip-partition=ocp",**
+          **"--pool-member-type=cluster",**
+            "--manage-routes=true",
+            "--node-poll-interval=5",
+            "--verify-interval=5",
+	      **"--namespace=demoproj",**
+	      **"--namespace=yelb",**
+	      **"--namespace=guestbook",**
+	        "--namespace=f5demo",
+            "--route-vserver-addr=10.10.201.120",
+            "--route-http-vserver=ocp-vserver",
+            "--route-https-vserver=ocp-https-vserver",
+            "--openshift-sdn-name=/Common/ocp-tunnel"
+          ]
+      imagePullSecrets:
+        - name: f5-docker-images
+
+Use the oc create -f bigip01-cc.yaml and bigip02-cc.yaml at add the bigip controller to OpenShift
+
+.. code-block:: console
+
+     [root@ose-mstr01 ocp]# oc create -f  bigip01-cc.yaml
+     deployment "bigip01-ctlr" created
+     [root@ose-mstr01 ocp]# oc create -f  bigip02-cc.yaml
+     deployment "bigip02-ctlr" created
 
 **Step 4.3:** Upload the Deployments
 
@@ -358,3 +479,27 @@ Upload the Deployments to the OpenShift API server
 **Step 4.4:** Upload the Deployments
 
 Verify Pod creation
+
+.. code-block:: console
+
+     [root@ose-mstr01 ocp]# oc get deployment
+     NAME           DESIRED   CURRENT   UP-TO-DATE   AVAILABLE   AGE
+     bigip01-ctlr   1         1         1            1           42s
+     bigip02-ctlr   1         1         1            1           36s
+
+.. code-block:: console
+
+     [root@ose-mstr01 ocp]# oc get deployment bigip01-ctlr
+     NAME           DESIRED   CURRENT   UP-TO-DATE   AVAILABLE   AGE
+     bigip01-ctlr   1         1         1            1           1m
+
+.. code-block:: console
+
+     [root@ose-mstr01 ocp]# oc get pods
+     NAME                           READY     STATUS    RESTARTS   AGE
+     bigip01-ctlr-242733768-dbwdm   1/1       Running   0          1m
+     bigip02-ctlr-66171581-q87kb    1/1       Running   0          1m
+     [root@ose-mstr01 ocp]#
+
+
+
