@@ -258,7 +258,7 @@ The BIG-IP OpenShift Controller cannot manage objects in the /Common partition. 
 * ssh root@10.10.200.98 tmsh save sys config
 * ssh root@10.10.200.99 tmsh save sys config
 
-Before adding the BIG-IP contrller to OpenShift validate the partition and tunnel configuration
+Before adding the BIG-IP controller to OpenShift validate the partition and tunnel configuration
 
 Validate that the OCP bigip partition was created
 
@@ -279,3 +279,13 @@ Check the ocp-tunnel configuration. Note the local-address 10.10.199.200 and sec
 .. image:: /_static/class5/bigip01-tunnelip.png
 
 .. _openshift deploy kctlr ha:
+
+Deploy the BIG-IP Controller
+----------------------------
+
+Take the steps below to deploy a contoller for each BIG-IP device in the cluster.
+
+Set up RBAC
+```````````
+
+You can create RBAC resources in the project in which you will run your BIG-IP Controller. Each Controller that manages a device in a cluster or active-standby pair can use the same Service Account, Cluster Role, and Cluster Role Binding.
