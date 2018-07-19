@@ -1,13 +1,34 @@
 Install Docker
 ==============
 
-#. To ensure the OS is up to date, run the following command
+Open up mRemoteNG and select Connections -> Agility 2018 -> Kubernetes -> Kubernetes Cluster -> Kube-Master
 
-    .. code-block:: bash
+.. image:: images/MremoteNG-1.png
+    :align: center
+    :scale: 50 %
 
-        apt update && apt upgrade -y
+1. Once connected as ubuntu user (it's the user already setup in the MremoteNG settings), let's elivate to root
 
-#. Add the docker repo
+  .. code-block:: none
+
+    su
+    ( when prompted for password enter "default" without the quotes )
+
+Your prompt should change to root@ at the start of the line :
+
+  .. image:: images/rootuser.png
+    :align: center
+    :scale: 50 %
+
+2.  Then, to ensure the OS is up to date, run the following command
+
+  .. code-block:: none
+
+      apt update && apt upgrade -y
+      (This can take a few seconds to a minute depending on demand to download the latest updates for the OS)
+
+
+3. Add the docker repo
 
     .. code-block:: bash
 
@@ -18,7 +39,7 @@ Install Docker
 #. Install the docker packages
 
     .. code-block:: bash
-        
+
         apt update && apt install docker-ce -y
 
 #. Configure docker to use the correct cgroupdriver
@@ -26,12 +47,20 @@ Install Docker
     .. important:: The cgroupdrive for docker and kubernetes have to match.  In this lab "cgroupfs" is the correct driver.
 
     .. code-block:: bash
-        
-        cat << EOF > /etc/docker/daemon.json
-        {
-        "exec-opts": ["native.cgroupdriver=cgroupfs"]
-        }
-        EOF
+
+      This next part can be a bit tricky - just cut/paste the 5 lines below exactly as they are and paste via buffer to the CLI (and press return when done)
+
+      cat << EOF > /etc/docker/daemon.json
+      {
+      "exec-opts": ["native.cgroupdriver=cgroupfs"]
+      }
+      EOF
+
+It should look something like this image below:
+
+      .. image:: images/goodEOL.png
+          :align: center
+          :scale: 50 %
 
 #. Verify docker is up and running
 
@@ -43,3 +72,11 @@ Install Docker
 
     .. image:: images/docker-hello-world-yes.png
         :align: center
+
+
+If you are not a linux/unix person - don't worry.  What happened above is how the linux installs and updates software.
+This is  ALL the ugly (under the cover) steps to install apps, and in this case Docker on a Linux host.
+Please ask questions as to what really happened, but this is how with linux on ubuntu (and many other linux flavors)
+installs applications.  Linux uses a term called "package manager", and there are many: like YUM, APT, DPKG, RPM, PACMAN, etc.
+usually one is more favored by the flavor of linux (i.e. debian, ubuntu, redhat, gentoo, OpenSuse, etc.), but at the end of the
+day they all pretty much do the same thing, download and keep applications updated.
