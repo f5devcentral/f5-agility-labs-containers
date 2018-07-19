@@ -16,6 +16,8 @@ Managing BIG-IP HA Clusters in OpenShift
 
 You can use the F5 Container Connectors to manage a BIG-IP HA active-standby pair or device group. The deployment details vary depending on the platform. For most, the basic principle is the same: You should run one BIG-IP Controller instance for each BIG-IP device. You will deploy two BIG-IP Controller instances - one for each BIG-IP device. To help ensure Controller HA, you will deploy each Controller instance on a separate Node in the cluster.
 
+.. image:: /_static/class5/ha-cluster.jpg
+
 BIG-IP config sync
 ~~~~~~~~~~~~~~~~~~
 
@@ -32,7 +34,7 @@ Complete the steps below to set up the solution shown in the diagram. Be sure to
    ===== ==================================================================================
    Step  Task
    ===== ==================================================================================
-   1.    :ref:`openshift initial bigip setup ha`
+   1.    openshift initial bigip setup ha
 
    2.    add bigip devices openshift ha
 
@@ -54,8 +56,6 @@ Complete the steps below to set up the solution shown in the diagram. Be sure to
          openshift upload deployment ha
 
    ===== ==================================================================================
-
-.. _openshift initial bigip setup ha:
 
 **Step 1:** Openshift initial bigip setup ha
 
@@ -105,32 +105,137 @@ The purpose of this lab is not to cover BIG-IP High Availability (HA) in depth b
      tmsh modify cm device bigip02.f5.local unicast-address {{ip 10.10.202.99} {ip management-ip}}
      tmsh save sys config
 
-Before adding the BIG-IP devices to OpenShift make sure your High Availability (HA) device trust group is configured correctly
+Before adding the BIG-IP devices to OpenShift make sure your High Availability (HA) device trust group, license, selfIP, vlans are configured correctly
 
-Initial BIG-IP Device Setup
----------------------------
+Validate that SDN services license is active
 
-.. include:: /_static/reuse/bigip-admin-permissions-reqd.rst
+.. image:: /_static/class5/license.png
 
-.. include:: /_static/reuse/kctlr-initial-setup.rst
+Validate the vlan configuration
 
-.. _add bigip devices openshift ha:
+.. image:: /_static/class5/vlans.png
+
+Validate bigip01 self IP configuration
+
+.. image:: /_static/class5/self-ip-bigip01.png
+
+Validate bigip02 self IP configuration
+
+.. image:: /_static/class5/self-ip-bigip02.png
+
+Validate the device group HA settings and make sure bigip01 and bigip02 are in sync. If out of sync, sync the bigip
+
+.. image:: /_static/class5/device-group-sync.png
+
+All synced. Note the sync-failover configuration is set to manual sync
+
+.. image:: /_static/class5/synced.png
 
 The diagram below displays the BIG-IP deployment with the OpenShift cluster in High Availability (HA) active-standby pair or device group. Note this solution applies to BIG-IP devices v13.x and later only. To accomplish High Availability (HA) active-standby pair or device group with OpenShift the BIG-IP needs to create a floating vxlan tunnel address with is currently only available in BIG-IP 13.x and later.
 
 .. _openshift initial bigip setup ha:
 
-what host subnests are created on OpenShift:
+**Step 1:** add bigip devices openshift ha
+
+HostSubnets must use valid YAML. You can upload the files individually using separate oc create commands. Create one HostSubnet for each BIG-IP device. These will handle health monitor traffic. Also create one HostSubnet to pass client traffic. You will create the floating IP address for the active device in this subnet as shown in the diagram above. We have create the YAML files to save time. The files are located at /root/agility2018/ocp
+
+Define HostSubnets
+``````````````````
+
+hs-bigip01.yaml
 
 .. code-block:: console
 
-     [root@ose-mstr01 ~]# oc get hostsubnets
-     NAME                  HOST                  HOST IP         SUBNET          EGRESS IPS
-     ose-mstr01.f5.local   ose-mstr01.f5.local   10.10.199.100   10.130.0.0/23   []
-     ose-node01            ose-node01            10.10.199.101   10.128.0.0/23   []
-     ose-node02            ose-node02            10.10.199.102   10.129.0.0/23   []
-     [root@ose-mstr01 ~]#
+     {
+        "apiVersion": "v1",
+        "host": "openshift-f5-bigip01",
+        "hostIP": "10.10.199.98",
+        "kind": "HostSubnet",
+        "metadata": {
+            "name": "openshift-f5-bigip01"
+        },
+        "subnet": "10.131.0.0/23"
+    }
 
-.. image:: /_static/class5/ha-cluster.jpg
+hs-bigip02.yaml
+
+. code-block:: console
+
+     {
+        "apiVersion": "v1",
+        "host": "openshift-f5-bigip02",
+        "hostIP": "10.10.199.99",
+        "kind": "HostSubnet",
+        "metadata": {
+            "name": "openshift-f5-bigip02"
+        },
+        "subnet": "10.131.2.0/23"
+    }
+
+hs-bigip-float.yaml
+
+. code-block:: console
+
+     {
+        "apiVersion": "v1",
+        "host": "openshift-f5-bigip-float",
+        "hostIP": "10.10.199.200",
+        "kind": "HostSubnet",
+        "metadata": {
+            "name": "openshift-f5-bigip-float"
+        },
+        "subnet": "10.131.4.0/23"
+    }
+
+Create the HostSubnet files to the OpenShift API server
+
+. code-block:: console
+
+     oc create -f hs-bigip01.yaml
+     oc create -f hs-bigip02.yaml
+     oc create -f hs-bigip-float.yaml
+
+Verify creation of the HostSubnets:
+
+.. code-block:: console
+
+     [root@ose-mstr01 ocp]# oc get hostsubnet
+     NAME                       HOST                       HOST IP         SUBNET          EGRESS IPS
+     openshift-f5-bigip-float   openshift-f5-bigip-float   10.10.199.200   10.131.4.0/23   []
+     openshift-f5-bigip01       openshift-f5-bigip01       10.10.199.98    10.131.0.0/23   []
+     openshift-f5-bigip02       openshift-f5-bigip02       10.10.199.99    10.131.2.0/23   []
+     ose-mstr01.f5.local        ose-mstr01.f5.local        10.10.199.100   10.130.0.0/23   []
+     ose-node01                 ose-node01                 10.10.199.101   10.128.0.0/23   []
+     ose-node02                 ose-node02                 10.10.199.102   10.129.0.0/23   []
+    [root@ose-mstr01 ocp]#
 
 The BIG-IP OpenShift Controller cannot manage objects in the /Common partition. Its recommended to create all HA using the /Common partition.
+
+Creating OCP Partition
+ssh root@10.10.200.98 tmsh create auth partition ocp
+ssh root@10.10.200.99 tmsh create auth partition ocp
+
+Creating ocp-profile
+ssh root@10.10.200.98 tmsh create net tunnels vxlan ocp-profile flooding-type multipoint
+ssh root@10.10.200.99 tmsh create net tunnels vxlan ocp-profile flooding-type multipoint
+
+Creating floating IP for underlay network
+ssh root@10.10.200.98 tmsh create net self 10.10.199.200/24 vlan internal traffic-group traffic-group-1
+ssh root@10.10.200.98 tmsh run cm config-sync to-group ocp-devicegroup
+
+Creating vxlan tunnel ocp-tunnel
+ssh root@10.10.200.98 tmsh create net tunnels tunnel ocp-tunnel key 0 profile ocp-profile local-address 10.10.199.200 secondary-address  10.10.199.98 traffic-group traffic-group-1
+ssh root@10.10.200.99 tmsh create net tunnels tunnel ocp-tunnel key 0 profile ocp-profile local-address 10.10.199.200 secondary-address  10.10.199.99 traffic-group traffic-group-1
+
+Creating overlay self-ip
+ssh root@10.10.200.98 tmsh create net self 10.131.0.98/14 vlan ocp-tunnel
+ssh root@10.10.200.99 tmsh create net self 10.131.2.99/14 vlan ocp-tunnel
+
+Creating floating IP for overlay network
+ssh root@10.10.200.98 tmsh create net self 10.131.4.200/14 vlan ocp-tunnel
+ssh root@10.10.200.98 tmsh run cm config-sync to-group ocp-devicegroup
+
+Saving configuration
+
+ssh root@10.10.200.98 tmsh save sys config
+ssh root@10.10.200.99 tmsh save sys config
