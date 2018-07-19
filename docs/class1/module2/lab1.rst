@@ -1,7 +1,17 @@
 Install Docker
 ==============
 
+<<<<<<< HEAD
 Open up mRemoteNG and select Connections -> Agility 2018 -> Kubernetes -> Kubernetes Cluster -> Kube-Master
+=======
+#. Elevate to root user
+
+    .. code-block:: bash
+
+        sudo -s
+
+#. To ensure the OS is up to date
+>>>>>>> origin/develop
 
 .. image:: images/MremoteNG-1.png
     :align: center
