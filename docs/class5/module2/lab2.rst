@@ -5,11 +5,11 @@ Each Container Connector is uniquely suited to its specific container orchestrat
 
 The Container Connector is stateless. The inputs are:
 
-* the container orchestration environment’s config,
-* the BIG-IP device config, and
+* the container orchestration environment’s config
+* the BIG-IP device config
 * the CC config (provided via the appropriate means for the container orchestration environment).
 
-This means an instance of a Container Connector can be readily discarded. Migrating a CC is as easy as destroying it in one place and spinning up a new one somewhere else. Wherever a Container Connector runs, it always watches the API and attempts to bring the BIG-IP up-to-date with the latest applicable configurations.
+Wherever a Container Connector runs, it always watches the API and attempts to bring the BIG-IP up-to-date with the latest applicable configurations.
 
 Managing BIG-IP HA Clusters in OpenShift
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -34,26 +34,28 @@ Complete the steps below to set up the solution shown in the diagram. Be sure to
    ===== ==================================================================================
    Step  Task
    ===== ==================================================================================
-   1.    openshift initial bigip setup ha
+   1.    :ref:openshift initial bigip setup ha
 
-   2.    add bigip devices openshift ha
+   2.    :ref:add bigip devices openshift ha
 
-         openshift create hostsubnets ha
-         openshift upload hostsubnets ha
-         openshift verify hostsubnets ha
+         - openshift create hostsubnets ha
+         - openshift upload hostsubnets ha
+         - openshift verify hostsubnets ha
 
    3.    openshift vxlan setup ha
 
-         openshift create vxlan profile ha
-         openshift create vxlan tunnel ha
-         openshift vxlan selfIP ha
-         openshift vxlan floatingip ha
+         - creating OCP partition create
+         - ocp-profile create 
+         - openshift create vxlan profile ha
+         - penshift create vxlan tunnel ha
+         - openshift vxlan selfIP ha
+         - openshift vxlan floatingip ha
 
    4.    openshift deploy kctlr ha
 
-         openshift rbac ha
-         openshift create deployment ha
-         openshift upload deployment ha
+         - openshift rbac ha
+         - openshift create deployment ha
+         - openshift upload deployment ha
 
    ===== ==================================================================================
 
@@ -135,7 +137,7 @@ The diagram below displays the BIG-IP deployment with the OpenShift cluster in H
 
 .. _openshift initial bigip setup ha:
 
-**Step 1:** add bigip devices openshift ha
+**Step 2:** add bigip devices openshift ha
 
 HostSubnets must use valid YAML. You can upload the files individually using separate oc create commands. Create one HostSubnet for each BIG-IP device. These will handle health monitor traffic. Also create one HostSubnet to pass client traffic. You will create the floating IP address for the active device in this subnet as shown in the diagram above. We have create the YAML files to save time. The files are located at /root/agility2018/ocp
 
@@ -159,7 +161,7 @@ hs-bigip01.yaml
 
 hs-bigip02.yaml
 
-. code-block:: console
+.. code-block:: console
 
      {
         "apiVersion": "v1",
@@ -174,7 +176,7 @@ hs-bigip02.yaml
 
 hs-bigip-float.yaml
 
-. code-block:: console
+.. code-block:: console
 
      {
         "apiVersion": "v1",
@@ -209,33 +211,34 @@ Verify creation of the HostSubnets:
      ose-node02                 ose-node02                 10.10.199.102   10.129.0.0/23   []
     [root@ose-mstr01 ocp]#
 
-The BIG-IP OpenShift Controller cannot manage objects in the /Common partition. Its recommended to create all HA using the /Common partition.
+**Step 3:** openshift vxlan setup ha
 
-Creating OCP Partition
-ssh root@10.10.200.98 tmsh create auth partition ocp
-ssh root@10.10.200.99 tmsh create auth partition ocp
+**Step 3.1: ****Creating OCP Partition**
+- ssh root@10.10.200.98 tmsh create auth partition ocp
+- ssh root@10.10.200.99 tmsh create auth partition ocp
 
-Creating ocp-profile
+**Step 3.2: **Creating ocp-profile**
 ssh root@10.10.200.98 tmsh create net tunnels vxlan ocp-profile flooding-type multipoint
 ssh root@10.10.200.99 tmsh create net tunnels vxlan ocp-profile flooding-type multipoint
 
-Creating floating IP for underlay network
+**Step 3.3: **Creating floating IP for underlay network**
 ssh root@10.10.200.98 tmsh create net self 10.10.199.200/24 vlan internal traffic-group traffic-group-1
 ssh root@10.10.200.98 tmsh run cm config-sync to-group ocp-devicegroup
 
-Creating vxlan tunnel ocp-tunnel
+***Step 3.4: *Creating vxlan tunnel ocp-tunnel**
 ssh root@10.10.200.98 tmsh create net tunnels tunnel ocp-tunnel key 0 profile ocp-profile local-address 10.10.199.200 secondary-address  10.10.199.98 traffic-group traffic-group-1
 ssh root@10.10.200.99 tmsh create net tunnels tunnel ocp-tunnel key 0 profile ocp-profile local-address 10.10.199.200 secondary-address  10.10.199.99 traffic-group traffic-group-1
 
-Creating overlay self-ip
+**Step 3.5: **Creating overlay self-ip**
 ssh root@10.10.200.98 tmsh create net self 10.131.0.98/14 vlan ocp-tunnel
 ssh root@10.10.200.99 tmsh create net self 10.131.2.99/14 vlan ocp-tunnel
 
-Creating floating IP for overlay network
+***Step 3.6: *Creating floating IP for overlay network**
 ssh root@10.10.200.98 tmsh create net self 10.131.4.200/14 vlan ocp-tunnel
 ssh root@10.10.200.98 tmsh run cm config-sync to-group ocp-devicegroup
 
-Saving configuration
-
+**Step 3.7: **Saving configuration**
 ssh root@10.10.200.98 tmsh save sys config
 ssh root@10.10.200.99 tmsh save sys config
+
+The BIG-IP OpenShift Controller cannot manage objects in the /Common partition. Its recommended to create all HA using the /Common partition.
