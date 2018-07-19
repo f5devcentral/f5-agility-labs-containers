@@ -142,7 +142,7 @@ The diagram below displays the BIG-IP deployment with the OpenShift cluster in H
 Upload the HostSubnet files to the OpenShift API server
 ```````````````````````````````````````````````````````
 
-**Step 2:** add bigip devices openshift ha
+**Step 2:** Create a new OpenShift HostSubnet
 
 HostSubnets must use valid YAML. You can upload the files individually using separate oc create commands. Create one HostSubnet for each BIG-IP device. These will handle health monitor traffic. Also create one HostSubnet to pass client traffic. You will create the floating IP address for the active device in this subnet as shown in the diagram above. We have create the YAML files to save time. The files are located at /root/agility2018/ocp
 
@@ -221,34 +221,38 @@ Verify creation of the HostSubnets:
 Set up the VXLAN on the BIG-IP devices
 --------------------------------------
 
-**Step 3:** openshift vxlan setup ha
+**Step 3.1: ****Create a new partition on your BIG-IP system**
 
-**Step 3.1: ****Creating OCP Partition**
-- ssh root@10.10.200.98 tmsh create auth partition ocp
-- ssh root@10.10.200.99 tmsh create auth partition ocp
+The BIG-IP OpenShift Controller cannot manage objects in the /Common partition. Its recommended to create all HA using the /Common partition
+
+* ssh root@10.10.200.98 tmsh create auth partition ocp
+* ssh root@10.10.200.99 tmsh create auth partition ocp
 
 **Step 3.2: **Creating ocp-profile**
-ssh root@10.10.200.98 tmsh create net tunnels vxlan ocp-profile flooding-type multipoint
-ssh root@10.10.200.99 tmsh create net tunnels vxlan ocp-profile flooding-type multipoint
+
+* ssh root@10.10.200.98 tmsh create net tunnels vxlan ocp-profile flooding-type multipoint
+* ssh root@10.10.200.99 tmsh create net tunnels vxlan ocp-profile flooding-type multipoint
 
 **Step 3.3: **Creating floating IP for underlay network**
-ssh root@10.10.200.98 tmsh create net self 10.10.199.200/24 vlan internal traffic-group traffic-group-1
-ssh root@10.10.200.98 tmsh run cm config-sync to-group ocp-devicegroup
+
+* ssh root@10.10.200.98 tmsh create net self 10.10.199.200/24 vlan internal traffic-group traffic-group-1
+* ssh root@10.10.200.98 tmsh run cm config-sync to-group ocp-devicegroup
 
 ***Step 3.4: *Creating vxlan tunnel ocp-tunnel**
-ssh root@10.10.200.98 tmsh create net tunnels tunnel ocp-tunnel key 0 profile ocp-profile local-address 10.10.199.200 secondary-address  10.10.199.98 traffic-group traffic-group-1
-ssh root@10.10.200.99 tmsh create net tunnels tunnel ocp-tunnel key 0 profile ocp-profile local-address 10.10.199.200 secondary-address  10.10.199.99 traffic-group traffic-group-1
+
+* ssh root@10.10.200.98 tmsh create net tunnels tunnel ocp-tunnel key 0 profile ocp-profile local-address 10.10.199.200 secondary-address  10.10.199.98 traffic-group traffic-group-1
+* ssh root@10.10.200.99 tmsh create net tunnels tunnel ocp-tunnel key 0 profile ocp-profile local-address 10.10.199.200 secondary-address  10.10.199.99 traffic-group traffic-group-1
 
 **Step 3.5: **Creating overlay self-ip**
-ssh root@10.10.200.98 tmsh create net self 10.131.0.98/14 vlan ocp-tunnel
-ssh root@10.10.200.99 tmsh create net self 10.131.2.99/14 vlan ocp-tunnel
+
+* ssh root@10.10.200.98 tmsh create net self 10.131.0.98/14 vlan ocp-tunnel
+* ssh root@10.10.200.99 tmsh create net self 10.131.2.99/14 vlan ocp-tunnel
 
 ***Step 3.6: *Creating floating IP for overlay network**
-ssh root@10.10.200.98 tmsh create net self 10.131.4.200/14 vlan ocp-tunnel
-ssh root@10.10.200.98 tmsh run cm config-sync to-group ocp-devicegroup
+
+* ssh root@10.10.200.98 tmsh create net self 10.131.4.200/14 vlan ocp-tunnel
+* ssh root@10.10.200.98 tmsh run cm config-sync to-group ocp-devicegroup
 
 **Step 3.7: **Saving configuration**
-ssh root@10.10.200.98 tmsh save sys config
-ssh root@10.10.200.99 tmsh save sys config
-
-The BIG-IP OpenShift Controller cannot manage objects in the /Common partition. Its recommended to create all HA using the /Common partition.
+* ssh root@10.10.200.98 tmsh save sys config
+* ssh root@10.10.200.99 tmsh save sys config
