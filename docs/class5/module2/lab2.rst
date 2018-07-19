@@ -352,3 +352,4 @@ Upload the Deployments to the OpenShift API server
 **Step 4.4:** Upload the Deployments
 
 Verify Pod creation
+
