@@ -1,7 +1,13 @@
 Install Docker
 ==============
 
-#. To ensure the OS is up to date, run the following command
+#. Elevate to root user
+
+    .. code-block:: bash
+
+        sudo -s
+
+#. To ensure the OS is up to date
 
     .. code-block:: bash
 
