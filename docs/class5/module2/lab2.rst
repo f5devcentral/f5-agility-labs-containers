@@ -338,10 +338,9 @@ The following file has already being created **f5-kctlr-openshift-clusterrole.ya
 .. code-block:: console
 
      oc create -f f5-kctlr-openshift-clusterrole.yaml
-     
+
 Create Deployments
 ``````````````````
-
 **Step 4.3:** 
 
 Create an OpenShift Deployment for each Controller (one per BIG-IP device):
