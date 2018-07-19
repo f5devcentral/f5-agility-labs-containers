@@ -12,14 +12,14 @@ The Container Connector is stateless. The inputs are:
 Wherever a Container Connector runs, it always watches the API and attempts to bring the BIG-IP up-to-date with the latest applicable configurations.
 
 Managing BIG-IP HA Clusters in OpenShift
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+----------------------------------------
 
 You can use the F5 Container Connectors to manage a BIG-IP HA active-standby pair or device group. The deployment details vary depending on the platform. For most, the basic principle is the same: You should run one BIG-IP Controller instance for each BIG-IP device. You will deploy two BIG-IP Controller instances - one for each BIG-IP device. To help ensure Controller HA, you will deploy each Controller instance on a separate Node in the cluster.
 
 .. image:: /_static/class5/ha-cluster.jpg
 
 BIG-IP config sync
-~~~~~~~~~~~~~~~~~~
+------------------
 
 **Important**
 
@@ -147,7 +147,7 @@ Upload the HostSubnet files to the OpenShift API server
 HostSubnets must use valid YAML. You can upload the files individually using separate oc create commands. Create one HostSubnet for each BIG-IP device. These will handle health monitor traffic. Also create one HostSubnet to pass client traffic. You will create the floating IP address for the active device in this subnet as shown in the diagram above. We have create the YAML files to save time. The files are located at **/root/agility2018/ocp**
 
 Define HostSubnets
-``````````````````
+------------------
 
 hs-bigip01.yaml
 
@@ -286,6 +286,7 @@ Deploy the BIG-IP Controller
 Take the steps below to deploy a contoller for each BIG-IP device in the cluster.
 
 Set up RBAC
+-----------
 
 You can create RBAC resources in the project in which you will run your BIG-IP Controller. Each Controller that manages a device in a cluster or active-standby pair can use the same Service Account, Cluster Role, and Cluster Role Binding.
 
@@ -339,6 +340,7 @@ The following file has already being created **f5-kctlr-openshift-clusterrole.ya
      oc create -f f5-kctlr-openshift-clusterrole.yaml
 
 Create Deployments
+------------------
 
 **Step 4.3:** 
 
