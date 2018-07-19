@@ -34,30 +34,32 @@ Complete the steps below to set up the solution shown in the diagram. Be sure to
    ===== ==================================================================================
    Step  Task
    ===== ==================================================================================
-   1.    :ref:openshift initial bigip setup ha
+   1.    :ref:`openshift initial bigip setup ha`
 
-   2.    :ref:add bigip devices openshift ha
+   2.    :ref:`add bigip devices openshift ha`
 
-         - openshift create hostsubnets ha
-         - openshift upload hostsubnets ha
-         - openshift verify hostsubnets ha
+         * openshift create hostsubnets ha
+         * openshift upload hostsubnets ha
+         * openshift verify hostsubnets ha
 
-   3.    openshift vxlan setup ha
+   3.    :ref:`openshift vxlan setup ha`
 
-         - creating OCP partition create
-         - ocp-profile create 
-         - openshift create vxlan profile ha
-         - penshift create vxlan tunnel ha
-         - openshift vxlan selfIP ha
-         - openshift vxlan floatingip ha
+         * creating OCP partition create
+         * ocp-profile create 
+         * openshift create vxlan profile ha
+         * penshift create vxlan tunnel ha
+         * openshift vxlan selfIP ha
+         * openshift vxlan floatingip ha
 
-   4.    openshift deploy kctlr ha
+   4.    :ref:`openshift deploy kctlr ha`
 
-         - openshift rbac ha
-         - openshift create deployment ha
-         - openshift upload deployment ha
+         * openshift rbac ha
+         * openshift create deployment ha
+         * openshift upload deployment ha
 
    ===== ==================================================================================
+
+.. _openshift initial bigip setup ha:
 
 **Step 1:** Openshift initial bigip setup ha
 
@@ -68,19 +70,19 @@ The purpose of this lab is not to cover BIG-IP High Availability (HA) in depth b
 .. code-block:: console
 
      tmsh modify sys global-settings hostname bigip01.f5.local
-     && tmsh modify sys global-settings mgmt-dhcp disabled
-     && tmsh create sys management-ip 10.10.200.98/24
-     && tmsh create sys management-route 10.10.200.1
-     && tmsh create net vlan external interfaces add {1.1}
-     && tmsh create net vlan internal interfaces add {1.2}
-     && tmsh create net vlan ha interfaces add {1.3}
-     && tmsh create net self 10.10.199.98/24 vlan internal
-     && tmsh create net self 10.10.201.98/24 vlan external
-     && tmsh create net self 10.10.202.98/24 vlan ha allow-service default
-     && tmsh create net route default gw 10.10.201.1
+     tmsh modify sys global-settings mgmt-dhcp disabled
+     tmsh create sys management-ip 10.10.200.98/24
+     tmsh create sys management-route 10.10.200.1
+     tmsh create net vlan external interfaces add {1.1}
+     tmsh create net vlan internal interfaces add {1.2}
+     tmsh create net vlan ha interfaces add {1.3}
+     tmsh create net self 10.10.199.98/24 vlan internal
+     tmsh create net self 10.10.201.98/24 vlan external
+     tmsh create net self 10.10.202.98/24 vlan ha allow-service default
+     tmsh create net route default gw 10.10.201.1
      tmsh mv cm device bigip1 bigip01.f5.local
-     && tmsh modify cm device bigip01.f5.local configsync-ip 10.10.202.98
-     && tmsh modify cm device bigip01.f5.local unicast-address {{ip 10.10.202.98} {ip management-ip}}
+     tmsh modify cm device bigip01.f5.local configsync-ip 10.10.202.98
+     tmsh modify cm device bigip01.f5.local unicast-address {{ip 10.10.202.98} {ip management-ip}}
      tmsh modify cm trust-domain ca-devices add {10.10.200.99} username admin password admin
      tmsh create cm device-group ocp-devicegroup devices add {bigip01.f5.local bigip02.f5.local} type sync-failover auto-sync disabled
      tmsh run cm config-sync to-group ocp-devicegroup
@@ -91,17 +93,17 @@ The purpose of this lab is not to cover BIG-IP High Availability (HA) in depth b
 . code-block:: console
 
      tmsh modify sys global-settings hostname bigip02.f5.local
-     && tmsh modify sys global-settings mgmt-dhcp disabled
-     && tmsh create sys management-ip 10.10.200.99/24
-     && tmsh create sys management-route 10.10.200.1
-     && tmsh create net vlan external interfaces add {1.1}
-     && tmsh create net vlan internal interfaces add {1.2}
-     && tmsh create net vlan ha interfaces add {1.3}
-     && tmsh create net self 10.10.199.99/24 vlan internal
-     && tmsh create net self 10.10.201.99/24 vlan external
-     && tmsh create net self 10.10.202.99/24 vlan ha allow-service default
-     && tmsh create net route default gw 10.10.201.1
-     && tmsh modify sys global-settings gui-setup disabled
+     tmsh modify sys global-settings mgmt-dhcp disabled
+     tmsh create sys management-ip 10.10.200.99/24
+     tmsh create sys management-route 10.10.200.1
+     tmsh create net vlan external interfaces add {1.1}
+     tmsh create net vlan internal interfaces add {1.2}
+     tmsh create net vlan ha interfaces add {1.3}
+     tmsh create net self 10.10.199.99/24 vlan internal
+     tmsh create net self 10.10.201.99/24 vlan external
+     tmsh create net self 10.10.202.99/24 vlan ha allow-service default
+     tmsh create net route default gw 10.10.201.1
+     tmsh modify sys global-settings gui-setup disabled
      tmsh mv cm device bigip1 bigip02.f5.local
      tmsh modify cm device bigip02.f5.local configsync-ip 10.10.202.99
      tmsh modify cm device bigip02.f5.local unicast-address {{ip 10.10.202.99} {ip management-ip}}
@@ -135,7 +137,10 @@ All synced. Note the sync-failover configuration is set to manual sync
 
 The diagram below displays the BIG-IP deployment with the OpenShift cluster in High Availability (HA) active-standby pair or device group. Note this solution applies to BIG-IP devices v13.x and later only. To accomplish High Availability (HA) active-standby pair or device group with OpenShift the BIG-IP needs to create a floating vxlan tunnel address with is currently only available in BIG-IP 13.x and later.
 
-.. _openshift initial bigip setup ha:
+.. _openshift upload hostsubnets ha:
+
+Upload the HostSubnet files to the OpenShift API server
+```````````````````````````````````````````````````````
 
 **Step 2:** add bigip devices openshift ha
 
@@ -191,7 +196,7 @@ hs-bigip-float.yaml
 
 Create the HostSubnet files to the OpenShift API server
 
-. code-block:: console
+.. code-block:: console
 
      oc create -f hs-bigip01.yaml
      oc create -f hs-bigip02.yaml
@@ -210,6 +215,11 @@ Verify creation of the HostSubnets:
      ose-node01                 ose-node01                 10.10.199.101   10.128.0.0/23   []
      ose-node02                 ose-node02                 10.10.199.102   10.129.0.0/23   []
     [root@ose-mstr01 ocp]#
+
+.. _openshift vxlan setup ha:
+
+Set up the VXLAN on the BIG-IP devices
+--------------------------------------
 
 **Step 3:** openshift vxlan setup ha
 
