@@ -241,7 +241,7 @@ Use the following username and password
 username: **demouser**
 password: **demouser**
 
-.. image:: /_static/class4/webconsole.png
+.. image:: /_static/class5/webconsole.png
 
 Section 1.2 Troubbleshooting OpenShift!
 --------------------------------------------------------
