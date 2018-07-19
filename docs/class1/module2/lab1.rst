@@ -1,11 +1,17 @@
 Install Docker
 ==============
 
-#. Elevate to root user
+#. From the jumphost open **mRemoteNG** and start a session to each of the following servers. The sessions are pre-configured to connect with the default user “ubuntu”.
+
+    - kube-master
+    - kube-node1
+    - kube-node2
+
+#. Connect as root
 
     .. code-block:: bash
 
-        sudo -s
+        su - (passwd = default)
 
 #. To ensure the OS is up to date
 

@@ -41,7 +41,7 @@ The master is the system where the "control plane" components run, including etc
         mkdir -p $HOME/.kube
         sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
         sudo chown $(id -u):$(id -g) $HOME/.kube/config
-        logout
+        exit
         mkdir -p $HOME/.kube
         sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
         sudo chown $(id -u):$(id -g) $HOME/.kube/config
@@ -185,6 +185,12 @@ To install the UI you have two options:
         :language: yaml
         :linenos:
         :emphasize-lines: 65
+
+    Apply Kubernetes manifest file:
+    
+    .. code-block:: bash
+
+         kubectl apply -f kube-dashboard.yaml
 
 #. To access the dashboard, you need to see which port it is listening on. You can find this information with the following command:
 
