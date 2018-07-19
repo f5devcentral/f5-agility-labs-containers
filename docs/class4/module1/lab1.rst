@@ -33,7 +33,7 @@ The BIG-IP we are working on has been licensed, and only these following command
 
 Let's validate your BIG-IP is just configured with VLANs, Self-IPs.  No no Virtual Servers and no Pools
 
-Connect to your BIG-IP on https://10.10.200.98 and familiarize yourself with the the current VLAN's.  Proceed to Network -> VLAN.
+Connect to your BIG-IP on https://10.1.1.245 and familiarize yourself with the the current VLAN's.  Proceed to Network -> VLAN.
 
 .. image:: /_static/class4/F5-BIG-IP-NETWORK-VLAN.png
    :align: center

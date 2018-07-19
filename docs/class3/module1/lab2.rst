@@ -10,7 +10,7 @@ BIG-IP setup
 
 To use F5 Container connector / Marathon BIG-IP Controller, you'll need a BIG-IP up and running first.
 
-In the lab, you should have a BIG-IP available at the following URL: https://10.2.10.60.
+In the lab, you should have a BIG-IP available at the following URL: https://10.1.1.245
 
 .. warning::
 
