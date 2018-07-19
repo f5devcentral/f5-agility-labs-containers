@@ -14,7 +14,7 @@ Lab 2.1 Install Docker
 
 #. Once connected as ubuntu user (it's the user already setup in the MremoteNG settings), let's elivate to root:
 
-    .. code-block:: bash
+    .. code-block:: console
 
         su - ( when prompted for password enter "default" without the quotes )
 
@@ -25,7 +25,7 @@ Lab 2.1 Install Docker
 
 #. Then, to ensure the OS is up to date, run the following command
 
-    .. code-block:: bash
+    .. code-block:: console
 
         apt update && apt upgrade -y
 
@@ -33,7 +33,7 @@ Lab 2.1 Install Docker
 
 #. Add the docker repo
 
-    .. code-block:: bash
+    .. code-block:: console
 
         curl \-fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add \-
 
@@ -41,7 +41,7 @@ Lab 2.1 Install Docker
 
 #. Install the docker packages
 
-    .. code-block:: bash
+    .. code-block:: console
 
         apt update && apt install docker-ce -y
 
@@ -49,7 +49,7 @@ Lab 2.1 Install Docker
 
     .. important:: The cgroupdrive for docker and kubernetes have to match.  In this lab "cgroupfs" is the correct driver.
 
-    .. code-block:: bash
+    .. code-block:: console
 
         This next part can be a bit tricky - just cut/paste the 5 lines below exactly as they are and paste via buffer to the CLI (and press return when done)
 
@@ -66,7 +66,7 @@ Lab 2.1 Install Docker
 
 #. Verify docker is up and running
 
-    .. code-block:: bash
+    .. code-block:: console
 
         docker run hello-world
 
