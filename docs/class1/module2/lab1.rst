@@ -1,44 +1,35 @@
 Install Docker
 ==============
 
-<<<<<<< HEAD
-Open up mRemoteNG and select Connections -> Agility 2018 -> Kubernetes -> Kubernetes Cluster -> Kube-Master
-=======
-#. Elevate to root user
+#. Open up mRemoteNG and select Connections -> Agility 2018 -> Kubernetes -> Kubernetes Cluster -> Kube-Master
+
+    .. image:: images/MremoteNG-1.png
+        :align: center
+        :scale: 50 %
+
+#. Once connected as ubuntu user (it's the user already setup in the MremoteNG settings), let's elivate to root
+
+    .. code-block:: none
+
+        su
+        ( when prompted for password enter "default" without the quotes )
+
+    Your prompt should change to root@ at the start of the line :
+
+    .. image:: images/rootuser.png
+        :align: center
+        :scale: 50 %
+
+#.  Then, to ensure the OS is up to date, run the following command
 
     .. code-block:: bash
 
-        sudo -s
+        apt update && apt upgrade -y
 
-#. To ensure the OS is up to date
->>>>>>> origin/develop
-
-.. image:: images/MremoteNG-1.png
-    :align: center
-    :scale: 50 %
-
-1. Once connected as ubuntu user (it's the user already setup in the MremoteNG settings), let's elivate to root
-
-  .. code-block:: none
-
-    su
-    ( when prompted for password enter "default" without the quotes )
-
-Your prompt should change to root@ at the start of the line :
-
-  .. image:: images/rootuser.png
-    :align: center
-    :scale: 50 %
-
-2.  Then, to ensure the OS is up to date, run the following command
-
-  .. code-block:: none
-
-      apt update && apt upgrade -y
-      (This can take a few seconds to a minute depending on demand to download the latest updates for the OS)
+        (This can take a few seconds to a minute depending on demand to download the latest updates for the OS)
 
 
-3. Add the docker repo
+#. Add the docker repo
 
     .. code-block:: bash
 
@@ -58,19 +49,19 @@ Your prompt should change to root@ at the start of the line :
 
     .. code-block:: bash
 
-      This next part can be a bit tricky - just cut/paste the 5 lines below exactly as they are and paste via buffer to the CLI (and press return when done)
+        This next part can be a bit tricky - just cut/paste the 5 lines below exactly as they are and paste via buffer to the CLI (and press return when done)
 
-      cat << EOF > /etc/docker/daemon.json
-      {
-      "exec-opts": ["native.cgroupdriver=cgroupfs"]
-      }
-      EOF
+        cat << EOF > /etc/docker/daemon.json
+        {
+        "exec-opts": ["native.cgroupdriver=cgroupfs"]
+        }
+        EOF
 
-It should look something like this image below:
+    It should look something like this image below:
 
-      .. image:: images/goodEOL.png
-          :align: center
-          :scale: 50 %
+    .. image:: images/goodEOL.png
+        :align: center
+        :scale: 50 %
 
 #. Verify docker is up and running
 
