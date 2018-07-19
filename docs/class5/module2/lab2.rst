@@ -144,7 +144,7 @@ Upload the HostSubnet files to the OpenShift API server
 
 **Step 2:** Create a new OpenShift HostSubnet
 
-HostSubnets must use valid YAML. You can upload the files individually using separate oc create commands. Create one HostSubnet for each BIG-IP device. These will handle health monitor traffic. Also create one HostSubnet to pass client traffic. You will create the floating IP address for the active device in this subnet as shown in the diagram above. We have create the YAML files to save time. The files are located at /root/agility2018/ocp
+HostSubnets must use valid YAML. You can upload the files individually using separate oc create commands. Create one HostSubnet for each BIG-IP device. These will handle health monitor traffic. Also create one HostSubnet to pass client traffic. You will create the floating IP address for the active device in this subnet as shown in the diagram above. We have create the YAML files to save time. The files are located at **/root/agility2018/ocp**
 
 Define HostSubnets
 ``````````````````
@@ -254,5 +254,102 @@ The BIG-IP OpenShift Controller cannot manage objects in the /Common partition. 
 * ssh root@10.10.200.98 tmsh run cm config-sync to-group ocp-devicegroup
 
 **Step 3.7: **Saving configuration**
+
 * ssh root@10.10.200.98 tmsh save sys config
 * ssh root@10.10.200.99 tmsh save sys config
+
+Before adding the BIG-IP contrller to OpenShift validate the partition and tunnel configuration
+
+Validate that the OCP bigip partition was created
+
+.. image:: /_static/class5/partition.png
+
+Validate bigip01 self IP configuration
+
+Note: On the active device, there is floating IP address in the subnet assigned by the OpenShift SDN.
+
+.. image:: /_static/class5/self-ip-bibip01-ha.png
+
+Validate bigip02 self IP configuration
+
+.. image:: /_static/class5/self-ip-bibip02-ha.png
+
+Check the ocp-tunnel configuration. Note the local-address 10.10.199.200 and secondary-address are  10.10.199.98 for bigip01 and 10.10.199.99 for bigip02
+
+.. image:: /_static/class5/bigip01-tunnelip.png
+
+.. _openshift deploy kctlr ha:
+
+Deploy the BIG-IP Controller
+----------------------------
+
+ Take the steps below to deploy a contoller for each BIG-IP device in the cluster.
+
+Set up RBAC
+```````````
+
+You can create RBAC resources in the project in which you will run your BIG-IP Controller. Each Controller that manages a device in a cluster or active-standby pair can use the same Service Account, Cluster Role, and Cluster Role Binding.
+
+**Step 4.1:** Create a Service Account for the BIG-IP Controller
+
+.. code-block:: console
+
+     oc create serviceaccount bigip-ctlr [-n kube-system]
+
+**Step 4.2:** Create a Cluster Role and Cluster Role Binding with the required permissions.
+
+The following file has already being created **f5-kctlr-openshift-clusterrole.yaml** which is located in /root/agility2018/ocp
+
+.. code-block:: console
+
+     # For use in OpenShift clusters
+     apiVersion: v1
+     kind: ClusterRole
+     metadata:
+     annotations:
+         authorization.openshift.io/system-only: "true"
+     name: system:bigip-ctlr
+     rules:
+     - apiGroups: ["", "extensions"]
+     resources: ["nodes", "services", "endpoints", "namespaces", "ingresses", "routes" ]
+     verbs: ["get", "list", "watch"]
+     - apiGroups: ["", "extensions"]
+     resources: ["configmaps", "events", "ingresses/status"]
+     verbs: ["get", "list", "watch", "update", "create", "patch" ]
+     - apiGroups: ["", "extensions"]
+     resources: ["secrets"]
+     resourceNames: ["<secret-containing-bigip-login>"]
+     verbs: ["get", "list", "watch"]
+
+     ---
+
+     apiVersion: v1
+     kind: ClusterRoleBinding
+     metadata:
+         name: bigip-ctlr-role
+     userNames:
+     - system:serviceaccount:kube-system:bigip-ctlr
+     subjects:
+     - kind: ServiceAccount
+     name: bigip-ctlr
+     roleRef:
+     name: system:bigip-ctlr
+
+.. code-block:: console
+
+     oc create -f f5-kctlr-openshift-clusterrole.yaml
+     
+Create Deployments
+``````````````````
+
+**Step 4.3:** 
+
+Create an OpenShift Deployment for each Controller (one per BIG-IP device):
+
+**Step 4.3:** Upload the Deployments
+
+Upload the Deployments to the OpenShift API server
+
+**Step 4.4:** Upload the Deployments
+
+Verify Pod creation
