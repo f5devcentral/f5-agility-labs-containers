@@ -294,7 +294,8 @@ You can create RBAC resources in the project in which you will run your BIG-IP C
 
 .. code-block:: console
 
-     oc create serviceaccount bigip-ctlr [-n kube-system]
+     [root@ose-mstr01 ocp]# **oc create serviceaccount bigip-ctlr [-n kube-system]**
+     serviceaccount "bigip-ctlr" created
 
 **Step 4.2:** Create a Cluster Role and Cluster Role Binding with the required permissions.
 
@@ -335,9 +336,13 @@ The following file has already being created **f5-kctlr-openshift-clusterrole.ya
      roleRef:
      name: system:bigip-ctlr
 
+Use the oc create -f f5-kctlr-openshift-clusterrole.yaml 
+
 .. code-block:: console
 
-     oc create -f f5-kctlr-openshift-clusterrole.yaml
+     [root@ose-mstr01 ocp]# **oc create -f f5-kctlr-openshift-clusterrole.yaml**
+     clusterrole "system:bigip-ctlr" created
+     clusterrolebinding "bigip-ctlr-role" created
 
 Create Deployments
 ------------------
