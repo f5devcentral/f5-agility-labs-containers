@@ -10,7 +10,7 @@ BIG-IP setup
 
 To use F5 Container connector / Marathon BIG-IP Controller, you'll need a BIG-IP up and running first.
 
-In the lab, you should have a BIG-IP available at the following URL: https://10.2.10.60.
+In the lab, you should have a BIG-IP available at the following URL: https://10.1.1.245
 
 .. warning::
 
@@ -57,14 +57,14 @@ To deploy our Marathon BIG-IP Controller, we need to either use Marathon UI or u
     "container": {
       "type": "DOCKER",
       "docker": {
-        "image": "f5networks/marathon-bigip-ctlr:1.0.0",
+        "image": "f5networks/marathon-bigip-ctlr:1.3.1",
         "network": "BRIDGE"
       }
     },
     "env": {
       "MARATHON_URL": "http://10.2.10.10:8080",
   		"F5_CC_PARTITIONS": "mesos",
-      "F5_CC_BIGIP_HOSTNAME": "10.2.10.60",
+      "F5_CC_BIGIP_HOSTNAME": "10.1.1.245",
       "F5_CC_BIGIP_USERNAME": "admin",
       "F5_CC_BIGIP_PASSWORD": "admin"
     }
