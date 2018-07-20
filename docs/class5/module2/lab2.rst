@@ -1,5 +1,5 @@
 Section 2.1 Working with BIG-IP HA pairs or device groups
---------------------------------------------------------
+=========================================================
 
 Each Container Connector is uniquely suited to its specific container orchestration environment and purpose, utilizing the architecture and language appropriate for the environment. Application Developers interact with the platform’s API; the CCs watch the API for certain events, then act accordingly.
 
@@ -268,15 +268,15 @@ Validate bigip01 self IP configuration
 
 Note: On the active device, there is floating IP address in the subnet assigned by the OpenShift SDN.
 
-.. image:: /_static/class5/self-ip-bibip01-ha.png
+.. image:: /_static/class5/self-ip-bigip01-ha.png
 
 Validate bigip02 self IP configuration
 
-.. image:: /_static/class5/self-ip-bibip02-ha.png
+.. image:: /_static/class5/self-ip-bigip02-ha.png
 
 Check the ocp-tunnel configuration. Note the local-address 10.10.199.200 and secondary-address are  10.10.199.98 for bigip01 and 10.10.199.99 for bigip02
 
-.. image:: /_static/class5/bigip01-tunnelip.png
+.. image:: /_static/class5/bigip01-tunnel-ip.png
 
 .. _openshift deploy kctlr ha:
 
