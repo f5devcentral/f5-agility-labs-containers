@@ -238,7 +238,7 @@ The BIG-IP OpenShift Controller cannot manage objects in the /Common partition. 
 * ssh root@10.10.200.98 tmsh create net self 10.10.199.200/24 vlan internal traffic-group traffic-group-1
 * ssh root@10.10.200.98 tmsh run cm config-sync to-group ocp-devicegroup
 
-***Step 3.4:** Creating vxlan tunnel ocp-tunnel
+**Step 3.4:** Creating vxlan tunnel ocp-tunnel
 
 * ssh root@10.10.200.98 tmsh create net tunnels tunnel ocp-tunnel key 0 profile ocp-profile local-address 10.10.199.200 secondary-address  10.10.199.98 traffic-group traffic-group-1
 * ssh root@10.10.200.99 tmsh create net tunnels tunnel ocp-tunnel key 0 profile ocp-profile local-address 10.10.199.200 secondary-address  10.10.199.99 traffic-group traffic-group-1
@@ -248,7 +248,7 @@ The BIG-IP OpenShift Controller cannot manage objects in the /Common partition. 
 * ssh root@10.10.200.98 tmsh create net self 10.131.0.98/14 vlan ocp-tunnel
 * ssh root@10.10.200.99 tmsh create net self 10.131.2.99/14 vlan ocp-tunnel
 
-***Step 3.6:** Creating floating IP for overlay network
+**Step 3.6:** Creating floating IP for overlay network
 
 * ssh root@10.10.200.98 tmsh create net self 10.131.4.200/14 vlan ocp-tunnel
 * ssh root@10.10.200.98 tmsh run cm config-sync to-group ocp-devicegroup
