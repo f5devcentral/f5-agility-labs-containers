@@ -1,205 +1,79 @@
-Container Connector(CC) Setup
-=============================
+Lab 2.1 Install Docker
+======================
 
-the official CC documentation is here: `Install the F5 Kubernetes BIG-IP Controller <http://clouddocs.f5.com/containers/v1/kubernetes/kctlr-app-install.html>`_
+.. attention:: The following commands need to be run on all three nodes unless otherwise specified.
 
-BIG-IP setup
-------------
+#. From the jumphost open **mRemoteNG** and start a session to each of the following servers. The sessions are pre-configured to connect with the default user “ubuntu”.
 
-To use F5 Container connector, you'll need a BIG-IP up and running first.
+    - kube-master
+    - kube-node1
+    - kube-node2
 
-Through the Jumpbox, you should have a BIG-IP available at the following URL: https://10.1.10.60
+    .. image:: images/MremoteNG-1.png
+        :align: center
 
-.. WARNING::
+#. Once connected as ubuntu user (it's the user already setup in the MremoteNG settings), let's elivate to root:
 
-   Connect to your BIG-IP and check it is active and licensed. Its login and password are: **admin/admin**
+    .. code-block:: console
 
-.. NOTE::
+        su - ( when prompted for password enter "default" without the quotes )
 
-	 If your BIG-IP has no license or its license expired, renew the license. You just need a LTM VE license for this lab. No specific add-ons are required (ask a lab instructor for eval licenses if your license has expired)
+    Your prompt should change to root@ at the start of the line :
 
-You need to setup a partition that will be used by F5 Container Connector.
+    .. image:: images/rootuser.png
+        :align: center
 
-To do so go to : System > Users > Partition List. Create a new partition called "kubernetes"
+#. Then, to ensure the OS is up to date, run the following command
 
-(enter the name "kubernetes" and take all the default settings and click Finished)
+    .. code-block:: console
 
-.. image:: /_static/class1/f5-container-connector-bigip-partition-setup.png
-	 :align: center
+        apt update && apt upgrade -y
 
-Once your partition is created, we can go back to Kubernetes to setup the F5 Container connector
+        (This can take a few seconds to a minute depending on demand to download the latest updates for the OS)
 
-Container Connector deployment
-------------------------------
+#. Add the docker repo
 
-Here we consider you have already retrieved the F5 container connector image and loaded it in the environment.
+    .. code-block:: console
 
-.. NOTE::
+        curl \-fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add \-
 
-   Because we have already loaded docker images for this environment, this can be skipped.
+        add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
 
-   Normally if you haven't loaded it in your environment, you have a few choices to load the images i.e.:
+#. Install the docker packages
 
-   #. load it on **all your systems** with the docker load -i <file_name.tar>
-   #. load it on a system and push it into your registry
+    .. code-block:: console
 
-Now that our container is loaded, we need to define a deployment: `Kubernetes deployments <https://kubernetes.io/docs/user-guide/deployments/>`_ and create a secret to hide our bigip credentials. `Kubernetes secrets <https://kubernetes.io/docs/user-guide/secrets/>`_
+        apt update && apt install docker-ce -y
 
-On the **master** , we need to setup a deployment file to load our container and also setup a secret for our big-ip credentials
+#. Configure docker to use the correct cgroupdriver
 
-.. NOTE::
+    .. important:: The cgroupdrive for docker and kubernetes have to match.  In this lab "cgroupfs" is the correct driver.
 
-   Utilizing a wrapper called MRemoteNG for Putty and other services.
-   MRNG hold credentials and allows for multiple protocols (i.e. SSH, RDP, etc.), makes jumping in and out of SSH connections easier
+    .. code-block:: console
 
-   On your desktop select **MRemoteNG**, once launched you'll see a few tabs similar to the example below, please open up Kubernetes tab
+        This next part can be a bit tricky - just cut/paste the 5 lines below exactly as they are and paste via buffer to the CLI (and press return when done)
 
-   .. image:: /_static/class1/MRemoteNG2.png
- 	  	:align: center
- 	  	:scale: 100%
+        cat << EOF > /etc/docker/daemon.json
+        {
+        "exec-opts": ["native.cgroupdriver=cgroupfs"]
+        }
+        EOF
 
+    It should look something like this image below:
 
-   Select the **"KUBERNETES-CLUSTER and K8s Master** and double click to connect"
+    .. image:: images/goodEOL.png
+        :align: center
 
+#. Verify docker is up and running
 
-   .. image:: /_static/class1/MRemoteNG1.png
-      :align: center
-      :scale: 100%
+    .. code-block:: console
 
-To setup the secret containing your BIG-IP login and password, you can run the following command:
+        docker run hello-world
 
-::
+    If everything is working properly you should see the following message
 
-	kubectl create secret generic bigip-login --namespace kube-system --from-literal=username=admin --from-literal=password=admin
+    .. image:: images/docker-hello-world-yes.png
+        :align: center
 
-you should see something like this:
 
-.. image:: /_static/class1/f5-container-connector-bigip-secret.png
-	 :align: center
-
-
-create a file called ``f5-cc-deployment.yaml``. Here is its content: ---> Please use the file in /home/ubuntu/f5-demo
-
-If you're not used to using Linux/Unix, please ask for help and we'll come over and show you how to create and edit files in the CLI
-
-.. code-block:: yaml
-
-        apiVersion: extensions/v1beta1
-        kind: Deployment
-        metadata:
-          name: k8s-bigip-ctlr-deployment
-          namespace: kube-system
-        spec:
-          replicas: 1
-          template:
-            metadata:
-              name: k8s-bigip-ctlr
-              labels:
-                app: k8s-bigip-ctlr
-            spec:
-              containers:
-                - name: k8s-bigip-ctlr
-                  image: "f5networks/k8s-bigip-ctlr:1.0.0"
-                  imagePullPolicy: IfNotPresent
-                  env:
-                    - name: BIGIP_USERNAME
-                      valueFrom:
-                        secretKeyRef:
-                          name: bigip-login
-                          key: username
-                    - name: BIGIP_PASSWORD
-                      valueFrom:
-                        secretKeyRef:
-                          name: bigip-login
-                          key: password
-                  command: ["/app/bin/k8s-bigip-ctlr"]
-                  args: [
-                    "--bigip-username=$(BIGIP_USERNAME)",
-                    "--bigip-password=$(BIGIP_PASSWORD)",
-                    "--bigip-url=10.1.10.60",
-                    "--bigip-partition=kubernetes",
-                    "--namespace=default"
-                  ]
-
-
-
-.. NOTE::
-
-   You can use the templates on your jumpbox desktop or the Kubernetes Master under /home/ubuntu/f5-demo. If you use those files, you'll need to :
-
-	 * check the container image path in the deployment file is accurate
-	 * Update the "bindAddr" in the configMap for an IP you want to use in this blueprint.
-
-If you have issues with your yaml and syntax (**identation MATTERS**), you can try to use an online parser to help you : `Yaml parser <http://codebeautify.org/yaml-validator>`_
-
-Once you have your yaml file setup, you can try to launch your deployment. It will start our f5-k8s-controller container on one of our node (may take around 30sec to be in a running state):
-
-::
-
-	kubectl create -f f5-cc-deployment.yaml
-
-	kubectl get deployment k8s-bigip-ctlr-deployment --namespace kube-system
-
-.. image:: /_static/class1/f5-container-connector-launch-deployment-controller.png
-	:align: center
-
-FYI, To locate on which node the container connector is running, you can use the following command:
-
-::
-
-	kubectl get pods -o wide -n kube-system
-
-.. image:: /_static/class1/f5-container-connector-locate-controller-container.png
-	:align: center
-
-We can see that our container is running on the nodes
-
-If you need to troubleshoot your container, you have two different ways to check the logs of your container:
-
-	1. via kubectl command (recommended - easier)
-	2. by connecting to the relevant node and use docker command. Here you'll need to identify on which node it runs and use docker logs command:
-
-If you want to use kubectl command: you need to use the full name of your pod as showed in the previous image and run the command kubectl logs k8s-bigip-ctlr-deployment-<id> -n kube-system
-
-::
-
-	 kubectl logs k8s-bigip-ctlr-deployment-710074254-b9dr8 -n kube-system
-
-.. image:: /_static/class1/f5-container-connector-check-logs-kubectl.png
-   :align: center
-   :scale: 50%
-
-If you want to use docker logs command
-
-On Node1 (or another node depending on the previous command):
-
-::
-
-	sudo docker ps
-
-.. image:: /_static/class1/f5-container-connector-find-dockerID--controller-container.png
-	 :align: center
-
-Here we can see our container ID: 7a774293230b
-
-Now we can check our container logs:
-
-::
-
-	sudo docker logs 7a774293230b
-
-.. image:: /_static/class1/f5-container-connector-check-logs-controller-container.png
-	 :align: center
-
-
-You can connect to your container with kubectl also:
-
-::
-
-	 kubectl exec -it k8s-bigip-ctlr-deployment-710074254-b9dr8 -n kube-system  -- /bin/sh
-
-	 cd /app
-
-	 ls -lR
-
-	 exit
+.. note:: If you are not a linux/unix person - don't worry.  What happened above is how the linux installs and updates software. This is  ALL the ugly (under the cover steps to install apps, and in this case Docker on a Linux host. Please ask questions as to what really happened, but this is how with linux on ubuntu (and many other linux flavors) installs applications.  Linux uses a term called "package manager", and there are many: like YUM, APT, DPKG, RPM, PACMAN, etc. usually one is more favored by the flavor of linux (i.e. debian, ubuntu, redhat gentoo, OpenSuse, etc.), but at the end of the day they all pretty much do the same thing, download and keep applications updated.

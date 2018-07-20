@@ -1,0 +1,33 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: f5-hello-world
+  namespace: default
+  labels:
+    f5type: virtual-server
+data:
+  schema: "f5schemadb://bigip-virtual-server_v0.1.7.json"
+  data: |
+    {
+      "virtualServer": {
+        "frontend": {
+          "balance": "round-robin",
+          "mode": "http",
+          "partition": "kubernetes",
+          "virtualAddress": {
+            "bindAddr": "10.1.10.81",
+            "port": 80
+          }
+        },
+        "backend": {
+          "serviceName": "f5-hello-world",
+          "servicePort": 8080,
+          "healthMonitors": [{
+            "interval": 5,
+            "protocol": "http",
+            "send": "HEAD / HTTP/1.0\r\n\r\n",
+            "timeout": 16
+          }]
+        }
+      }
+    }
