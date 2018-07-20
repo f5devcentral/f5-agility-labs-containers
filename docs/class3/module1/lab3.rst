@@ -83,7 +83,7 @@ Click on the <IP:Port> assigned to be redirect there:
 
 We can check whether the Marathon BIG-IP Controller has updated our BIG-IP configuration accordingly
 
-Connect to your BIG-IP on https://10.2.10.60 and go to Local Traffic > Virtual Server. Select the Partition called "**mesos**" from the top-right corner in the GUI. You should have something like this:
+Connect to your BIG-IP on https://10.1.1.245 and go to Local Traffic > Virtual Server. Select the Partition called "**mesos**" from the top-right corner in the GUI. You should have something like this:
 
 .. image:: /_static/class3/f5-container-connector-check-app-on-BIG-IP-VS.png
 	:align: center

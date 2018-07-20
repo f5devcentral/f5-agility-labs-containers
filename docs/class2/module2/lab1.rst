@@ -8,10 +8,10 @@ This installation will utilize Ubuntu v16.04 (Xenial) and **kubeadm**
 
 .. note::  You can find a more thorough installation guide here: `Ubuntu getting started guide 16.04 <http://kubernetes.io/docs/getting-started-guides/kubeadm/>`_
 
-.. important:: The following commands need to be run on all three nodes unless otherwise specified.
-
 Setup
 -----
+
+.. attention:: The following commands need to be run on all three nodes unless otherwise specified.
 
 #. From the jumphost open **mRemoteNG** and start a session to each of the following servers. The sessions are pre-configured to connect with the default user “ubuntu”.
 
@@ -19,15 +19,24 @@ Setup
     - kube-node1
     - kube-node2
 
-#. Connect as root
+    .. image:: images/MremoteNG-1.png
+        :align: center
 
-    .. code-block:: bash
+#. Once connected as ubuntu user (it's the user already setup in the MremoteNG settings), let's elivate to root:
 
-        su - (passwd = default)
+    .. code-block:: console
+
+        su - ( when prompted for password enter "default" without the quotes )
+
+    Your prompt should change to root@ at the start of the line :
+
+    .. image:: images/rootuser.png
+        :align: center
+
 
 #. Edit /etc/hosts and add the following static hosts entries
 
-    .. code-block:: bash
+    .. code-block:: console
 
         vim /etc/hosts
 
@@ -46,7 +55,7 @@ Setup
 
     .. important:: Running a swap file is incompatible with Kubernetes
 
-    .. code-block:: bash
+    .. code-block:: console
 
         swapoff -a
         
@@ -57,58 +66,23 @@ Setup
     .. image:: images/disable-swap.png
         :align: center
 
-#. To ensure the OS is up to date, run the following command
+#. Then, to ensure the OS is up to date, run the following command
 
-    .. code-block:: bash
+    .. code-block:: console
 
         apt update && apt upgrade -y
 
+        (This can take a few seconds to a minute depending on demand to download the latest updates for the OS)
+
 #. Install docker-ce
 
-    .. note:: This was done earlier in `Class 1 / Module2: Install Docker <../../class1/module2/module2.html>`_.  If skipped go back and install Docker.
-
-    #. Add the docker repo
-
-        .. code-block:: bash
-
-            curl \-fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add \-
-
-            add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
-
-    #. Install the docker packages
-
-        .. code-block:: bash
-            
-            apt update && apt install docker-ce -y
-
-    #. Configure docker to use the correct cgroupdriver
-
-        .. important:: The cgroupdrive for docker and kubernetes have to match.  In this lab "cgroupfs" is the correct driver.
-
-        .. code-block:: bash
-            
-            cat << EOF > /etc/docker/daemon.json
-            {
-            "exec-opts": ["native.cgroupdriver=cgroupfs"]
-            }
-            EOF
-
-    #. Verify docker is up and running
-
-        .. code-block:: bash
-
-            docker run hello-world
-
-        If everything is working properly you should see the following message
-
-        .. image:: images/docker-hello-world-yes.png
-          :align: center
+    .. attention:: This was done earlier in `Class 1 / Module2: Install Docker <../../class1/module2/module2.html>`_.  If skipped go back and install Docker by clicking the link.
 
 #. Install Kubernetes
 
     #. Add the kubernetes repo
 
-        .. code-block:: bash
+        .. code-block:: console
 
             curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
             
@@ -118,7 +92,7 @@ Setup
 
     #. Install the kubernetes packages
 
-        .. code-block:: bash
+        .. code-block:: console
             
             apt update && apt install kubelet kubeadm kubectl -y
 
