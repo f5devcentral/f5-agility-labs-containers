@@ -1,7 +1,14 @@
 Welcome to F5 Containers lab's documentation!
-==================================================
+=============================================
 
 **The purpose of these labs is to give you better understanding of...**
+
+- Docker
+
+  - What is Docker?
+  - How does Docker work?
+  - Different flavors of Docker (I.e. Linux, Windows)
+  - Lab getting comfortable with Docker
 
 - Kubernetes
 
@@ -18,7 +25,6 @@ Welcome to F5 Containers lab's documentation!
   - How to install Mesos-DNS for service discovery
   - How to setup and install F5 solutions for Mesos / Marathon environment
 
-
 - RedHat OpenShift Enterprise
 
   - Understanding the relationship between RedHat Openshift Router and BIG-IP
@@ -26,15 +32,10 @@ Welcome to F5 Containers lab's documentation!
   - How to configure BIG-IP HA with OpenShift
   - Configure advanced OpenShift configuration working with BIG-IP
 
-
 .. toctree::
    :maxdepth: 1
    :caption: Contents:
    :glob:
 
    intro
-   class1/class1
-   class2/index
-   class3/class3
-   class4/class4
-   class4/class5
+   class*/class*
