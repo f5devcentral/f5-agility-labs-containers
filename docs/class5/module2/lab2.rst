@@ -391,15 +391,15 @@ bigip01-cc.yaml
           args: [
             "--bigip-username=$(BIGIP_USERNAME)",
             "--bigip-password=$(BIGIP_PASSWORD)",
-          **"--bigip-url=10.10.200.98",**
-          **"--bigip-partition=ocp",**
-          **"--pool-member-type=cluster",**
+            "--bigip-url=10.10.200.98",
+            "--bigip-partition=ocp",
+            "--pool-member-type=cluster",
             "--manage-routes=true",
             "--node-poll-interval=5",
             "--verify-interval=5",
-	      **"--namespace=demoproj",**
-	      **"--namespace=yelb",**
-	      **"--namespace=guestbook",**
+	        "--namespace=demoproj",
+	        "--namespace=yelb",
+	        "--namespace=guestbook",
 	        "--namespace=f5demo",
             "--route-vserver-addr=10.10.201.120",
             "--route-http-vserver=ocp-vserver",
@@ -445,15 +445,15 @@ bigip02-cc.yaml
           args: [
             "--bigip-username=$(BIGIP_USERNAME)",
             "--bigip-password=$(BIGIP_PASSWORD)",
-          **"--bigip-url=10.10.200.99",**
-          **"--bigip-partition=ocp",**
-          **"--pool-member-type=cluster",**
+            "--bigip-url=10.10.200.99",
+            "--bigip-partition=ocp",
+            "--pool-member-type=cluster",
             "--manage-routes=true",
             "--node-poll-interval=5",
             "--verify-interval=5",
-	      **"--namespace=demoproj",**
-	      **"--namespace=yelb",**
-	      **"--namespace=guestbook",**
+	        "--namespace=demoproj",
+	        "--namespace=yelb",
+	        "--namespace=guestbook",
 	        "--namespace=f5demo",
             "--route-vserver-addr=10.10.201.120",
             "--route-http-vserver=ocp-vserver",
@@ -463,7 +463,9 @@ bigip02-cc.yaml
       imagePullSecrets:
         - name: f5-docker-images
 
-Use the oc create -f bigip01-cc.yaml and bigip02-cc.yaml at add the bigip controller to OpenShift
+Use the oc create -f bigip01-cc.yaml and bigip02-cc.yaml to add the bigip controller to OpenShift
+
+**Step 4.3:** Upload the Deployments to the OpenShift API server
 
 .. code-block:: console
 
@@ -472,13 +474,9 @@ Use the oc create -f bigip01-cc.yaml and bigip02-cc.yaml at add the bigip contro
      [root@ose-mstr01 ocp]# oc create -f  bigip02-cc.yaml
      deployment "bigip02-ctlr" created
 
-**Step 4.3:** Upload the Deployments
+**Step 4.4:** Verify Pod creation
 
-Upload the Deployments to the OpenShift API server
-
-**Step 4.4:** Upload the Deployments
-
-Verify Pod creation
+Verify the deployment and pods that are created
 
 .. code-block:: console
 
@@ -501,5 +499,72 @@ Verify Pod creation
      bigip02-ctlr-66171581-q87kb    1/1       Running   0          1m
      [root@ose-mstr01 ocp]#
 
+You can also use the web conole in OpenShift to view the bigip controller. Go the kube-system project
+
+.. image:: /_static/class5/kube-system.png
+
+Upload the Deployments
+----------------------
+
+**Step 4.5:** Upload the Deployments to the OpenShift API server. Use the pool-only configmap to configuration project namespace: f5demo on the bigip
+
+pool-only.yaml
+
+.. code-block:: console
+
+     kind: ConfigMap
+     apiVersion: v1
+     metadata:
+     # name of the resource to create on the BIG-IP
+     name: k8s.poolonly
+     # the namespace to create the object in
+     # As of v1.1, the k8s-bigip-ctlr watches all namespaces by default
+     # If the k8s-bigip-ctlr is watching a specific namespace(s),
+     # this setting must match the namespace of the Service you want to proxy
+     # -AND- the namespace(s) the k8s-bigip-ctlr watches
+     namespace: f5demo
+     labels:
+         # the type of resource you want to create on the BIG-IP
+         f5type: virtual-server
+     data:
+     schema: "f5schemadb://bigip-virtual-server_v0.1.3.json"
+     data: |
+         {
+         "virtualServer": {
+             "backend": {
+             "servicePort": 8080,
+             "serviceName": "f5demo",
+             "healthMonitors": [{
+                 "interval": 3,
+                 "protocol": "http",
+                 "send": "GET /\r\n",
+                 "timeout": 10
+             }]
+             },
+             "frontend": {
+             "virtualAddress": {
+                 "port": 80
+             },
+             "partition": "ocp",
+             "balance": "round-robin",
+             "mode": "http"
+             }
+         }
+         }
+
+.. code-block:: console
+
+     [root@ose-mstr01 ocp]# oc create -f pool-only.yaml
+     configmap "k8s.poolonly" created
+
+**Step 4.5:** Check bigip01 and bigip02 to make sure the pool got create. Validate that both bigip01 and bigip02 can reach the pool members. Pool members should show green
+
+.. image:: /_static/class5/pool-members.png
+
+**Step 4.6:** Increase the replication of the f5demo project pods
+
+.. image:: /_static/class5/10-containers.png
+
+Validate that bigip01 and bigip02 so the updated pool member count and they keepalives work. If the keepalives are failing check the tunnel and selfIP
 
 
