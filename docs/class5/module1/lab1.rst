@@ -1,5 +1,5 @@
 Section 1.1 Welcome to OpenShift!
---------------------------------------------------------
+=================================
 
 This lab guide is the F5 Advanced Labs for Red Hat OpenShift Container Platform (OCP). This lab guide and blueprint was created using OCP version 3.7. This lab provides a quick tour of the console to help you get familiar with the user interface along with some key terminology we will use in subsequent lab content.
 
