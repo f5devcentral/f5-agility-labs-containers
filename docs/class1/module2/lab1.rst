@@ -27,9 +27,14 @@ Lab 2.1 Install Docker
 
     .. code-block:: console
 
+<<<<<<< Updated upstream
         apt update && apt upgrade -y
 
         (This can take a few seconds to a minute depending on demand to download the latest updates for the OS)
+=======
+      apt update && apt upgrade -y
+      (This can take a few seconds to a minute depending on demand to download the latest updates for the OS)
+>>>>>>> Stashed changes
 
 #. Add the docker repo
 
