@@ -1,0 +1,29 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: k8s-bigip-ctlr
+  namespace: demoproject
+spec:
+  replicas: 1
+  template:
+    metadata:
+      name: k8s-bigip-ctlr
+      labels:
+        app: k8s-bigip-ctlr
+    spec:
+      containers:
+        - name: k8s-bigip-ctlr
+          image: "f5networks/k8s-bigip-ctlr:1.5.1"
+          imagePullPolicy: IfNotPresent
+          command: ["/app/bin/k8s-bigip-ctlr"]
+          args: [
+            "--bigip-username=admin",
+            "--bigip-password=admin",
+            "--bigip-url=10.10.199.60",
+            "--bigip-partition=ose",
+            "--namespace=demoproject",
+            "--pool-member-type=cluster",
+            "--openshift-sdn-name=/Common/ose-tunnel"
+          ]
+      imagePullSecrets:
+        - name: f5-docker-images

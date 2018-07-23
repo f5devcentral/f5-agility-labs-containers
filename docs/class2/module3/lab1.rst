@@ -1,7 +1,7 @@
-Lab 3.1 - F5 Container Connector(CC) Setup
-==========================================
+Lab 3.1 - F5 Container Connector Setup
+======================================
 
-The official CC documentation is here: `Install the F5 Kubernetes BIG-IP Controller <http://clouddocs.f5.com/containers/v1/kubernetes/kctlr-app-install.html>`_
+The official CC documentation is here: `Install the BIG-IP Controller: Kubernetes <https://clouddocs.f5.com/containers/v2/kubernetes/kctlr-app-install.html>`_
 
 BIG-IP setup
 ------------
