@@ -20,13 +20,11 @@ lab and access your jump host.
    * Click on 'Language' option in the search list
 
    .. image:: /_static/class3/select-region-language.png
-      :scale: 50 %
       :align: center
 
    * Click on 'Add a language'
 
    .. image:: /_static/class3/select-change-keyboard.png
-      :scale: 50 %
       :align: center
 
    * Add the language you want to have for your keyboard mapping.
