@@ -1,7 +1,7 @@
 Module 1: Introduction to Docker
 ================================
 
-In this module, we will install Docker on our 3 node Kubernetes cluster in preparation for class 2.
+In this module, we will spend a few minutes going over what is Docker, and install Docker on our 3 node Kubernetes cluster in preparation for class 2.
 
 As a reminder, in this module, our cluster setup is:
 
@@ -26,4 +26,3 @@ As a reminder, in this module, our cluster setup is:
    :glob:
 
    lab*
-   
