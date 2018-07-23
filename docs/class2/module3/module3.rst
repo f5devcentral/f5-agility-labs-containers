@@ -35,10 +35,10 @@ For example, for an F5 virtualServer resource, the CC - Kubernetes does the foll
 * the BIG-IP then handles traffic for the Service on the specified virtual address and load-balances to all nodes in the cluster.
 * within the cluster, the allocated NodePort is load-balanced to all pods for the Service.
 
-Before being able to use the Container Connector, you need to handle some prerequisites
-
 Prerequisites
 -------------
+
+Before being able to use the F5 Container Connector, you need to confirm the following:
 
 * You must have a fully active/licensed BIG-IP
 * A BIG-IP partition needs to be setup for the Container Connector.

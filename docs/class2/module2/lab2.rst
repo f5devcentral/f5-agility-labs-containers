@@ -10,7 +10,7 @@ The master is the system where the "control plane" components run, including etc
 
 #. Swtich back to the ssh session connected to kube-master
 
-    .. note:: This session should be running from the previous if lab.  If not simply open **mRemoteNG** and connect via the saved session.
+    .. tip:: This session should be running from the previous if lab.  If not simply open **mRemoteNG** and connect via the saved session.
 
 #. Initialize kubernetes
 
@@ -78,7 +78,7 @@ The master is the system where the "control plane" components run, including etc
     .. image:: images/cluster-setup-guide-kubeadmin-init-check-cluster-get-pods.png
         :align: center
 
-    .. note:: Before moving to the next section, "Setup the nodes" wait for all system pods to show status “Running”.
+    .. important:: Before moving to the next section, "Setup the nodes" wait for all system pods to show status “Running”.
 
 #.  Addional kubernetes checks.
 
@@ -116,7 +116,7 @@ Once the master is setup and running, we need to join our *nodes* to the cluster
     .. image:: images/cluster-setup-guide-node-setup-join-master.png
         :align: center
 
-#. To verify the *nodes* have joined the cluster, run the following command on the *master*:
+#. To verify the *nodes* have joined the cluster, run the following command on the **master**:
 
     .. code-block:: bash
 
@@ -202,6 +202,8 @@ To install the UI you have two options:
         :align: center
 
     Here we can see that it is listening on port: 32005 (NodePort)
+
+    .. note:: In our service we are assigned port "32005", you'll be assigned a different port.
 
     We can now access the dashboard by connecting to the following uri http://10.1.10.21:32005
 

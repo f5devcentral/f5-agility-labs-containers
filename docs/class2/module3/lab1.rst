@@ -51,8 +51,10 @@ Now that BIG-IP is licensed and prepped with the "kubernetes" partition, we need
     .. code-block:: bash
 
         git clone https://github.com/iluvpcs/f5-agility-labs-containers.git
+
+        cd /home/ubuntu/f5-agility-labs-containers/kubernetes
         
-    .. note:: If you did the optional Kubernetes UI Lab earlier you have these files.
+    .. note:: If you did the optional Kubernetes UI Lab earlier you already cloned this repo.
 
 #. Create bigip login secret
 
@@ -97,7 +99,7 @@ Now that BIG-IP is licensed and prepped with the "kubernetes" partition, we need
         .. note:: For your convenience the file can be found in /home/ubuntu/f5-agility-labs-containers/kubernetes (downloaded earlier in the clone git repo step).
 
         .. note:: Or you can cut and paste the file below and create your own file.
-            If you have issues with your yaml and syntax (**identation MATTERS**), you can try to use an online parser to help you : `Yaml parser <http://codebeautify.org/yaml-validator>`_
+            If you have issues with your yaml and syntax (**indentation MATTERS**), you can try to use an online parser to help you : `Yaml parser <http://codebeautify.org/yaml-validator>`_
 
         .. literalinclude:: ../../../kubernetes/f5-nodeport-deployment.yaml
             :language: yaml
