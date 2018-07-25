@@ -11,19 +11,29 @@ spec:
       labels:
         app: k8s-bigip-ctlr
     spec:
+      serviceAccountName: k8s-bigip-ctlr
       containers:
         - name: k8s-bigip-ctlr
           image: "f5networks/k8s-bigip-ctlr:1.5.1"
           imagePullPolicy: IfNotPresent
+          env:
+            - name: BIGIP_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: bigip-login
+                  key: username
+            - name: BIGIP_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: bigip-login
+                  key: password
           command: ["/app/bin/k8s-bigip-ctlr"]
           args: [
-            "--bigip-username=admin",
-            "--bigip-password=admin",
+            "--bigip-username=$(BIGIP_USERNAME)",
+            "--bigip-password=$(BIGIP_PASSWORD)",
             "--bigip-url=10.10.199.60",
             "--bigip-partition=ose",
             "--namespace=demoproject",
             "--pool-member-type=cluster",
             "--openshift-sdn-name=/Common/ose-tunnel"
           ]
-      imagePullSecrets:
-        - name: f5-docker-images
