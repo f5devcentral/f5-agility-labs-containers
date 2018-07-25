@@ -138,8 +138,8 @@ Once the master is setup and running, we need to join our *nodes* to the cluster
         :align: center
 
 
-Install the Kubernetes UI (**Optional**)
-----------------------------------------
+Install the Kubernetes UI
+-------------------------
 
 To install the UI you have two options:
 

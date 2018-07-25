@@ -41,7 +41,7 @@ Now that BIG-IP is licensed and prepped with the "kubernetes" partition, we need
 
     .. note:: As a reminder we're utilizing a wrapper called **MRemoteNG** for Putty and other services. MRNG hold credentials and allows for multiple protocols(i.e. SSH, RDP, etc.), makes jumping in and out of SSH connections easier.
 
-    On your desktop select **MRemoteNG**, once launched you'll see a few tabs similar to the example below.  Open up the Kubernetes / kubernetes-Cluster folder and double click kube-master.
+    On your desktop select **MRemoteNG**, once launched you'll see a few tabs similar to the example below.  Open up the Kubernetes / Kubernetes-Cluster folder and double click kube-master.
 
     .. image:: images/MRemoteNG-kubernetes.png
         :align: center
@@ -54,7 +54,7 @@ Now that BIG-IP is licensed and prepped with the "kubernetes" partition, we need
 
         cd /home/ubuntu/f5-agility-labs-containers/kubernetes
         
-    .. note:: If you did the optional Kubernetes UI Lab earlier you already cloned this repo.
+    .. note:: You did this earlier in the "Install the Kubernetes UI" section.
 
 #. Create bigip login secret
 

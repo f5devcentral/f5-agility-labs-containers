@@ -1,5 +1,5 @@
-Module 3: Overview of F5® Container Connector (CC)
-==================================================
+Module 3: F5 Container Connector with Kubernetes
+================================================
 
 Overview
 --------
