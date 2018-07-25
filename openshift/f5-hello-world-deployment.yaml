@@ -11,7 +11,7 @@ spec:
     spec:
       containers:
       - name: f5-hello-world
-        image: "f5devcentral/f5-hello-world"
+        image: "f5devcentral/f5-hello-world:develop"
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8080
