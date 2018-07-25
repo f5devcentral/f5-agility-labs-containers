@@ -34,7 +34,7 @@ On the **ose-master** we will create all the required files:
     .. literalinclude:: ../../../openshift/f5-hello-world-configmap.yaml
         :language: yaml
         :linenos:
-        :emphasize-lines: 2,5,9,16,18
+        :emphasize-lines: 2,5,7,9,16,18
 
 #. Create a file called ``f5-hello-world-service.yaml``
 
@@ -49,9 +49,9 @@ On the **ose-master** we will create all the required files:
 
     .. code-block:: bash
 
-        kubectl create -f f5-hello-world-deployment.yaml
-        kubectl create -f f5-hello-world-configmap.yaml
-        kubectl create -f f5-hello-world-service.yaml
+        oc create -f f5-hello-world-deployment.yaml
+        oc create -f f5-hello-world-configmap.yaml
+        oc create -f f5-hello-world-service.yaml
 
     .. image:: images/f5-container-connector-launch-app.png
         :align: center
@@ -60,57 +60,44 @@ On the **ose-master** we will create all the required files:
 
     .. code-block:: bash
 
-        kubectl get pods
+        oc get pods -o wide
 
     .. image:: images/f5-hello-world-pods.png
         :align: center
 
     .. code-block:: bash
 
-        kubectl describe svc f5-hello-world
+        oc describe svc f5-hello-world
         
     .. image:: images/f5-container-connector-check-app-definition.png
         :align: center
 
 #. To test the app you need to pay attention to:
 
-    **The NodePort value**, that's the port used by Kubernetes to give you access to the app from the outside. Here it's "30507", highlighted above.
-    
     **The Endpoints**, that's our 2 instances (defined as replicas in our deployment file) and the port assigned to the service: port 8080.
 
     Now that we have deployed our application sucessfully, we can check our BIG-IP configuration.  From the browser open https://10.1.1.245
 
     .. warning:: Don't forget to select the "ose" partition or you'll see nothing.
 
-    Here you can see a new Virtual Server, "default_f5-hello-world" was created, listening on 10.1.10.81.
+    Here you can see a new Virtual Server, "demoproject_f5-hello-world" was created, listening on 10.10.199.99.
 
     .. image:: images/f5-container-connector-check-app-bigipconfig.png
         :align: center
 
-    Check the Pools to see a new pool and the associated pool members: Local Traffic --> Pools --> "cfgmap_default_f5-hello-world_f5-hello-world" --> Members
+    Check the Pools to see a new pool and the associated pool members: Local Traffic --> Pools --> "cfgmap_demoproject_f5-hello-world_f5-hello-world" --> Members
 
     .. image:: images/f5-container-connector-check-app-bigipconfig2.png
         :align: center
 
-    .. note:: You can see that the pool members listed are all the kubernetes nodes. (**NodePort mode**)
+    .. note:: You can see that the pool members IP addresses are assigned from the overlay network (**ClusterIP mode**)
 
-#. Now you can try to access your application via your BIG-IP VIP: 10.1.10.81
+#. Now you can try to access your application via your BIG-IP VIP: 10.10.199.99
 
     .. image:: images/f5-container-connector-access-app.png
         :align: center
 
-#. Hit Refresh many times and go back to your **BIG-IP** UI, go to Local Traffic > Pools > Pool list > cfgmap_default_f5-hello-world_f5-hello-world > Statistics to see that traffic is distributed as expected.
+#. Hit Refresh many times and go back to your **BIG-IP** UI, go to Local Traffic --> Pools --> Pool list --> cfgmap_demeproject_f5-hello-world_f5-hello-world --> Statistics to see that traffic is distributed as expected.
 
     .. image:: images/f5-container-connector-check-app-bigip-stats.png
-        :align: center
-
-#. How is traffic forwarded in Kubernetes from the <node IP>:30507 to the <container IP>:8080? This is done via iptables that is managed via the kube-proxy instances. On either of the nodes, ssh in and run the following command:
-
-    .. code-block:: bash
-
-        sudo iptables-save | grep f5-hello-world
-
-    This will list the different iptables rules that were created regarding our service.
-
-    .. image:: images/f5-container-connector-list-frontend-iptables.png
         :align: center
