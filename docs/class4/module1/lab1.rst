@@ -6,93 +6,129 @@ The official CC documentation is here: `Install the BIG-IP Controller: Openshift
 BIG-IP Setup
 ------------
 
-The BIG-IP we are working on has been licensed, and only these following commands below has been issued in the CLI so we have a very new/basic BIG-IP configured.
+To use F5 Container connector, you'll need a BIG-IP up and running first.
 
-    .. code-block:: console
+Through the Jumpbox, you should have a BIG-IP available at the following URL: https://10.1.1.245
 
-        License BIG-IP
+.. warning:: Connect to your BIG-IP and check it is active and licensed. Its login and password are: **admin/admin**
 
-        tmsh create net vlan external-ose interfaces add {1.2}
+    If your BIG-IP has no license or its license expired, renew the license. You just need a LTM VE license for this lab. No specific add-ons are required (ask a lab instructor for eval licenses if your license has expired)
 
-        tmsh create net self ose-selfip address 10.10.199.60/24 vlan external-ose
+#. You need to setup a partition that will be used by F5 Container Connector.
 
+    .. code-block:: bash
+
+        From the CLI:
         tmsh create auth partition ose
+
+        From the UI:
+        GoTo System --> Users --> Partition List
+        Create a new partition called "ose" (use default settings and click Finished)
+
+    .. image:: images/f5-container-connector-bigip-partition-setup.png
+        :align: center
+
+    With the new partition created, we can go back to Openshift to setup the F5 Container connector.
+
+#. configure vxlan tunnel
+
+    .. code-block:: bash
 
         tmsh create net tunnel vxlan ose-vxlan {app-service none flooding-type multipoint}
 
         tmsh create net tunnel tunnel ose-tunnel {key 0 local-address 10.10.199.60 profile ose-vxlan}
 
-        tmsh save sys config
-
-    .. note:: Typically the command below is entered after running the ''oc create -f f5-hostsubnet.yaml'' command coming up in the next section (This is the range the self ip should come from, to make this lab quicker we have already done this tmsh command)**
-
-    .. code-block:: console
-
-        tmsh create net self <IP>/subnet vlan <tunnel>
-
         tmsh create net self ose-vxlan-selfip address 10.131.0.98/14 vlan ose-tunnel
 
-Let's validate your BIG-IP is just configured with VLANs, Self-IPs.  No Virtual Servers and no Pools. From the jumphost connect to your BIG-IP on https://10.1.1.245
-
-#. Go to Local Traffic --> Network --> VLANs.  You should have an external VLAN
-
-    .. image:: images/F5-BIG-IP-NETWORK-VLAN.png
-        :align: center
-
-#. Go to Local Traffic -> Network -> Self-IP.  You should have an external SELF-IPs
-
-    .. image:: images/F5-BIG-IP-NETWORK-SELFIP.png
-        :align: center
-
-#. Go to Local Traffic -> Network -> Tunnel.  You should see something similar to this:
-
-    .. image:: images/F5-BIG-IP-NETWORK-TUNNEL.png
-        :align: center
-
-#. Lastly, validate there are no Virtual Servers and no Pools.  Go to Local Traffic -> Virtual Servers and then Pools.
-
-    .. note:: Be sure to select the ose partition.
-
-    .. image:: images/F5-BIG-IP-LOCAL_TRAFFIC-POOL.png
-        :align: center
-
-    .. important:: If you find something missing in the last several steps/checks be sure to ask a lab assistant or add the missing component.  If all checks out move to the next section "Container Connector Deployment".
+        tmsh save sys config
 
 Container Connector Deployment
 ------------------------------
 
-The official CC documentation is here: `F5 Container Connector - OpenShift <http://clouddocs.f5.com/containers/v2/openshift/>`_
+.. note:: For a more thorough explanation of all the settings and options see `F5 Container Connector - Openshift <https://clouddocs.f5.com/containers/v2/openshift/>`_
 
-#. From the jumphost open **mRemoteNG**, go to the OpenShift folder, and connect to OSE-Master
+Now that BIG-IP is licensed and prepped with the "ose" partition, we need to define a `Kubernetes deployment <https://kubernetes.io/docs/user-guide/deployments/>`_ and create a `Kubernetes secret <https://kubernetes.io/docs/user-guide/secrets/>`_ to hide our bigip credentials. 
 
-    .. attention:: The following steps need to be run on **ose-master** unless otherwise specified.
+#. From the jumphost open **mRemoteNG** and start a session with ose-master.
 
-    .. image:: images/MremoteNG.png
+    .. note:: As a reminder we're utilizing a wrapper called **MRemoteNG** for Putty and other services. MRNG hold credentials and allows for multiple protocols(i.e. SSH, RDP, etc.), makes jumping in and out of SSH connections easier.
+
+    On your desktop select **MRemoteNG**, once launched you'll see a few tabs similar to the example below.  Open up the OpenShift Enterprise / OSE-Cluster folder and double click ose-master.
+
+    .. image:: images/MRemoteNG-ose.png
         :align: center
 
-#. The next step logs you into Openshift Client
+#. "git" the demo files
+
+    .. code-block:: bash
+
+        git clone https://github.com/iluvpcs/f5-agility-labs-containers.git
+
+        cd /root/f5-agility-labs-containers/openshift
+        
+#. Log in with an Openshift Client.
+
+    .. note:: Here we're using a prebuilt user "demouser" and prompted for a password, which is: demouser
 
     .. code-block:: console
 
         oc login -u demouser
 
-    .. note:: You will be prompted for password, which is: demouser
-
     .. image:: images/OC-DEMOuser-Login.png
+        :align: center
+    
+    .. important:: Upon logging in you'll notice access to several projects.  In our lab well be working from the default "demoproject".
+
+#. Create bigip login secret
+
+    .. code-block:: bash
+
+        oc create secret generic bigip-login --from-literal=username=admin --from-literal=password=admin
+
+    You should see something similar to this:
+
+    .. image:: images/f5-container-connector-bigip-secret.png
+        :align: center
+
+#. Create kubernetes service account for bigip controller
+
+    .. code-block:: bash
+
+        oc create serviceaccount k8s-bigip-ctlr
+
+    You should see something similar to this:
+
+    .. image:: images/f5-container-connector-bigip-serviceaccount.png
+        :align: center
+
+
+#. Create cluster role for bigip service account (admin rights, but can be modified for your environment)
+
+    .. code-block:: bash
+
+        oc create clusterrolebinding k8s-bigip-ctlr-clusteradmin --clusterrole=cluster-admin --serviceaccount=demoproject:k8s-bigip-ctlr
+
+    You should see something similar to this:
+
+    .. image:: images/f5-container-connector-bigip-clusterrolebinding.png
         :align: center
 
 #. Next let's explore the f5-hostsubnet.yaml file
 
     .. code-block:: console
 
-        cat f5-hostsubnet.yaml
+        cd /root/f5-agility-labs-containers/openshift/
+
+        cat f5-bigip-hostsubnet.yaml
 
     You'll see a config file similar to this:
 
-    .. image:: images/F5-HOSTSUBNET-YAML.png
-        :align: center
+    .. literalinclude:: ../../../openshift/f5-bigip-hostsubnet.yaml
+            :language: yaml
+            :linenos:
+            :emphasize-lines: 2,9
 
-    .. note:: This YAML file creates an OpenShift Node and the Host is the BIG-IP with /23 subnet of IP's (3 images down).
+    .. attention:: This YAML file creates an OpenShift Node and the Host is the BIG-IP with /23 subnet of IP's (3 images down).
 
 #. Next let's look at the current cluster,  you should see 3 members (1 master, 2 nodes)
 
@@ -103,50 +139,56 @@ The official CC documentation is here: `F5 Container Connector - OpenShift <http
     .. image:: images/F5-OC-HOSTSUBNET1.png
         :align: center
 
-#. Let create the connector to the BIG-IP device, then look before and after at the attached devices
+#. Now create the connector to the BIG-IP device, then look before and after at the attached devices
 
     .. code-block:: console
 
-        oc create -f f5-hostsubnet.yaml
+        oc create -f f5-bigip-hostsubnet.yaml
 
-    You should see a successful creation a new OpenShift Node
+    You should see a successful creation of a new OpenShift Node.
 
     .. image:: images/F5-OS-NODE.png
         :align: center
 
-#. Nothing has been done yet to the BIG-IP, this only was done in the OpenShift environment.
+#. At this point nothing has been done to the BIG-IP, this only was done in the OpenShift environment.
 
     .. code-block:: console
 
         oc get hostsubnet
 
-    You should now see  OpenShift configured to communicate with the BIG-IP
+    You should now see OpenShift configured to communicate with the BIG-IP
 
     .. image:: images/F5-OC-HOSTSUBNET2.png
         :align: center
 
-#. The next step is to do is create an Openshift F5 Container Connector to do the API calls to/from the F5 device. First, let us examine a few items in a configuration YAML file.  
+    .. note:: The Subnet assignment, in our case 10.129.2.0/23.
 
-    .. note:: You can ''cat f5-cc.yaml'' or just review the config below.
-
-    - Credentials to authenticate to the BIG-IP
-    - Container image name
-    - Namespace this container will live in
-    - IP of the BIP-IP to communicate to for API calls
-    - Which tunnel to use to/from the BIG-IP
-
-    .. literalinclude:: ../../../openshift/f5-cc.yaml
-        :language: yaml
-        :linenos:
-        :emphasize-lines: 2,16,19-21,24
-
-#. From the OSE-Master CLI, enter
+#. Now we'll create an Openshift F5 Container Connector to do the API calls to/from the F5 device. First we need the "deployment" file.
 
     .. code-block:: console
 
-        oc create -f f5-cc.yaml
+        cd /root/f5-agility-labs-containers/openshift/
 
-    .. note:: As ContainerCreating is dependent on many factors i.e. first download remotely, you host your own local images, or it's already cached on the host. I've seen 20 containers spin up <1 second on my laptop, as well as minutes depending on long downloads of the image first time.
+        cat f5-cluster-deployment.yaml
+
+    You'll see a config file similar to this:
+
+    .. literalinclude:: ../../../openshift/f5-cluster-deployment.yaml
+        :language: yaml
+        :linenos:
+        :emphasize-lines: 2,5,17,34-38
+
+#. Create the container connector deployment with the following command
+
+    .. code-block:: console
+
+        oc create -f f5-cluser-deployment.yaml
+
+#. Check for successful creation:
+
+    .. code-block:: console
+
+        oc get pods -o wide
 
     .. image:: images/F5-CTRL-RUNNING.png
         :align: center

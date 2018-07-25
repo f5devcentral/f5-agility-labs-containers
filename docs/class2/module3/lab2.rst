@@ -16,7 +16,7 @@ To deploy our application, we will need to do the following:
 App Deployment
 --------------
 
-On the **master** we will create all the required files:
+On the **kube-master** we will create all the required files:
 
 #. Create a file called ``f5-hello-world-deployment.yaml``
 
@@ -34,7 +34,7 @@ On the **master** we will create all the required files:
     .. literalinclude:: ../../../kubernetes/f5-hello-world-configmap.yaml
         :language: yaml
         :linenos:
-        :emphasize-lines: 2,9,16,18
+        :emphasize-lines: 2,5,9,16,18
 
 #. Create a file called ``f5-hello-world-service.yaml``
 
