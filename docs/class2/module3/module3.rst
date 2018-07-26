@@ -1,5 +1,5 @@
-Module 3: Overview of F5® Container Connector (CC)
-==================================================
+Module 3: F5 Container Connector with Kubernetes
+================================================
 
 Overview
 --------
@@ -20,25 +20,24 @@ can run in a *Kubernetes Pod*. The “F5 resources” are *Kubernetes ConfigMap*
 resources that pass encoded data to the f5-k8s-controller. These resources tell
 the f5-k8s-controller:
 
-* What objects to configure on your BIG-IP
+  * What objects to configure on your BIG-IP.
 
-* What *Kubernetes Service* the BIG-IP objects belong to (the frontend and
-  backend properties in the *ConfigMap*, respectively).
+  * What *Kubernetes Service* the BIG-IP objects belong to (the frontend and backend properties in the *ConfigMap*, respectively).
 
 The f5-k8s-controller watches for the creation and modification of F5 resources
 in Kubernetes. When it discovers changes, it modifies the BIG-IP accordingly.
 For example, for an F5 virtualServer resource, the CC - Kubernetes does the following:
 
-* creates objects to represent the virtual server on the BIG-IP in the specified partition;
-* creates pool members for each node in the Kubernetes cluster, using the NodePort assigned to the service port by Kubernetes;
-* monitors the F5 resources and linked Kubernetes resources for changes and reconfigures the BIG-IP accordingly.
-* the BIG-IP then handles traffic for the Service on the specified virtual address and load-balances to all nodes in the cluster.
-* within the cluster, the allocated NodePort is load-balanced to all pods for the Service.
-
-Before being able to use the Container Connector, you need to handle some prerequisites
+  * Creates objects to represent the virtual server on the BIG-IP in the specified partition.
+  * Creates pool members for each node in the Kubernetes cluster, using the NodePort assigned to the service port by Kubernetes.
+  * Monitors the F5 resources and linked Kubernetes resources for changes and reconfigures the BIG-IP accordingly.
+  * The BIG-IP then handles traffic for the Service on the specified virtual address and load-balances to all nodes in the cluster.
+  * Within the cluster, the allocated NodePort is load-balanced to all pods for the Service.
 
 Prerequisites
 -------------
+
+Before being able to use the F5 Container Connector, you need to confirm the following:
 
 * You must have a fully active/licensed BIG-IP
 * A BIG-IP partition needs to be setup for the Container Connector.
@@ -50,4 +49,4 @@ Prerequisites
   :glob:
 
   lab*
-   
+  

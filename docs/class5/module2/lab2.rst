@@ -29,11 +29,11 @@ The Container Connector for OpenShift uses FDB entries and ARP records to identi
 
 Complete the steps below to set up the solution shown in the diagram. Be sure to use the correct IP addresses and subnet masks for your OpenShift Cluster
 
-. table:: Tasks
+.. table:: Tasks
 
-   ===== ==================================================================================
+   ===== =====================================================================
    Step  Task
-   ===== ==================================================================================
+   ===== =====================================================================
    1.    :ref:`openshift initial bigip setup ha`
 
    2.    :ref:`add bigip devices openshift ha`
@@ -56,12 +56,14 @@ Complete the steps below to set up the solution shown in the diagram. Be sure to
          * openshift rbac ha
          * openshift create deployment ha
          * openshift upload deployment ha
-
-   ===== ==================================================================================
+   ===== =====================================================================
 
 .. _openshift initial bigip setup ha:
 
-**Step 1:** Openshift initial bigip setup ha
+Openshift initial bigip setup ha
+--------------------------------
+
+**Step 1:**
 
 The purpose of this lab is not to cover BIG-IP High Availability (HA) in depth but focus on OpenShift configuration with BIG-IP. Some prior BIG-IP HA knowledge is required. We have created the BIG-IPs base configuration for bigip01 and bigip02 to save time. Below is the initial configuration used on each BIG-IP:
 
@@ -137,10 +139,10 @@ All synced. Note the sync-failover configuration is set to manual sync
 
 The diagram below displays the BIG-IP deployment with the OpenShift cluster in High Availability (HA) active-standby pair or device group. Note this solution applies to BIG-IP devices v13.x and later only. To accomplish High Availability (HA) active-standby pair or device group with OpenShift the BIG-IP needs to create a floating vxlan tunnel address with is currently only available in BIG-IP 13.x and later.
 
-.. _openshift upload hostsubnets ha:
+.. _add bigip devices openshift ha:
 
 Upload the HostSubnet files to the OpenShift API server
-```````````````````````````````````````````````````````
+-------------------------------------------------------
 
 **Step 2:** Create a new OpenShift HostSubnet
 

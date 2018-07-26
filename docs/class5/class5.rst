@@ -1,4 +1,4 @@
-Class 5 - Advanced Labs for Red Hat OpenShift Container Platform (OCP)
+Class 5: Advanced Labs for Red Hat OpenShift Container Platform (OCP)
 ======================================================================
 
 The purpose of this lab is to give you more visibility on
