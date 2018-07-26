@@ -39,12 +39,12 @@ How to achieve this
 
 There are a number of ways that this network model can be implemented. Here is a list of possible options:
 
-* `Contiv <https://github.com/contiv/netplugin>`_
+* `Contiv Netplugin <https://github.com/contiv/netplugin>`_
 * `Flannel <https://github.com/coreos/flannel#flannel>`_
-* `Open vswitch <http://kubernetes.io/docs/admin/ovs-networking>`_
-* `Project Calico <http://docs.projectcalico.org/>`_
+* `Open vSwitch <https://www.openvswitch.org/>`_
+* `Calico <http://docs.projectcalico.org/>`_
 * `Romana <http://romana.io/>`_
-* `Weave net <https://www.weave.works/products/weave-net/>`_
+* `Weave Net <https://www.weave.works/products/weave-net/>`_
 * `L2 networks and linux bridging <http://blog.oddbit.com/2014/08/11/four-ways-to-connect-a-docker/>`_
 
 .. important:: For this lab, we will use **Flannel**.
