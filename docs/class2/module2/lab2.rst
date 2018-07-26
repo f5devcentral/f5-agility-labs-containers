@@ -105,7 +105,7 @@ Once the master is setup and running, we need to join our *nodes* to the cluster
 
 #. To join the master we need to run the command highlighted during the master initialization. You'll need to use the command saved to notepad in an earlier step.
 
-    .. warning:: This is just an example.
+    .. warning:: This is just an example. You should have saved this command after successfully initializing the master.
 
     .. code-block:: bash
 
@@ -184,7 +184,7 @@ To install the UI you have two options:
     .. literalinclude:: ../../../kubernetes/kube-dashboard.yaml
         :language: yaml
         :linenos:
-        :emphasize-lines: 65
+        :emphasize-lines: 3,23,54,65
 
     Apply Kubernetes manifest file:
     
