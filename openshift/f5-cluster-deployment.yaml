@@ -2,7 +2,7 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: k8s-bigip-ctlr
-  namespace: demoproject
+  namespace: kube-system
 spec:
   replicas: 1
   template:
@@ -33,7 +33,7 @@ spec:
             "--bigip-password=$(BIGIP_PASSWORD)",
             "--bigip-url=10.10.199.60",
             "--bigip-partition=ose",
-            "--namespace=demoproject",
+            "--namespace=default",
             "--pool-member-type=cluster",
             "--openshift-sdn-name=/Common/ose-tunnel"
           ]

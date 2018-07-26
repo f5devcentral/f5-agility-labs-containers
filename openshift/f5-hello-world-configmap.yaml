@@ -2,7 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: f5-hello-world
-  namespace: demoproject
+  namespace: default
   labels:
     f5type: virtual-server
 data:
@@ -15,7 +15,7 @@ data:
           "mode": "http",
           "partition": "ose",
           "virtualAddress": {
-            "bindAddr": "10.10.199.99",
+            "bindAddr": "10.10.199.81",
             "port": 80
           }
         },
