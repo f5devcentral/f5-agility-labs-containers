@@ -1,23 +1,79 @@
-Introduction to Docker
+Lab 1.1 Install Docker
 ======================
 
-Docker, Docker, Docker.  It has been a buzzword in recent years, with a steady uptick in use, as companies started asking for integration with F5 in 2017, F5 assign PD resources to build the integration via .yaml (more later) and a BIG-IP service (more later) that runs within Docker to automate F5 into the process. (Example: release notes for Kubernetes/F5)
+.. attention:: The following commands need to be run on all three nodes unless otherwise specified.
 
-To the question what Docker is, and for you reading that haven’t researched what Docker is. let us step back for a moment and look at the context of technologies as they apply to I.T. and history.  While some products only last moments, others seem to endure forever (COBOL for example - I still know of customers using it today).  Some of you reading this will be new to the world of IT, while others have seen the progression from mainframes, mini, physical servers, Hypervisors, and as of late Docker/microservices, and serverless.  Docker is one of those steps of technology that might not be the end state of IT, but just like COBOL, this technology might stay around for a very long time.  In much of the same way that VMWare and other hypervisors over the past dozen or so years have transformed most businesses physical servers into a world of virtual servers saving cost, floor space, enabling easier management, ability to support snapshots and many other technologies only dreamed of decades ago.  In a way, Docker is doing what Hypervisors did to physical servers.  Docker essential development is the simplification of using some old features of Linux (going back to Sun Solaris or FreeBSD), by delivering packaging management needed to run specific code i.e. Tomcat, PHP, or WordPress for example in a “container”.  As Docker removes the need to support the Guest OS, this has immediate benefits: running a single file(Container) with all the software/code embedded within that image.  Containers are typically much smaller, faster, and easier to swap in/out as needed with code upgrades.  For example my laptop can spin up a dozen TomCat Apache servers in about a second.  This could be a generic TomCat image that nees to be initialized to go and pull down HTML code that I want them to host. Or, they could be embedded already into the container my specific HTML code I need them to run.  Lastly I could update the container of my image with new HTML code and spin down the old containers and spin back up the new containers of the image in seconds.  All while saving over a traditional OS and Tomcat install anywhere from 5X to 25X(or more) less memory and disk requirements.
+#. From the jumphost open **mRemoteNG** and start a session to each of the following servers. The sessions are pre-configured to connect with the default user “ubuntu”.
 
-Today all these labs will run in the cloud, due to the number of guests needed to host a few different management platforms for Docker (RedHat Openshift K8s, Mesos/Marathon, and Generic Kubernetes), and not the time to setup all these environments.  Next page we will install Docker and run a small container for a “hello world”.
+    - kube-master
+    - kube-node1
+    - kube-node2
 
-Windows versus Linux:
-You are in luck (mostly), containers are cross platform or “agnostic” of OS that Docker runs on.
-If you decide to install Docker on Linux on your own (as in next page) you install only the Docker Engine and management tools. You don’t need to create a virtual machine or virtual networks, because docker via it’s containers will handle the setup for you.
+    .. image:: images/MremoteNG-1.png
+        :align: center
 
-For Windows:  having another hypervisor can cause conflicts.  During Docker installation, Docker creates a Linux-based virtual machine called MobyLinuxVM.  The Docker application connects to this machine, so that you can create your container with the necessary apparatus for operation. This installation also configures a subnet for the virtual machine to communicate with the local network / NAT for your containers to use in the application. All of these steps occur behind the scenes and, as the user, you don’t really have to worry about them. Still, the fact that Docker on Windows runs a virtual machine in the background is another major difference between Docker on Windows and Docker on Linux.
+#. Once connected as ubuntu user (it's the user already setup in the MremoteNG settings), let's elivate to root:
+
+    .. code-block:: console
+
+        su - ( when prompted for password enter "default" without the quotes )
+
+    Your prompt should change to root@ at the start of the line :
+
+    .. image:: images/rootuser.png
+        :align: center
+
+#. Then, to ensure the OS is up to date, run the following command
+
+    .. code-block:: console
+
+        apt update && apt upgrade -y
+
+        (This can take a few seconds to a minute depending on demand to download the latest updates for the OS)
+
+#. Add the docker repo
+
+    .. code-block:: console
+
+        curl \-fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add \-
+
+        add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+
+#. Install the docker packages
+
+    .. code-block:: console
+
+        apt update && apt install docker-ce -y
+
+#. Configure docker to use the correct cgroupdriver
+
+    .. important:: The cgroupdrive for docker and kubernetes have to match.  In this lab "cgroupfs" is the correct driver.
+
+    .. note:: This next part can be a bit tricky - just cut/paste the 5 lines below exactly as they are and paste via buffer to the CLI (and press return when done)
+
+    .. code-block:: console
+
+        cat << EOF > /etc/docker/daemon.json
+        {
+        "exec-opts": ["native.cgroupdriver=cgroupfs"]
+        }
+        EOF
+
+    It should look something like this image below:
+
+    .. image:: images/goodEOL.png
+        :align: center
+
+#. Verify docker is up and running
+
+    .. code-block:: console
+
+        docker run hello-world
+
+    If everything is working properly you should see the following message
+
+    .. image:: images/docker-hello-world-yes.png
+        :align: center
 
 
-PS for more information please come back and visit any of these links below:
-
-https://www.docker.com
-
-https://www.infoworld.com/article/3204171/linux/what-is-docker-linux-containers-explained.html
-
-https://www.zdnet.com/article/what-is-docker-and-why-is-it-so-darn-popular/
+.. note:: If you are not a linux/unix person - don't worry.  What happened above is how the linux installs and updates software. This is  ALL the ugly (under the cover steps to install apps, and in this case Docker on a Linux host. Please ask questions as to what really happened, but this is how with linux on ubuntu (and many other linux flavors) installs applications.  Linux uses a term called "package manager", and there are many: like YUM, APT, DPKG, RPM, PACMAN, etc. usually one is more favored by the flavor of linux (i.e. debian, ubuntu, redhat gentoo, OpenSuse, etc.), but at the end of the day they all pretty much do the same thing, download and keep applications updated.
