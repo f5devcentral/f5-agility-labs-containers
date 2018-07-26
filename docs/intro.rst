@@ -34,6 +34,6 @@ Applications used during lab exercises
 
 Once you have established remote access to your lab environment, launch Google Chrome and mRemoteNG (both have shortcuts on the desktop and taskbar).
 
-  * mRemoteNG has shortcuts pre-defined within the application. To open terminal access to everything in the lab, right click on the appropriate folder, select the host, and click 'Connect'.
+  * mRemoteNG has shortcuts pre-defined within the application. To open terminal access to any host in the lab, double click on the appropriate folder, and double click on the host.
 
   .. image:: /_static/intro/mremoteng.png
