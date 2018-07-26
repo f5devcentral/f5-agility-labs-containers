@@ -97,7 +97,7 @@ On the **ose-master** we will create all the required files:
     .. image:: images/f5-container-connector-access-app.png
         :align: center
 
-#. Hit Refresh many times and go back to your **BIG-IP** UI, go to Local Traffic --> Pools --> Pool list --> cfgmap_demeproject_f5-hello-world_f5-hello-world --> Statistics to see that traffic is distributed as expected.
+#. Hit Refresh many times and go back to your **BIG-IP** UI, go to Local Traffic --> Pools --> Pool list --> cfgmap_default_f5-hello-world_f5-hello-world --> Statistics to see that traffic is distributed as expected.
 
     .. image:: images/f5-container-connector-check-app-bigip-stats.png
         :align: center
