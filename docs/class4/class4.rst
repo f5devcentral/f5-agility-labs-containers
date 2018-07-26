@@ -66,6 +66,7 @@ guide:
 
     [root@ose-node01 ~]# cat /etc/hosts
     127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4
+    ::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
     10.10.199.100 ose-mstr01 ose-mstr01.f5.local
     10.10.199.101 ose-node01 ose-node01.f5.local
     10.10.199.102 ose-node02 ose-node02.f5.local

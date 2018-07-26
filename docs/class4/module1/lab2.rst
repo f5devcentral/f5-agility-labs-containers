@@ -25,7 +25,7 @@ On the **ose-master** we will create all the required files:
     .. literalinclude:: ../../../openshift/f5-hello-world-deployment.yaml
         :language: yaml
         :linenos:
-        :emphasize-lines: 2,14
+        :emphasize-lines: 2,6,14
 
 #. Create a file called ``f5-hello-world-configmap.yaml``
 
@@ -47,7 +47,7 @@ On the **ose-master** we will create all the required files:
 
 #. We can now launch our application:
 
-    .. code-block:: bash
+    .. code-block:: console
 
         oc create -f f5-hello-world-deployment.yaml
         oc create -f f5-hello-world-configmap.yaml
@@ -58,14 +58,14 @@ On the **ose-master** we will create all the required files:
 
 #. To check the status of our deployment, you can run the following commands:
 
-    .. code-block:: bash
+    .. code-block:: console
 
         oc get pods -o wide
 
     .. image:: images/f5-hello-world-pods.png
         :align: center
 
-    .. code-block:: bash
+    .. code-block:: console
 
         oc describe svc f5-hello-world
         
@@ -80,19 +80,19 @@ On the **ose-master** we will create all the required files:
 
     .. warning:: Don't forget to select the "ose" partition or you'll see nothing.
 
-    Here you can see a new Virtual Server, "demoproject_f5-hello-world" was created, listening on 10.10.199.99.
+    Here you can see a new Virtual Server, "default_f5-hello-world" was created, listening on 10.10.199.81 in partition "ose".
 
     .. image:: images/f5-container-connector-check-app-bigipconfig.png
         :align: center
 
-    Check the Pools to see a new pool and the associated pool members: Local Traffic --> Pools --> "cfgmap_demoproject_f5-hello-world_f5-hello-world" --> Members
+    Check the Pools to see a new pool and the associated pool members: Local Traffic --> Pools --> "cfgmap_default_f5-hello-world_f5-hello-world" --> Members
 
     .. image:: images/f5-container-connector-check-app-bigipconfig2.png
         :align: center
 
     .. note:: You can see that the pool members IP addresses are assigned from the overlay network (**ClusterIP mode**)
 
-#. Now you can try to access your application via your BIG-IP VIP: 10.10.199.99
+#. Now you can try to access your application via your BIG-IP VIP: 10.10.199.81
 
     .. image:: images/f5-container-connector-access-app.png
         :align: center

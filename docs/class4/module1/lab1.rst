@@ -16,31 +16,51 @@ Through the Jumpbox, you should have a BIG-IP available at the following URL: ht
 
 #. You need to setup a partition that will be used by F5 Container Connector.
 
-    .. code-block:: bash
+    .. code-block:: console
 
         From the CLI:
         tmsh create auth partition ose
 
         From the UI:
         GoTo System --> Users --> Partition List
-        Create a new partition called "ose" (use default settings and click Finished)
+        - Create a new partition called "ose" (use default settings)
+        - Click Finished
 
     .. image:: images/f5-container-connector-bigip-partition-setup.png
         :align: center
 
-    With the new partition created, we can go back to Openshift to setup the F5 Container connector.
+#. Create a vxlan tunnel profile
 
-#. configure vxlan tunnel
+    .. code-block:: console
 
-    .. code-block:: bash
-
+        From the CLI:
         tmsh create net tunnel vxlan ose-vxlan {app-service none flooding-type multipoint}
 
+        From the UI:
+        GoTo Network --> Tunnels --> Profiles --> VXLAN
+        - Create a new profile called "ose-vxlan"
+        - Set the Flooding Type = Multipoint
+        - Click Finished
+
+    .. image:: images/create-ose-vxlan-profile.png
+        :align: center   
+
+#. Create a vxlan tunnel
+
+    .. code-block:: console
+
+        From the CLI:
         tmsh create net tunnel tunnel ose-tunnel {key 0 local-address 10.10.199.60 profile ose-vxlan}
+        
+        From the UI:
+        GoTo Network --> Tunnels --> Tunnel List
+        - Create a new tunnel called "ose-tunnel"
+        - Set the Local Address to 10.10.199.60
+        - Set the Profile to the one previously created called "ose-vxlan"
+        - Click Finished
 
-        tmsh create net self ose-vxlan-selfip address 10.131.0.98/14 vlan ose-tunnel
-
-        tmsh save sys config
+    .. image:: images/create-ose-vxlan-tunnel.png
+        :align: center
 
 Container Connector Deployment
 ------------------------------
@@ -60,10 +80,10 @@ Now that BIG-IP is licensed and prepped with the "ose" partition, we need to def
 
 #. "git" the demo files
 
-    .. code-block:: bash
+    .. code-block:: console
 
-        git clone https://github.com/iluvpcs/f5-agility-labs-containers.git
-
+        git clone -b develop https://github.com/iluvpcs/f5-agility-labs-containers.git
+        
         cd /root/f5-agility-labs-containers/openshift
         
 #. Log in with an Openshift Client.
@@ -72,18 +92,18 @@ Now that BIG-IP is licensed and prepped with the "ose" partition, we need to def
 
     .. code-block:: console
 
-        oc login -u demouser
+        oc login -u demouser -n default
 
     .. image:: images/OC-DEMOuser-Login.png
         :align: center
     
-    .. important:: Upon logging in you'll notice access to several projects.  In our lab well be working from the default "demoproject".
+    .. important:: Upon logging in you'll notice access to several projects.  In our lab well be working from the default "default".
 
 #. Create bigip login secret
 
-    .. code-block:: bash
+    .. code-block:: console
 
-        oc create secret generic bigip-login --from-literal=username=admin --from-literal=password=admin
+        oc create secret generic bigip-login -n kube-system --from-literal=username=admin --from-literal=password=admin
 
     You should see something similar to this:
 
@@ -92,9 +112,9 @@ Now that BIG-IP is licensed and prepped with the "ose" partition, we need to def
 
 #. Create kubernetes service account for bigip controller
 
-    .. code-block:: bash
+    .. code-block:: console
 
-        oc create serviceaccount k8s-bigip-ctlr
+        oc create serviceaccount k8s-bigip-ctlr -n kube-system
 
     You should see something similar to this:
 
@@ -104,9 +124,9 @@ Now that BIG-IP is licensed and prepped with the "ose" partition, we need to def
 
 #. Create cluster role for bigip service account (admin rights, but can be modified for your environment)
 
-    .. code-block:: bash
+    .. code-block:: console
 
-        oc create clusterrolebinding k8s-bigip-ctlr-clusteradmin --clusterrole=cluster-admin --serviceaccount=demoproject:k8s-bigip-ctlr
+        oc create clusterrolebinding k8s-bigip-ctlr-clusteradmin --clusterrole=cluster-admin --serviceaccount=kube-system:k8s-bigip-ctlr
 
     You should see something similar to this:
 
@@ -161,7 +181,26 @@ Now that BIG-IP is licensed and prepped with the "ose" partition, we need to def
     .. image:: images/F5-OC-HOSTSUBNET2.png
         :align: center
 
-    .. note:: The Subnet assignment, in our case 10.129.2.0/23.
+    .. important:: The Subnet assignment, in this case is 10.129.2.0/23.  We need to know this subnet to configure the self-ip for the vxlan tunnel on BIG-IP.
+
+#. Create the vxlan tunnel self-ip
+
+    .. code-block:: console
+
+        From the CLI:
+        tmsh create net self ose-vxlan-selfip address 10.131.0.98/14 vlan ose-tunnel
+        
+        From the UI:
+        GoTo Network --> Self IP List
+        - Create a new Self-IP called "ose-vxlan-selfip"
+        - Set the IP Address to an IP from the subnet assigned in the previous step. In this case we'll ue "10.129.2.1"
+        - Set the Netmask to "255.252.0.0"
+        - Set the VLAN / Tunnel to "ose-tunnel" (created earlier)
+        - Set Port Lockdown to "Allow All"
+        - Click Finished
+
+    .. image:: images/create-ose-vxlan-selfip.png
+        :align: center
 
 #. Now we'll create an Openshift F5 Container Connector to do the API calls to/from the F5 device. First we need the "deployment" file.
 
@@ -182,13 +221,13 @@ Now that BIG-IP is licensed and prepped with the "ose" partition, we need to def
 
     .. code-block:: console
 
-        oc create -f f5-cluser-deployment.yaml
+        oc create -f f5-cluster-deployment.yaml
 
 #. Check for successful creation:
 
     .. code-block:: console
 
-        oc get pods -o wide
+        oc get pods -n kube-system -o wide
 
     .. image:: images/F5-CTRL-RUNNING.png
         :align: center

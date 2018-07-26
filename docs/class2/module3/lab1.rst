@@ -50,7 +50,7 @@ Now that BIG-IP is licensed and prepped with the "kubernetes" partition, we need
 
     .. code-block:: bash
 
-        git clone https://github.com/iluvpcs/f5-agility-labs-containers.git
+        git clone -b develop https://github.com/iluvpcs/f5-agility-labs-containers.git
 
         cd /home/ubuntu/f5-agility-labs-containers/kubernetes
         
