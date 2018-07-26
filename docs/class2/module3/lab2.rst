@@ -16,7 +16,7 @@ To deploy our application, we will need to do the following:
 App Deployment
 --------------
 
-On the **master** we will create all the required files:
+On the **kube-master** we will create all the required files:
 
 #. Create a file called ``f5-hello-world-deployment.yaml``
 
@@ -34,7 +34,7 @@ On the **master** we will create all the required files:
     .. literalinclude:: ../../../kubernetes/f5-hello-world-configmap.yaml
         :language: yaml
         :linenos:
-        :emphasize-lines: 2,9,16,18
+        :emphasize-lines: 2,5,7,9,16,18
 
 #. Create a file called ``f5-hello-world-service.yaml``
 
@@ -60,7 +60,7 @@ On the **master** we will create all the required files:
 
     .. code-block:: bash
 
-        kubectl get pods
+        kubectl get pods -o wide
 
     .. image:: images/f5-hello-world-pods.png
         :align: center
@@ -99,7 +99,7 @@ On the **master** we will create all the required files:
     .. image:: images/f5-container-connector-access-app.png
         :align: center
 
-#. Hit Refresh many times and go back to your **BIG-IP** UI, go to Local Traffic > Pools > Pool list > cfgmap_default_f5-hello-world_f5-hello-world > Statistics to see that traffic is distributed as expected.
+#. Hit Refresh many times and go back to your **BIG-IP** UI, go to Local Traffic --> Pools --> Pool list --> cfgmap_default_f5-hello-world_f5-hello-world --> Statistics to see that traffic is distributed as expected.
 
     .. image:: images/f5-container-connector-check-app-bigip-stats.png
         :align: center
