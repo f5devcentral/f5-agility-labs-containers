@@ -646,7 +646,6 @@ How do I verify connectivity between the BIG-IP VTEP and the OSE Node?
 #. In a TMOS shell, view the MAC address entries for the OSE tunnel. This will show the mac address and IP addresses of all of the OpenShift endpoints.
 
    .. code-block:: console
-      :caption: Example
 
       root@(bigip02)(cfg-sync In Sync)(Active)(/Common)(tmos)# show /net fdb tunnel ocp-tunnel
 
