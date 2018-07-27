@@ -628,31 +628,21 @@ How do I verify connectivity between the BIG-IP VTEP and the OSE Node?
    - Do a ``tcpdump`` of the underlay network.
 
    .. code-block:: console
+      :caption: Example showing two-way communication between the BIG-IP VTEP IP and the OSE node VTEP IPs. Example showing traffic on the overlay network; at minimum, you should see BIG-IP health monitors for the Pod IP addresses.
 
-        tcpdump -i <name-of-BIG-IP-VXLAN-tunnel>
-
-   .. code-block:: console
-        :caption: Example showing two-way communication between the BIG-IP VTEP IP and the OSE node VTEP IPs. Example showing traffic on the overlay network; at minimum, you should see BIG-IP health monitors for the Pod IP addresses.
-
-        root@(bigip01)(cfg-sync In Sync)(Standby)(/Common)(tmos)# tcpdump -i ocp-tunnel
-        tcpdump: verbose output suppressed, use -v or -vv for full protocol decode
-        listening on ocp-tunnel, link-type EN10MB (Ethernet), capture size 65535 bytes
-        10:29:48.126529 IP 10.131.0.98.47006 > 10.128.0.96.webcache: Flags [S], seq 3679729621, win 29200, options [mss 1460,sackOK,TS val 3704230749 ecr 0,nop,wscale 7], length 0 out slot1/tmm0 lis=
-        10:29:48.128430 IP 10.128.0.96.webcache > 10.131.0.98.47006: Flags [S.], seq 2278441553, ack 3679729622, win 27960, options [mss 1410,sackOK,TS val 2782018 ecr 3704230749,nop,wscale 7], length 0 in slot1/tmm0 lis=
-        10:29:48.131715 IP 10.128.0.96.webcache > 10.131.0.98.47006: Flags [.], ack 10, win 219, options [nop,nop,TS val 2782022 ecr 3704230753], length 0 in slot1/tmm1 lis=
-        10:29:48.130533 IP 10.131.0.98.47006 > 10.128.0.96.webcache: Flags [.], ack 1, win 229, options [nop,nop,TS val 3704230753 ecr 2782018], length 0 out slot1/tmm0 lis=
-        10:29:48.130539 IP 10.131.0.98.47006 > 10.128.0.96.webcache: Flags [P.], seq 1:10, ack 1, win 229, options [nop,nop,TS val 3704230753 ecr 2782018], length 9: HTTP: GET / out slot1/tmm0 lis=
-        10:29:48.141479 IP 10.131.0.98.47006 > 10.128.0.96.webcache: Flags [.], ack 1349, win 251, options [nop,nop,TS val 3704230764 ecr 2782031], length 0 out slot1/tmm0 lis=
-        10:29:48.141036 IP 10.128.0.96.webcache > 10.131.0.98.47006: Flags [P.], seq 1:1349, ack 10, win 219, options [nop,nop,TS val 2782031 ecr 3704230753], length 1348: HTTP: HTTP/1.1 200 OK in slot1/tmm1 lis=
-        10:29:48.141041 IP 10.128.0.96.webcache > 10.131.0.98.47006: Flags [F.], seq 1349, ack 10, win 219, options [nop,nop,TS val 2782031 ecr 3704230753], length 0 in slot1/tmm1 lis=
+      root@(bigip01)(cfg-sync In Sync)(Standby)(/Common)(tmos)# tcpdump -i ocp-tunnel
+      tcpdump: verbose output suppressed, use -v or -vv for full protocol decode
+      listening on ocp-tunnel, link-type EN10MB (Ethernet), capture size 65535 bytes
+      10:29:48.126529 IP 10.131.0.98.47006 > 10.128.0.96.webcache: Flags [S], seq 3679729621, win 29200, options [mss 1460,sackOK,TS val 3704230749 ecr 0,nop,wscale 7], length 0 out slot1/tmm0 lis=
+      10:29:48.128430 IP 10.128.0.96.webcache > 10.131.0.98.47006: Flags [S.], seq 2278441553, ack 3679729622, win 27960, options [mss 1410,sackOK,TS val 2782018 ecr 3704230749,nop,wscale 7], length 0 in slot1/tmm0 lis=
+      10:29:48.131715 IP 10.128.0.96.webcache > 10.131.0.98.47006: Flags [.], ack 10, win 219, options [nop,nop,TS val 2782022 ecr 3704230753], length 0 in slot1/tmm1 lis=
+      10:29:48.130533 IP 10.131.0.98.47006 > 10.128.0.96.webcache: Flags [.], ack 1, win 229, options [nop,nop,TS val 3704230753 ecr 2782018], length 0 out slot1/tmm0 lis=
+      10:29:48.130539 IP 10.131.0.98.47006 > 10.128.0.96.webcache: Flags [P.], seq 1:10, ack 1, win 229, options [nop,nop,TS val 3704230753 ecr 2782018], length 9: HTTP: GET / out slot1/tmm0 lis=
+      10:29:48.141479 IP 10.131.0.98.47006 > 10.128.0.96.webcache: Flags [.], ack 1349, win 251, options [nop,nop,TS val 3704230764 ecr 2782031], length 0 out slot1/tmm0 lis=
+      10:29:48.141036 IP 10.128.0.96.webcache > 10.131.0.98.47006: Flags [P.], seq 1:1349, ack 10, win 219, options [nop,nop,TS val 2782031 ecr 3704230753], length 1348: HTTP: HTTP/1.1 200 OK in slot1/tmm1 lis=
+      10:29:48.141041 IP 10.128.0.96.webcache > 10.131.0.98.47006: Flags [F.], seq 1349, ack 10, win 219, options [nop,nop,TS val 2782031 ecr 3704230753], length 0 in slot1/tmm1 lis=
 
 #. In a TMOS shell, view the MAC address entries for the OSE tunnel. This will show the mac address and IP addresses of all of the OpenShift endpoints.
-
-   .. code-block:: console
-
-      tmsh show /net fdb tunnel <name_of_VXLAN_tunnel on BIG-IP>
-
-   \
 
    .. code-block:: console
       :caption: Example
@@ -667,7 +657,6 @@ How do I verify connectivity between the BIG-IP VTEP and the OSE Node?
       ocp-tunnel  0a:0a:0a:0a:c7:65  endpoint:10.10.199.101%0  no
       ocp-tunnel  0a:0a:0a:0a:c7:66  endpoint:10.10.199.102%0  no
       ocp-tunnel  0a:58:0a:80:00:60  endpoint:10.10.199.101    yes
-
 
 #. In a TMOS shell, view the ARP entries.
 
