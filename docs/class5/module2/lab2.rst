@@ -252,6 +252,8 @@ The BIG-IP OpenShift Controller cannot manage objects in the /Common partition. 
 
 **Step 3.6:** Creating floating IP for overlay network
 
+Note: Should the traffic group be configured as a traffic-group-local-only (non-floating) or traffic-group-1 (floating)?
+
 * ssh root@10.10.200.98 tmsh create net self 10.131.4.200/14 vlan ocp-tunnel
 * ssh root@10.10.200.98 tmsh run cm config-sync to-group ocp-devicegroup
 
@@ -568,5 +570,142 @@ pool-only.yaml
 .. image:: /_static/class5/10-containers.png
 
 Validate that bigip01 and bigip02 so the updated pool member count and they keepalives work. If the keepalives are failing check the tunnel and selfIP
+
+Validation and troubleshooting
+------------------------------
+
+Now that you have HA configured and uploaded the deployment its time to generate traffic through bigip. 
+
+**Step 5.1:** Create a virtual IP address for the deployment
+
+Add a virtual IP to the the configmap. You can edit the pool-only.yaml configmap. There are multuple ways to edit the configmap which will be covered in module 3. In this task remove the deployment, edit the yaml file and re-apply the deployment
+
+.. code-block:: console
+
+     [root@ose-mstr01 ocp]# oc delete -f pool-only.yaml
+     configmap "k8s.poolonly" deleted
+     [root@ose-mstr01 ocp]#
+  
+.. code-block:: console
+
+Edit the pool-only.yaml and add the bindAddr 
+
+vi pool-only.yaml
+
+.. code-block:: console
+
+     "frontend": {
+          "virtualAddress": {
+            "port": 80,
+            "bindAddr": "10.10.201.220"
+
+Create the modified pool-only deployment
+
+.. code-block:: console
+
+     [root@ose-mstr01 ocp]# oc create -f pool-only.yaml
+     configmap "k8s.poolonly" created
+
+Connect to the virtual server at http://10.10.201.220. Does the connection work? If not, try the following troubleshooting options
+
+1) Capture the http request to see if the connection is established with the bigip
+2) Follow the following networking troubleshooting Tasks
+
+Network troubleshooting
+-----------------------
+
+How do I verify connectivity between the BIG-IP VTEP and the OSE Node?
+``````````````````````````````````````````````````````````````````````
+
+#. Ping the Node's VTEP IP address.
+
+   Use the ``-s`` flag to set the MTU of the packets to allow for VxLAN encapsulation.
+
+   .. code-block:: console
+
+      ping -s 1600 <OSE_Node_IP>
+
+#. In a TMOS shell, output the REST requests from the BIG-IP logs.
+
+   - Do a ``tcpdump`` of the underlay network.
+
+   Example showing two-way communication between the BIG-IP VTEP IP and the OSE node VTEP IPs. Example showing traffic on the overlay network; at minimum, you should see BIG-IP health monitors for the Pod IP addresses.
+
+   .. code-block:: console
+
+      root@(bigip01)(cfg-sync In Sync)(Standby)(/Common)(tmos)# tcpdump -i ocp-tunnel
+      tcpdump: verbose output suppressed, use -v or -vv for full protocol decode
+      listening on ocp-tunnel, link-type EN10MB (Ethernet), capture size 65535 bytes
+      10:29:48.126529 IP 10.131.0.98.47006 > 10.128.0.96.webcache: Flags [S], seq 3679729621, win 29200, options [mss 1460,sackOK,TS val 3704230749 ecr 0,nop,wscale 7], length 0 out slot1/tmm0 lis=
+      10:29:48.128430 IP 10.128.0.96.webcache > 10.131.0.98.47006: Flags [S.], seq 2278441553, ack 3679729622, win 27960, options [mss 1410,sackOK,TS val 2782018 ecr 3704230749,nop,wscale 7], length 0 in slot1/tmm0 lis=
+      10:29:48.131715 IP 10.128.0.96.webcache > 10.131.0.98.47006: Flags [.], ack 10, win 219, options [nop,nop,TS val 2782022 ecr 3704230753], length 0 in slot1/tmm1 lis=
+      10:29:48.130533 IP 10.131.0.98.47006 > 10.128.0.96.webcache: Flags [.], ack 1, win 229, options [nop,nop,TS val 3704230753 ecr 2782018], length 0 out slot1/tmm0 lis=
+      10:29:48.130539 IP 10.131.0.98.47006 > 10.128.0.96.webcache: Flags [P.], seq 1:10, ack 1, win 229, options [nop,nop,TS val 3704230753 ecr 2782018], length 9: HTTP: GET / out slot1/tmm0 lis=
+      10:29:48.141479 IP 10.131.0.98.47006 > 10.128.0.96.webcache: Flags [.], ack 1349, win 251, options [nop,nop,TS val 3704230764 ecr 2782031], length 0 out slot1/tmm0 lis=
+      10:29:48.141036 IP 10.128.0.96.webcache > 10.131.0.98.47006: Flags [P.], seq 1:1349, ack 10, win 219, options [nop,nop,TS val 2782031 ecr 3704230753], length 1348: HTTP: HTTP/1.1 200 OK in slot1/tmm1 lis=
+      10:29:48.141041 IP 10.128.0.96.webcache > 10.131.0.98.47006: Flags [F.], seq 1349, ack 10, win 219, options [nop,nop,TS val 2782031 ecr 3704230753], length 0 in slot1/tmm1 lis=
+
+#. In a TMOS shell, view the MAC address entries for the OSE tunnel. This will show the mac address and IP addresses of all of the OpenShift endpoints.
+
+   .. code-block:: console
+
+      root@(bigip02)(cfg-sync In Sync)(Active)(/Common)(tmos)# show /net fdb tunnel ocp-tunnel
+
+      ----------------------------------------------------------------
+      Net::FDB
+      Tunnel      Mac Address        Member                    Dynamic
+      ----------------------------------------------------------------
+      ocp-tunnel  0a:0a:0a:0a:c7:64  endpoint:10.10.199.100%0  no
+      ocp-tunnel  0a:0a:0a:0a:c7:65  endpoint:10.10.199.101%0  no
+      ocp-tunnel  0a:0a:0a:0a:c7:66  endpoint:10.10.199.102%0  no
+      ocp-tunnel  0a:58:0a:80:00:60  endpoint:10.10.199.101    yes
+
+#. In a TMOS shell, view the ARP entries.
+
+   This will show all of the ARP entries; you should see the VTEP entries on the :code:`ocpvlan` and the Pod IP addresses on :code:`ose-tunnel`.
+
+   .. code-block:: console
+
+      root@(bigip02)(cfg-sync In Sync)(Active)(/Common)(tmos)# show /net arp
+
+      --------------------------------------------------------------------------------------------
+      Net::Arp
+      Name           Address        HWaddress          Vlan                Expire-in-sec  Status
+      --------------------------------------------------------------------------------------------
+      10.10.199.100  10.10.199.100  2c:c2:60:49:b2:9d  /Common/internal    41             resolved
+      10.10.199.101  10.10.199.101  2c:c2:60:58:62:64  /Common/internal    70             resolved
+      10.10.199.102  10.10.199.102  2c:c2:60:51:65:a0  /Common/internal    41             resolved
+      10.10.202.98   10.10.202.98   2c:c2:60:1f:74:62  /Common/ha          64             resolved
+      10.128.0.96    10.128.0.96    0a:58:0a:80:00:60  /Common/ocp-tunnel  7              resolved
+
+      root@(bigip02)(cfg-sync In Sync)(Active)(/Common)(tmos)#
+
+**Step 5.1:** Validate floating traffic for ocp-tunnel self-ip
+
+Check if the configuration is correct from step 3.6. Make sure the floating IP is set to traffic-group-1 floating. A floating traffic group is request for the response traffic from the pool-member. If the traffic is local change to floating
+
+.. image:: /_static/class5/non-floating.png
+
+change to floating
+
+.. image:: /_static/class5/floating.png
+
+Connect to the viutal IP address
+
+.. image:: /_static/class5/success.png
+
+Test failover and make sure you can connect to the virtual. 
+
+Congraulation for completeing the HA clusterting setup. Please move next module. 
+
+
+
+
+
+
+
+
+
+
 
 
