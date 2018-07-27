@@ -627,8 +627,9 @@ How do I verify connectivity between the BIG-IP VTEP and the OSE Node?
 
    - Do a ``tcpdump`` of the underlay network.
 
+   Example showing two-way communication between the BIG-IP VTEP IP and the OSE node VTEP IPs. Example showing traffic on the overlay network; at minimum, you should see BIG-IP health monitors for the Pod IP addresses.
+
    .. code-block:: console
-      :caption: Example showing two-way communication between the BIG-IP VTEP IP and the OSE node VTEP IPs. Example showing traffic on the overlay network; at minimum, you should see BIG-IP health monitors for the Pod IP addresses.
 
       root@(bigip01)(cfg-sync In Sync)(Standby)(/Common)(tmos)# tcpdump -i ocp-tunnel
       tcpdump: verbose output suppressed, use -v or -vv for full protocol decode
