@@ -673,7 +673,7 @@ How do I verify connectivity between the BIG-IP VTEP and the OSE Node?
       10.10.199.100  10.10.199.100  2c:c2:60:49:b2:9d  /Common/internal    41             resolved
       10.10.199.101  10.10.199.101  2c:c2:60:58:62:64  /Common/internal    70             resolved
       10.10.199.102  10.10.199.102  2c:c2:60:51:65:a0  /Common/internal    41             resolved
-      0.10.202.98   10.10.202.98   2c:c2:60:1f:74:62  /Common/ha          64             resolved
+      10.10.202.98   10.10.202.98   2c:c2:60:1f:74:62  /Common/ha          64             resolved
       10.128.0.96    10.128.0.96    0a:58:0a:80:00:60  /Common/ocp-tunnel  7              resolved
 
       root@(bigip02)(cfg-sync In Sync)(Active)(/Common)(tmos)#
