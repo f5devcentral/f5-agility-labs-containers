@@ -3,7 +3,9 @@ Lab 3.1 - F5 Container Connector Setup
 
 The official CC documentation is here: `Install the BIG-IP Controller: Kubernetes <https://clouddocs.f5.com/containers/v2/kubernetes/kctlr-app-install.html>`_
 
-BIG-IP setup
+Use a `Deployment <https://kubernetes.io/docs/concepts/workloads/controllers/deployment/>`_ to install the BIG-IP Controller for Kubernetes.
+
+BIG-IP Setup
 ------------
 
 To use F5 Container connector, you'll need a BIG-IP up and running first.
@@ -16,14 +18,15 @@ Through the Jumpbox, you should have a BIG-IP available at the following URL: ht
 
 #. You need to setup a partition that will be used by F5 Container Connector.
 
-    .. code-block:: bash
+    .. code-block:: console
 
         From the CLI:
         tmsh create auth partition kubernetes
 
         From the UI:
         GoTo System --> Users --> Partition List
-        Create a new partition called "kubernetes" (use default settings and click Finished)
+        - Create a new partition called "kubernetes" (use default settings)
+        - Click Finished
 
     .. image:: images/f5-container-connector-bigip-partition-setup.png
         :align: center
@@ -52,7 +55,7 @@ Now that BIG-IP is licensed and prepped with the "kubernetes" partition, we need
 
     .. tip:: You did this earlier in the "Install the Kubernetes UI" section.
 
-    .. code-block:: bash
+    .. code-block:: console
 
         git clone -b develop https://github.com/iluvpcs/f5-agility-labs-containers.git
 
@@ -60,7 +63,7 @@ Now that BIG-IP is licensed and prepped with the "kubernetes" partition, we need
 
 #. Create bigip login secret
 
-    .. code-block:: bash
+    .. code-block:: console
 
         kubectl create secret generic bigip-login -n kube-system --from-literal=username=admin --from-literal=password=admin
 
@@ -71,7 +74,7 @@ Now that BIG-IP is licensed and prepped with the "kubernetes" partition, we need
 
 #. Create kubernetes service account for bigip controller
 
-    .. code-block:: bash
+    .. code-block:: console
 
         kubectl create serviceaccount k8s-bigip-ctlr -n kube-system
 
@@ -83,7 +86,7 @@ Now that BIG-IP is licensed and prepped with the "kubernetes" partition, we need
 
 #. Create cluster role for bigip service account (admin rights, but can be modified for your environment)
 
-    .. code-block:: bash
+    .. code-block:: console
 
         kubectl create clusterrolebinding k8s-bigip-ctlr-clusteradmin --clusterrole=cluster-admin --serviceaccount=kube-system:k8s-bigip-ctlr
 
@@ -125,7 +128,7 @@ Now that BIG-IP is licensed and prepped with the "kubernetes" partition, we need
 
 #. To locate on which node the container connector is running, you can use the following command:
 
-    .. code-block:: bash
+    .. code-block:: console
 
         kubectl get pods -o wide -n kube-system
 
@@ -141,7 +144,7 @@ Now that BIG-IP is licensed and prepped with the "kubernetes" partition, we need
 
     #. Using kubectl command: you need to use the full name of your pod as showed in the previous image
 
-        .. code-block:: bash
+        .. code-block:: console
             
             kubectl logs k8s-bigip-ctlr-deployment-79fcf97bcc-48qs7 -n kube-system
 
@@ -150,7 +153,7 @@ Now that BIG-IP is licensed and prepped with the "kubernetes" partition, we need
 
     #. Using docker logs command: From the previous check we know the container is running on kube-node1.  Via mRemoteNG open a session to kube-nodel and run the following commands:
 
-        .. code-block:: bash
+        .. code-block:: console
 
             sudo docker ps
 
@@ -161,7 +164,7 @@ Now that BIG-IP is licensed and prepped with the "kubernetes" partition, we need
 
         Now we can check our container logs:
 
-        .. code-block:: bash
+        .. code-block:: console
 
             sudo docker logs b91d400df115
 
@@ -171,7 +174,7 @@ Now that BIG-IP is licensed and prepped with the "kubernetes" partition, we need
 
 #. You can connect to your container with kubectl as well:
 
-    .. code-block:: bash
+    .. code-block:: console
 
         kubectl exec -it k8s-bigip-ctlr-deployment-79fcf97bcc-48qs7 -n kube-system  -- /bin/sh
 

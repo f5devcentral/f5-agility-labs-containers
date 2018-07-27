@@ -50,7 +50,6 @@ you should see something like this:
 .. image:: /_static/class3/setup-master-check-service-mesos-master.png
 	:align: center
 
-
 .. image:: /_static/class3/setup-master-check-service-marathon.png
 	:align: center
 
