@@ -590,6 +590,8 @@ Edit the pool-only.yaml and add the bindAddr
 
 vi pool-only.yaml
 
+.. code-block:: console
+
      "frontend": {
           "virtualAddress": {
             "port": 80,
@@ -602,9 +604,9 @@ Create the modified pool-only deployment
      [root@ose-mstr01 ocp]# oc create -f pool-only.yaml
      configmap "k8s.poolonly" created
 
-Using the client connect the virtual server 10.10.201.220. Does the connection work? If not, try the following troubleshooting options
+Connect to the virtual server at http://10.10.201.220. Does the connection work? If not, try the following troubleshooting options
 
-1) The client has wireshark installed. Capture the http request to see if the connection is established with the bigip
+1) Capture the http request to see if the connection is established with the bigip
 2) Follow the following networking troubleshooting Tasks
 
 Network troubleshooting
@@ -625,13 +627,11 @@ How do I verify connectivity between the BIG-IP VTEP and the OSE Node?
 
    - Do a ``tcpdump`` of the underlay network.
 
-     .. code-block:: console
+   .. code-block:: console
 
         tcpdump -i <name-of-BIG-IP-VXLAN-tunnel>
 
-     \
-
-     .. code-block:: console
+   .. code-block:: console
         :caption: Example showing two-way communication between the BIG-IP VTEP IP and the OSE node VTEP IPs. Example showing traffic on the overlay network; at minimum, you should see BIG-IP health monitors for the Pod IP addresses.
 
         root@(bigip01)(cfg-sync In Sync)(Standby)(/Common)(tmos)# tcpdump -i ocp-tunnel
@@ -645,8 +645,6 @@ How do I verify connectivity between the BIG-IP VTEP and the OSE Node?
         10:29:48.141479 IP 10.131.0.98.47006 > 10.128.0.96.webcache: Flags [.], ack 1349, win 251, options [nop,nop,TS val 3704230764 ecr 2782031], length 0 out slot1/tmm0 lis=
         10:29:48.141036 IP 10.128.0.96.webcache > 10.131.0.98.47006: Flags [P.], seq 1:1349, ack 10, win 219, options [nop,nop,TS val 2782031 ecr 3704230753], length 1348: HTTP: HTTP/1.1 200 OK in slot1/tmm1 lis=
         10:29:48.141041 IP 10.128.0.96.webcache > 10.131.0.98.47006: Flags [F.], seq 1349, ack 10, win 219, options [nop,nop,TS val 2782031 ecr 3704230753], length 0 in slot1/tmm1 lis=
-
-
 
 #. In a TMOS shell, view the MAC address entries for the OSE tunnel. This will show the mac address and IP addresses of all of the OpenShift endpoints.
 
