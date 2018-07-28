@@ -3,6 +3,8 @@ Lab 1.1 - F5 Container Connector Setup
 
 The official CC documentation is here: `Install the BIG-IP Controller: Openshift <https://clouddocs.f5.com/containers/v2/openshift/kctlr-openshift-app-install.html>`_
 
+Use a `Deployment <https://kubernetes.io/docs/concepts/workloads/controllers/deployment/>`_ to install the BIG-IP Controller for OpenShift.
+
 BIG-IP Setup
 ------------
 
