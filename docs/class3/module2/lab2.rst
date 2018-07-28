@@ -6,109 +6,88 @@ Now that our container connector is up and running, let’s deploy an applicatio
 App Deployment
 --------------
 
-#. Go to Marathon UI and click on "Create application"
+From the jumphost connect to the Marathon UI on `http://10.2.10.10:8080 <http://10.2.10.10:8080>`_ and click "Create Application".
 
-#. Click on "JSON Mode"
+	.. image:: images/f5-container-connector-create-application-button.png
+  		:align: center
 
-    ::
+#. Click on "JSON mode" in the top-right corner
 
-        {
-            "id": "my-frontend",
-            "cpus": 0.1,
-            "mem": 128.0,
-            "container": {
-                "type": "DOCKER",
-                "docker": {
-                    "image": "10.2.10.10:5000/f5-demo-app",
-                    "network": "BRIDGE",
-                    "portMappings": [
-                        { "containerPort": 80, "hostPort": 0, "protocol": "tcp" }
-                    ]
-                }
-            },
-            "labels": {
-                "F5_PARTITION": "mesos",
-                "F5_0_BIND_ADDR": "10.2.10.80",
-                "F5_0_MODE": "http",
-                "F5_0_PORT": "80",
-                "run": "my-frontend"
-            },
-            "env": {
-            "F5DEMO_APP": "frontend",
-            "F5DEMO_BACKEND_URL": "http://asp-my-backend.marathon.mesos:31899/"
-            },
-            "healthChecks": [
-            {
-                "protocol": "HTTP",
-                "portIndex": 0,
-                "path": "/",
-                "gracePeriodSeconds": 5,
-                "intervalSeconds": 20,
-                "maxConsecutiveFailures": 3
-            }
-            ]
-        }
+	.. image:: images/f5-container-connector-json-mode.png
+  		:align: center
 
-#. Click on "Create Application"
+#. **REPLACE** the 8 lines of default JSON code shown with the following JSON code and click Create Application
 
-    .. note:: Here we specified a few things:
+	.. literalinclude:: ../../../marathon/f5-hello-world-app.json
+		:language: json
+		:linenos:
+		:emphasize-lines: 5,9,18,19,22
 
-        #. The involved BIG-IP configuration (Partition, VS IP, VS Port)
-        #. The Marathon health check for this app. The BIG-IP will replicate those health checks
-        #. We didn't specified how many instances of this application we want so it will deploy a single instance
+#. F5-Hello-World is "Deploying"
+
+    .. note:: The JSON app definition specified several things:
+
+        #. What container image to use (line 9)
+        #. The BIG-IP configuration (Partition, VS IP, VS Port).
+        #. The Marathon health check for this app. The BIG-IP will replicate those health checks.
+        #. The number of instances (line 5)
 
     Wait for your application to be successfully deployed and be in a running state.
 
-    .. image:: /_static/class3/f5-container-connector-check-application-running.png
+    .. image:: images/f5-container-connector-check-application-running.png
         :align: center
 
-#. Click on "my-frontend". Here you will see the instance deployed and how to access it (here it's 10.2.10.40:31109 - you may have something else)
+#. Click on "f5-hello-world". Here you will see two instance deployed, with their node IP and Port.
 
-    .. image:: /_static/class3/f5-container-connector-check-application-instance.png
+    .. image:: images/f5-container-connector-check-application-instance.png
         :align: center
 
-#. Click on the <IP:Port> assigned to be redirect there:
+#. Click on one of the <IP:Port> assigned to be redirect there:
 
-    .. image:: /_static/class3/f5-container-connector-access-application-instance.png
+    .. image:: images/f5-container-connector-access-application-instance.png
         :align: center
 
-#. We can check whether the Marathon BIG-IP Controller has updated our BIG-IP configuration accordingly
+#. We can check whether the Marathon BIG-IP Controller has updated our BIG-IP configuration accordingly. Connect to your BIG-IP on https://10.1.1.245 and go to Local Traffic --> Virtual Server.
 
-#. Connect to your BIG-IP on https://10.1.1.245 and go to Local Traffic > Virtual Server. Select the Partition called "**mesos**" from the top-right corner in the GUI. You should have something like this:
+    .. warning:: Don’t forget to select the “mesos” partition or you’ll see nothing.
+    
+    You should have something like this:
 
-    .. image:: /_static/class3/f5-container-connector-check-app-on-BIG-IP-VS.png
+    .. image:: images/f5-container-connector-check-app-on-BIG-IP-VS.png
         :align: center
 
-#. Go to Local Traffic > Pool > "my-frontend_10.2.10.80_80" > Members. Here we can see that a single pool member is defined.
+#. Go to Local Traffic --> Pool --> "f5-hello-world_80" --> Members. Here we can see that two pool members are defined and the IP:Port match our deployed app in Marathon.
 
-    .. image:: /_static/class3/f5-container-connector-check-app-on-BIG-IP-Pool_members.png
+    .. image:: images/f5-container-connector-check-app-on-BIG-IP-Pool_members.png
         :align: center
 
-#. In your browser try to connect to http://10.2.10.80. You should be able to access the application (You have a bookmark for the Frontend application in your Chrome browser):
+#. You should be able to access the application. In your browser try to connect to http://10.2.10.81
 
-    .. image:: /_static/class3/f5-container-connector-access-BIGIP-VS.png
+    .. image:: images/f5-container-connector-access-BIGIP-VS.png
         :align: center
-
-    .. note:: If you try to click on the link "Backend App", it will fail. This is expected (Proxy Error)
 
 Scale the application via Marathon
 ----------------------------------
 
 We can try to increase the number of containers delivering our application. 
 
-#. To do so , go back to the Marathon UI (http://10.2.10.10:8080). Go to Applications > my-frontend  and click on "Scale Application". Let's request 10 instances. Click on "Scale Application".
+#. Go back to the Marathon UI (http://10.2.10.10:8080). Go to Applications --> "f5-hello-world" and click "Scale Application". 
 
-    Once it is done, you should see 10 "healthy instances" running in Marathon UI. You can also check your pool members list on your BIG-IP.
+    Let's increase the number from 2 to 10 instances and click on "Scale Application".
 
-    .. image:: /_static/class3/f5-container-connector-scale-application-UI.png
+    .. image:: images/f5-container-connector-scale-application-UI.png
         :align: center
 
-    .. image:: /_static/class3/f5-container-connector-scale-application-UI-10-done.png
+    Once it is done you should see 10 "healthy instances" running in Marathon UI.
+
+    .. image:: images/f5-container-connector-scale-application-UI-10-done.png
         :align: center
 
-    .. image:: /_static/class3/f5-container-connector-scale-application-BIGIP-10-done.png
+    You can also check your pool members list on your BIG-IP.
+
+    .. image:: images/f5-container-connector-scale-application-BIGIP-10-done.png
         :align: center
 
     As we can see, the Marathon BIG-IP Controller is adapting the pool members setup based on the number of instances delivering this application automatically.
 
-#. Scale back the application to 1 to save ressources for the next labs
+#. Scale back the application to 2 to save ressources for the next labs
