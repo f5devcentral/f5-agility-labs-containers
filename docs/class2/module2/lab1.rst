@@ -35,7 +35,6 @@ Setup
     .. image:: images/rootuser.png
         :align: center
 
-
 #. For your conveniance we've already added the host IP & names to /etc/hosts.  Verify the file
 
     .. code-block:: console
