@@ -8,8 +8,9 @@ This introductory class covers the following topics:
    :glob:
 
    module*/module*
+   setup/setup
 
-Expected time to complete: **1 hours**
+Expected time to complete: **30 minutes**
 
 Lab Setup
 ---------
@@ -35,29 +36,39 @@ We will leverage the following setup to configure the Mesos / Marathon environme
     - mgmt: 10.1.1.0/24
 
       external-mesos 10.2.10.0/24
-    - GUI: admin/admin
+    - admin/admin
 
-      SSH: root/default
+      root/default
   * - f5-mesos-master1
     - 10.2.10.10
     - external-mesos: 10.2.10.0/24
-    - SSH: root/default
+    - admin/admin
+    
+      root/default
   * - f5-mesos-master2
     - 10.2.10.20
     - external-mesos: 10.2.10.0/24
-    - SSH: root/default
+    - admin/admin
+    
+      root/default
   * - f5-mesos-master3
     - 10.2.10.30
     - external-mesos: 10.2.10.0/24
-    - SSH: root/default
+    - admin/admin
+    
+      root/default
   * - f5-mesos-agent1
     - 10.2.10.40
     - external-mesos: 10.2.10.0/24
-    - SSH: root/default
+    - admin/admin
+      
+      root/default
   * - f5-mesos-agent2
     - 10.2.10.50
     - external-mesos: 10.2.10.0/24
-    - SSH: root/default
+    - admin/admin
+    
+      root/default
 
 Here are a few things to know that could be useful (if you want to reproduce this in another environment)
 
