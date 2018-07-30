@@ -1,5 +1,5 @@
-Setup Mesos-DNS
-===============
+Lab 1.3 - Setup Mesos-DNS
+=========================
 
 If you want to be able to do service discovery with Mesos/Marathon, you will need to install and setup mesos-dns.
 
