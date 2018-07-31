@@ -24,7 +24,7 @@ For Windows:  having another hypervisor can cause conflicts.  During Docker inst
 
     https://www.zdnet.com/article/what-is-docker-and-why-is-it-so-darn-popular/
 
-Next we're going to install Docker on 3 Ubuntu servers.
+Next we're going to install Docker and learn some of the basic commands.  We'll do this on 3 Ubuntu servers (Kubernetes VM's in the lab).
 
 .. toctree::
    :maxdepth: 1

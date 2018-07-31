@@ -49,7 +49,7 @@ Lab 1.1 Install Docker
 
     .. code-block:: console
 
-        docker run hello-world
+        docker run --rm hello-world
 
     If everything is working properly you should see the following message
 
