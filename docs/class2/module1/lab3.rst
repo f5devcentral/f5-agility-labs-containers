@@ -14,8 +14,9 @@ Defining a service
 
 A *service* in Kubernetes is a REST object, similar to a *pod*. Like all of the REST objects, a *service* definition can be *POSTed* to the *apiserver* to create a new instance. For example, suppose you have a set of *pods* that each expose port 9376 and carry a *label* "app=MyApp".
 
-.. code-block:: yaml
+.. code-block:: json
     :linenos:
+    :emphasize-lines: 2,9,15
 
     {
         "kind": "Service",
@@ -43,8 +44,9 @@ This *service* will also be assigned an IP address (sometimes called the *cluste
 
 If the service is not a native kubernetes app, then you can do a service definition without the *selector* field. In such a case you'll have to specify yourself the *endpoints*
 
-.. code-block:: yaml
+.. code-block:: json
     :linenos:
+    :emphasize-lines: 2,12,19,27,30
 
     {
         "kind": "Service",
@@ -111,8 +113,9 @@ Service type: LoadBalancer
 
 On cloud providers which support external load balancers, setting the type field to "LoadBalancer" will provision a load balancer for your *Service*. The actual creation of the load balancer happens asynchronously, and information about the provisioned balancer will be published in the Service’s status.loadBalancer field. For example:
 
-.. code-block:: yaml
+.. code-block:: json
     :linenos:
+    :emphasize-lines: 2,20,21
 
     {
         "kind": "Service",

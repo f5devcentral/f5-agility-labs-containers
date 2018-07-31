@@ -1,5 +1,5 @@
-Setup the Agents
-================
+Lab 1.2 - Setup the Agents
+==========================
 
 .. important:: The following commands need to be run on both agent nodes unless otherwise specified.
 

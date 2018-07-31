@@ -84,7 +84,7 @@ Now that BIG-IP is licensed and prepped with the "ose" partition, we need to def
 
     .. code-block:: console
 
-        git clone -b develop https://github.com/iluvpcs/f5-agility-labs-containers.git
+        git clone -b develop https://github.com/iluvpcs/f5-agility-labs-containers.git /root/f5-agility-labs-containers
         
         cd /root/f5-agility-labs-containers/openshift
         
@@ -233,3 +233,16 @@ Now that BIG-IP is licensed and prepped with the "ose" partition, we need to def
 
     .. image:: images/F5-CTRL-RUNNING.png
         :align: center
+
+#. If the tunnel is up and running big-ip should be able to ping the master nodes.  SSH to big-ip and run one or all of the following ping tests:
+
+    .. code-block:: console
+
+        ...to ping ose-master
+        ping 10.128.0.1
+        
+        ...to ping ose-node1
+        ping 10.129.0.1
+        
+        ...to ping ose-node2
+        ping 10.130.0.1

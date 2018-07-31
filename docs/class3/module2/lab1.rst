@@ -76,49 +76,45 @@ Now that BIG-IP is licensed and prepped with the "mesos" partition, we need to d
 	- Marathon UI
 	- Docker command (By connecting to the relevant node. Here you'll need to identify which node is running the container)
 
-	#. Using the Marathon UI
+		#. Using the Marathon UI
 
-		- Click on Applications
-		- Click on the f5 folder
-		- Click on marathon-bigip-ctlr
+			Click on Applications --> the f5 folder --> marathon-bigip-ctlr --> From here you can download and view the logs from the text editor of choice.
+		
+			You should see something like this:
 
-		You should see something like this:
+			.. image:: images/f5-container-connector-logs.png
+				:align: center
+			
+		#. To check the logs with docker, you need to identify where the Controller is running. From the previous step we can see it's running on 10.2.10.40 (which is **f5-mesos-agent1**).
 
-		.. image:: images/f5-container-connector-logs.png
-  			:align: center
+			.. image:: images/f5-container-connector-locate-bigip-controller.png
+				:align: center
 
-		From here you can download and view the logs from your text editor of choice.
-	
-	#. To check the logs with docker, you need to identify where the Controller is running. From the previous step we can see it's running on 10.2.10.40 (which is **f5-mesos-agent1**).
+		#. Connect via SSH to **f5-mesos-agent1** and run the following commands:
 
-		.. image:: images/f5-container-connector-locate-bigip-controller.png
-			:align: center
+			.. code-block:: console
 
-	#. Connect via SSH to **f5-mesos-agent1** and run the following commands:
+				sudo docker ps
 
-		.. code-block:: console
+			This command will give us the Controllers Container ID, here it is: 43c11f8d0cfa. We need this ID for the next few commands
 
-  			sudo docker ps
+			.. image:: images/f5-container-connector-get-bigip-ctlr-container-id.png
+				:align: center
 
-		This command will give us the Controllers Container ID, here it is: 43c11f8d0cfa. We need this ID for the next few commands
+		#. To check the logs of our Controller:
 
-		.. image:: images/f5-container-connector-get-bigip-ctlr-container-id.png
-  			:align: center
+			.. code-block:: console
 
-	#. To check the logs of our Controller:
+				sudo docker logs 43c11f8d0cfa
 
-		.. code-block:: console
+			.. image:: images/f5-container-connector-check-logs-bigip-ctlr.png
+				:align: center
 
-  			sudo docker logs 43c11f8d0cfa
+		#. To connect to our container with a Shell:
 
-		.. image:: images/f5-container-connector-check-logs-bigip-ctlr.png
-  			:align: center
+			.. code-block:: console
 
-	#. To connect to our container with a Shell:
+				sudo docker exec -i -t 43c11f8d0cfa /bin/sh
 
-		.. code-block:: console
-
-   			sudo docker exec -i -t 43c11f8d0cfa /bin/sh
-
-		.. image:: images/f5-container-connector-run-shell-bigip-ctlr.png
-  			:align: center
+			.. image:: images/f5-container-connector-run-shell-bigip-ctlr.png
+				:align: center
