@@ -155,7 +155,7 @@ To install the UI you have two options:
 
     .. code-block:: bash
 
-        git clone -b develop https://github.com/iluvpcs/f5-agility-labs-containers.git
+        git clone -b develop https://github.com/iluvpcs/f5-agility-labs-containers.git /home/ubuntu/f5-agility-labs-containers
 
     .. note:: These files will be used to complete this section and needed later to complete the class.
 

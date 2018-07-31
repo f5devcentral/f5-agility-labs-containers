@@ -57,7 +57,7 @@ Now that BIG-IP is licensed and prepped with the "kubernetes" partition, we need
 
     .. code-block:: console
 
-        git clone -b develop https://github.com/iluvpcs/f5-agility-labs-containers.git
+        git clone -b develop https://github.com/iluvpcs/f5-agility-labs-containers.git /home/ubuntu/f5-agility-labs-containers
 
         cd /home/ubuntu/f5-agility-labs-containers/kubernetes
 
@@ -142,35 +142,34 @@ Now that BIG-IP is licensed and prepped with the "kubernetes" partition, we need
     - kubectl command (recommended - easier)
     - docker command (By connecting to the relevant node. Here you'll need to identify which node is running the container)
 
-    #. Using kubectl command: you need to use the full name of your pod as showed in the previous image
+        #. Using kubectl command: you need to use the full name of your pod as showed in the previous image
 
-        .. code-block:: console
+            .. code-block:: console
+                
+                kubectl logs k8s-bigip-ctlr-deployment-79fcf97bcc-48qs7 -n kube-system
+
+            .. image:: images/f5-container-connector-check-logs-kubectl.png
+                :align: center
+
+        #. Using docker logs command: From the previous check we know the container is running on kube-node1.  Via mRemoteNG open a session to kube-node1 and run the following commands:
+
+            .. code-block:: console
+
+                sudo docker ps
+
+            Here we can see our container ID is "b91d400df115"
             
-            kubectl logs k8s-bigip-ctlr-deployment-79fcf97bcc-48qs7 -n kube-system
+            .. image:: images/f5-container-connector-find-dockerID--controller-container.png
+                :align: center
 
-        .. image:: images/f5-container-connector-check-logs-kubectl.png
-            :align: center
+            Now we can check our container logs:
 
-    #. Using docker logs command: From the previous check we know the container is running on kube-node1.  Via mRemoteNG open a session to kube-nodel and run the following commands:
+            .. code-block:: console
 
-        .. code-block:: console
+                sudo docker logs b91d400df115
 
-            sudo docker ps
-
-        Here we can see our container ID is "b91d400df115"
-        
-        .. image:: images/f5-container-connector-find-dockerID--controller-container.png
-            :align: center
-
-        Now we can check our container logs:
-
-        .. code-block:: console
-
-            sudo docker logs b91d400df115
-
-        .. image:: images/f5-container-connector-check-logs-controller-container.png
-            :align: center
-
+            .. image:: images/f5-container-connector-check-logs-controller-container.png
+                :align: center
 
 #. You can connect to your container with kubectl as well:
 
