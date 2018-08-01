@@ -32,4 +32,4 @@ Welcome to F5 Containers lab's documentation!
   - How to configure BIG-IP HA with OpenShift
   - Configure advanced OpenShift configuration working with BIG-IP
 
-The lab guide is hosted here: http://f5-agility-labs-containers.readthedocs.io/en/latest/
+The lab guide is hosted here: https://clouddocs.f5.com/training/community/containers/html/
