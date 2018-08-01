@@ -25,7 +25,7 @@ We will be using the following terms throughout the workshop labs so here are so
 
 Use the following username and password
 
-* username: **student**
+* username: **user**
 * password: **Student!Agility!**
 * Note: Use the Send Text to Client option to paste the password
 
