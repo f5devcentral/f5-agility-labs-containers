@@ -1,44 +1,93 @@
-Setup Zookeeper
-===============
+Lab 1.2 - F5 Container Connector Usage
+======================================
 
-Need to point zookeeper to our 3 master instances. This is done in the file
-``/etc/mesos/zk``
+Now that our container connector is up and running, let’s deploy an application and leverage our F5 CC.
 
-``2181`` is zookeeper's default port.
+App Deployment
+--------------
 
-On **all masters**, we need to setup a unique ID per zookeeper instance:
+From the jumphost connect to the Marathon UI on `http://10.2.10.10:8080 <http://10.2.10.10:8080>`_ and click "Create Application".
 
-- Master1: ``1``
-- Master2: ``2``
-- Master3: ``3``
+	.. image:: images/f5-container-connector-create-application-button.png
+  		:align: center
 
-to do so we need to do the following:
+#. Click on "JSON mode" in the top-right corner
 
-1. Update ``/etc/zookeeper/conf/myid`` to ``1``, ``2`` or ``3`` depending
-   on the master
-2. Setup zookeeper config file on each master
-3. Change the quorum value to reflect our cluster size. It should be set
-   over 50% of the number of master instances.  In this case it should be ``2``
+	.. image:: images/f5-container-connector-json-mode.png
+  		:align: center
 
-.. code-block:: console
+#. **REPLACE** the 8 lines of default JSON code shown with the following JSON code and click Create Application
 
-   # On master1
-   mkdir -p /etc/zookeeper/conf/
-   printf 1 | sudo tee /etc/zookeeper/conf/myid
-   printf "tickTime=2000\ndataDir=/var/lib/zookeeper\nclientPort=2181\ninitLimit=10\nsyncLimit=5\nserver.1=10.2.10.   10:2888:3888\nserver.2=10.2.10.20:2888:3888\nserver.3=10.2.10.30:2888:3888" | sudo tee /etc/zookeeper/conf/zoo.cfg
-   printf 2 | sudo tee /etc/mesos-master/quorum
+	.. literalinclude:: ../../../marathon/f5-hello-world-app.json
+		:language: json
+		:linenos:
+		:emphasize-lines: 5,9,18,19,22
 
+#. F5-Hello-World is "Deploying"
 
-   # On master2
-   mkdir -p /etc/zookeeper/conf/
-   printf 2 | sudo tee /etc/zookeeper/conf/myid
-   printf "tickTime=2000\ndataDir=/var/lib/zookeeper\nclientPort=2181\ninitLimit=10\nsyncLimit=5\nserver.1=10.2.10.   10:2888:3888\nserver.2=10.2.10.20:2888:3888\nserver.3=10.2.10.30:2888:3888" | sudo tee /etc/zookeeper/conf/zoo.cfg
-   printf 2 | sudo tee /etc/mesos-master/quorum
+    .. note:: The JSON app definition specified several things:
 
+        #. What container image to use (line 9)
+        #. The BIG-IP configuration (Partition, VS IP, VS Port).
+        #. The Marathon health check for this app. The BIG-IP will replicate those health checks.
+        #. The number of instances (line 5)
 
-   # On master3
-   rm -rf /etc/zookeeper/
-   mkdir -p /etc/zookeeper/conf/
-   printf 3 | sudo tee /etc/zookeeper/conf/myid
-   printf "tickTime=2000\ndataDir=/var/lib/zookeeper\nclientPort=2181\ninitLimit=10\nsyncLimit=5\nserver.1=10.2.10.   10:2888:3888\nserver.2=10.2.10.20:2888:3888\nserver.3=10.2.10.30:2888:3888" | sudo tee /etc/zookeeper/conf/zoo.cfg
-   echo 2 | sudo tee /etc/mesos-master/quorum
+    Wait for your application to be successfully deployed and be in a running state.
+
+    .. image:: images/f5-container-connector-check-application-running.png
+        :align: center
+
+#. Click on "f5-hello-world". Here you will see two instance deployed, with their node IP and Port.
+
+    .. image:: images/f5-container-connector-check-application-instance.png
+        :align: center
+
+#. Click on one of the <IP:Port> assigned to be redirect there:
+
+    .. image:: images/f5-container-connector-access-application-instance.png
+        :align: center
+
+#. We can check whether the Marathon BIG-IP Controller has updated our BIG-IP configuration accordingly. Connect to your BIG-IP on https://10.1.1.245 and go to Local Traffic --> Virtual Server.
+
+    .. warning:: Don’t forget to select the “mesos” partition or you’ll see nothing.
+    
+    You should have something like this:
+
+    .. image:: images/f5-container-connector-check-app-on-BIG-IP-VS.png
+        :align: center
+
+#. Go to Local Traffic --> Pool --> "f5-hello-world_80" --> Members. Here we can see that two pool members are defined and the IP:Port match our deployed app in Marathon.
+
+    .. image:: images/f5-container-connector-check-app-on-BIG-IP-Pool_members.png
+        :align: center
+
+#. You should be able to access the application. In your browser try to connect to http://10.2.10.81
+
+    .. image:: images/f5-container-connector-access-BIGIP-VS.png
+        :align: center
+
+Scale the application via Marathon
+----------------------------------
+
+We can try to increase the number of containers delivering our application. 
+
+#. Go back to the Marathon UI (http://10.2.10.10:8080). Go to Applications --> "f5-hello-world" and click "Scale Application". 
+
+    Let's increase the number from 2 to 10 instances and click on "Scale Application".
+
+    .. image:: images/f5-container-connector-scale-application-UI.png
+        :align: center
+
+    Once it is done you should see 10 "healthy instances" running in Marathon UI.
+
+    .. image:: images/f5-container-connector-scale-application-UI-10-done.png
+        :align: center
+
+    You can also check your pool members list on your BIG-IP.
+
+    .. image:: images/f5-container-connector-scale-application-BIGIP-10-done.png
+        :align: center
+
+    As we can see, the Marathon BIG-IP Controller is adapting the pool members setup based on the number of instances delivering this application automatically.
+
+#. Scale back the application to 2 to save ressources for the next labs
