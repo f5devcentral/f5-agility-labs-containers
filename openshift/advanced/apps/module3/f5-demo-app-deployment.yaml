@@ -1,0 +1,18 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: f5-demo-app
+  namespace: f5demo
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: f5-demo-app
+    spec:
+      containers:
+      - name: f5-demo-app
+        image: chen23/f5-demo-app:openshift
+        ports:
+         - containerPort: 8080
+           protocol: TCP

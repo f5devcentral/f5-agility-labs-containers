@@ -19,14 +19,12 @@ lab and access your jump host.
    * Click on the start menu button and type 'Language' in the search field.
    * Click on 'Language' option in the search list
 
-   .. image:: /_static/class3/select-region-language.png
-      :scale: 50 %
+   .. image:: /_static/intro/select-region-language.png
       :align: center
 
    * Click on 'Add a language'
 
-   .. image:: /_static/class3/select-change-keyboard.png
-      :scale: 50 %
+   .. image:: /_static/intro/select-change-keyboard.png
       :align: center
 
    * Add the language you want to have for your keyboard mapping.
@@ -36,6 +34,6 @@ Applications used during lab exercises
 
 Once you have established remote access to your lab environment, launch Google Chrome and mRemoteNG (both have shortcuts on the desktop and taskbar).
 
-  * mRemoteNG has shortcuts pre-defined within the application. To open terminal access to everything in the lab, right click on the appropriate folder, select the host, and click 'Connect'.
+  * mRemoteNG has shortcuts pre-defined within the application. To open terminal access to any host in the lab, double click on the appropriate folder, and double click on the host.
 
-  .. image:: /_static/class3/mesos-lab-mremoteng.png
+  .. image:: /_static/intro/mremoteng.png

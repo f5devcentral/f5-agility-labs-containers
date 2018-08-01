@@ -8,10 +8,10 @@ This installation will utilize Ubuntu v16.04 (Xenial) and **kubeadm**
 
 .. note::  You can find a more thorough installation guide here: `Ubuntu getting started guide 16.04 <http://kubernetes.io/docs/getting-started-guides/kubeadm/>`_
 
-.. important:: The following commands need to be run on all three nodes unless otherwise specified.
-
 Setup
 -----
+
+.. important:: The following commands need to be run on all three nodes unless otherwise specified.
 
 #. From the jumphost open **mRemoteNG** and start a session to each of the following servers. The sessions are pre-configured to connect with the default user “ubuntu”.
 
@@ -19,34 +19,54 @@ Setup
     - kube-node1
     - kube-node2
 
-#. Connect as root
+    .. tip:: These sessions should be running from the previous Docker lab.
 
-    .. code-block:: bash
+    .. image:: images/MremoteNG-1.png
+        :align: center
 
-        su - (passwd = default)
+#. If not already done from the previous Docker lab elivate to "root"
 
-#. Edit /etc/hosts and add the following static hosts entries
+    .. code-block:: console
 
-    .. code-block:: bash
+        su - ( when prompted for password enter "default" without the quotes )
 
-        vim /etc/hosts
+    Your prompt should change to root@ at the start of the line :
 
-        ...and add the following lines to the bottom of the file
+    .. image:: images/rootuser.png
+        :align: center
 
-        10.1.10.21    kube-master
-        10.1.10.22    kube-node1
-        10.1.10.23    kube-node2
+#. For your conveniance we've already added the host IP & names to /etc/hosts.  Verify the file
+
+    .. code-block:: console
+
+        cat /etc/hosts
 
     The file should look like this:
 
     .. image:: images/ubuntu-hosts-file.png
         :align: center
+    
+    If not there add the following lines to the bottom of the file with "vim /etc/hosts"
 
-#. Disable linux swap file
+    .. code-block:: console
+
+        10.1.10.21    kube-master
+        10.1.10.22    kube-node1
+        10.1.10.23    kube-node2
+
+#. The linux swap file needs to be disabled, this is not the case by default.  Again for your convenience we disabled swap.  Verify the setting
 
     .. important:: Running a swap file is incompatible with Kubernetes
 
-    .. code-block:: bash
+    .. code-block:: console
+
+        top
+    
+    .. image:: images/top.png
+
+    If you see a number other than "0" you need to run the following commands
+
+    .. code-block:: console
 
         swapoff -a
         
@@ -57,58 +77,44 @@ Setup
     .. image:: images/disable-swap.png
         :align: center
 
-#. To ensure the OS is up to date, run the following command
+#. Ensure the OS is up to date, run the following command
 
-    .. code-block:: bash
+    .. tip:: You can skip this step if it was done in the previous Docker lab.
+
+    .. code-block:: console
 
         apt update && apt upgrade -y
 
+        (This can take a few seconds to a minute depending on demand to download the latest updates for the OS)
+
 #. Install docker-ce
 
-    .. note:: This was done earlier in `Class 1 / Module2: Install Docker <../../class1/module2/module2.html>`_.  If skipped go back and install Docker.
+    .. attention:: This was done earlier in `Class 1 / Module2: Install Docker <../../class1/module2/module2.html>`_.  If skipped go back and install Docker by clicking the link.
 
-    #. Add the docker repo
+#. Configure docker to use the correct cgroupdriver
 
-        .. code-block:: bash
+    .. important:: The cgroupdrive for docker and kubernetes have to match.  In this lab "cgroupfs" is the correct driver.
 
-            curl \-fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add \-
+    .. note:: This next part can be a bit tricky - just cut/paste the 5 lines below exactly as they are and paste via buffer to the CLI (and press return when done)
 
-            add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+    .. code-block:: console
 
-    #. Install the docker packages
+        cat << EOF > /etc/docker/daemon.json
+        {
+        "exec-opts": ["native.cgroupdriver=cgroupfs"]
+        }
+        EOF
 
-        .. code-block:: bash
-            
-            apt update && apt install docker-ce -y
+    It should look something like this image below:
 
-    #. Configure docker to use the correct cgroupdriver
-
-        .. important:: The cgroupdrive for docker and kubernetes have to match.  In this lab "cgroupfs" is the correct driver.
-
-        .. code-block:: bash
-            
-            cat << EOF > /etc/docker/daemon.json
-            {
-            "exec-opts": ["native.cgroupdriver=cgroupfs"]
-            }
-            EOF
-
-    #. Verify docker is up and running
-
-        .. code-block:: bash
-
-            docker run hello-world
-
-        If everything is working properly you should see the following message
-
-        .. image:: images/docker-hello-world-yes.png
-          :align: center
+    .. image:: images/goodEOL.png
+        :align: center
 
 #. Install Kubernetes
 
     #. Add the kubernetes repo
 
-        .. code-block:: bash
+        .. code-block:: console
 
             curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
             
@@ -118,7 +124,7 @@ Setup
 
     #. Install the kubernetes packages
 
-        .. code-block:: bash
+        .. code-block:: console
             
             apt update && apt install kubelet kubeadm kubectl -y
 

@@ -1,0 +1,20 @@
+{
+  "id": "f5/marathon-bigip-ctlr",
+  "cpus": 0.5,
+  "mem": 64.0,
+  "instances": 1,
+  "container": {
+    "type": "DOCKER",
+    "docker": {
+      "image": "f5networks/marathon-bigip-ctlr:latest",
+      "network": "BRIDGE"
+    }
+  },
+  "env": {
+    "MARATHON_URL": "http://10.2.10.10:8080",
+    "F5_CC_PARTITIONS": "mesos",
+    "F5_CC_BIGIP_HOSTNAME": "10.2.10.60",
+    "F5_CC_BIGIP_USERNAME": "admin",
+    "F5_CC_BIGIP_PASSWORD": "admin"
+  }
+}

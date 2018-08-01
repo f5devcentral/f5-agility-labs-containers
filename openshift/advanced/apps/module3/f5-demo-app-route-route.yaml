@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: Route
+metadata:
+  labels:
+    name: f5-demo-app-route
+  name: f5-demo-app-route
+  namespace: f5demo
+  annotations:
+    # Specify a supported BIG-IP load balancing mode
+    virtual-server.f5.com/balance: least-connections-node
+    virtual-server.f5.com/health: |
+      [
+        {
+          "path": "mysite.f5demo.com/",
+          "send": "HTTP GET /",
+          "interval": 5,
+          "timeout": 10
+        }
+      ]
+spec:
+  host: mysite.f5demo.com
+  path: "/"
+  port:
+    targetPort: 8080
+  to:
+    kind: Service
+    name: f5-demo-app-route
