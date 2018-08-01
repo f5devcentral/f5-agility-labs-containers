@@ -391,8 +391,7 @@ bigip01-cc.yaml
                       key: password
           command: ["/app/bin/k8s-bigip-ctlr"]
           args: [
-            "--bigip-username=$(BIGIP_USERNAME)",
-            "--bigip-password=$(BIGIP_PASSWORD)",
+            "--credentials-directory=/tmp/creds",
             "--bigip-url=10.10.200.98",
             "--bigip-partition=ocp",
             "--pool-member-type=cluster",
@@ -445,8 +444,7 @@ bigip02-cc.yaml
                       key: password
           command: ["/app/bin/k8s-bigip-ctlr"]
           args: [
-            "--bigip-username=$(BIGIP_USERNAME)",
-            "--bigip-password=$(BIGIP_PASSWORD)",
+            "--credentials-directory=/tmp/creds",
             "--bigip-url=10.10.200.99",
             "--bigip-partition=ocp",
             "--pool-member-type=cluster",
