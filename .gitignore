@@ -2,3 +2,5 @@ docs/_build/*
 media
 *.docx
 pdf/*
+LICENSE.md
+TERMS_OF_USE.md
