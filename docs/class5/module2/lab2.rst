@@ -252,9 +252,7 @@ The BIG-IP OpenShift Controller cannot manage objects in the /Common partition. 
 
 **Step 3.6:** Creating floating IP for overlay network
 
-Note: Should the traffic group be configured as a traffic-group-local-only (non-floating) or traffic-group-1 (floating)?
-
-* ssh root@10.10.200.98 tmsh create net self 10.131.4.200/14 vlan ocp-tunnel
+* ssh root@10.10.200.98 tmsh create net self 10.131.4.200/14 vlan ocp-tunnel traffic-group-1
 * ssh root@10.10.200.98 tmsh run cm config-sync to-group ocp-devicegroup
 
 **Step 3.7:** Saving configuration
