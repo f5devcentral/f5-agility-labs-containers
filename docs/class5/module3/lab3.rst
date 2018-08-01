@@ -1004,9 +1004,3 @@ Using the Chrome browser, navigate to **Local Traffic -> Network Map** and chang
 The network map view shows that the two virtual servers that you previously created have not been deleted by the Container Connector.  At this point, you could make changes to either of the two virtual servers and those changes will not be removed by the Container Connector.
 
 
-
-
-Excercise #5: Container Connector Troubleshooting
--------------------------------------------------
-
-
