@@ -1,0 +1,28 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: k8s-bigip-ctlr
+  namespace: guestbook
+spec:
+  replicas: 1
+  template:
+    metadata:
+      name: k8s-bigip-ctlr
+      labels:
+        app: k8s-bigip-ctlr
+    spec:
+      containers:
+        - name: k8s-bigip-ctlr
+          image: "f5networks/k8s-bigip-ctlr:latest"
+          command: ["/app/bin/k8s-bigip-ctlr"]
+          args: [
+            "--bigip-username=admin",
+            "--bigip-password=admin",
+            "--bigip-url=10.105.157.201",
+            "--bigip-partition=guestbook",
+            "--namespace=guestbook",
+            "--pool-member-type=cluster"
+          ]
+      imagePullSecrets:
+        - name: f5-docker-images
+

@@ -1,0 +1,40 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  # name of the resource to create on the BIG-IP
+  name: k8s.poolonly
+  # the namespace to create the object in
+  # As of v1.1, the k8s-bigip-ctlr watches all namespaces by default
+  # If the k8s-bigip-ctlr is watching a specific namespace(s),
+  # this setting must match the namespace of the Service you want to proxy
+  # -AND- the namespace(s) the k8s-bigip-ctlr watches
+  namespace: f5demo
+  labels:
+    # the type of resource you want to create on the BIG-IP
+    f5type: virtual-server
+data:
+  schema: "f5schemadb://bigip-virtual-server_v0.1.3.json"
+  data: |
+    {
+      "virtualServer": {
+        "backend": {
+          "servicePort": 8080,
+          "serviceName": "f5demo",
+          "healthMonitors": [{
+            "interval": 3,
+            "protocol": "http",
+            "send": "GET /\r\n",
+            "timeout": 10
+          }]
+        },
+        "frontend": {
+          "virtualAddress": {
+            "port": 80
+          },
+          "partition": "ocp",
+          "balance": "round-robin",
+          "mode": "http"
+        }
+      }
+    }
+

@@ -1,0 +1,33 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: f5-demo-app-route
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: f5-demo-app-route
+    spec:
+      containers:
+      - name: f5-demo-app-route
+        image: chen23/f5-demo-app:openshift
+        ports:
+         - containerPort: 8080
+           protocol: TCP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: f5-demo-app-route
+  labels:
+    name: f5-demo-app-route
+  namespace: f5demo
+spec:
+  type: ClusterIP
+  ports:
+  - port: 8080
+    targetPort: 8080
+  selector:
+    app: f5-demo-app-route
+

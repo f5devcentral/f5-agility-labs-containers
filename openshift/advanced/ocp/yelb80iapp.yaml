@@ -1,0 +1,76 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: f5k8siapp.http
+  namespace: yelb
+  labels:
+    f5type: virtual-server
+data:
+  schema: "f5schemadb://bigip-virtual-server_v0.1.3.json"
+  data: |
+    {
+      "virtualServer": {
+        "backend": {
+          "serviceName": "yelb-ui",
+          "servicePort": 80
+        },
+        "frontend": {
+          "partition": "ocp",
+          "iapp": "/Common/appsvcs_integration_v2.0.004",
+          "iappPoolMemberTable": {
+            "name": "pool__Members",
+            "columns": [
+                {"name": "IPAddress", "kind": "IPAddress"},
+                {"name": "Port", "kind": "Port"},
+                {"name": "connection_limit", "value": "0"}
+            ]
+          },
+          "iappOptions": {
+            "description": "appsvc iApp"
+          },
+          "iappVariables": {
+            "iapp__strictUpdates":"disabled",
+            "pool__mask":"255.255.255.255",
+            "iapp__appStats":"enabled",
+            "iapp__mode":"auto",
+            "iapp__logLevel":"9",
+            "iapp__routeDomain":"auto",
+            "iapp__asmDeployMode":"preserve-bypass",
+            "iapp__apmDeployMode":"preserve-bypass",
+            "pool__DefaultPoolIndex":"0",
+            "pool__MemberDefaultPort":"80",
+            "vs__RouteAdv":"disabled",
+            "vs__SourceAddress":"0.0.0.0/0",
+            "vs__IpProtocol":"tcp",
+            "vs__ConnectionLimit":"0",
+            "vs__ProfileClientProtocol":"/Common/tcp-wan-optimized",
+            "vs__ProfileServerProtocol":"/Common/tcp-lan-optimized",
+            "vs__SNATConfig":"automap",
+            "vs__ProfileSecurityIPBlacklist":"none",
+            "vs__OptionSourcePort":"preserve",
+            "vs__OptionConnectionMirroring":"disabled",
+            "vs__Name":"YelbDemoiAPP",
+            "l7policy__strategy":"/Common/first-match",
+            "l7policy__defaultASM":"bypass",
+            "l7policy__defaultL7DOS":"bypass",
+            "feature__statsTLS":"auto",
+            "feature__statsHTTP":"auto",
+            "feature__insertXForwardedFor":"auto",
+            "feature__redirectToHTTPS":"auto",
+            "feature__sslEasyCipher":"disabled",
+            "feature__securityEnableHSTS":"disabled",
+            "feature__easyL4Firewall":"disabled",
+            "vs__IpProtocol":"tcp",
+            "vs__SNATConfig":"automap",
+            "vs__ProfileHTTP":"/Common/http",
+            "vs__ProfileOneConnect":"/Common/oneconnect" ,
+            "vs__ProfileCompression":"/Common/httpcompression",
+            "vs__ProfileDefaultPersist":"/Common/cookie",
+            "vs__ProfileFallbackPersist":"/Common/source_addr",
+            "pool__addr": "10.10.201.202",
+            "pool__pool_to_use": "/#create_new#",
+            "pool__port": "80"
+             }
+             }
+             }
+    }

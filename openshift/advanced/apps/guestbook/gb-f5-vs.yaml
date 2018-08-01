@@ -1,0 +1,41 @@
+
+# te: Remove all comments before uploading to kubernetes
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  # name of the resource to create on the BIG-IP
+  name: gb-k8s.vs
+  # the namespace to create the object in; must match the namespace of the
+  # service you want to proxy and the namespace the k8s-bigip-ctlr is
+  # configured to watch
+  namespace: guestbook
+  labels:
+    # the type of resource you want to create on the BIG-IP
+    f5type: virtual-server
+data:
+  schema: "f5schemadb://bigip-virtual-server_v0.1.2.json"
+  data: |
+    {
+      "virtualServer": {
+        "backend": {
+          "servicePort": 80,
+          "serviceName": "frontend",
+          "healthMonitors": [{
+            "interval": 5,
+            "protocol": "http",
+            "send": "GET",
+            "timeout": 16
+          }]
+        },
+        "frontend": {
+          "virtualAddress": {
+            "port": 80,
+            "bindAddr": "10.105.156.132"
+          },
+          "partition": "guestbook",
+          "balance": "round-robin",
+          "mode": "http"
+        }
+      }
+    }
+
