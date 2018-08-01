@@ -24,7 +24,7 @@ In the environment, there is a three-node OpenShift cluster with one master and 
     - **Login / Password**
   * - Windows Jumpbox
     - 10.10.200.199
-    - student/Student!Agility!
+    - user/Student!Agility!
   * - BIG-IP
     - 10.10.200.98
     - GUI: admin/admin
