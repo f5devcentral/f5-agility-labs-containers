@@ -19,7 +19,6 @@ metadata:
       ]
 spec:
   host: mysite-bg.f5demo.com
-  path: "/"
   port:
     targetPort: 80
   to:
