@@ -1,5 +1,5 @@
-Section 1.1 Welcome to OpenShift!
-=================================
+Module 1: Welcome to OpenShift!
+================================
 
 This lab guide is the F5 Advanced Labs for Red Hat OpenShift Container Platform (OCP). This lab guide and blueprint was created using OCP version 3.7. This lab provides a quick tour of the console to help you get familiar with the user interface along with some key terminology we will use in subsequent lab content.
 
@@ -121,7 +121,7 @@ To list all nodes that are known to the master:
      ose-node02            Ready                      24d       v1.7.6+a08f5eeb62
      [root@ose-mstr01 ~]#
      
-If the status shows **NotReady** or **SchedulingDisabled** contact the lab proctor. The The node is not passing the health checks performed from the master and Pods cannot be scheduled for placement on the node. 
+If the **node** status shows **NotReady** or **SchedulingDisabled** contact the lab proctor. The node is not passing the health checks performed from the master and Pods cannot be scheduled for placement on the node. SchedulingDisabled for the **Master** is normal.
 
 .. code-block:: console
 
@@ -235,7 +235,7 @@ You will be using these projects in the lab
      
 **Step 8:** Access OpenShift web console
 
-Navigate to the URI provided by your instructor and login with the user/password provided (there is favorite on chrome)
+From the jumpbox navigate to the URI provided by your instructor and login with the user/password provided (there is favorite on chrome).
 
 Use the following username and password
 username: **demouser**
@@ -243,8 +243,8 @@ password: **demouser**
 
 .. image:: /_static/class5/webconsole.png
 
-Section 1.2 Troubbleshooting OpenShift!
---------------------------------------------------------
+Troubleshooting OpenShift!
+--------------------------
 
 If you have a problem in your OpenShift Container Platform 3 environment how do you investigate
 

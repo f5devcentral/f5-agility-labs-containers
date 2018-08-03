@@ -1,5 +1,5 @@
-Section 2.1 Working with BIG-IP HA pairs or device groups
-=========================================================
+Module 2: Working with BIG-IP HA Pairs or Device Groups
+=======================================================
 
 Each Container Connector is uniquely suited to its specific container orchestration environment and purpose, utilizing the architecture and language appropriate for the environment. Application Developers interact with the platform’s API; the CCs watch the API for certain events, then act accordingly.
 
@@ -18,7 +18,7 @@ You can use the F5 Container Connectors to manage a BIG-IP HA active-standby pai
 
 .. image:: /_static/class5/ha-cluster.jpg
 
-BIG-IP config sync
+BIG-IP Config Sync
 ------------------
 
 **Important**
@@ -60,8 +60,8 @@ Complete the steps below to set up the solution shown in the diagram. Be sure to
 
 .. _openshift initial bigip setup ha:
 
-Openshift initial bigip setup ha
---------------------------------
+Openshift Initial BIG-IP Setup HA
+---------------------------------
 
 **Step 1:**
 
@@ -141,7 +141,7 @@ The diagram below displays the BIG-IP deployment with the OpenShift cluster in H
 
 .. _add bigip devices openshift ha:
 
-Upload the HostSubnet files to the OpenShift API server
+Upload the HostSubnet Files to the OpenShift API Server
 -------------------------------------------------------
 
 **Step 2:** Create a new OpenShift HostSubnet
@@ -220,7 +220,7 @@ Verify creation of the HostSubnets:
 
 .. _openshift vxlan setup ha:
 
-Set up the VXLAN on the BIG-IP devices
+Set up the VXLAN on the BIG-IP Devices
 --------------------------------------
 
 **Step 3.1:** Create a new partition on your BIG-IP system
@@ -252,7 +252,7 @@ The BIG-IP OpenShift Controller cannot manage objects in the /Common partition. 
 
 **Step 3.6:** Creating floating IP for overlay network
 
-* ssh root@10.10.200.98 tmsh create net self 10.131.4.200/14 vlan ocp-tunnel traffic-group-1
+* ssh root@10.10.200.98 tmsh create net self 10.131.4.200/14 vlan ocp-tunnel traffic-group traffic-group-1
 * ssh root@10.10.200.98 tmsh run cm config-sync to-group ocp-devicegroup
 
 **Step 3.7:** Saving configuration
@@ -295,8 +295,10 @@ You can create RBAC resources in the project in which you will run your BIG-IP C
 **Step 4.1:** Create a Service Account for the BIG-IP Controller
 
 .. code-block:: console
+     
+     oc create serviceaccount bigip-ctlr -n kube-system
 
-     [root@ose-mstr01 ocp]# **oc create serviceaccount bigip-ctlr [-n kube-system]**
+     [root@ose-mstr01 ocp]# oc create serviceaccount bigip-ctlr -n kube-system
      serviceaccount "bigip-ctlr" created
 
 **Step 4.2:** Create a Cluster Role and Cluster Role Binding with the required permissions.
@@ -342,7 +344,7 @@ Use the oc create -f f5-kctlr-openshift-clusterrole.yaml
 
 .. code-block:: console
 
-     [root@ose-mstr01 ocp]# **oc create -f f5-kctlr-openshift-clusterrole.yaml**
+     [root@ose-mstr01 ocp]# oc create -f f5-kctlr-openshift-clusterrole.yaml
      clusterrole "system:bigip-ctlr" created
      clusterrolebinding "bigip-ctlr-role" created
 
@@ -567,7 +569,7 @@ pool-only.yaml
 
 Validate that bigip01 and bigip02 so the updated pool member count and they keepalives work. If the keepalives are failing check the tunnel and selfIP
 
-Validation and troubleshooting
+Validation and Troubleshooting
 ------------------------------
 
 Now that you have HA configured and uploaded the deployment its time to generate traffic through bigip. 
@@ -602,12 +604,12 @@ Create the modified pool-only deployment
      [root@ose-mstr01 ocp]# oc create -f pool-only.yaml
      configmap "k8s.poolonly" created
 
-Connect to the virtual server at http://10.10.201.220. Does the connection work? If not, try the following troubleshooting options
+Connect to the virtual server at http://10.10.201.220. Does the connection work If not, try the following troubleshooting options:
 
-1) Capture the http request to see if the connection is established with the bigip
-2) Follow the following networking troubleshooting Tasks
+  1) Capture the http request to see if the connection is established with the bigip
+  2) Follow the following network troubleshooting section
 
-Network troubleshooting
+Network Troubleshooting
 -----------------------
 
 How do I verify connectivity between the BIG-IP VTEP and the OSE Node?
@@ -693,15 +695,3 @@ Connect to the viutal IP address
 Test failover and make sure you can connect to the virtual. 
 
 Congraulation for completeing the HA clusterting setup. Please move next module. 
-
-
-
-
-
-
-
-
-
-
-
-
