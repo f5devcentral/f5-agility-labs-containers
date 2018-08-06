@@ -19,9 +19,12 @@ Lab 1.2 Run a Container on Docker
 
           ``-P`` "tells docker to auto assign any required ephemeral port and map it to the container"
 
+          The below process will first look for a local cache of the container httpd, and upon comparing that copy to the latest instance, decide to either download an update or use the local copy.  Since there is no local copy, docker will download the container httpd to your local cache.  This can take a few seconds (or longer), depending on container size and your bandwidth.  Docker will chunk this into parts called a pull.
+
     .. code-block:: console
 
         docker run --rm --name "myapache" -d -it -P httpd:latest
+
 
 #. If everything is working properly you should see your container running.
 
@@ -44,3 +47,6 @@ Lab 1.2 Run a Container on Docker
 
     .. image:: images/myapache.png
         :align: center
+
+
+Thats it, you installed docker, downloaded a container,  ran the Hello World container, ran a web server container, and accessed your web server container via the broswer.
