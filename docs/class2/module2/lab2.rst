@@ -153,11 +153,13 @@ To install the UI you have two options:
 
 #. "git" the demo files
 
+    .. note:: These files should be here by default, if **NOT** run the following commands.
+
     .. code-block:: bash
 
-        git clone -b develop https://github.com/iluvpcs/f5-agility-labs-containers.git /home/ubuntu/f5-agility-labs-containers
+        git clone https://github.com/f5devcentral/f5-agility-labs-containers.git ~/agilitydocs
 
-    .. note:: These files will be used to complete this section and needed later to complete the class.
+        cd ~/agilitydocs/kubernetes
 
 #. Run the following commands to configure the UI
 

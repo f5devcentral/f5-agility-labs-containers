@@ -53,13 +53,13 @@ Now that BIG-IP is licensed and prepped with the "kubernetes" partition, we need
 
 #. "git" the demo files
 
-    .. tip:: You did this earlier in the "Install the Kubernetes UI" section.
+    .. note:: These files should be here by default, if **NOT** run the following commands.
 
-    .. code-block:: console
+    .. code-block:: bash
 
-        git clone -b develop https://github.com/iluvpcs/f5-agility-labs-containers.git /home/ubuntu/f5-agility-labs-containers
+        git clone https://github.com/f5devcentral/f5-agility-labs-containers.git ~/agilitydocs
 
-        cd /home/ubuntu/f5-agility-labs-containers/kubernetes
+        cd ~/agilitydocs/kubernetes
 
 #. Create bigip login secret
 
