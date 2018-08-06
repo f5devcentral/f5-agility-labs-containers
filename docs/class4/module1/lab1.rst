@@ -82,12 +82,14 @@ Now that BIG-IP is licensed and prepped with the "ose" partition, we need to def
 
 #. "git" the demo files
 
-    .. code-block:: console
+    .. note:: These files should be here by default, if **NOT** run the following commands.
 
-        git clone -b develop https://github.com/iluvpcs/f5-agility-labs-containers.git /root/f5-agility-labs-containers
+    .. code-block:: bash
+
+        git clone https://github.com/f5devcentral/f5-agility-labs-containers.git ~/agilitydocs
         
-        cd /root/f5-agility-labs-containers/openshift
-        
+        cd ~/agilitydocs/openshift
+
 #. Log in with an Openshift Client.
 
     .. note:: Here we're using a prebuilt user "demouser" and prompted for a password, which is: demouser
