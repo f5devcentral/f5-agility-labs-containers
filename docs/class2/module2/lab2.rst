@@ -14,7 +14,7 @@ The master is the system where the "control plane" components run, including etc
 
 #. Initialize kubernetes
 
-    .. code-block:: bash
+    .. code-block:: console
 
         kubeadm init --apiserver-advertise-address=10.1.10.21 --pod-network-cidr=10.244.0.0/16
 
@@ -36,7 +36,7 @@ The master is the system where the "control plane" components run, including etc
 
 #. Configure kubernetes administration. At this point you should be logged in as root. The following will update both root and ubuntu user accounts for kubernetes administration.
 
-    .. code-block:: bash
+    .. code-block:: console
         
         mkdir -p $HOME/.kube
         sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
@@ -48,7 +48,7 @@ The master is the system where the "control plane" components run, including etc
 
 #. Verify kubernetes is up and running.  You can monitor the services are running by using the following command.  
 
-    .. code-block:: bash
+    .. code-block:: console
 
         kubectl get pods --all-namespaces
 
@@ -61,7 +61,7 @@ The master is the system where the "control plane" components run, including etc
 
 #. Install flannel
 
-    .. code-block:: bash
+    .. code-block:: console
 
         kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
 
@@ -69,7 +69,7 @@ The master is the system where the "control plane" components run, including etc
 
 #. If everything installs and starts as expected you should have "coredns" and all services status "Running". To check the status of core services, you can run the followin command:
 
-    .. code-block:: bash
+    .. code-block:: console
 
         kubectl get pods --all-namespaces
 
@@ -82,14 +82,14 @@ The master is the system where the "control plane" components run, including etc
 
 #.  Addional kubernetes checks.
 
-    .. code-block:: bash
+    .. code-block:: console
 
         kubectl get cs
 
     .. image:: images/cluster-setup-guide-kubeadmin-init-check-cluster.png
         :align: center
 
-    .. code-block:: bash
+    .. code-block:: console
 
         kubectl cluster-info
 
@@ -107,7 +107,7 @@ Once the master is setup and running, we need to join our *nodes* to the cluster
 
     .. warning:: This is just an example. You should have saved this command after successfully initializing the master.
 
-    .. code-block:: bash
+    .. code-block:: console
 
         kubeadm join 10.1.10.21:6443 --token 12rmdx.z0cbklfaoixhhdfj --discovery-token-ca-cert-hash sha256:c624989e418d92b8040a1609e493c009df5721f4392e90ac6b066c304cebe673
 
@@ -118,7 +118,7 @@ Once the master is setup and running, we need to join our *nodes* to the cluster
 
 #. To verify the *nodes* have joined the cluster, run the following command on the **master**:
 
-    .. code-block:: bash
+    .. code-block:: console
 
         kubectl get nodes
 
@@ -130,7 +130,7 @@ Once the master is setup and running, we need to join our *nodes* to the cluster
 
 #. Verify all the services are started as expected (run on the **master**):
 
-    .. code-block:: bash
+    .. code-block:: console
 
         kubectl get pods --all-namespaces
 
@@ -155,7 +155,7 @@ To install the UI you have two options:
 
     .. note:: These files should be here by default, if **NOT** run the following commands.
 
-    .. code-block:: bash
+    .. code-block:: console
 
         git clone https://github.com/f5devcentral/f5-agility-labs-containers.git ~/agilitydocs
 
@@ -165,7 +165,7 @@ To install the UI you have two options:
 
     .. note:: A script is included in the cloned git repo from the previous step.  In the interest of time you can simply use the script.
 
-    .. code-block:: bash
+    .. code-block:: console
 
         cd /home/ubuntu/f5-agility-labs-containers/kubernetes
 
@@ -173,7 +173,7 @@ To install the UI you have two options:
 
     or run through the following steps:
 
-    .. code-block:: bash
+    .. code-block:: console
 
         kubectl create serviceaccount kubernetes-dashboard -n kube-system
         
@@ -190,13 +190,13 @@ To install the UI you have two options:
 
     Apply Kubernetes manifest file:
     
-    .. code-block:: bash
+    .. code-block:: console
 
          kubectl apply -f kube-dashboard.yaml
 
 #. To access the dashboard, you need to see which port it is listening on. You can find this information with the following command:
 
-    .. code-block:: bash
+    .. code-block:: console
 
         kubectl describe svc kubernetes-dashboard -n kube-system
 
