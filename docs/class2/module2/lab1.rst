@@ -45,7 +45,7 @@ Setup
 
     .. image:: images/ubuntu-hosts-file.png
         :align: center
-    
+
     If not there add the following lines to the bottom of the file with "vim /etc/hosts"
 
     .. code-block:: console
@@ -56,21 +56,22 @@ Setup
 
 #. The linux swap file needs to be disabled, this is not the case by default.  Again for your convenience we disabled swap.  Verify the setting
 
-    .. important:: Running a swap file is incompatible with Kubernetes
+    .. important:: Running a swap file is incompatible with Kubernetes.  Lets use the linux top command, which allows users to monitor processes and system resource usage
+
 
     .. code-block:: console
 
         top
-    
+
     .. image:: images/top.png
 
-    If you see a number other than "0" you need to run the following commands
+    If you see a number other than "0" you need to run the following commands (else press q to quit top)
 
     .. code-block:: console
 
         swapoff -a
-        
-        vim /etc/fstab 
+
+        vim /etc/fstab
 
         and rem out the highlighted line below by adding "#" to the beginning of the line, write and save the file, ":wq"
 
@@ -117,7 +118,7 @@ Setup
         .. code-block:: console
 
             curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
-            
+
             cat <<EOF > /etc/apt/sources.list.d/kubernetes.list
             deb http://apt.kubernetes.io/ kubernetes-xenial main
             EOF
@@ -125,7 +126,7 @@ Setup
     #. Install the kubernetes packages
 
         .. code-block:: console
-            
+
             apt update && apt install kubelet kubeadm kubectl -y
 
 Limitations

@@ -84,7 +84,7 @@ Now that BIG-IP is licensed and prepped with the "ose" partition, we need to def
 
     .. note:: These files should be here by default, if **NOT** run the following commands.
 
-    .. code-block:: bash
+    .. code-block:: console
 
         git clone https://github.com/f5devcentral/f5-agility-labs-containers.git ~/agilitydocs
         

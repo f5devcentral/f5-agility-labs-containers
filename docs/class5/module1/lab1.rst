@@ -121,7 +121,9 @@ To list all nodes that are known to the master:
      ose-node02            Ready                      24d       v1.7.6+a08f5eeb62
      [root@ose-mstr01 ~]#
      
-If the **node** status shows **NotReady** or **SchedulingDisabled** contact the lab proctor. The node is not passing the health checks performed from the master and Pods cannot be scheduled for placement on the node. SchedulingDisabled for the **Master** is normal.
+If the **node** status shows **NotReady** or **SchedulingDisabled** contact the lab proctor. The node is not passing the health checks performed from the master and Pods cannot be scheduled for placement on the node.
+
+.. note:: "SchedulingDisabled" for the **Master** is normal.
 
 .. code-block:: console
 
@@ -242,6 +244,7 @@ username: **demouser**
 password: **demouser**
 
 .. image:: /_static/class5/webconsole.png
+    :align: center
 
 Troubleshooting OpenShift!
 --------------------------

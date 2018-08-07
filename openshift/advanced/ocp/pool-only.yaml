@@ -13,7 +13,7 @@ metadata:
     # the type of resource you want to create on the BIG-IP
     f5type: virtual-server
 data:
-  schema: "f5schemadb://bigip-virtual-server_v0.1.3.json"
+  schema: "f5schemadb://bigip-virtual-server_v0.1.7.json"
   data: |
     {
       "virtualServer": {

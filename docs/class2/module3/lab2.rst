@@ -47,7 +47,7 @@ On the **kube-master** we will create all the required files:
 
 #. We can now launch our application:
 
-    .. code-block:: bash
+    .. code-block:: console
 
         kubectl create -f f5-hello-world-deployment.yaml
         kubectl create -f f5-hello-world-configmap.yaml
@@ -58,14 +58,14 @@ On the **kube-master** we will create all the required files:
 
 #. To check the status of our deployment, you can run the following commands:
 
-    .. code-block:: bash
+    .. code-block:: console
 
         kubectl get pods -o wide
 
     .. image:: images/f5-hello-world-pods.png
         :align: center
 
-    .. code-block:: bash
+    .. code-block:: console
 
         kubectl describe svc f5-hello-world
         
@@ -106,7 +106,7 @@ On the **kube-master** we will create all the required files:
 
 #. How is traffic forwarded in Kubernetes from the <node IP>:30507 to the <container IP>:8080? This is done via iptables that is managed via the kube-proxy instances. On either of the nodes, ssh in and run the following command:
 
-    .. code-block:: bash
+    .. code-block:: console
 
         sudo iptables-save | grep f5-hello-world
 
