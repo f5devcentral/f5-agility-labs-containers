@@ -27,7 +27,7 @@ The master is the system where the "control plane" components run, including etc
     .. image:: images/cluster-setup-guide-kubeadm-init-master.png
         :align: center
 
-    .. important:: Be sure to save the highlighted output from this command to notepad. You'll need this to add your worker nodes and configure user administration.
+    .. important:: Be sure to save the highlighted output from this command to notepad and save for use in this lab. You'll need this to add your worker nodes and configure user administration.
 
     .. image:: images/cluster-setup-guide-kubeadm-init-master-join.png
         :align: center
@@ -37,7 +37,7 @@ The master is the system where the "control plane" components run, including etc
 #. Configure kubernetes administration. At this point you should be logged in as root. The following will update both root and ubuntu user accounts for kubernetes administration.
 
     .. code-block:: console
-        
+
         mkdir -p $HOME/.kube
         sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
         sudo chown $(id -u):$(id -g) $HOME/.kube/config
@@ -46,7 +46,7 @@ The master is the system where the "control plane" components run, including etc
         sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
         sudo chown $(id -u):$(id -g) $HOME/.kube/config
 
-#. Verify kubernetes is up and running.  You can monitor the services are running by using the following command.  
+#. Verify kubernetes is up and running.  You can monitor the services are running by using the following command.
 
     .. code-block:: console
 
@@ -65,7 +65,7 @@ The master is the system where the "control plane" components run, including etc
 
         kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
 
-    .. note:: You must install a *pod* network add-on so that your *pods* can communicate with each other. **It is necessary to do this before you try to deploy any applications to your cluster**, and before "coredns" will start up. 
+    .. note:: You must install a *pod* network add-on so that your *pods* can communicate with each other. **It is necessary to do this before you try to deploy any applications to your cluster**, and before "coredns" will start up.
 
 #. If everything installs and starts as expected you should have "coredns" and all services status "Running". To check the status of core services, you can run the followin command:
 
@@ -176,20 +176,20 @@ To install the UI you have two options:
     .. code-block:: console
 
         kubectl create serviceaccount kubernetes-dashboard -n kube-system
-        
+
         kubectl create clusterrolebinding kubernetes-dashboard --clusterrole=cluster-admin --serviceaccount=kube-system:kubernetes-dashboard
-    
+
     .. warning:: These commands create a service account with full admin rights.  In a typical deployment this would be overkill.
 
     Create a file called kube-dashboard.yaml with the following content:
-    
+
     .. literalinclude:: ../../../kubernetes/kube-dashboard.yaml
         :language: yaml
         :linenos:
         :emphasize-lines: 3,23,54,65
 
     Apply Kubernetes manifest file:
-    
+
     .. code-block:: console
 
          kubectl apply -f kube-dashboard.yaml
