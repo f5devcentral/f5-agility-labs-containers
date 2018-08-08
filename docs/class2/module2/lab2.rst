@@ -218,4 +218,4 @@ To install the UI you have two options:
         :align: center
 
 
-CONGRATUATIONS!  You just did the hardest part of todays lab - building a Kubernetes cluster.  While we didn't dive deep into details for every command you ran due to time of other labs we need to complete today.  This is the steps to build your own cluster with a few linux boxes in your own lab, all this content is publicaly online/available at clouddocs.f5.com. 
+CONGRATUATIONS!  You just did the hardest part of todays lab - building a Kubernetes cluster.  While we didn't cover each step in great detail, due to time of other labs we need to complete today, this is one path to the overall steps to build your own cluster with a few linux boxes in your own lab.  All this content is publicaly online/available at clouddocs.f5.com. 

@@ -38,7 +38,7 @@ Container Connector Deployment
 
 .. note:: For a more thorough explanation of all the settings and options see `F5 Container Connector - Kubernetes <https://clouddocs.f5.com/containers/v2/kubernetes/>`_
 
-Now that BIG-IP is licensed and prepped with the "kubernetes" partition, we need to define a `Kubernetes deployment <https://kubernetes.io/docs/user-guide/deployments/>`_ and create a `Kubernetes secret <https://kubernetes.io/docs/user-guide/secrets/>`_ to hide our bigip credentials. 
+Now that BIG-IP is licensed and prepped with the "kubernetes" partition, we need to define a `Kubernetes deployment <https://kubernetes.io/docs/user-guide/deployments/>`_ and create a `Kubernetes secret <https://kubernetes.io/docs/user-guide/secrets/>`_ to hide our bigip credentials.
 
 #. From the jumphost open **mRemoteNG** and start a session with Kube-master.
 
@@ -99,9 +99,9 @@ Now that BIG-IP is licensed and prepped with the "kubernetes" partition, we need
 
     .. important:: This lab will focus on **Nodeport**.  In Class 4 Openshift we'll use **ClusterIP**.
 
-#. **Nodeport mode** ``f5-nodeport-deployment.yaml``. 
+#. **Nodeport mode** ``f5-nodeport-deployment.yaml``.
 
-    .. note:: For your convenience the file can be found in /home/ubuntu/f5-agility-labs-containers/kubernetes (downloaded earlier in the clone git repo step).
+    .. note:: For your convenience the file can be found in /home/ubuntu/agilitydocs/kubernetes (downloaded earlier in the clone git repo step).
 
     .. note:: Or you can cut and paste the file below and create your own file.
         If you have issues with your yaml and syntax (**indentation MATTERS**), you can try to use an online parser to help you : `Yaml parser <http://codebeautify.org/yaml-validator>`_
@@ -145,7 +145,7 @@ Now that BIG-IP is licensed and prepped with the "kubernetes" partition, we need
         #. Using kubectl command: you need to use the full name of your pod as showed in the previous image
 
             .. code-block:: console
-                
+
                 kubectl logs k8s-bigip-ctlr-deployment-79fcf97bcc-48qs7 -n kube-system
 
             .. image:: images/f5-container-connector-check-logs-kubectl.png
@@ -158,7 +158,7 @@ Now that BIG-IP is licensed and prepped with the "kubernetes" partition, we need
                 sudo docker ps
 
             Here we can see our container ID is "b91d400df115"
-            
+
             .. image:: images/f5-container-connector-find-dockerID--controller-container.png
                 :align: center
 
