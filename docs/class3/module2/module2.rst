@@ -21,11 +21,11 @@ Architecture
 .. image:: images/F5-container-connector-overview-f5-solution-architecture.png
     :align: center
 
-In Marathon, you can associate labels with Application tasks for tracking/reporting purposes. F5 has developed a set of custom “F5 Application Labels” as a way notify the F5 Marathon BIG-IP Controller and F5 Marathon ASP Controller that they have work to do.
+In Marathon, you can associate labels with Application tasks for tracking/reporting purposes. F5 has developed a set of custom “F5 Application Labels” as a way notify the F5 Marathon BIG-IP Controller that they have work to do.
 
 When the F5 Marathon BIG-IP Controller discovers Applications with new or updated F5 Application Labels, it dynamically creates iApps or virtual servers, pools, pool members, and HTTP health monitors for each of the Application’s tasks.
 
-If you want to have more details about the F5 Application Labels, you may go to the F5 official documentation here: `F5 Marathon BIG-IP Controller <http://clouddocs.f5.com/products/connectors/marathon-bigip-ctlr/v1.1/>`_
+.. seealso:: If you want to have more details about the F5 Application Labels, you may go to the F5 official documentation here: `F5 Marathon BIG-IP Controller <http://clouddocs.f5.com/products/connectors/marathon-bigip-ctlr/v1.1/>`_
 
 Before being able to use the Container Connecter, you need to handle some prerequisites
 
@@ -40,5 +40,5 @@ Prerequisites
 .. toctree::
    :maxdepth: 1
    :glob:
-   
+
    lab*

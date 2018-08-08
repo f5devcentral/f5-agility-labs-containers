@@ -9,7 +9,7 @@ microservices-based applications in a containerized infrastructure. The
 CC - Kubernetes allows you to expose a Kubernetes Service outside the cluster
 as a virtual server on a BIG-IP® device entirely through the Kubernetes API.
 
-The offical F5 documentation is here: `F5 Kubernetes Container Integration <http://clouddocs.f5.com/containers/v1/kubernetes/>`_
+.. seealso:: The official F5 documentation is here: `F5 Kubernetes Container Integration <http://clouddocs.f5.com/containers/v2/kubernetes/>`_
 
 Architecture
 ------------

@@ -12,7 +12,6 @@ Let us step back for a moment and look at the context of technologies as they ap
 
 In a way, containers are doing what hypervisors did to physical servers.  Docker essential development deploying containers via a simplification of old features of Unix (going back to Sun Solaris or FreeBSD from early 2000’s with zones and jail to separate users, file system views, and processes).   By delivering this in a container to run specific code i.e. Tomcat, PHP, or WordPress for example.  As containers removes the need to support the Guest OS, this has immediate benefits: running a single file/container with all the software/code embedded within that “image”.  Containers are typically much smaller, faster, and easier to swap in/out as needed with code upgrades.  A decent laptop can spin up a dozen TomCat Apache servers in about a second with embedded HTML code for your site, or within a few seconds have pulled down new html code.  Lastly, one can update the container image with new HTML code, save the new container.  All while saving over a traditional OS and Tomcat install anywhere from 5X to 25X(or more) less memory and disk requirements.
 
-
 For today labs at Agility, all these labs will run in the cloud, due to the number of guests needed to host a few different management platforms for containers (RedHat Openshift, Kubernetes (K8s), and Mesos/Marathon).  Next page we will install Docker and run a small container for a “hello world”.
 
 Side note for your own work after today: Windows versus Linux

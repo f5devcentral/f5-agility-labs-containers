@@ -6,7 +6,7 @@ Now that our container connector is up and running, let’s deploy an applicatio
 App Deployment
 --------------
 
-From the jumphost connect to the Marathon UI on `http://10.2.10.10:8080 <http://10.2.10.10:8080>`_ and click "Create Application".
+From the jumpbox connect to the Marathon UI on `http://10.2.10.10:8080 <http://10.2.10.10:8080>`_ and click "Create Application".
 
 	.. image:: images/f5-container-connector-create-application-button.png
   		:align: center
@@ -73,7 +73,7 @@ We can try to increase the number of containers delivering our application.
 
 #. Go back to the Marathon UI (http://10.2.10.10:8080). Go to Applications --> "f5-hello-world" and click "Scale Application". 
 
-    Let's increase the number from 2 to 10 instances and click on "Scale Application".
+    Let's increase the number from `2` to `10` instances and click on "Scale Application".
 
     .. image:: images/f5-container-connector-scale-application-UI.png
         :align: center
@@ -90,4 +90,4 @@ We can try to increase the number of containers delivering our application.
 
     As we can see, the Marathon BIG-IP Controller is adapting the pool members setup based on the number of instances delivering this application automatically.
 
-#. Scale back the application to 2 to save ressources for the next labs
+#. Scale back the application to `2` to save resources for the next labs

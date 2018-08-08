@@ -13,7 +13,7 @@ Setup
 
 .. important:: The following commands need to be run on all three nodes unless otherwise specified.
 
-#. From the jumphost open **mRemoteNG** and start a session to each of the following servers. The sessions are pre-configured to connect with the default user “ubuntu”.
+#. From the jumpbox open **mRemoteNG** and start a session to each of the following servers. The sessions are pre-configured to connect with the default user “ubuntu”.
 
     - kube-master
     - kube-node1
@@ -90,7 +90,7 @@ Setup
 
 #. Install docker-ce
 
-    .. attention:: This was done earlier in `Class 1 / Module2: Install Docker <../../class1/module2/module2.html>`_.  If skipped go back and install Docker by clicking the link.
+    .. attention:: This was done earlier in `Class 1 / Module1 / Lab 1.1: Install Docker <../../class1/module1/lab1.html>`_.  If skipped go back and install Docker by clicking the link.
 
 #. Configure docker to use the correct cgroupdriver
 
@@ -111,23 +111,21 @@ Setup
     .. image:: images/goodEOL.png
         :align: center
 
-#. Install Kubernetes
+#. Add the kubernetes repo
 
-    #. Add the kubernetes repo
+    .. code-block:: console
 
-        .. code-block:: console
+        curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
 
-            curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
+        cat <<EOF > /etc/apt/sources.list.d/kubernetes.list
+        deb http://apt.kubernetes.io/ kubernetes-xenial main
+        EOF
 
-            cat <<EOF > /etc/apt/sources.list.d/kubernetes.list
-            deb http://apt.kubernetes.io/ kubernetes-xenial main
-            EOF
+#. Install the kubernetes packages
 
-    #. Install the kubernetes packages
+    .. code-block:: console
 
-        .. code-block:: console
-
-            apt update && apt install kubelet kubeadm kubectl -y
+        apt update && apt install kubelet kubeadm kubectl -y
 
 Limitations
 -----------
