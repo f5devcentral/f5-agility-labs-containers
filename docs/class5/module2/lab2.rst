@@ -481,7 +481,7 @@ How do I verify connectivity between the BIG-IP VTEP and the OSE Node?
       --- 10.128.0.54 ping statistics ---
       4 packets transmitted, 0 received, 100% packet loss, time 12999ms
       
-Now change the MTU
+   Now change the MTU
 
    .. code-block:: console
 
@@ -542,7 +542,7 @@ When pinging the VTEP IP directly the BIG-IP was L2 adjacent to the device and c
 
 #. In a TMOS shell, view the ARP entries.
 
-.. note:: run the command "tmsh"  if you do not see "(tmos)" in your shell.
+   .. note:: run the command "tmsh"  if you do not see "(tmos)" in your shell.
 
    This will show all of the ARP entries; you should see the VTEP entries on the :code:`ocpvlan` and the Pod IP addresses on :code:`ose-tunnel`.
 
