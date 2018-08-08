@@ -99,7 +99,7 @@ Now that BIG-IP is licensed and prepped with the "kubernetes" partition, we need
 
     .. important:: This lab will focus on **Nodeport**.  In Class 4 Openshift we'll use **ClusterIP**.
 
-#. **Nodeport mode** ``f5-nodeport-deployment.yaml``.
+#. **Nodeport mode** ``f5-nodeport-deployment.yaml``
 
     .. note:: For your convenience the file can be found in /home/ubuntu/agilitydocs/kubernetes (downloaded earlier in the clone git repo step).
 
@@ -146,6 +146,7 @@ Now that BIG-IP is licensed and prepped with the "kubernetes" partition, we need
 
             .. code-block:: console
 
+                For example:
                 kubectl logs k8s-bigip-ctlr-deployment-79fcf97bcc-48qs7 -n kube-system
 
             .. image:: images/f5-container-connector-check-logs-kubectl.png
