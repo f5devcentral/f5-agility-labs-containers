@@ -40,7 +40,7 @@ Container Connector Deployment
 
 Now that BIG-IP is licensed and prepped with the "kubernetes" partition, we need to define a `Kubernetes deployment <https://kubernetes.io/docs/user-guide/deployments/>`_ and create a `Kubernetes secret <https://kubernetes.io/docs/user-guide/secrets/>`_ to hide our bigip credentials.
 
-#. From the jumphost open **mRemoteNG** and start a session with Kube-master.
+#. From the jumpbox open **mRemoteNG** and start a session with Kube-master.
 
     .. tip:: These sessions should be running from the previous lab.
 

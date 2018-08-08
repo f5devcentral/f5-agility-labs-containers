@@ -3,7 +3,7 @@ Lab 1.1 Install Docker
 
 .. important:: The following commands need to be run on all three nodes unless otherwise specified.
 
-#. From the jumphost open **mRemoteNG** and start a session to each of the following servers. The sessions are pre-configured to connect with the default user “ubuntu”.
+#. From the jumpbox open **mRemoteNG** and start a session to each of the following servers. The sessions are pre-configured to connect with the default user “ubuntu”.
 
     - kube-master
     - kube-node1

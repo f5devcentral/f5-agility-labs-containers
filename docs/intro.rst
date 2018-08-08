@@ -7,7 +7,7 @@ lab and access your jump host.
 .. important::
   * **The instructor will provide the necessary details to connect to lab environment.**
 
-  * All work for this lab will be performed exclusively from the Windows jumphost via RDP. No installation or interaction with your local system is required.
+  * All work for this lab will be performed exclusively from the Windows jumpbox via RDP. No installation or interaction with your local system is required.
 
 .. attention:: To access the lab environment follow this link http://training.f5agility.com
 

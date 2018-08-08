@@ -32,7 +32,7 @@ Additionally, you will also create variations of each resource type.
 
 .. NOTE:: 
 
-    You will use the same Windows jumphost as you used in the previous sections to complete the exercises in this section.
+    You will use the same Windows jumpbox as you used in the previous sections to complete the exercises in this section.
 
     Unless otherwise noted, all the resource definition yaml files have been pre-created and can be found on the ose-master server under **/root/agility2018/apps/module3**
 
@@ -162,7 +162,7 @@ Open a new browser tab and enter the IP address assigned to the virtual server i
 .. image:: /_static/class5/module3/f5-demo-app-url.png
     :align: center
 
-.. note:: On the application page, the **Server IP** is the pool member (pod) IP address; the **Server Port** is the port of the virtual server; and the **Client IP** is the IP address of the Windows jumphost you are using.
+.. note:: On the application page, the **Server IP** is the pool member (pod) IP address; the **Server Port** is the port of the virtual server; and the **Client IP** is the IP address of the Windows jumpbox you are using.
 
 **Step 6:** Scale the application
 
@@ -346,7 +346,7 @@ Open a new Chrome browser tab and enter the hostname **mysite.f5demo.com** in to
 .. image:: /_static/class5/module3/f5-demo-app-route.png
     :align: center
 
-On the application page, the **Server IP** is the pool member (pod) IP address; the **Server Port** is the port of the virtual server; and the **Client IP** is the IP address of the Windows jumphost you are using.
+On the application page, the **Server IP** is the pool member (pod) IP address; the **Server Port** is the port of the virtual server; and the **Client IP** is the IP address of the Windows jumpbox you are using.
 
 **Step 6:** Cleanup deployed resources
 

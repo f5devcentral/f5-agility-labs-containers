@@ -3,7 +3,7 @@ Lab 1.2 Run a Container on Docker
 
 .. note:: This is only a very basic introduction to docker. For everything else see `Docker Documentation <https://docs.docker.com/>`_
 
-#. Continuing from where we left off on the jumphost go back to the **kube-master** session.
+#. Continuing from where we left off on the jumpbox go back to the **kube-master** session.
 
 #. Now that docker is up and running and confirmed to be working lets deploy the latest `Apache web server <https://hub.docker.com/_/httpd/>`_.
 

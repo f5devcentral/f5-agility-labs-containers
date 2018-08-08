@@ -6,7 +6,7 @@ Now that our container connector is up and running, let’s deploy an applicatio
 App Deployment
 --------------
 
-From the jumphost connect to the Marathon UI on `http://10.2.10.10:8080 <http://10.2.10.10:8080>`_ and click "Create Application".
+From the jumpbox connect to the Marathon UI on `http://10.2.10.10:8080 <http://10.2.10.10:8080>`_ and click "Create Application".
 
 	.. image:: images/f5-container-connector-create-application-button.png
   		:align: center

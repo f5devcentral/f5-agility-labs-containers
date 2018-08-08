@@ -38,7 +38,7 @@ Container Connector Deployment
 
 Now that BIG-IP is licensed and prepped with the "mesos" partition, we need to deploy our Marathon BIG-IP Controller, we can either use Marathon UI or use the Marathon REST API.  For this class we will be using the Marathon UI.
 
-#. From the jumphost connect to the Marathon UI on `http://10.2.10.10:8080 <http://10.2.10.10:8080>`_ and click "Create Application".
+#. From the jumpbox connect to the Marathon UI on `http://10.2.10.10:8080 <http://10.2.10.10:8080>`_ and click "Create Application".
 
 	.. image:: images/f5-container-connector-create-application-button.png
   		:align: center

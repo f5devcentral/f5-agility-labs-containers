@@ -71,7 +71,7 @@ Container Connector Deployment
 
 Now that BIG-IP is licensed and prepped with the "ose" partition, we need to define a `Kubernetes deployment <https://kubernetes.io/docs/user-guide/deployments/>`_ and create a `Kubernetes secret <https://kubernetes.io/docs/user-guide/secrets/>`_ to hide our bigip credentials. 
 
-#. From the jumphost open **mRemoteNG** and start a session with ose-master.
+#. From the jumpbox open **mRemoteNG** and start a session with ose-master.
 
     .. note:: As a reminder we're utilizing a wrapper called **MRemoteNG** for Putty and other services. MRNG hold credentials and allows for multiple protocols(i.e. SSH, RDP, etc.), makes jumping in and out of SSH connections easier.
 
