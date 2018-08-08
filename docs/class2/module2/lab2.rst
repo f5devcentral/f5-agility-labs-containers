@@ -45,6 +45,7 @@ The master is the system where the "control plane" components run, including etc
         mkdir -p $HOME/.kube
         sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
         sudo chown $(id -u):$(id -g) $HOME/.kube/config
+        cd $HOME
 
 #. Verify kubernetes is up and running.  You can monitor the services are running by using the following command.
 
@@ -101,11 +102,11 @@ Setup the Nodes
 
 Once the master is setup and running, we need to join our *nodes* to the cluster.
 
-.. important:: The following commands need to be run on the worker **nodes** only unless otherwise specified.
+.. important:: The following commands need to be run on the worker **nodes only** unless otherwise specified.
 
 #. To join the master we need to run the command highlighted during the master initialization. You'll need to use the command saved to notepad in an earlier step.
 
-    .. warning:: This is just an example. You should have saved this command after successfully initializing the master.
+    .. warning:: This is just an example below!! **DO not cut/paste the one below.** You should have saved this command after successfully initializing the master with step 2 above.   Scroll up in your CLI history to find the hash your kube-master generated to add nodes.
 
     .. code-block:: console
 
@@ -116,7 +117,7 @@ Once the master is setup and running, we need to join our *nodes* to the cluster
     .. image:: images/cluster-setup-guide-node-setup-join-master.png
         :align: center
 
-#. To verify the *nodes* have joined the cluster, run the following command on the **master**:
+#. To verify the *nodes* have joined the cluster, run the following command on the **kube-master**:
 
     .. code-block:: console
 
@@ -128,7 +129,8 @@ Once the master is setup and running, we need to join our *nodes* to the cluster
         :align: center
 
 
-#. Verify all the services are started as expected (run on the **master**):
+#. Verify all the services are started as expected (run on the **kube-master**)
+Don't worry about last 5 characters matching on most services, as they are randomly generated:
 
     .. code-block:: console
 
@@ -140,6 +142,9 @@ Once the master is setup and running, we need to join our *nodes* to the cluster
 
 Install the Kubernetes UI
 -------------------------
+
+.. important:: The following commands need to be run on the **master** only.
+
 
 To install the UI you have two options:
 
@@ -167,7 +172,7 @@ To install the UI you have two options:
 
     .. code-block:: console
 
-        cd /home/ubuntu/f5-agility-labs-containers/kubernetes
+        cd /home/ubuntu/agilitydocs/kubernetes
 
         ./create-kube-dashboard
 
@@ -211,3 +216,6 @@ To install the UI you have two options:
 
     .. image:: images/cluster-setup-guide-access-ui.png
         :align: center
+
+
+CONGRATUATIONS!  You just did the hardest part of todays lab - building a Kubernetes cluster.  While we didn't dive deep into details for every command you ran due to time of other labs we need to complete today.  This is the steps to build your own cluster with a few linux boxes in your own lab, all this content is publicaly online/available at clouddocs.f5.com. 
