@@ -258,6 +258,8 @@ If you have a problem in your OpenShift Container Platform 3 environment how do 
 
 A starting point for data collection from an OpenShift master or node is a sosreport that includes docker and OpenShift related information. The process to collect a sosreport is the same as with any other Red Hat Enterprise Linux (RHEL) based system:
 
+.. note:: The following is provided for informational purposes.  You do not need to run these commands for the lab.
+
 .. code-block:: console
 
      # yum update sos
