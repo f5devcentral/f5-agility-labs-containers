@@ -31,7 +31,7 @@ Lab 1.1 Install Docker
 
         apt update && apt upgrade -y
 
-        (This can take a few seconds to a minute depending on demand to download the latest updates for the OS)
+    .. note:: This can take a few seconds to a minute depending on demand to download the latest updates for the OS.
 
 #. Add the docker repo
 
@@ -58,4 +58,4 @@ Lab 1.1 Install Docker
     .. image:: images/docker-hello-world-yes.png
         :align: center
 
-.. note:: If you are not a linux/unix person - don't worry.  What happened above is how the linux installs and updates software. This is  ALL the ugly (under the cover steps to install apps, and in this case Docker on a Linux host. Please ask questions as to what really happened, but this is how with linux on ubuntu (and many other linux flavors) installs applications.  Linux uses a term called "package manager", and there are many: like PIP, YUM, APT, DPKG, RPM, PACMAN, etc. usually one is more favored by the flavor of linux (i.e. debian, ubuntu, redhat, gentoo, OpenSuse, etc.), but at the end of the day they all pretty much do the same thing, download and keep applications updated.
+.. note:: If you are not a linux/unix person - don't worry.  What happened above is how linux installs and updates software. This is  ALL the ugly (under the cover steps to install apps, and in this case Docker on a Linux host. Please ask questions as to what really happened, but this is how with linux on ubuntu (and many other linux flavors) installs applications.  Linux uses a term called "package manager", and there are many: like PIP, YUM, APT, DPKG, RPM, PACMAN, etc. usually one is more favored by the flavor of linux (i.e. debian, ubuntu, redhat, gentoo, OpenSuse, etc.), but at the end of the day they all pretty much do the same thing, download and keep applications updated.

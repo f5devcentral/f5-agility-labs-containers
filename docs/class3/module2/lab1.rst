@@ -1,9 +1,9 @@
 Lab 1.1 - F5 Container Connector Setup
 ======================================
 
-The official CC documentation is here: `Install the BIG-IP Controller: Marathon <http://clouddocs.f5.com/containers/v2/marathon/mctlr-app-install.html>`_
+The BIG-IP Controller for Marathon installs as an `Application <https://mesosphere.github.io/marathon/docs/application-basics.html>`_
 
-The BIG-IP Controller for Marathon installs as a Marathon `Application <https://mesosphere.github.io/marathon/docs/application-basics.html>`_
+.. seealso:: The official CC documentation is here: `Install the BIG-IP Controller: Marathon <http://clouddocs.f5.com/containers/v2/marathon/mctlr-app-install.html>`_
 
 BIG-IP Setup
 ------------
@@ -34,7 +34,7 @@ Through the Jumpbox, you should have a BIG-IP available at the following URL: ht
 Container Connector Deployment
 ------------------------------
 
-.. note:: IN this lab - we have already built out your Mesos Environment. In the Kubernetes lab, we the work via CLI.  In this lab we will use the GUI and do the tasks via the YAML/JSON type format.  For a more thorough explanation of all the settings and options see `F5 Container Connector - Marathon <https://clouddocs.f5.com/containers/v2/marathon/>`_
+.. note:: In this lab we have already built out your Mesos Environment. In the Kubernetes lab, we did the work via the CLI. In this lab we will use the GUI and do the tasks via the YAML/JSON format. For a more thorough explanation of all the settings and options see `F5 Container Connector - Marathon <https://clouddocs.f5.com/containers/v2/marathon/>`_
 
 Now that BIG-IP is licensed and prepped with the "mesos" partition, we need to deploy our Marathon BIG-IP Controller, we can either use Marathon UI or use the Marathon REST API.  For this class we will be using the Marathon UI.
 
@@ -54,6 +54,8 @@ Now that BIG-IP is licensed and prepped with the "mesos" partition, we need to d
 		:language: json
 		:linenos:
 		:emphasize-lines: 9,14,15
+
+	.. image:: images/f5-container-connector-create-f5-cc.png
 
 #. After a few seconds you should have a 2nd application folder labeled “F5” as shown in this picture.
 
@@ -114,7 +116,13 @@ Now that BIG-IP is licensed and prepped with the "mesos" partition, we need to d
 
 			.. code-block:: console
 
-				sudo docker exec -i -t 43c11f8d0cfa /bin/sh
+				sudo docker exec -it 43c11f8d0cfa /bin/sh
+
+				cd /app
+
+				ls -la
+
+				exit
 
 			.. image:: images/f5-container-connector-run-shell-bigip-ctlr.png
 				:align: center

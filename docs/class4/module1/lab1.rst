@@ -1,9 +1,9 @@
 Lab 1.1 - F5 Container Connector Setup
 ======================================
 
-The official CC documentation is here: `Install the BIG-IP Controller: Openshift <https://clouddocs.f5.com/containers/v2/openshift/kctlr-openshift-app-install.html>`_
+The BIG-IP Controller for OpenShift installs as a `Deployment object <https://kubernetes.io/docs/concepts/workloads/controllers/deployment/>`_
 
-Use a `Deployment <https://kubernetes.io/docs/concepts/workloads/controllers/deployment/>`_ to install the BIG-IP Controller for OpenShift.
+.. seealso:: The official CC documentation is here: `Install the BIG-IP Controller: Openshift <https://clouddocs.f5.com/containers/v2/openshift/kctlr-openshift-app-install.html>`_
 
 BIG-IP Setup
 ------------
@@ -141,7 +141,7 @@ Now that BIG-IP is licensed and prepped with the "ose" partition, we need to def
 
     .. code-block:: console
 
-        cd /root/f5-agility-labs-containers/openshift/
+        cd /root/agilitydocs/openshift
 
         cat f5-bigip-hostsubnet.yaml
 
@@ -187,6 +187,22 @@ Now that BIG-IP is licensed and prepped with the "ose" partition, we need to def
 
     .. important:: The Subnet assignment, in this case is 10.129.2.0/23.  We need to know this subnet to configure the self-ip for the vxlan tunnel on BIG-IP.
 
+    .. note:: In this lab OpenShift is auto assigning a subnet.  We have the options to set this by adding **subnet: "10.131.0.0/23"** at the end of the "hostsubnet" yaml file and setting the **assign-subnet: "false"**.  It would look something like this:
+
+        .. code-block:: yaml
+            :emphasize-lines: 7,10
+
+            apiVersion: v1
+            kind: HostSubnet
+            metadata:
+                name: openshift-f5-node
+                annotations:
+                    pod.network.openshift.io/fixed-vnid-host: "0"
+                    pod.network.openshift.io/assign-subnet: "false"
+            host: openshift-f5-node
+            hostIP: 10.10.199.60
+            subnet: "10.131.0.0/23"
+
 #. Create the vxlan tunnel self-ip
 
     .. code-block:: console
@@ -210,7 +226,7 @@ Now that BIG-IP is licensed and prepped with the "ose" partition, we need to def
 
     .. code-block:: console
 
-        cd /root/f5-agility-labs-containers/openshift/
+        cd /root/agilitydocs/openshift
 
         cat f5-cluster-deployment.yaml
 

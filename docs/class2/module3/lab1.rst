@@ -1,9 +1,9 @@
 Lab 3.1 - F5 Container Connector Setup
 ======================================
 
-The official CC documentation is here: `Install the BIG-IP Controller: Kubernetes <https://clouddocs.f5.com/containers/v2/kubernetes/kctlr-app-install.html>`_
+The BIG-IP Controller for Kubernetes installs as a `Deployment object <https://kubernetes.io/docs/concepts/workloads/controllers/deployment/>`_
 
-Use a `Deployment <https://kubernetes.io/docs/concepts/workloads/controllers/deployment/>`_ to install the BIG-IP Controller for Kubernetes.
+.. seealso:: The official CC documentation is here: `Install the BIG-IP Controller: Kubernetes <https://clouddocs.f5.com/containers/v2/kubernetes/kctlr-app-install.html>`_
 
 BIG-IP Setup
 ------------
@@ -36,7 +36,7 @@ Through the Jumpbox, you should have a BIG-IP available at the following URL: ht
 Container Connector Deployment
 ------------------------------
 
-.. note:: For a more thorough explanation of all the settings and options see `F5 Container Connector - Kubernetes <https://clouddocs.f5.com/containers/v2/kubernetes/>`_
+.. seealso:: For a more thorough explanation of all the settings and options see `F5 Container Connector - Kubernetes <https://clouddocs.f5.com/containers/v2/kubernetes/>`_
 
 Now that BIG-IP is licensed and prepped with the "kubernetes" partition, we need to define a `Kubernetes deployment <https://kubernetes.io/docs/user-guide/deployments/>`_ and create a `Kubernetes secret <https://kubernetes.io/docs/user-guide/secrets/>`_ to hide our bigip credentials.
 
@@ -139,47 +139,47 @@ Now that BIG-IP is licensed and prepped with the "kubernetes" partition, we need
 
 #. If you need to troubleshoot your container, you have two different ways to check the logs of your container:
 
-    - kubectl command (recommended - easier)
-    - docker command (By connecting to the relevant node. Here you'll need to identify which node is running the container)
+  - kubectl command (recommended - easier)
+  - docker command (By connecting to the relevant node. Here you'll need to identify which node is running the container)
 
-        #. Using kubectl command: you need to use the full name of your pod as showed in the previous image
+    #. Using kubectl command: you need to use the full name of your pod as showed in the previous image
 
-            .. code-block:: console
+        .. code-block:: console
 
-                For example:
-                kubectl logs k8s-bigip-ctlr-deployment-79fcf97bcc-48qs7 -n kube-system
+            For example:
+            kubectl logs k8s-bigip-ctlr-deployment-79fcf97bcc-48qs7 -n kube-system
 
-            .. image:: images/f5-container-connector-check-logs-kubectl.png
-                :align: center
+        .. image:: images/f5-container-connector-check-logs-kubectl.png
+            :align: center
 
-        #. Using docker logs command: From the previous check we know the container is running on kube-node1.  Via mRemoteNG open a session to kube-node1 and run the following commands:
+    #. Using docker logs command: From the previous check we know the container is running on kube-node1.  Via mRemoteNG open a session to kube-node1 and run the following commands:
 
-            .. code-block:: console
+        .. code-block:: console
 
-                sudo docker ps
+            sudo docker ps
 
-            Here we can see our container ID is "b91d400df115"
+        Here we can see our container ID is "b91d400df115"
 
-            .. image:: images/f5-container-connector-find-dockerID--controller-container.png
-                :align: center
+        .. image:: images/f5-container-connector-find-dockerID--controller-container.png
+            :align: center
 
-            Now we can check our container logs:
+        Now we can check our container logs:
 
-            .. code-block:: console
+        .. code-block:: console
 
-                sudo docker logs b91d400df115
+            sudo docker logs b91d400df115
 
-            .. image:: images/f5-container-connector-check-logs-controller-container.png
-                :align: center
+        .. image:: images/f5-container-connector-check-logs-controller-container.png
+            :align: center
 
-#. You can connect to your container with kubectl as well:
+    #. You can connect to your container with kubectl as well:
 
-    .. code-block:: console
+        .. code-block:: console
 
-        kubectl exec -it k8s-bigip-ctlr-deployment-79fcf97bcc-48qs7 -n kube-system  -- /bin/sh
+            kubectl exec -it k8s-bigip-ctlr-deployment-79fcf97bcc-48qs7 -n kube-system  -- /bin/sh
 
-        cd /app
+            cd /app
 
-        ls -lR
+            ls -la
 
-        exit
+            exit

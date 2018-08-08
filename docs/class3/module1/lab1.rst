@@ -7,8 +7,7 @@ Controller.
 The F5 Marathon BIG-IP Controller configures a BIG-IP to expose applications
 in a Mesos cluster as BIG-IP virtual servers, serving North-South traffic.
 
-The official F5 documentation is available here:
-`F5 Marathon Container Integration <http://clouddocs.f5.com/containers/v1/marathon/>`_
+.. seealso:: The official F5 documentation is available here: `F5 Marathon Container Integration <http://clouddocs.f5.com/containers/v2/marathon/>`_
 
 You can either setup the whole F5 solutions yourself or use some scripts to
 automatically deploy everything

@@ -81,7 +81,7 @@ The master is the system where the "control plane" components run, including etc
 
     .. important:: Before moving to the next section, "Setup the nodes" wait for all system pods to show status “Running”.
 
-#.  Addional kubernetes checks.
+#.  Addional kubernetes status checks.
 
     .. code-block:: console
 
@@ -106,7 +106,9 @@ Once the master is setup and running, we need to join our *nodes* to the cluster
 
 #. To join the master we need to run the command highlighted during the master initialization. You'll need to use the command saved to notepad in an earlier step.
 
-    .. warning:: This is just an example below!! **DO not cut/paste the one below.** You should have saved this command after successfully initializing the master with step 2 above.   Scroll up in your CLI history to find the hash your kube-master generated to add nodes.
+    .. warning:: This is just an example!! **DO not cut/paste the one below.** You should have saved this command after successfully initializing the master with step 2 above.   Scroll up in your CLI history to find the hash your kube-master generated to add nodes.
+
+    .. warning:: This command needs to be run on **node1** and **node2** only!
 
     .. code-block:: console
 
@@ -208,9 +210,7 @@ To install the UI you have two options:
     .. image:: images/cluster-setup-guide-check-port-ui.png
         :align: center
 
-    Here we can see that it is listening on port: 32005 (NodePort)
-
-    .. note:: In our service we are assigned port "32005", you'll be assigned a different port.
+    .. note:: In our service we are assigned port "32005" (NodePort), you'll be assigned a different port.
 
     We can now access the dashboard by connecting to the following uri http://10.1.10.21:32005
 

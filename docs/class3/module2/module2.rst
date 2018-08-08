@@ -25,7 +25,7 @@ In Marathon, you can associate labels with Application tasks for tracking/report
 
 When the F5 Marathon BIG-IP Controller discovers Applications with new or updated F5 Application Labels, it dynamically creates iApps or virtual servers, pools, pool members, and HTTP health monitors for each of the Application’s tasks.
 
-If you want to have more details about the F5 Application Labels, you may go to the F5 official documentation here: `F5 Marathon BIG-IP Controller <http://clouddocs.f5.com/products/connectors/marathon-bigip-ctlr/v1.1/>`_
+.. seealso:: If you want to have more details about the F5 Application Labels, you may go to the F5 official documentation here: `F5 Marathon BIG-IP Controller <http://clouddocs.f5.com/products/connectors/marathon-bigip-ctlr/v1.1/>`_
 
 Before being able to use the Container Connecter, you need to handle some prerequisites
 
