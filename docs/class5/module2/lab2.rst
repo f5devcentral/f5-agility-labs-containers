@@ -68,6 +68,8 @@ Initial BIG-IP HA Setup
 
 The purpose of this lab is not to cover BIG-IP High Availability (HA) in depth but focus on OpenShift configuration with BIG-IP. Some prior BIG-IP HA knowledge is required. We have created the BIG-IPs base configuration for bigip01 and bigip02 to save time. Below is the initial configuration used on each BIG-IP:
 
+.. note:: The following is provided for informational purposes.  You do not need to run these commands for the lab.
+
 **bigip01.f5.local**
 
 .. code-block:: console
@@ -115,6 +117,9 @@ The purpose of this lab is not to cover BIG-IP High Availability (HA) in depth b
 Before adding the BIG-IP devices to OpenShift make sure your High Availability (HA) device trust group, license, selfIP, vlans are configured correctly
 
 Validate that SDN services license is active
+
+.. note:: In your lab environment the BIG-IP VE LAB license includes the SDN license.  The following is provided as a reference of what you may see in a production license.  The SDN license is also included in the -V16 version of the BIG-IP VE license.
+
 
 .. image:: /_static/class5/license.png
     :align: center
@@ -207,6 +212,8 @@ Set up VXLAN on the BIG-IP Devices
 
 The BIG-IP OpenShift Controller cannot manage objects in the /Common partition. Its recommended to create all HA using the /Common partition
 
+.. note:: You can copy and paste the following commands to be run directly from the OpenShift master (ose-mstr01).  To paste content into mRemoteNG; use your right mouse button.
+
 * ssh root@10.10.200.98 tmsh create auth partition ocp
 * ssh root@10.10.200.99 tmsh create auth partition ocp
 
@@ -259,7 +266,7 @@ Validate bigip02 self IP configuration
 .. image:: /_static/class5/self-ip-bigip02-ha.png
     :align: center
 
-Check the ocp-tunnel configuration. Note the local-address 10.10.199.200 and secondary-address are  10.10.199.98 for bigip01 and 10.10.199.99 for bigip02
+Check the ocp-tunnel configuration (under Network -> Tunnels). Note the local-address 10.10.199.200 and secondary-address are  10.10.199.98 for bigip01 and 10.10.199.99 for bigip02.  The secondary-address will be used to send monitor traffic and the local address will be used by the active device to send client traffic.
 
 .. image:: /_static/class5/bigip01-tunnel-ip.png
     :align: center
@@ -273,6 +280,8 @@ Take the steps below to deploy a contoller for each BIG-IP device in the cluster
 
 Set up RBAC
 -----------
+
+The F5 BIG-IP Controller requires permission to monitor the status of the OpenSfhift cluster.  The following will create a "role" that will allow it to access specific resources.
 
 You can create RBAC resources in the project in which you will run your BIG-IP Controller. Each Controller that manages a device in a cluster or active-standby pair can use the same Service Account, Cluster Role, and Cluster Role Binding.
 
@@ -377,7 +386,7 @@ pool-only.yaml
      [root@ose-mstr01 ocp]# oc create -f pool-only.yaml
      configmap "k8s.poolonly" created
 
-**Step 4.5:** Check bigip01 and bigip02 to make sure the pool got create. Validate that both bigip01 and bigip02 can reach the pool members. Pool members should show green
+**Step 4.5:** Check bigip01 and bigip02 to make sure the pool got created (make sure you are looking at the "ocp" partition). Validate that both bigip01 and bigip02 can reach the pool members. Pool members should show green
 
 .. image:: /_static/class5/pool-members.png
     :align: center
@@ -449,7 +458,47 @@ How do I verify connectivity between the BIG-IP VTEP and the OSE Node?
 
    .. code-block:: console
 
-      ping -s 1600 <OSE_Node_IP>
+      [root@bigip01:Standby:Changes Pending] config # ping -s 1600 -c 4 10.10.199.101
+      PING 10.10.199.101 (10.10.199.101) 1600(1628) bytes of data.
+      1608 bytes from 10.10.199.101: icmp_seq=1 ttl=64 time=2.94 ms
+      1608 bytes from 10.10.199.101: icmp_seq=2 ttl=64 time=2.21 ms
+      1608 bytes from 10.10.199.101: icmp_seq=3 ttl=64 time=2.48 ms
+      1608 bytes from 10.10.199.101: icmp_seq=4 ttl=64 time=2.47 ms
+      
+      --- 10.10.199.101 ping statistics ---
+      4 packets transmitted, 4 received, 0% packet loss, time 3006ms
+      rtt min/avg/max/mdev = 2.210/2.527/2.946/0.267 ms
+
+#. Ping the Pod's IP address (use the output from looking at the pool members in the previous steps).
+
+   Use the ``-s`` flag to set the MTU of the packets to allow for VxLAN encapsulation.
+
+   .. code-block:: console
+
+      [root@bigip01:Standby:Changes Pending] config # ping -s 1600 -c 4 10.128.0.54
+      PING 10.128.0.54 (10.128.0.54) 1600(1628) bytes of data.
+      
+      --- 10.128.0.54 ping statistics ---
+      4 packets transmitted, 0 received, 100% packet loss, time 12999ms
+      
+Now change the MTU
+
+   .. code-block:: console
+
+      [root@bigip01:Standby:Changes Pending] config # ping -s 1400 -c 4 10.128.0.54
+      PING 10.128.0.54 (10.128.0.54) 1400(1428) bytes of data.
+      1408 bytes from 10.128.0.54: icmp_seq=1 ttl=64 time=1.74 ms
+      1408 bytes from 10.128.0.54: icmp_seq=2 ttl=64 time=2.43 ms
+      1408 bytes from 10.128.0.54: icmp_seq=3 ttl=64 time=2.77 ms
+      1408 bytes from 10.128.0.54: icmp_seq=4 ttl=64 time=2.25 ms
+      
+      --- 10.128.0.54 ping statistics ---
+      4 packets transmitted, 4 received, 0% packet loss, time 3005ms
+      rtt min/avg/max/mdev = 1.748/2.303/2.774/0.372 ms
+      
+When pinging the VTEP IP directly the BIG-IP was L2 adjacent to the device and could send a large MTU.  In the second example the packet is dropped across the VxLAN tunnel.  In the third example the packet is able to traverse the VxLAN tunnel.
+
+
 
 #. In a TMOS shell, output the REST requests from the BIG-IP logs.
 
@@ -459,17 +508,22 @@ How do I verify connectivity between the BIG-IP VTEP and the OSE Node?
 
    .. code-block:: console
 
-      root@(bigip01)(cfg-sync In Sync)(Standby)(/Common)(tmos)# tcpdump -i ocp-tunnel
+      [root@bigip01:Standby:Changes Pending] config # tcpdump -i ocp-tunnel -c 10 -nnn
       tcpdump: verbose output suppressed, use -v or -vv for full protocol decode
       listening on ocp-tunnel, link-type EN10MB (Ethernet), capture size 65535 bytes
-      10:29:48.126529 IP 10.131.0.98.47006 > 10.128.0.96.webcache: Flags [S], seq 3679729621, win 29200, options [mss 1460,sackOK,TS val 3704230749 ecr 0,nop,wscale 7], length 0 out slot1/tmm0 lis=
-      10:29:48.128430 IP 10.128.0.96.webcache > 10.131.0.98.47006: Flags [S.], seq 2278441553, ack 3679729622, win 27960, options [mss 1410,sackOK,TS val 2782018 ecr 3704230749,nop,wscale 7], length 0 in slot1/tmm0 lis=
-      10:29:48.131715 IP 10.128.0.96.webcache > 10.131.0.98.47006: Flags [.], ack 10, win 219, options [nop,nop,TS val 2782022 ecr 3704230753], length 0 in slot1/tmm1 lis=
-      10:29:48.130533 IP 10.131.0.98.47006 > 10.128.0.96.webcache: Flags [.], ack 1, win 229, options [nop,nop,TS val 3704230753 ecr 2782018], length 0 out slot1/tmm0 lis=
-      10:29:48.130539 IP 10.131.0.98.47006 > 10.128.0.96.webcache: Flags [P.], seq 1:10, ack 1, win 229, options [nop,nop,TS val 3704230753 ecr 2782018], length 9: HTTP: GET / out slot1/tmm0 lis=
-      10:29:48.141479 IP 10.131.0.98.47006 > 10.128.0.96.webcache: Flags [.], ack 1349, win 251, options [nop,nop,TS val 3704230764 ecr 2782031], length 0 out slot1/tmm0 lis=
-      10:29:48.141036 IP 10.128.0.96.webcache > 10.131.0.98.47006: Flags [P.], seq 1:1349, ack 10, win 219, options [nop,nop,TS val 2782031 ecr 3704230753], length 1348: HTTP: HTTP/1.1 200 OK in slot1/tmm1 lis=
-      10:29:48.141041 IP 10.128.0.96.webcache > 10.131.0.98.47006: Flags [F.], seq 1349, ack 10, win 219, options [nop,nop,TS val 2782031 ecr 3704230753], length 0 in slot1/tmm1 lis=
+      09:05:55.962408 IP 10.131.0.98.53404 > 10.128.0.54.8080: Flags [S], seq 1597206142, win 29200, options [mss 1460,sackOK,TS val 441031289 ecr 0,nop,wscale 7], length 0 out slot1/tmm0 lis=
+      09:05:55.963532 IP 10.128.0.54.8080 > 10.131.0.98.53404: Flags [S.], seq 1644640677, ack 1597206143, win 27960, options [mss 1410,sackOK,TS val 3681001 ecr 441031289,nop,wscale 7], length 0 in slot1/tmm1 lis=
+      09:05:55.964361 IP 10.131.0.98.53404 > 10.128.0.54.8080: Flags [.], ack 1, win 229, options [nop,nop,TS val 441031291 ecr 3681001], length 0 out slot1/tmm0 lis=
+      09:05:55.964367 IP 10.131.0.98.53404 > 10.128.0.54.8080: Flags [P.], seq 1:10, ack 1, win 229, options [nop,nop,TS val 441031291 ecr 3681001], length 9: HTTP: GET / out slot1/tmm0 lis=
+      09:05:55.965630 IP 10.128.0.54.8080 > 10.131.0.98.53404: Flags [.], ack 10, win 219, options [nop,nop,TS val 3681003 ecr 441031291], length 0 in slot1/tmm1 lis=
+      09:05:55.975754 IP 10.128.0.54.8080 > 10.131.0.98.53404: Flags [P.], seq 1:1337, ack 10, win 219, options [nop,nop,TS val 3681013 ecr 441031291], length 1336: HTTP: HTTP/1.1 200 OK in slot1/tmm1 lis=
+      09:05:55.975997 IP 10.128.0.54.8080 > 10.131.0.98.53404: Flags [F.], seq 1337, ack 10, win 219, options [nop,nop,TS val 3681013 ecr 441031291], length 0 in slot1/tmm1 lis=
+      09:05:55.976108 IP 10.131.0.98.53404 > 10.128.0.54.8080: Flags [.], ack 1337, win 251, options [nop,nop,TS val 441031302 ecr 3681013], length 0 out slot1/tmm0 lis=
+      09:05:55.976114 IP 10.131.0.98.53404 > 10.128.0.54.8080: Flags [F.], seq 10, ack 1337, win 251, options [nop,nop,TS val 441031303 ecr 3681013], length 0 out slot1/tmm0 lis=
+      09:05:55.976488 IP 10.131.0.98.53404 > 10.128.0.54.8080: Flags [.], ack 1338, win 251, options [nop,nop,TS val 441031303 ecr 3681013], length 0 out slot1/tmm0 lis=
+      10 packets captured
+      10 packets received by filter
+      0 packets dropped by kernel
 
 #. In a TMOS shell, view the MAC address entries for the OSE tunnel. This will show the mac address and IP addresses of all of the OpenShift endpoints.
 
@@ -487,6 +541,8 @@ How do I verify connectivity between the BIG-IP VTEP and the OSE Node?
       ocp-tunnel  0a:58:0a:80:00:60  endpoint:10.10.199.101    yes
 
 #. In a TMOS shell, view the ARP entries.
+
+.. note:: run the command "tmsh"  if you do not see "(tmos)" in your shell.
 
    This will show all of the ARP entries; you should see the VTEP entries on the :code:`ocpvlan` and the Pod IP addresses on :code:`ose-tunnel`.
 
