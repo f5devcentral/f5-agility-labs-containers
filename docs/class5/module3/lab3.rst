@@ -293,7 +293,7 @@ Now that you have reviewed the Route, you need to actually create it by deployin
 
 .. code-block:: console
 
-    [root@ose-mstr01 tmp]# oc create -f f5-demo-app-route-route.yaml
+    [root@ose-mstr01 tmp]# oc create -f f5-demo-app-route-route.yaml -n f5demo
     route "f5-demo-app-route" created
 
 **Step 3:** Review the BIG-IP configuration
