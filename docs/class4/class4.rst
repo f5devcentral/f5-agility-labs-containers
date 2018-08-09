@@ -23,7 +23,7 @@ We will leverage the following setup to configure the OpenShift environment.
     - **IP-ADDR**
     - **VLAN**
     - **Credentials**
-  * - jumphost
+  * - jumpbox
     - 10.1.1.250
     - mgmt: 10.1.1.0/24
     - user/Student!Agility!
@@ -38,15 +38,15 @@ We will leverage the following setup to configure the OpenShift environment.
     - admin/admin
 
       root/default
-  * - ose-master01
+  * - ose-mstr01
     - 10.10.199.100
     - external-ose: 10.10.199.0/24
     - root/default
-  * - ose-agent01
+  * - ose-node01
     - 10.10.199.101
     - external-ose: 10.10.199.0/24
     - root/default
-  * - ose-agent02
+  * - ose-node02
     - 10.10.199.102
     - external-ose: 10.10.199.0/24
     - root/default

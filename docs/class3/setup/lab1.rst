@@ -6,7 +6,7 @@ Lab 1.1 - Setup the Masters
 Prep Ubuntu
 -----------
 
-#. From the jumphost open **mRemoteNG** and start a session to each of the following servers. The sessions are pre-configured to connect with the default user “ubuntu”.
+#. From the jumpbox open **mRemoteNG** and start a session to each of the following servers. The sessions are pre-configured to connect with the default user “ubuntu”.
 
     - mesos-master1
     - mesos-master2

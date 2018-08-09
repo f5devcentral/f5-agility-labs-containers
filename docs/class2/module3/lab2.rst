@@ -1,5 +1,5 @@
-Lab 3.2 - F5 Container Connector Usage
-======================================
+Lab 3.2 - F5 Container Connector(CC) Usage
+==========================================
 
 Now that our container connector is up and running, let's deploy an application and leverage our F5 CC.
 
@@ -20,7 +20,7 @@ On the **kube-master** we will create all the required files:
 
 #. Create a file called ``f5-hello-world-deployment.yaml``
 
-    .. tip:: Use the file in /home/ubuntu/f5-agility-labs-containers/kubernetes
+    .. tip:: Use the file in /home/ubuntu/agilitydocs/kubernetes
 
     .. literalinclude:: ../../../kubernetes/f5-hello-world-deployment.yaml
         :language: yaml
@@ -29,7 +29,7 @@ On the **kube-master** we will create all the required files:
 
 #. Create a file called ``f5-hello-world-configmap.yaml``
 
-    .. tip:: Use the file in /home/ubuntu/f5-agility-labs-containers/kubernetes
+    .. tip:: Use the file in /home/ubuntu/agilitydocs/kubernetes
 
     .. literalinclude:: ../../../kubernetes/f5-hello-world-configmap.yaml
         :language: yaml
@@ -38,7 +38,7 @@ On the **kube-master** we will create all the required files:
 
 #. Create a file called ``f5-hello-world-service.yaml``
 
-    .. tip:: Use the file in /home/ubuntu/f5-agility-labs-containers/kubernetes
+    .. tip:: Use the file in /home/ubuntu/agilitydocs/kubernetes
 
     .. literalinclude:: ../../../kubernetes/f5-hello-world-service.yaml
         :language: yaml
@@ -47,7 +47,7 @@ On the **kube-master** we will create all the required files:
 
 #. We can now launch our application:
 
-    .. code-block:: bash
+    .. code-block:: console
 
         kubectl create -f f5-hello-world-deployment.yaml
         kubectl create -f f5-hello-world-configmap.yaml
@@ -58,24 +58,25 @@ On the **kube-master** we will create all the required files:
 
 #. To check the status of our deployment, you can run the following commands:
 
-    .. code-block:: bash
+    .. code-block:: console
 
         kubectl get pods -o wide
+        (This can take a few seconds to a minute to create these hello-world containers to running state)
 
     .. image:: images/f5-hello-world-pods.png
         :align: center
 
-    .. code-block:: bash
+    .. code-block:: console
 
         kubectl describe svc f5-hello-world
-        
+
     .. image:: images/f5-container-connector-check-app-definition.png
         :align: center
 
 #. To test the app you need to pay attention to:
 
     **The NodePort value**, that's the port used by Kubernetes to give you access to the app from the outside. Here it's "30507", highlighted above.
-    
+
     **The Endpoints**, that's our 2 instances (defined as replicas in our deployment file) and the port assigned to the service: port 8080.
 
     Now that we have deployed our application sucessfully, we can check our BIG-IP configuration.  From the browser open https://10.1.1.245
@@ -106,7 +107,7 @@ On the **kube-master** we will create all the required files:
 
 #. How is traffic forwarded in Kubernetes from the <node IP>:30507 to the <container IP>:8080? This is done via iptables that is managed via the kube-proxy instances. On either of the nodes, ssh in and run the following command:
 
-    .. code-block:: bash
+    .. code-block:: console
 
         sudo iptables-save | grep f5-hello-world
 

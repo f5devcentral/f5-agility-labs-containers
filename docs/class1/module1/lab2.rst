@@ -3,11 +3,13 @@ Lab 1.2 Run a Container on Docker
 
 .. note:: This is only a very basic introduction to docker. For everything else see `Docker Documentation <https://docs.docker.com/>`_
 
-#. Continuing from where we left off on the jumphost go back to the **kube-master** session.
+#. Continuing from where we left off on the jumpbox go back to the **kube-master** session.
 
 #. Now that docker is up and running and confirmed to be working lets deploy the latest `Apache web server <https://hub.docker.com/_/httpd/>`_.
 
     .. note::
+
+        The ``docker run`` command will first look for a local cache of the container **httpd**, and upon comparing that copy to the latest instance, decide to either download an update or use the local copy.  Since there is no local copy, docker will download the container **httpd** to your local cache.  This can take a few seconds (or longer), depending on container size and your bandwidth.  Docker will chunk this into parts called a pull.
 
         ``--rm`` "tells docker to remove the container after stopping"
 
@@ -23,6 +25,7 @@ Lab 1.2 Run a Container on Docker
 
         docker run --rm --name "myapache" -d -it -P httpd:latest
 
+
 #. If everything is working properly you should see your container running.
 
     .. note:: ``-f`` "lets us filter on key:pair"
@@ -36,7 +39,7 @@ Lab 1.2 Run a Container on Docker
 
     .. note:: The "PORTS" section shows the container mapping.  In this case the nodes local IP and port 32768 are mapped to the container.  We can use this info to connect to the container in the next step.
 
-#. The httpd container "myapache, is running on kube-master (10.1.10.21) and port 32768. To test connect to the server via chrome.
+#. The httpd container "myapache, is running on kube-master (10.1.10.21) and port 32768. To test, connect to the webserver via chrome.
 
     .. code-block:: console
 
@@ -44,3 +47,6 @@ Lab 1.2 Run a Container on Docker
 
     .. image:: images/myapache.png
         :align: center
+
+
+Thats it, you installed docker, downloaded a container,  ran the Hello World container, ran a web server container, and accessed your web server container via the broswer.

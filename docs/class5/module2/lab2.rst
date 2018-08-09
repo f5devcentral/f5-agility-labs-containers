@@ -1,5 +1,5 @@
-Section 2.1 Working with BIG-IP HA pairs or device groups
-=========================================================
+Module 2: Working with BIG-IP HA Pairs or Device Groups
+=======================================================
 
 Each Container Connector is uniquely suited to its specific container orchestration environment and purpose, utilizing the architecture and language appropriate for the environment. Application Developers interact with the platform’s API; the CCs watch the API for certain events, then act accordingly.
 
@@ -17,8 +17,9 @@ Managing BIG-IP HA Clusters in OpenShift
 You can use the F5 Container Connectors to manage a BIG-IP HA active-standby pair or device group. The deployment details vary depending on the platform. For most, the basic principle is the same: You should run one BIG-IP Controller instance for each BIG-IP device. You will deploy two BIG-IP Controller instances - one for each BIG-IP device. To help ensure Controller HA, you will deploy each Controller instance on a separate Node in the cluster.
 
 .. image:: /_static/class5/ha-cluster.jpg
+    :align: center
 
-BIG-IP config sync
+BIG-IP Config Sync
 ------------------
 
 **Important**
@@ -34,9 +35,9 @@ Complete the steps below to set up the solution shown in the diagram. Be sure to
    ===== =====================================================================
    Step  Task
    ===== =====================================================================
-   1.    :ref:`openshift initial bigip setup ha`
+   1.    :ref:`initial bigip ha setup`
 
-   2.    :ref:`add bigip devices openshift ha`
+   2.    :ref:`add bigip devices to openshift`
 
          * openshift create hostsubnets ha
          * openshift upload hostsubnets ha
@@ -58,14 +59,16 @@ Complete the steps below to set up the solution shown in the diagram. Be sure to
          * openshift upload deployment ha
    ===== =====================================================================
 
-.. _openshift initial bigip setup ha:
+.. _initial bigip ha setup:
 
-Openshift initial bigip setup ha
---------------------------------
+Initial BIG-IP HA Setup
+-----------------------
 
 **Step 1:**
 
 The purpose of this lab is not to cover BIG-IP High Availability (HA) in depth but focus on OpenShift configuration with BIG-IP. Some prior BIG-IP HA knowledge is required. We have created the BIG-IPs base configuration for bigip01 and bigip02 to save time. Below is the initial configuration used on each BIG-IP:
+
+.. note:: The following is provided for informational purposes.  You do not need to run these commands for the lab.
 
 **bigip01.f5.local**
 
@@ -115,86 +118,68 @@ Before adding the BIG-IP devices to OpenShift make sure your High Availability (
 
 Validate that SDN services license is active
 
+.. note:: In your lab environment the BIG-IP VE LAB license includes the SDN license.  The following is provided as a reference of what you may see in a production license.  The SDN license is also included in the -V16 version of the BIG-IP VE license.
+
+
 .. image:: /_static/class5/license.png
+    :align: center
 
 Validate the vlan configuration
 
 .. image:: /_static/class5/vlans.png
+    :align: center
 
 Validate bigip01 self IP configuration
 
 .. image:: /_static/class5/self-ip-bigip01.png
+    :align: center
 
 Validate bigip02 self IP configuration
 
 .. image:: /_static/class5/self-ip-bigip02.png
+    :align: center
 
 Validate the device group HA settings and make sure bigip01 and bigip02 are in sync. If out of sync, sync the bigip
 
 .. image:: /_static/class5/device-group-sync.png
+    :align: center
 
 All synced. Note the sync-failover configuration is set to manual sync
 
 .. image:: /_static/class5/synced.png
+    :align: center
 
 The diagram below displays the BIG-IP deployment with the OpenShift cluster in High Availability (HA) active-standby pair or device group. Note this solution applies to BIG-IP devices v13.x and later only. To accomplish High Availability (HA) active-standby pair or device group with OpenShift the BIG-IP needs to create a floating vxlan tunnel address with is currently only available in BIG-IP 13.x and later.
 
-.. _add bigip devices openshift ha:
+.. _add bigip devices to openshift:
 
-Upload the HostSubnet files to the OpenShift API server
+Upload the HostSubnet Files to the OpenShift API Server
 -------------------------------------------------------
 
 **Step 2:** Create a new OpenShift HostSubnet
 
-HostSubnets must use valid YAML. You can upload the files individually using separate oc create commands. Create one HostSubnet for each BIG-IP device. These will handle health monitor traffic. Also create one HostSubnet to pass client traffic. You will create the floating IP address for the active device in this subnet as shown in the diagram above. We have create the YAML files to save time. The files are located at **/root/agility2018/ocp**
+HostSubnets must use valid YAML. You can upload the files individually using separate oc create commands. Create one HostSubnet for each BIG-IP device. These will handle health monitor traffic. Also create one HostSubnet to pass client traffic. You will create the floating IP address for the active device in this subnet as shown in the diagram above. We have created the YAML files to save time. The files are located at **/root/agility2018/ocp**
 
 Define HostSubnets
 ------------------
 
 hs-bigip01.yaml
 
-.. code-block:: console
-
-     {
-        "apiVersion": "v1",
-        "host": "openshift-f5-bigip01",
-        "hostIP": "10.10.199.98",
-        "kind": "HostSubnet",
-        "metadata": {
-            "name": "openshift-f5-bigip01"
-        },
-        "subnet": "10.131.0.0/23"
-    }
+.. literalinclude:: ../../../openshift/advanced/ocp/hs-bigip01.yaml
+  :language: yaml
+  :emphasize-lines: 3,4,9
 
 hs-bigip02.yaml
 
-.. code-block:: console
-
-     {
-        "apiVersion": "v1",
-        "host": "openshift-f5-bigip02",
-        "hostIP": "10.10.199.99",
-        "kind": "HostSubnet",
-        "metadata": {
-            "name": "openshift-f5-bigip02"
-        },
-        "subnet": "10.131.2.0/23"
-    }
+.. literalinclude:: ../../../openshift/advanced/ocp/hs-bigip02.yaml
+  :language: yaml
+  :emphasize-lines: 3,4,9
 
 hs-bigip-float.yaml
 
-.. code-block:: console
-
-     {
-        "apiVersion": "v1",
-        "host": "openshift-f5-bigip-float",
-        "hostIP": "10.10.199.200",
-        "kind": "HostSubnet",
-        "metadata": {
-            "name": "openshift-f5-bigip-float"
-        },
-        "subnet": "10.131.4.0/23"
-    }
+.. literalinclude:: ../../../openshift/advanced/ocp/hs-bigip-float.yaml
+  :language: yaml
+  :emphasize-lines: 3,4,9
 
 Create the HostSubnet files to the OpenShift API server
 
@@ -220,12 +205,16 @@ Verify creation of the HostSubnets:
 
 .. _openshift vxlan setup ha:
 
-Set up the VXLAN on the BIG-IP devices
---------------------------------------
+Set up VXLAN on the BIG-IP Devices
+----------------------------------
 
 **Step 3.1:** Create a new partition on your BIG-IP system
 
-The BIG-IP OpenShift Controller cannot manage objects in the /Common partition. Its recommended to create all HA using the /Common partition
+.. important:: The BIG-IP OpenShift Controller cannot manage objects in the /Common partition. 
+
+    Its recommended to create all HA using the /Common partition
+
+.. note:: You can copy and paste the following commands to be run directly from the OpenShift master (ose-mstr01).  To paste content into mRemoteNG; use your right mouse button.
 
 * ssh root@10.10.200.98 tmsh create auth partition ocp
 * ssh root@10.10.200.99 tmsh create auth partition ocp
@@ -252,7 +241,7 @@ The BIG-IP OpenShift Controller cannot manage objects in the /Common partition. 
 
 **Step 3.6:** Creating floating IP for overlay network
 
-* ssh root@10.10.200.98 tmsh create net self 10.131.4.200/14 vlan ocp-tunnel traffic-group-1
+* ssh root@10.10.200.98 tmsh create net self 10.131.4.200/14 vlan ocp-tunnel traffic-group traffic-group-1
 * ssh root@10.10.200.98 tmsh run cm config-sync to-group ocp-devicegroup
 
 **Step 3.7:** Saving configuration
@@ -265,20 +254,24 @@ Before adding the BIG-IP controller to OpenShift validate the partition and tunn
 Validate that the OCP bigip partition was created
 
 .. image:: /_static/class5/partition.png
+    :align: center
 
 Validate bigip01 self IP configuration
 
 Note: On the active device, there is floating IP address in the subnet assigned by the OpenShift SDN.
 
 .. image:: /_static/class5/self-ip-bigip01-ha.png
+    :align: center
 
 Validate bigip02 self IP configuration
 
 .. image:: /_static/class5/self-ip-bigip02-ha.png
+    :align: center
 
-Check the ocp-tunnel configuration. Note the local-address 10.10.199.200 and secondary-address are  10.10.199.98 for bigip01 and 10.10.199.99 for bigip02
+Check the ocp-tunnel configuration (under Network -> Tunnels). Note the local-address 10.10.199.200 and secondary-address are  10.10.199.98 for bigip01 and 10.10.199.99 for bigip02.  The secondary-address will be used to send monitor traffic and the local address will be used by the active device to send client traffic.
 
 .. image:: /_static/class5/bigip01-tunnel-ip.png
+    :align: center
 
 .. _openshift deploy kctlr ha:
 
@@ -290,59 +283,29 @@ Take the steps below to deploy a contoller for each BIG-IP device in the cluster
 Set up RBAC
 -----------
 
+The F5 BIG-IP Controller requires permission to monitor the status of the OpenSfhift cluster.  The following will create a "role" that will allow it to access specific resources.
+
 You can create RBAC resources in the project in which you will run your BIG-IP Controller. Each Controller that manages a device in a cluster or active-standby pair can use the same Service Account, Cluster Role, and Cluster Role Binding.
 
 **Step 4.1:** Create a Service Account for the BIG-IP Controller
 
 .. code-block:: console
 
-     [root@ose-mstr01 ocp]# **oc create serviceaccount bigip-ctlr [-n kube-system]**
+     [root@ose-mstr01 ocp]# oc create serviceaccount bigip-ctlr -n kube-system
      serviceaccount "bigip-ctlr" created
 
 **Step 4.2:** Create a Cluster Role and Cluster Role Binding with the required permissions.
 
 The following file has already being created **f5-kctlr-openshift-clusterrole.yaml** which is located in /root/agility2018/ocp
 
-.. code-block:: console
-
-     # For use in OpenShift clusters
-     apiVersion: v1
-     kind: ClusterRole
-     metadata:
-     annotations:
-         authorization.openshift.io/system-only: "true"
-     name: system:bigip-ctlr
-     rules:
-     - apiGroups: ["", "extensions"]
-     resources: ["nodes", "services", "endpoints", "namespaces", "ingresses", "routes" ]
-     verbs: ["get", "list", "watch"]
-     - apiGroups: ["", "extensions"]
-     resources: ["configmaps", "events", "ingresses/status"]
-     verbs: ["get", "list", "watch", "update", "create", "patch" ]
-     - apiGroups: ["", "extensions"]
-     resources: ["secrets"]
-     resourceNames: ["<secret-containing-bigip-login>"]
-     verbs: ["get", "list", "watch"]
-
-     ---
-
-     apiVersion: v1
-     kind: ClusterRoleBinding
-     metadata:
-         name: bigip-ctlr-role
-     userNames:
-     - system:serviceaccount:kube-system:bigip-ctlr
-     subjects:
-     - kind: ServiceAccount
-     name: bigip-ctlr
-     roleRef:
-     name: system:bigip-ctlr
-
-Use the oc create -f f5-kctlr-openshift-clusterrole.yaml 
+.. literalinclude:: ../../../openshift/advanced/ocp/f5-kctlr-openshift-clusterrole.yaml
+  :language: yaml
+  :linenos:
+  :emphasize-lines: 3,23
 
 .. code-block:: console
 
-     [root@ose-mstr01 ocp]# **oc create -f f5-kctlr-openshift-clusterrole.yaml**
+     [root@ose-mstr01 ocp]# oc create -f f5-kctlr-openshift-clusterrole.yaml
      clusterrole "system:bigip-ctlr" created
      clusterrolebinding "bigip-ctlr-role" created
 
@@ -359,113 +322,17 @@ Create an OpenShift Deployment for each Controller (one per BIG-IP device). You 
 
 bigip01-cc.yaml
 
-.. code-block:: console
-
-     apiVersion: extensions/v1beta1
-     kind: Deployment
-     metadata:
-       name: bigip01-ctlr
-       namespace: kube-system
-     spec:
-       replicas: 1
-       template:
-         metadata:
-           name: k8s-bigip-ctlr1
-           labels:
-             app: k8s-bigip-ctlr1
-         spec:
-           serviceAccountName: bigip-ctlr
-           containers:
-             -  name: k8s-bigip-ctlr
-                image: "f5networks/k8s-bigip-ctlr:latest"
-                env:
-                  - name: BIGIP_USERNAME
-                    valueFrom:
-                      secretKeyRef:
-                        name: bigip-login
-                        key: username
-                 - name: BIGIP_PASSWORD
-                   valueFrom:
-                      secretKeyRef:
-                      name: bigip-login
-                      key: password
-          command: ["/app/bin/k8s-bigip-ctlr"]
-          args: [
-            "--credentials-directory=/tmp/creds",
-            "--bigip-url=10.10.200.98",
-            "--bigip-partition=ocp",
-            "--pool-member-type=cluster",
-            "--manage-routes=true",
-            "--node-poll-interval=5",
-            "--verify-interval=5",
-	        "--namespace=demoproj",
-	        "--namespace=yelb",
-	        "--namespace=guestbook",
-	        "--namespace=f5demo",
-            "--route-vserver-addr=10.10.201.120",
-            "--route-http-vserver=ocp-vserver",
-            "--route-https-vserver=ocp-https-vserver",
-            "--openshift-sdn-name=/Common/ocp-tunnel"
-          ]
-      imagePullSecrets:
-        - name: f5-docker-images
+.. literalinclude:: ../../../openshift/advanced/ocp/bigip01-cc.yaml
+  :language: yaml
+  :linenos:
+  :emphasize-lines: 2,4,17,21-23
 
 bigip02-cc.yaml
 
-.. code-block:: console
-
-     apiVersion: extensions/v1beta1
-     kind: Deployment
-     metadata:
-       name: bigip02-ctlr
-       namespace: kube-system
-     spec:
-       replicas: 1
-       template:
-         metadata:
-           name: k8s-bigip-ctlr1
-           labels:
-             app: k8s-bigip-ctlr1
-         spec:
-           serviceAccountName: bigip-ctlr
-           containers:
-             -  name: k8s-bigip-ctlr
-                image: "f5networks/k8s-bigip-ctlr:latest"
-                env:
-                  - name: BIGIP_USERNAME
-                    valueFrom:
-                      secretKeyRef:
-                        name: bigip-login
-                        key: username
-                 - name: BIGIP_PASSWORD
-                   valueFrom:
-                      secretKeyRef:
-                      name: bigip-login
-                      key: password
-          command: ["/app/bin/k8s-bigip-ctlr"]
-          args: [
-            "--credentials-directory=/tmp/creds",
-            "--bigip-url=10.10.200.99",
-            "--bigip-partition=ocp",
-            "--pool-member-type=cluster",
-            "--manage-routes=true",
-            "--node-poll-interval=5",
-            "--verify-interval=5",
-	        "--namespace=demoproj",
-	        "--namespace=yelb",
-	        "--namespace=guestbook",
-	        "--namespace=f5demo",
-            "--route-vserver-addr=10.10.201.120",
-            "--route-http-vserver=ocp-vserver",
-            "--route-https-vserver=ocp-https-vserver",
-            "--openshift-sdn-name=/Common/ocp-tunnel"
-          ]
-      imagePullSecrets:
-        - name: f5-docker-images
-
-Use the oc create -f bigip01-cc.yaml and bigip02-cc.yaml to add the bigip controller to OpenShift
-
-**Step 4.3:** Upload the Deployments to the OpenShift API server
+.. literalinclude:: ../../../openshift/advanced/ocp/bigip02-cc.yaml
+  :language: yaml
+  :linenos:
+  :emphasize-lines: 2,4,17,21-23
 
 .. code-block:: console
 
@@ -502,6 +369,7 @@ Verify the deployment and pods that are created
 You can also use the web conole in OpenShift to view the bigip controller. Go the kube-system project
 
 .. image:: /_static/class5/kube-system.png
+    :align: center
 
 Upload the Deployments
 ----------------------
@@ -510,64 +378,36 @@ Upload the Deployments
 
 pool-only.yaml
 
-.. code-block:: console
-
-     kind: ConfigMap
-     apiVersion: v1
-     metadata:
-     # name of the resource to create on the BIG-IP
-     name: k8s.poolonly
-     # the namespace to create the object in
-     # As of v1.1, the k8s-bigip-ctlr watches all namespaces by default
-     # If the k8s-bigip-ctlr is watching a specific namespace(s),
-     # this setting must match the namespace of the Service you want to proxy
-     # -AND- the namespace(s) the k8s-bigip-ctlr watches
-     namespace: f5demo
-     labels:
-         # the type of resource you want to create on the BIG-IP
-         f5type: virtual-server
-     data:
-     schema: "f5schemadb://bigip-virtual-server_v0.1.3.json"
-     data: |
-         {
-         "virtualServer": {
-             "backend": {
-             "servicePort": 8080,
-             "serviceName": "f5demo",
-             "healthMonitors": [{
-                 "interval": 3,
-                 "protocol": "http",
-                 "send": "GET /\r\n",
-                 "timeout": 10
-             }]
-             },
-             "frontend": {
-             "virtualAddress": {
-                 "port": 80
-             },
-             "partition": "ocp",
-             "balance": "round-robin",
-             "mode": "http"
-             }
-         }
-         }
+.. literalinclude:: ../../../openshift/advanced/ocp/pool-only.yaml
+  :language: yaml
+  :linenos:
+  :emphasize-lines: 1,11,14,34
 
 .. code-block:: console
 
      [root@ose-mstr01 ocp]# oc create -f pool-only.yaml
      configmap "k8s.poolonly" created
+     [root@ose-mstr01 ocp]#
 
-**Step 4.5:** Check bigip01 and bigip02 to make sure the pool got create. Validate that both bigip01 and bigip02 can reach the pool members. Pool members should show green
+**Step 4.5:** Check bigip01 and bigip02 to make sure the pool got created (make sure you are looking at the "ocp" partition). Validate that both bigip01 and bigip02 can reach the pool members. Pool members should show green
 
 .. image:: /_static/class5/pool-members.png
+    :align: center
 
 **Step 4.6:** Increase the replication of the f5demo project pods
 
+.. code-block:: console
+
+       [root@ose-mstr01 ocp]# oc scale --replicas=10 deployment/f5demo -n f5demo
+       deployment "f5demo" scaled
+       [root@ose-mstr01 ocp]#
+
 .. image:: /_static/class5/10-containers.png
+    :align: center
 
-Validate that bigip01 and bigip02 so the updated pool member count and they keepalives work. If the keepalives are failing check the tunnel and selfIP
+Validate that bigip01 and bigip02 are updated with the additional pool members and they health monitor works. If the monitor is failing check the tunnel and selfIP.
 
-Validation and troubleshooting
+Validation and Troubleshooting
 ------------------------------
 
 Now that you have HA configured and uploaded the deployment its time to generate traffic through bigip. 
@@ -595,19 +435,22 @@ vi pool-only.yaml
             "port": 80,
             "bindAddr": "10.10.201.220"
 
+.. tip:: Don't forget the "," at the end of the ""port": 80," line.
+
 Create the modified pool-only deployment
 
 .. code-block:: console
 
      [root@ose-mstr01 ocp]# oc create -f pool-only.yaml
      configmap "k8s.poolonly" created
+     [root@ose-mstr01 ocp]#
 
-Connect to the virtual server at http://10.10.201.220. Does the connection work? If not, try the following troubleshooting options
+Connect to the virtual server at http://10.10.201.220. Does the connection work If not, try the following troubleshooting options:
 
-1) Capture the http request to see if the connection is established with the bigip
-2) Follow the following networking troubleshooting Tasks
+  1) Capture the http request to see if the connection is established with the bigip
+  2) Follow the following network troubleshooting section
 
-Network troubleshooting
+Network Troubleshooting
 -----------------------
 
 How do I verify connectivity between the BIG-IP VTEP and the OSE Node?
@@ -619,27 +462,72 @@ How do I verify connectivity between the BIG-IP VTEP and the OSE Node?
 
    .. code-block:: console
 
-      ping -s 1600 <OSE_Node_IP>
+      [root@bigip01:Standby:Changes Pending] config # ping -s 1600 -c 4 10.10.199.101
+      PING 10.10.199.101 (10.10.199.101) 1600(1628) bytes of data.
+      1608 bytes from 10.10.199.101: icmp_seq=1 ttl=64 time=2.94 ms
+      1608 bytes from 10.10.199.101: icmp_seq=2 ttl=64 time=2.21 ms
+      1608 bytes from 10.10.199.101: icmp_seq=3 ttl=64 time=2.48 ms
+      1608 bytes from 10.10.199.101: icmp_seq=4 ttl=64 time=2.47 ms
+      
+      --- 10.10.199.101 ping statistics ---
+      4 packets transmitted, 4 received, 0% packet loss, time 3006ms
+      rtt min/avg/max/mdev = 2.210/2.527/2.946/0.267 ms
+
+#. Ping the Pod's IP address (use the output from looking at the pool members in the previous steps).
+
+   Use the ``-s`` flag to set the MTU of the packets to allow for VxLAN encapsulation.
+
+   .. code-block:: console
+
+      [root@bigip01:Standby:Changes Pending] config # ping -s 1600 -c 4 10.128.0.54
+      PING 10.128.0.54 (10.128.0.54) 1600(1628) bytes of data.
+      
+      --- 10.128.0.54 ping statistics ---
+      4 packets transmitted, 0 received, 100% packet loss, time 12999ms
+      
+   Now change the MTU
+
+   .. code-block:: console
+
+      [root@bigip01:Standby:Changes Pending] config # ping -s 1400 -c 4 10.128.0.54
+      PING 10.128.0.54 (10.128.0.54) 1400(1428) bytes of data.
+      1408 bytes from 10.128.0.54: icmp_seq=1 ttl=64 time=1.74 ms
+      1408 bytes from 10.128.0.54: icmp_seq=2 ttl=64 time=2.43 ms
+      1408 bytes from 10.128.0.54: icmp_seq=3 ttl=64 time=2.77 ms
+      1408 bytes from 10.128.0.54: icmp_seq=4 ttl=64 time=2.25 ms
+      
+      --- 10.128.0.54 ping statistics ---
+      4 packets transmitted, 4 received, 0% packet loss, time 3005ms
+      rtt min/avg/max/mdev = 1.748/2.303/2.774/0.372 ms
+      
+   .. note:: When pinging the VTEP IP directly the BIG-IP was L2 adjacent to the device and could send a large MTU.  In the second example the packet is dropped across the VxLAN tunnel.  In the third example the packet is able to traverse the VxLAN tunnel.
 
 #. In a TMOS shell, output the REST requests from the BIG-IP logs.
 
    - Do a ``tcpdump`` of the underlay network.
-
-   Example showing two-way communication between the BIG-IP VTEP IP and the OSE node VTEP IPs. Example showing traffic on the overlay network; at minimum, you should see BIG-IP health monitors for the Pod IP addresses.
+      
+    Example showing two-way communication between the BIG-IP VTEP IP and the OSE node VTEP IPs. 
+      
+    Example showing traffic on the overlay network; at minimum, you should see BIG-IP health monitors for the Pod IP addresses.
 
    .. code-block:: console
 
-      root@(bigip01)(cfg-sync In Sync)(Standby)(/Common)(tmos)# tcpdump -i ocp-tunnel
+      [root@bigip01:Standby:Changes Pending] config # tcpdump -i ocp-tunnel -c 10 -nnn
       tcpdump: verbose output suppressed, use -v or -vv for full protocol decode
       listening on ocp-tunnel, link-type EN10MB (Ethernet), capture size 65535 bytes
-      10:29:48.126529 IP 10.131.0.98.47006 > 10.128.0.96.webcache: Flags [S], seq 3679729621, win 29200, options [mss 1460,sackOK,TS val 3704230749 ecr 0,nop,wscale 7], length 0 out slot1/tmm0 lis=
-      10:29:48.128430 IP 10.128.0.96.webcache > 10.131.0.98.47006: Flags [S.], seq 2278441553, ack 3679729622, win 27960, options [mss 1410,sackOK,TS val 2782018 ecr 3704230749,nop,wscale 7], length 0 in slot1/tmm0 lis=
-      10:29:48.131715 IP 10.128.0.96.webcache > 10.131.0.98.47006: Flags [.], ack 10, win 219, options [nop,nop,TS val 2782022 ecr 3704230753], length 0 in slot1/tmm1 lis=
-      10:29:48.130533 IP 10.131.0.98.47006 > 10.128.0.96.webcache: Flags [.], ack 1, win 229, options [nop,nop,TS val 3704230753 ecr 2782018], length 0 out slot1/tmm0 lis=
-      10:29:48.130539 IP 10.131.0.98.47006 > 10.128.0.96.webcache: Flags [P.], seq 1:10, ack 1, win 229, options [nop,nop,TS val 3704230753 ecr 2782018], length 9: HTTP: GET / out slot1/tmm0 lis=
-      10:29:48.141479 IP 10.131.0.98.47006 > 10.128.0.96.webcache: Flags [.], ack 1349, win 251, options [nop,nop,TS val 3704230764 ecr 2782031], length 0 out slot1/tmm0 lis=
-      10:29:48.141036 IP 10.128.0.96.webcache > 10.131.0.98.47006: Flags [P.], seq 1:1349, ack 10, win 219, options [nop,nop,TS val 2782031 ecr 3704230753], length 1348: HTTP: HTTP/1.1 200 OK in slot1/tmm1 lis=
-      10:29:48.141041 IP 10.128.0.96.webcache > 10.131.0.98.47006: Flags [F.], seq 1349, ack 10, win 219, options [nop,nop,TS val 2782031 ecr 3704230753], length 0 in slot1/tmm1 lis=
+      09:05:55.962408 IP 10.131.0.98.53404 > 10.128.0.54.8080: Flags [S], seq 1597206142, win 29200, options [mss 1460,sackOK,TS val 441031289 ecr 0,nop,wscale 7], length 0 out slot1/tmm0 lis=
+      09:05:55.963532 IP 10.128.0.54.8080 > 10.131.0.98.53404: Flags [S.], seq 1644640677, ack 1597206143, win 27960, options [mss 1410,sackOK,TS val 3681001 ecr 441031289,nop,wscale 7], length 0 in slot1/tmm1 lis=
+      09:05:55.964361 IP 10.131.0.98.53404 > 10.128.0.54.8080: Flags [.], ack 1, win 229, options [nop,nop,TS val 441031291 ecr 3681001], length 0 out slot1/tmm0 lis=
+      09:05:55.964367 IP 10.131.0.98.53404 > 10.128.0.54.8080: Flags [P.], seq 1:10, ack 1, win 229, options [nop,nop,TS val 441031291 ecr 3681001], length 9: HTTP: GET / out slot1/tmm0 lis=
+      09:05:55.965630 IP 10.128.0.54.8080 > 10.131.0.98.53404: Flags [.], ack 10, win 219, options [nop,nop,TS val 3681003 ecr 441031291], length 0 in slot1/tmm1 lis=
+      09:05:55.975754 IP 10.128.0.54.8080 > 10.131.0.98.53404: Flags [P.], seq 1:1337, ack 10, win 219, options [nop,nop,TS val 3681013 ecr 441031291], length 1336: HTTP: HTTP/1.1 200 OK in slot1/tmm1 lis=
+      09:05:55.975997 IP 10.128.0.54.8080 > 10.131.0.98.53404: Flags [F.], seq 1337, ack 10, win 219, options [nop,nop,TS val 3681013 ecr 441031291], length 0 in slot1/tmm1 lis=
+      09:05:55.976108 IP 10.131.0.98.53404 > 10.128.0.54.8080: Flags [.], ack 1337, win 251, options [nop,nop,TS val 441031302 ecr 3681013], length 0 out slot1/tmm0 lis=
+      09:05:55.976114 IP 10.131.0.98.53404 > 10.128.0.54.8080: Flags [F.], seq 10, ack 1337, win 251, options [nop,nop,TS val 441031303 ecr 3681013], length 0 out slot1/tmm0 lis=
+      09:05:55.976488 IP 10.131.0.98.53404 > 10.128.0.54.8080: Flags [.], ack 1338, win 251, options [nop,nop,TS val 441031303 ecr 3681013], length 0 out slot1/tmm0 lis=
+      10 packets captured
+      10 packets received by filter
+      0 packets dropped by kernel
 
 #. In a TMOS shell, view the MAC address entries for the OSE tunnel. This will show the mac address and IP addresses of all of the OpenShift endpoints.
 
@@ -657,6 +545,8 @@ How do I verify connectivity between the BIG-IP VTEP and the OSE Node?
       ocp-tunnel  0a:58:0a:80:00:60  endpoint:10.10.199.101    yes
 
 #. In a TMOS shell, view the ARP entries.
+
+   .. note:: run the command "tmsh"  if you do not see "(tmos)" in your shell.
 
    This will show all of the ARP entries; you should see the VTEP entries on the :code:`ocpvlan` and the Pod IP addresses on :code:`ose-tunnel`.
 
@@ -676,32 +566,29 @@ How do I verify connectivity between the BIG-IP VTEP and the OSE Node?
 
       root@(bigip02)(cfg-sync In Sync)(Active)(/Common)(tmos)#
 
-**Step 5.1:** Validate floating traffic for ocp-tunnel self-ip
+#. Validate floating traffic for ocp-tunnel self-ip
 
 Check if the configuration is correct from step 3.6. Make sure the floating IP is set to traffic-group-1 floating. A floating traffic group is request for the response traffic from the pool-member. If the traffic is local change to floating
 
 .. image:: /_static/class5/non-floating.png
+    :align: center
 
 change to floating
 
 .. image:: /_static/class5/floating.png
+    :align: center
 
 Connect to the viutal IP address
 
 .. image:: /_static/class5/success.png
+    :align: center
 
 Test failover and make sure you can connect to the virtual. 
 
-Congraulation for completeing the HA clusterting setup. Please move next module. 
+**Congraulation** for completeing the HA clusterting setup. Before moving to the next module cleanup the deployed resource:
 
+.. code-block:: console
 
-
-
-
-
-
-
-
-
-
-
+     [root@ose-mstr01 ocp]# oc delete -f pool-only.yaml
+     configmap "k8s.poolonly" created
+     [root@ose-mstr01 ocp]#

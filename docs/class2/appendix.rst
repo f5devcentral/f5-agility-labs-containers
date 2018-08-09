@@ -3,9 +3,9 @@ Appendix
 
 This Kubernetes lab came from open source code on Github, Docker, Ubuntu, and was originally created by F5 Solution Architects and F5 PD.  This was updated to a RavelloSystems BluePrint to support multiple container deployments for the 2018 F5 Agility event.
 
-For more detailed instructions about all the yaml files used related to F5 and Kubernetes, OpenShift, Mesos/Marathon, and Cloud Foundry please visit:
+.. seealso:: For more detailed instructions about all the yaml files used related to F5 and Kubernetes please visit:
 
-http://clouddocs.f5.com/containers/v2/kubernetes/index.html
+  http://clouddocs.f5.com/containers/v2/kubernetes/index.html
 
 Additional links available:
 

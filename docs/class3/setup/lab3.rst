@@ -31,7 +31,7 @@ To retrieve the binary, go to `Mesos DNS releases <http://https://github.com/mes
 
 		vi /etc/mesos-dns/config.json
 
-	.. code-block:: console
+	.. code-block:: json
 
 		{
 			"zk": "zk://10.2.10.10:2181,10.2.10.20:2181,10.2.10.30:2181/mesos",

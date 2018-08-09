@@ -24,7 +24,7 @@ We will leverage the following setup to configure the Mesos / Marathon environme
     - **IP-ADDR**
     - **VLAN**
     - **Credentials**
-  * - jumphost
+  * - jumpbox
     - 10.1.1.250
     - mgmt: 10.1.1.0/24
     - user/Student!Agility!

@@ -1,9 +1,9 @@
 Lab 1.1 - F5 Container Connector Setup
 ======================================
 
-The official CC documentation is here: `Install the BIG-IP Controller: Marathon <http://clouddocs.f5.com/containers/v2/marathon/mctlr-app-install.html>`_
+The BIG-IP Controller for Marathon installs as an `Application <https://mesosphere.github.io/marathon/docs/application-basics.html>`_
 
-The BIG-IP Controller for Marathon installs as a Marathon `Application <https://mesosphere.github.io/marathon/docs/application-basics.html>`_
+.. seealso:: The official CC documentation is here: `Install the BIG-IP Controller: Marathon <http://clouddocs.f5.com/containers/v2/marathon/mctlr-app-install.html>`_
 
 BIG-IP Setup
 ------------
@@ -27,18 +27,18 @@ Through the Jumpbox, you should have a BIG-IP available at the following URL: ht
         GoTo System --> Users --> Partition List
         - Create a new partition called "mesos" (use default settings)
         - Click Finished
-		
+
     .. image:: images/f5-container-connector-bigip-partition-setup.png
 		:align: center
 
 Container Connector Deployment
 ------------------------------
 
-.. note:: For a more thorough explanation of all the settings and options see `F5 Container Connector - Marathon <https://clouddocs.f5.com/containers/v2/marathon/>`_
+.. note:: In this lab we have already built out your Mesos Environment. In the Kubernetes lab, we did the work via the CLI. In this lab we will use the GUI and do the tasks via the YAML/JSON format. For a more thorough explanation of all the settings and options see `F5 Container Connector - Marathon <https://clouddocs.f5.com/containers/v2/marathon/>`_
 
 Now that BIG-IP is licensed and prepped with the "mesos" partition, we need to deploy our Marathon BIG-IP Controller, we can either use Marathon UI or use the Marathon REST API.  For this class we will be using the Marathon UI.
 
-#. From the jumphost connect to the Marathon UI on `http://10.2.10.10:8080 <http://10.2.10.10:8080>`_ and click "Create Application".
+#. From the jumpbox connect to the Marathon UI on `http://10.2.10.10:8080 <http://10.2.10.10:8080>`_ and click "Create Application".
 
 	.. image:: images/f5-container-connector-create-application-button.png
   		:align: center
@@ -54,6 +54,8 @@ Now that BIG-IP is licensed and prepped with the "mesos" partition, we need to d
 		:language: json
 		:linenos:
 		:emphasize-lines: 9,14,15
+
+	.. image:: images/f5-container-connector-create-f5-cc.png
 
 #. After a few seconds you should have a 2nd application folder labeled “F5” as shown in this picture.
 
@@ -79,12 +81,12 @@ Now that BIG-IP is licensed and prepped with the "mesos" partition, we need to d
 		#. Using the Marathon UI
 
 			Click on Applications --> the f5 folder --> marathon-bigip-ctlr --> From here you can download and view the logs from the text editor of choice.
-		
+
 			You should see something like this:
 
 			.. image:: images/f5-container-connector-logs.png
 				:align: center
-			
+
 		#. To check the logs with docker, you need to identify where the Controller is running. From the previous step we can see it's running on 10.2.10.40 (which is **f5-mesos-agent1**).
 
 			.. image:: images/f5-container-connector-locate-bigip-controller.png
@@ -114,7 +116,13 @@ Now that BIG-IP is licensed and prepped with the "mesos" partition, we need to d
 
 			.. code-block:: console
 
-				sudo docker exec -i -t 43c11f8d0cfa /bin/sh
+				sudo docker exec -it 43c11f8d0cfa /bin/sh
+
+				cd /app
+
+				ls -la
+
+				exit
 
 			.. image:: images/f5-container-connector-run-shell-bigip-ctlr.png
 				:align: center
