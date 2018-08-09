@@ -1,5 +1,5 @@
-Module 1: Welcome to OpenShift!
-================================
+Section 1.1 Welcome to OpenShift!
+=================================
 
 This lab guide is the F5 Advanced Labs for Red Hat OpenShift Container Platform (OCP). This lab guide and blueprint was created using OCP version 3.7. This lab provides a quick tour of the console to help you get familiar with the user interface along with some key terminology we will use in subsequent lab content.
 
@@ -121,10 +121,17 @@ To list all nodes that are known to the master:
      ose-node02            Ready                      24d       v1.7.6+a08f5eeb62
      [root@ose-mstr01 ~]#
      
-If the **node** status shows **NotReady** or **SchedulingDisabled** contact the lab proctor. The node is not passing the health checks performed from the master and Pods cannot be scheduled for placement on the node.
+If the status shows **NotReady** or **SchedulingDisabled** contact the lab proctor. The The node is not passing the health checks performed from the master and Pods cannot be scheduled for placement on the node. 
 
-.. note:: "SchedulingDisabled" for the **Master** is normal.
+.. code-block:: console
 
+     [root@ose-mstr01 ~]# oc get nodes
+     NAME                  STATUS                     AGE       VERSION
+     ose-mstr01.f5.local   Ready,SchedulingDisabled   24d       v1.7.6+a08f5eeb62
+     ose-node01            Ready                      24d       v1.7.6+a08f5eeb62
+     ose-node02            Ready                      24d       v1.7.6+a08f5eeb62
+     [root@ose-mstr01 ~]#
+     
 To get more detailed information about a specific node, including the reason for the current condition use the oc describe node command. This does provide alot of very useful information and can assist with throubleshooting issues. 
      
 .. code-block:: console
@@ -228,17 +235,16 @@ You will be using these projects in the lab
      
 **Step 8:** Access OpenShift web console
 
-From the jumpbox navigate to the URI provided by your instructor and login with the user/password provided (there is favorite on chrome).
+Navigate to the URI provided by your instructor and login with the user/password provided (there is favorite on chrome)
 
 Use the following username and password
 username: **demouser**
 password: **demouser**
 
 .. image:: /_static/class5/webconsole.png
-    :align: center
 
-Troubleshooting OpenShift!
---------------------------
+Section 1.2 Troubbleshooting OpenShift!
+--------------------------------------------------------
 
 If you have a problem in your OpenShift Container Platform 3 environment how do you investigate
 
@@ -248,8 +254,6 @@ If you have a problem in your OpenShift Container Platform 3 environment how do 
 * I need to provide supporting data to technical support for analysis. What information is needed?
 
 A starting point for data collection from an OpenShift master or node is a sosreport that includes docker and OpenShift related information. The process to collect a sosreport is the same as with any other Red Hat Enterprise Linux (RHEL) based system:
-
-.. note:: The following is provided for informational purposes.  You do not need to run these commands for the lab.
 
 .. code-block:: console
 
