@@ -328,6 +328,8 @@ Click on the traffic policy listed uner **Published Policies** to view the polic
 
 Next, click on the rule name listed under the **Rules** section of the policy page to view the rule page for the selected rule:
 
+.. warning:: Due to the version of TMOS used in this lab you will not see the correct "hostname" due to a GUI issue.
+
 .. image:: /_static/class5/module3/bigip01-route-rule.png
     :align: center
 
