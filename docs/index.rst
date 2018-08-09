@@ -1,5 +1,5 @@
-Welcome to F5 Containers lab's documentation!
-=============================================
+Welcome to the F5 Container Lab's Documentation!
+================================================
 
 **The purpose of these labs is to give you better understanding of...**
 

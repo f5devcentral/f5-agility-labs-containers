@@ -2,18 +2,12 @@ Mesos / Marathon Overview
 =========================
 
 The F5 Marathon Container Integration consists of the F5 Marathon BIG-IP
-Controller, the F5 Application Service Proxy (ASP), and the F5 Marathon
-ASP Controller.
+Controller.
 
 The F5 Marathon BIG-IP Controller configures a BIG-IP to expose applications
 in a Mesos cluster as BIG-IP virtual servers, serving North-South traffic.
 
-The F5 Application Service Proxy provides load balancing and telemetry for
-containerized applications, serving East-West traffic. The F5 Marathon ASP
-Controller deploys ASP instances ‘on-demand’ for Marathon Applications.
-
-The official F5 documentation is available here:
-`F5 Marathon Container Integration <http://clouddocs.f5.com/containers/v1/marathon/>`_
+.. seealso:: The official F5 documentation is available here: `F5 Marathon Container Integration <http://clouddocs.f5.com/containers/v2/marathon/>`_
 
 You can either setup the whole F5 solutions yourself or use some scripts to
 automatically deploy everything

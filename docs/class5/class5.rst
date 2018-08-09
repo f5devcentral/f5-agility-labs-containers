@@ -1,13 +1,13 @@
 Class 5: Advanced Labs for Red Hat OpenShift Container Platform (OCP)
-======================================================================
+=====================================================================
 
 The purpose of this lab is to give you more visibility on
 
 .. toctree::
-   :maxdepth: 1
-   :glob:
+  :maxdepth: 1
+  :glob:
 
-   module*/*
+  module*/*
 
 Expected time to complete: **3 hours**
 
@@ -22,20 +22,25 @@ In the environment, there is a three-node OpenShift cluster with one master and 
   * - **Hostname**
     - **Mgt-IP**
     - **Login / Password**
-  * - Windows Jumpbox
+  * - jumpbox
     - 10.10.200.199
     - user/Student!Agility!
-  * - BIG-IP
+  * - bigip01
     - 10.10.200.98
-    - GUI: admin/admin
+    - admin/admin
 
-      SSH: root/default
-  * - ose-master
+      root/default
+  * - bigip02
+    - 10.10.200.99
+    - admin/admin
+
+      root/default
+  * - ose-mstr01
     - 10.10.199.100
-    - ssh: root/default
+    - root/default
   * - ose-node01
     - 10.10.199.101
-    - ssh: root/default
+    - root/default
   * - ose-node02
     - 10.10.199.102
-    - ssh: root/default
+    - root/default
