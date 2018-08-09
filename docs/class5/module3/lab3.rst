@@ -272,7 +272,7 @@ Now that you have reviewed the Deployment, you need to actually create it by dep
 
 .. code-block:: console
 
-    [root@ose-mstr01 tmp]# oc create -f f5-demo-app-route-deployment.yaml
+    [root@ose-mstr01 tmp]# oc create -f f5-demo-app-route-deployment.yaml -n f5demo
     deployment "f5-demo-app-route" created
     service "f5-demo-app-route" created
 
@@ -358,10 +358,10 @@ From ose-master server, issue the following commands:
 
 .. code-block:: console
 
-    [root@ose-mstr01 tmp]# oc delete -f f5-demo-app-route-route.yaml
+    [root@ose-mstr01 tmp]# oc delete -f f5-demo-app-route-route.yaml -n f5demo
     route "f5-demo-app-route" deleted
 
-    [root@ose-mstr01 tmp]# oc delete -f f5-demo-app-route-deployment.yaml
+    [root@ose-mstr01 tmp]# oc delete -f f5-demo-app-route-deployment.yaml -n f5demo
     deployment "f5-demo-app-route" deleted
     service "f5-demo-app-route" deleted
 
@@ -399,7 +399,7 @@ Now that you have reviewed the Deployment, you need to actually create it by dep
 
 .. code-block:: console
 
-    [root@ose-mstr01 tmp]# oc create -f f5-demo-app-bg-deployment.yaml
+    [root@ose-mstr01 tmp]# oc create -f f5-demo-app-bg-deployment.yaml -n f5demo
     deployment "node-blue" created
     service "node-blue" created
     deployment "node-green" created
@@ -496,10 +496,10 @@ From ose-master server, run the following commands:
 
 .. code-block:: console
 
-    [root@ose-mstr01 tmp]# oc delete -f f5-demo-app-bg-route.yaml
+    [root@ose-mstr01 tmp]# oc delete -f f5-demo-app-bg-route.yaml -n f5demo
     route "f5-demo-app-bg-route" deleted
 
-    [root@ose-mstr01 tmp]# oc delete -f f5-demo-app-bg-deployment.yaml
+    [root@ose-mstr01 tmp]# oc delete -f f5-demo-app-bg-deployment.yaml -n f5demo
     deployment "node-blue" deleted
     service "node-blue" deleted
     deployment "node-green" deleted
@@ -561,11 +561,15 @@ Connect to BIG-IP01 and BIG-IP02 via SSH using the mRemoteNG application and iss
 
     root@(bigip02)(cfg-sync In Sync)(Active)(/Common)(tmos)# cd /ocp
 
-    root@(bigip02)(cfg-sync In Sync)(Active)(/ocp)(tmos)# create ltm virtual my-ose-vserver destination "10.10.201.120:80" ip-protocol "6" profiles add { http } metadata add { cccl-whitelist { value 1 }}
+    root@(bigip02)(cfg-sync In Sync)(Active)(/ocp)(tmos)# create ltm virtual my-ose-vserver destination "10.10.201.120:80" ip-protocol "6" profiles add { http f5-tcp-progressive }  source-address-translation { type automap } metadata add { cccl-whitelist { value 1 }}
 
-    root@(bigip02)(cfg-sync In Sync)(Active)(/ocp)(tmos)# create ltm virtual my-ose-https-vserver destination "10.10.201.120:443" ip-protocol "6" profiles add { http {} clientssl {context clientside}} metadata add { cccl-whitelist { value 1 }}
+    root@(bigip02)(cfg-sync In Sync)(Active)(/ocp)(tmos)# create ltm virtual my-ose-https-vserver destination "10.10.201.120:443" ip-protocol "6" profiles add { http f5-tcp-progressive {} clientssl {context clientside}}  source-address-translation { type automap } metadata add { cccl-whitelist { value 1 }}
+
+    root@(bigip02)(cfg-sync In Sync)(Active)(/ocp)(tmos)# modify /ltm virtual-address 10.10.201.120 metadata add { cccl-whitelist { value 1 }}save 
 
     root@(bigip02)(cfg-sync Changes Pending)(Active)(/ocp)(tmos)# save sys config
+    root@(bigip02)(cfg-sync Changes Pending)(Active)(/ocp)(tmos)# run /cm config-sync to-group ocp-devicegroup
+
     Saving running configuration...
     /config/bigip.conf
     /config/bigip_base.conf
@@ -617,7 +621,7 @@ From the ose-master server, run the following command:
 
 .. code-block:: console
 
-    [root@ose-mstr01 tmp]# oc create -f f5-demo-app-route-route.yaml
+    [root@ose-mstr01 tmp]# oc create -f f5-demo-app-route-route.yaml -n f5demo
     route "f5-demo-app-route" created
 
 **Step 6:** Review the BIG-IP configuration
