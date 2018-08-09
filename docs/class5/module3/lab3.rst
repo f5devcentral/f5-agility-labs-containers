@@ -68,6 +68,10 @@ Now that you have reviewed the Deployment,you need to actually create the Deploy
 
 From ose-master server, run the following command:
 
+.. attention:: Be sure to change working directory on ose-mstr01:
+
+    cd /root/agility2018/apps/module3
+
 .. code-block:: console
 
     [root@ose-mstr01 module3]# oc create -f f5-demo-app-deployment.yaml
@@ -180,7 +184,7 @@ From ose-master, issue the following command:
     NAME          DESIRED   CURRENT   UP-TO-DATE   AVAILABLE   AGE
     f5-demo-app   1         1         1            1           1m
 
-You can see from the output that the deployment is named **f5-demo-app** an you will use that name for the next command.
+You can see from the output that the deployment is named **f5-demo-app**.  You will use that name for the next command.
 
 From the ose-master host, entering the following command to set the replica count for the deployment to 10 instances:
 
@@ -259,7 +263,7 @@ To complete this exercise, you will perform the following steps:
 
 **Step 1:** Deploy demo application and its associated Service
 
-In the previous exercise, you created the Deployment and Service separately. This step demonstrates creating both the Deployment and the Service from a single configuration file.  A separator of 3 dashes (---) is used to separate one resource definition from next resource definition. 
+In the previous exercise, you created the Deployment and Service separately. This step demonstrates creating both the Deployment and the Service from a single configuration file.  A separator of 3 dashes (``---``) is used to separate one resource definition from the next resource definition. 
 
 From ose-master, review the following deployment: f5-demo-app-route-deployment.yaml
 

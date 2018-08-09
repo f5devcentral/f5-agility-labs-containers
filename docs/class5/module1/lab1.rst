@@ -125,15 +125,6 @@ If the **node** status shows **NotReady** or **SchedulingDisabled** contact the 
 
 .. note:: "SchedulingDisabled" for the **Master** is normal.
 
-.. code-block:: console
-
-     [root@ose-mstr01 ~]# oc get nodes
-     NAME                  STATUS                     AGE       VERSION
-     ose-mstr01.f5.local   Ready,SchedulingDisabled   24d       v1.7.6+a08f5eeb62
-     ose-node01            Ready                      24d       v1.7.6+a08f5eeb62
-     ose-node02            Ready                      24d       v1.7.6+a08f5eeb62
-     [root@ose-mstr01 ~]#
-     
 To get more detailed information about a specific node, including the reason for the current condition use the oc describe node command. This does provide alot of very useful information and can assist with throubleshooting issues. 
      
 .. code-block:: console

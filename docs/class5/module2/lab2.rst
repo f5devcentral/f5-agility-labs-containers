@@ -158,7 +158,7 @@ Upload the HostSubnet Files to the OpenShift API Server
 
 **Step 2:** Create a new OpenShift HostSubnet
 
-HostSubnets must use valid YAML. You can upload the files individually using separate oc create commands. Create one HostSubnet for each BIG-IP device. These will handle health monitor traffic. Also create one HostSubnet to pass client traffic. You will create the floating IP address for the active device in this subnet as shown in the diagram above. We have create the YAML files to save time. The files are located at **/root/agility2018/ocp**
+HostSubnets must use valid YAML. You can upload the files individually using separate oc create commands. Create one HostSubnet for each BIG-IP device. These will handle health monitor traffic. Also create one HostSubnet to pass client traffic. You will create the floating IP address for the active device in this subnet as shown in the diagram above. We have created the YAML files to save time. The files are located at **/root/agility2018/ocp**
 
 Define HostSubnets
 ------------------
@@ -210,7 +210,9 @@ Set up VXLAN on the BIG-IP Devices
 
 **Step 3.1:** Create a new partition on your BIG-IP system
 
-The BIG-IP OpenShift Controller cannot manage objects in the /Common partition. Its recommended to create all HA using the /Common partition
+.. important:: The BIG-IP OpenShift Controller cannot manage objects in the /Common partition. 
+
+    Its recommended to create all HA using the /Common partition
 
 .. note:: You can copy and paste the following commands to be run directly from the OpenShift master (ose-mstr01).  To paste content into mRemoteNG; use your right mouse button.
 
@@ -385,6 +387,7 @@ pool-only.yaml
 
      [root@ose-mstr01 ocp]# oc create -f pool-only.yaml
      configmap "k8s.poolonly" created
+     [root@ose-mstr01 ocp]#
 
 **Step 4.5:** Check bigip01 and bigip02 to make sure the pool got created (make sure you are looking at the "ocp" partition). Validate that both bigip01 and bigip02 can reach the pool members. Pool members should show green
 
@@ -440,6 +443,7 @@ Create the modified pool-only deployment
 
      [root@ose-mstr01 ocp]# oc create -f pool-only.yaml
      configmap "k8s.poolonly" created
+     [root@ose-mstr01 ocp]#
 
 Connect to the virtual server at http://10.10.201.220. Does the connection work If not, try the following troubleshooting options:
 
@@ -496,15 +500,15 @@ How do I verify connectivity between the BIG-IP VTEP and the OSE Node?
       4 packets transmitted, 4 received, 0% packet loss, time 3005ms
       rtt min/avg/max/mdev = 1.748/2.303/2.774/0.372 ms
       
-When pinging the VTEP IP directly the BIG-IP was L2 adjacent to the device and could send a large MTU.  In the second example the packet is dropped across the VxLAN tunnel.  In the third example the packet is able to traverse the VxLAN tunnel.
-
-
+   .. note:: When pinging the VTEP IP directly the BIG-IP was L2 adjacent to the device and could send a large MTU.  In the second example the packet is dropped across the VxLAN tunnel.  In the third example the packet is able to traverse the VxLAN tunnel.
 
 #. In a TMOS shell, output the REST requests from the BIG-IP logs.
 
    - Do a ``tcpdump`` of the underlay network.
-
-   Example showing two-way communication between the BIG-IP VTEP IP and the OSE node VTEP IPs. Example showing traffic on the overlay network; at minimum, you should see BIG-IP health monitors for the Pod IP addresses.
+      
+    Example showing two-way communication between the BIG-IP VTEP IP and the OSE node VTEP IPs. 
+      
+    Example showing traffic on the overlay network; at minimum, you should see BIG-IP health monitors for the Pod IP addresses.
 
    .. code-block:: console
 
@@ -562,7 +566,7 @@ When pinging the VTEP IP directly the BIG-IP was L2 adjacent to the device and c
 
       root@(bigip02)(cfg-sync In Sync)(Active)(/Common)(tmos)#
 
-**Step 5.1:** Validate floating traffic for ocp-tunnel self-ip
+#. Validate floating traffic for ocp-tunnel self-ip
 
 Check if the configuration is correct from step 3.6. Make sure the floating IP is set to traffic-group-1 floating. A floating traffic group is request for the response traffic from the pool-member. If the traffic is local change to floating
 
@@ -581,4 +585,10 @@ Connect to the viutal IP address
 
 Test failover and make sure you can connect to the virtual. 
 
-Congraulation for completeing the HA clusterting setup. Please move next module. 
+**Congraulation** for completeing the HA clusterting setup. Before moving to the next module cleanup the deployed resource:
+
+.. code-block:: console
+
+     [root@ose-mstr01 ocp]# oc delete -f pool-only.yaml
+     configmap "k8s.poolonly" created
+     [root@ose-mstr01 ocp]#
