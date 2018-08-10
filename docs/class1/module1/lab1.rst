@@ -12,7 +12,7 @@ Lab 1.1 Install Docker
     .. image:: images/MremoteNG-1.png
         :align: center
 
-#. Once connected via CLI(SSH) to kube-master as ubuntu user (it's the user already setup in the MremoteNG settings), let's elivate to root:
+#. Once connected via CLI(SSH) to kube-master as ubuntu user (it's the user already setup in the MremoteNG settings), let's elevate to root:
 
     .. code-block:: console
 

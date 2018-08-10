@@ -106,4 +106,4 @@ Main features
 7. Health Checks. Evaluate your application's health using HTTP or TCP checks.
 8. Event Subscription. Supply an HTTP endpoint to receive notifications - for example to integrate with an external load balancer.
 9. Metrics. Query them at /metrics in JSON format or push them to systems like graphite, statsd and Datadog.
-10. Complete REST API for easy integration and scriptability.
+10. Complete REST API for easy integration and script-ability.

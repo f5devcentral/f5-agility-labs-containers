@@ -54,7 +54,7 @@ different Openshift nodes (Master and nodes) and to your BIG-IPs.
 
 **Accessing OpenShift**
 
-OpenShift provides a web console that allow you to perform various tasks via a web browser. Additionally, you can utilize a command line tool to perfrom tasks. Let's get started by logging into both of these and checking the status of the platform.
+OpenShift provides a web console that allow you to perform various tasks via a web browser. Additionally, you can utilize a command line tool to perform tasks. Let's get started by logging into both of these and checking the status of the platform.
 
 **Step 3:** Login to OpenShift master
 

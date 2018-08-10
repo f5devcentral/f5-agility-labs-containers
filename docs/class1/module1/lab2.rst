@@ -49,4 +49,4 @@ Lab 1.2 Run a Container on Docker
         :align: center
 
 
-Thats it, you installed docker, downloaded a container,  ran the Hello World container, ran a web server container, and accessed your web server container via the broswer.
+That's it, you installed docker, downloaded a container,  ran the Hello World container, ran a web server container, and accessed your web server container via the browser.
