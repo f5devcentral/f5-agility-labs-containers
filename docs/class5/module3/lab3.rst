@@ -34,7 +34,7 @@ Additionally, you will also create variations of each resource type.
 
     You will use the same Windows jumpbox as you used in the previous sections to complete the exercises in this section.
 
-    Unless otherwise noted, all the resource definition yaml files have been pre-created and can be found on the ose-master server under **/root/agility2018/apps/module3**
+    Unless otherwise noted, all the resource definition yaml files have been pre-created and can be found on the **ose-master** server under **/root/agility2018/apps/module3**
 
 Exercise 1: ConfigMap - Basic
 -----------------------------
@@ -57,7 +57,7 @@ To complete this exercise, you will perform the following steps:
 
 **Step 1**: Deploy demo application
 
-From ose-master, review the following Deployment configuration: f5-demo-app-deployment.yaml
+From the **ose-master**, review the following Deployment configuration: **f5-demo-app-deployment.yaml**
 
 .. literalinclude:: ../../../openshift/advanced/apps/module3/f5-demo-app-deployment.yaml
   :language: yaml
@@ -66,9 +66,9 @@ From ose-master, review the following Deployment configuration: f5-demo-app-depl
 
 Now that you have reviewed the Deployment,you need to actually create the Deployment by deploying it to OpenShift by using the **oc create** command.
 
-From ose-master server, run the following command:
+From **ose-master** server, run the following command:
 
-.. attention:: Be sure to change working directory on ose-mstr01:
+.. attention:: Be sure to change the working directory on **ose-mstr01**:
 
     cd /root/agility2018/apps/module3
 
@@ -81,7 +81,7 @@ From ose-master server, run the following command:
 
 In order for an application to be accessible outside of the OpenShift cluster, a Service must be created.  The Service uses a label selector to reference the application to be exposed.  Additionally, the service also specifies the container port (8080) that the application is listening on.
 
-From ose-master, review the following Service: f5-demo-app-service.yaml
+From **ose-master**, review the following Service: f5-demo-app-service.yaml
 
 .. literalinclude:: ../../../openshift/advanced/apps/module3/f5-demo-app-service.yaml
   :language: yaml
