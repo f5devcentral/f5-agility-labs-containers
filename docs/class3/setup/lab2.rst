@@ -11,7 +11,7 @@ Prep Ubuntu
     - mesos-agent1
     - mesos-agent2
 
-#. Elivate to "root"
+#. Elevate to "root"
 
     .. code-block:: console
 

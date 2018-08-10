@@ -27,7 +27,7 @@ BIG-IP Config Sync
 
 Each Container Connector monitors the BIG-IP partition it manages for configuration changes. If its configuration changes, the Connector reapplies its own configuration to the BIG-IP. F5 does not recommend making configuration changes to objects in any partition managed by a F5 Container Connector via any other means (for example, the configuration utility, TMOS, or by syncing configuration from another device or service group). Doing so may result in disruption of service or unexpected behavior. 
 
-The Container Connector for OpenShift uses FDB entries and ARP records to identify the Cluster resources associated with BIG-IP Nodes. Because BIG-IP config sync doesn’t include FDB entries or ARP records, F5 does not recommend using automatic configuration sync when managing a BIG-IP HA pair or cluster with the F5 Container Connector. You must diable config sync when using tunnels.
+The Container Connector for OpenShift uses FDB entries and ARP records to identify the Cluster resources associated with BIG-IP Nodes. Because BIG-IP config sync doesn’t include FDB entries or ARP records, F5 does not recommend using automatic configuration sync when managing a BIG-IP HA pair or cluster with the F5 Container Connector. You must disable config sync when using tunnels.
 
 Complete the steps below to set up the solution shown in the diagram. Be sure to use the correct IP addresses and subnet masks for your OpenShift Cluster
 
@@ -606,7 +606,7 @@ How do I verify connectivity between the BIG-IP VTEP and the OSE Node?
 
 #. Test failover and make sure you can connect to the virtual. 
 
-**Congratulations** for completing the HA clusterting setup. Before moving to the next module cleanup the deployed resource:
+**Congratulations** for completing the HA clustering setup. Before moving to the next module cleanup the deployed resource:
 
 .. code-block:: console
 

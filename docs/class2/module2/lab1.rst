@@ -24,7 +24,7 @@ Setup
     .. image:: images/MremoteNG-1.png
         :align: center
 
-#. If not already done from the previous Docker lab elivate to "root"
+#. If not already done from the previous Docker lab elevate to "root"
 
     .. code-block:: console
 
@@ -35,7 +35,7 @@ Setup
     .. image:: images/rootuser.png
         :align: center
 
-#. For your conveniance we've already added the host IP & names to /etc/hosts.  Verify the file
+#. For your convenience we've already added the host IP & names to /etc/hosts.  Verify the file
 
     .. code-block:: console
 
