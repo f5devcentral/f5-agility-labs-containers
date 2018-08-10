@@ -158,11 +158,7 @@ Upload the HostSubnet Files to the OpenShift API Server
 
 **Step 2:** Create a new OpenShift HostSubnet
 
-HostSubnets must use valid YAML. You can upload the files individually using separate oc create commands. Create one HostSubnet for each BIG-IP device. These will handle health monitor traffic. Also create one HostSubnet to pass client traffic. You will create the floating IP address for the active device in this subnet as shown in the diagram above. 
-
-.. attention:: We have created the YAML files to save time. The files are located at **/root/agility2018/ocp**
-
-    cd /root/agility2018/ocp
+HostSubnets must use valid YAML. You can upload the files individually using separate oc create commands. Create one HostSubnet for each BIG-IP device. These will handle health monitor traffic. Also create one HostSubnet to pass client traffic. You will create the floating IP address for the active device in this subnet as shown in the diagram above. We have created the YAML files to save time. The files are located at **/root/agility2018/ocp**
 
 Define HostSubnets
 ------------------
@@ -572,27 +568,27 @@ How do I verify connectivity between the BIG-IP VTEP and the OSE Node?
 
 #. Validate floating traffic for ocp-tunnel self-ip
 
-   Check if the configuration is correct from step 3.6. Make sure the floating IP is set to traffic-group-1 floating. A floating traffic group is request for the response traffic from the pool-member. If the traffic is local change to floating
+Check if the configuration is correct from step 3.6. Make sure the floating IP is set to traffic-group-1 floating. A floating traffic group is request for the response traffic from the pool-member. If the traffic is local change to floating
 
-   .. image:: /_static/class5/non-floating.png
-      :align: center
+.. image:: /_static/class5/non-floating.png
+    :align: center
 
-   change to floating
+change to floating
 
-   .. image:: /_static/class5/floating.png
-      :align: center
+.. image:: /_static/class5/floating.png
+    :align: center
 
-   Connect to the viutal IP address
+Connect to the viutal IP address
 
-   .. image:: /_static/class5/success.png
-      :align: center
+.. image:: /_static/class5/success.png
+    :align: center
 
-#. Test failover and make sure you can connect to the virtual. 
+Test failover and make sure you can connect to the virtual. 
 
 **Congraulation** for completeing the HA clusterting setup. Before moving to the next module cleanup the deployed resource:
 
 .. code-block:: console
 
-    [root@ose-mstr01 ocp]# oc delete -f pool-only.yaml
-    configmap "k8s.poolonly" created
-    [root@ose-mstr01 ocp]#
+     [root@ose-mstr01 ocp]# oc delete -f pool-only.yaml
+     configmap "k8s.poolonly" created
+     [root@ose-mstr01 ocp]#
