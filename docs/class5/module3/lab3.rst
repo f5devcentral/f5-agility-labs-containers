@@ -36,8 +36,8 @@ Additionally, you will also create variations of each resource type.
 
     Unless otherwise noted, all the resource definition yaml files have been pre-created and can be found on the ose-master server under **/root/agility2018/apps/module3**
 
-Excercise #1: ConfigMap - Basic
--------------------------------
+Exercise 1: ConfigMap - Basic
+-----------------------------
 
 An OpenShift ConfigMap is one of the resource types that the F5 Container Connector watches for.  The Container Connector will read the ConfigMap
 and create a virtual server, node(s), a pool, pool member(s) and a pool health monitor.
@@ -232,8 +232,8 @@ From ose-master server, issue the following commands:
     [root@ose-mstr01 module3]# oc delete -f f5-demo-app-service.yaml
     service "f5-demo-app" deleted   
 
-Excercise #2: Route - Basic
----------------------------
+Exercise 2: Route - Basic
+-------------------------
 
 An OpenShift Route is one of the resource types that the F5 Container Connector watches for.  A Route defines a hostname or URI mapping to an application.  For example, the hostname "customer.example.com" could map to the application "customer", hostname "catalog.example.com", might map to the application "catalog", etc.
 
@@ -369,12 +369,12 @@ From ose-master server, issue the following commands:
     deployment "f5-demo-app-route" deleted
     service "f5-demo-app-route" deleted
 
-Excercise #3: Route - Blue/Green Testing
------------------------------------------
+Exercise 3: Route - Blue/Green Testing
+--------------------------------------
 
 The F5 Container Connector supports Blue/Green application testing e.g testing two different versions of the same application, by using the **weight** parameter of OpenShift Routes.  The **weight** parameter allows you to establish relative ratios between application **Blue** and application **Green**. So, for example, if the first route specifies a weight of 20 and the second a weight of 10, the application associated with the first route will get twice the number of requests as the application associated with the second route.
 
-Just as in the previous excercise, the F5 Container Connector reads the Route resource and creates a virtual server, node(s), a pool per route path and pool members.
+Just as in the previous exercise, the F5 Container Connector reads the Route resource and creates a virtual server, node(s), a pool per route path and pool members.
 
 However, in order to support Blue/Green testing using OpenShift Routes, the Container Connector creates an iRule and a datagroup on the BIG-IP. Troubleshooting handles the connection routing based on the assigned weights.
 
@@ -411,7 +411,7 @@ Now that you have reviewed the Deployment, you need to actually create it by dep
 
 **Step 2:** Create OpenShift Route for Blue/Green Testing
 
-The basic Route example from the previous excercise only included one path.  In order to support Blue/Green application testing, a Route must be created that has two paths.  In OpenShift, the second (and subsequent) path is defined in the **alternateBackends** section of a Route resource.
+The basic Route example from the previous exercise only included one path.  In order to support Blue/Green application testing, a Route must be created that has two paths.  In OpenShift, the second (and subsequent) path is defined in the **alternateBackends** section of a Route resource.
 
 From ose-master, review the following Route: f5-demo-app-bg-route.yaml
 

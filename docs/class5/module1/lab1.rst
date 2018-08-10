@@ -264,16 +264,19 @@ Openshift has five log message severities. Messages with FATAL, ERROR, WARNING a
 * 6 - API-level debugging information (request / response)
 * 8 - Body-level API debugging information 
 
-This parameter can be set in the OPTIONS for the relevant services environment file within /etc/sysconfig/.
+This parameter can be set in the OPTIONS for the relevant services environment file within /etc/sysconfig/
 
-For example to set OpenShift master's log level to debug, add or edit this line in /etc/sysconfig/atomic-openshift-master:
+For example to set OpenShift master's log level to debug, add or edit this line in /etc/sysconfig/atomic-openshift-master
 
 .. code-block:: console
 
-     OPTIONS='--loglevel=4'
+  OPTIONS='--loglevel=4'
 
-and then restart the service with systemctl restart atomic-openshift-master
+  and then restart the service with
+  
+  systemctl restart atomic-openshift-master
 
 Key files / directories
+
 * /etc/origin/{node,master}/
 * /etc/origin/{node,master}/{node.master}-config.yaml
