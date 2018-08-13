@@ -105,6 +105,15 @@ On the **kube-master** we will create all the required files:
     .. image:: images/f5-container-connector-check-app-bigip-stats.png
         :align: center
 
+#. Scale the f5-hello-world app
+
+    .. code-block:: console
+
+        kubectl scale --replicas=10 deployment/f5-hello-world -n default
+
+    .. image:: images/f5-container-connector-scale10.png
+        :align: center
+
 #. How is traffic forwarded in Kubernetes from the <node IP>:30507 to the <container IP>:8080? This is done via iptables that is managed via the kube-proxy instances. On either of the nodes, ssh in and run the following command:
 
     .. code-block:: console
