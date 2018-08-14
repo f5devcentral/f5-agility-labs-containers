@@ -111,8 +111,21 @@ On the **kube-master** we will create all the required files:
 
         kubectl scale --replicas=10 deployment/f5-hello-world -n default
 
-    .. image:: images/f5-container-connector-scale10.png
+#. Check the pods were created
+
+    .. code-block:: console
+
+        kubectl get pods
+
+    .. image:: images/f5-hello-world-pods-scale10.png
         :align: center
+
+#.  Check the pool was updated on big-ip
+
+    .. image:: images/f5-hello-world-pool-scale10.png
+        :align: center
+
+    .. attention:: Why are there only 2 pool members?
 
 #. How is traffic forwarded in Kubernetes from the <node IP>:30507 to the <container IP>:8080? This is done via iptables that is managed via the kube-proxy instances. On either of the nodes, ssh in and run the following command:
 
