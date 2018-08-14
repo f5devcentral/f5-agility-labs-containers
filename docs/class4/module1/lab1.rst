@@ -254,7 +254,7 @@ Now that BIG-IP is licensed and prepped with the "ose" partition, we need to def
     .. image:: images/F5-CTRL-RUNNING.png
         :align: center
 
-#. If the tunnel is up and running big-ip should be able to ping the master nodes.  SSH to big-ip and run one or all of the following ping tests:
+#. If the tunnel is up and running big-ip should be able to ping the cluster nodes.  SSH to big-ip and run one or all of the following ping tests:
 
     .. code-block:: console
 
