@@ -358,7 +358,7 @@ Verify the deployment and pods that are created
 
 .. code-block:: console
 
-     [root@ose-mstr01 ocp]# oc get deployment
+     [root@ose-mstr01 ocp]# oc get deployment -n kube-system
      NAME           DESIRED   CURRENT   UP-TO-DATE   AVAILABLE   AGE
      bigip01-ctlr   1         1         1            1           42s
      bigip02-ctlr   1         1         1            1           36s
@@ -367,13 +367,13 @@ Verify the deployment and pods that are created
 
 .. code-block:: console
 
-     [root@ose-mstr01 ocp]# oc get deployment bigip01-ctlr
+     [root@ose-mstr01 ocp]# oc get deployment bigip01-ctlr -n kube-system
      NAME           DESIRED   CURRENT   UP-TO-DATE   AVAILABLE   AGE
      bigip01-ctlr   1         1         1            1           1m
 
 .. code-block:: console
 
-     [root@ose-mstr01 ocp]# oc get pods
+     [root@ose-mstr01 ocp]# oc get pods -n kube-system
      NAME                           READY     STATUS    RESTARTS   AGE
      bigip01-ctlr-242733768-dbwdm   1/1       Running   0          1m
      bigip02-ctlr-66171581-q87kb    1/1       Running   0          1m
