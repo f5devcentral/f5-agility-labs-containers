@@ -105,13 +105,24 @@ On the **kube-master** we will create all the required files:
     .. image:: images/f5-container-connector-check-app-bigip-stats.png
         :align: center
 
+#. How is traffic forwarded in Kubernetes from the <node IP>:30507 to the <container IP>:8080? This is done via iptables that is managed via the kube-proxy instances. On either of the nodes, ssh in and run the following command:
+
+    .. code-block:: console
+
+        sudo iptables-save | grep f5-hello-world
+
+    This will list the different iptables rules that were created regarding our service.
+
+    .. image:: images/f5-container-connector-list-frontend-iptables.png
+        :align: center
+
 #. Scale the f5-hello-world app
 
     .. code-block:: console
 
         kubectl scale --replicas=10 deployment/f5-hello-world -n default
 
-#. Check the pods were created
+#. Check that the pods were created
 
     .. code-block:: console
 
@@ -126,14 +137,3 @@ On the **kube-master** we will create all the required files:
         :align: center
 
     .. attention:: Why are there only 2 pool members?
-
-#. How is traffic forwarded in Kubernetes from the <node IP>:30507 to the <container IP>:8080? This is done via iptables that is managed via the kube-proxy instances. On either of the nodes, ssh in and run the following command:
-
-    .. code-block:: console
-
-        sudo iptables-save | grep f5-hello-world
-
-    This will list the different iptables rules that were created regarding our service.
-
-    .. image:: images/f5-container-connector-list-frontend-iptables.png
-        :align: center
