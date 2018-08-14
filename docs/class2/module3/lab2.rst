@@ -30,6 +30,8 @@ On the **kube-master** we will create all the required files:
 #. Create a file called ``f5-hello-world-configmap.yaml``
 
     .. tip:: Use the file in /home/ubuntu/agilitydocs/kubernetes
+    .. tip:: The schema version below (for example 1.7) comes from the releases of big-ip-controller.  For more information, head over to the following link for a quick review:  https://clouddocs.f5.com/containers/v2/releases_and_versioning.html#schema-table
+
 
     .. literalinclude:: ../../../kubernetes/f5-hello-world-configmap.yaml
         :language: yaml
