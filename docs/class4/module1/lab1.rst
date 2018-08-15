@@ -32,6 +32,7 @@ Through the Jumpbox, you should have a BIG-IP available at the following URL: ht
         :align: center
 
 #. Create a vxlan tunnel profile
+    .. note:: Navigate back to Partition Common - the VXLAN tunnel needs to be created in Common partition.  Note: This is currently in discussion with PD to decide if this stays at Common or goes within the Partition you just created. 
 
     .. code-block:: console
 
@@ -45,7 +46,7 @@ Through the Jumpbox, you should have a BIG-IP available at the following URL: ht
         - Click Finished
 
     .. image:: images/create-ose-vxlan-profile.png
-        :align: center   
+        :align: center
 
 #. Create a vxlan tunnel
 
@@ -53,7 +54,7 @@ Through the Jumpbox, you should have a BIG-IP available at the following URL: ht
 
         From the CLI:
         tmsh create net tunnel tunnel ose-tunnel {key 0 local-address 10.10.199.60 profile ose-vxlan}
-        
+
         From the UI:
         GoTo Network --> Tunnels --> Tunnel List
         - Create a new tunnel called "ose-tunnel"
@@ -69,7 +70,7 @@ Container Connector Deployment
 
 .. note:: For a more thorough explanation of all the settings and options see `F5 Container Connector - Openshift <https://clouddocs.f5.com/containers/v2/openshift/>`_
 
-Now that BIG-IP is licensed and prepped with the "ose" partition, we need to define a `Kubernetes deployment <https://kubernetes.io/docs/user-guide/deployments/>`_ and create a `Kubernetes secret <https://kubernetes.io/docs/user-guide/secrets/>`_ to hide our bigip credentials. 
+Now that BIG-IP is licensed and prepped with the "ose" partition, we need to define a `Kubernetes deployment <https://kubernetes.io/docs/user-guide/deployments/>`_ and create a `Kubernetes secret <https://kubernetes.io/docs/user-guide/secrets/>`_ to hide our bigip credentials.
 
 #. From the jumpbox open **mRemoteNG** and start a session with ose-master.
 
@@ -87,7 +88,7 @@ Now that BIG-IP is licensed and prepped with the "ose" partition, we need to def
     .. code-block:: console
 
         git clone https://github.com/f5devcentral/f5-agility-labs-containers.git ~/agilitydocs
-        
+
         cd ~/agilitydocs/openshift
 
 #. Log in with an Openshift Client.
@@ -100,7 +101,7 @@ Now that BIG-IP is licensed and prepped with the "ose" partition, we need to def
 
     .. image:: images/OC-DEMOuser-Login.png
         :align: center
-    
+
     .. important:: Upon logging in you'll notice access to several projects.  In our lab well be working from the default "default".
 
 #. Create bigip login secret
@@ -205,11 +206,13 @@ Now that BIG-IP is licensed and prepped with the "ose" partition, we need to def
 
 #. Create the vxlan tunnel self-ip
 
+    .. important:: For your SELF-IP subnet, remember it is a /14 and not a /23 - Why?  The Self-IP has to be able to understand those other /23 subnets are local in the namespace in the example above for Master, Node1, Node2, etc. Many students accidently use /23, but then the self-ip  will be only to communicate to one subnet on the openshift-f5-node.  When trying to ping across to services on other /23 subnets from the BIG-IP for instance, communication will fail as your self-ip doesn't have the proper subnet mask to know those other subnets are local.
+
     .. code-block:: console
 
         From the CLI:
         tmsh create net self ose-vxlan-selfip address 10.131.0.98/14 vlan ose-tunnel
-        
+
         From the UI:
         GoTo Network --> Self IP List
         - Create a new Self-IP called "ose-vxlan-selfip"
@@ -258,9 +261,9 @@ Now that BIG-IP is licensed and prepped with the "ose" partition, we need to def
 
         ...to ping ose-master
         ping 10.128.0.1
-        
+
         ...to ping ose-node1
         ping 10.129.0.1
-        
+
         ...to ping ose-node2
         ping 10.130.0.1
