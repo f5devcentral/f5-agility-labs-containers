@@ -18,6 +18,8 @@ Through the Jumpbox, you should have a BIG-IP available at the following URL: ht
 
 #. You need to setup a partition that will be used by F5 Container Connector.
 
+    .. warning:: Be sure to change back to the "Common" partition.
+
     .. code-block:: console
 
         From the CLI:
@@ -211,8 +213,8 @@ Now that BIG-IP is licensed and prepped with the "ose" partition, we need to def
     .. code-block:: console
 
         From the CLI:
-        tmsh create net self ose-vxlan-selfip address 10.131.0.98/14 vlan ose-tunnel
-
+        tmsh create net self ose-vxlan-selfip address 10.129.2.1/14 vlan ose-tunnel
+        
         From the UI:
         GoTo Network --> Self IP List
         - Create a new Self-IP called "ose-vxlan-selfip"
@@ -255,7 +257,7 @@ Now that BIG-IP is licensed and prepped with the "ose" partition, we need to def
     .. image:: images/F5-CTRL-RUNNING.png
         :align: center
 
-#. If the tunnel is up and running big-ip should be able to ping the master nodes.  SSH to big-ip and run one or all of the following ping tests:
+#. If the tunnel is up and running big-ip should be able to ping the cluster nodes.  SSH to big-ip and run one or all of the following ping tests:
 
     .. code-block:: console
 

@@ -86,4 +86,4 @@ Here are a few things to know that could be useful (if you want to reproduce thi
     10.2.10.50    f5-mesos-agent2 f5-mesos-agent2.agility-labs.io
 
 * On f5-mesos-master1, we created some ssh keys for user that we copied on all the nodes. This way you can use f5-mesos-master1 to connect to all nodes without authentication.
-* We enabled user to do sudo commands without authentication. This was done via the visudo command to specify that we allow passwordless sudo command for this user (here is a thread talking about how to do it: `visudo  <http://askubuntu.com/questions/504652/adding-nopasswd-in-etc-sudoers-doesnt-work/504666/>`_)
+* We enabled user to do sudo commands without authentication. This was done via the visudo command to specify that we allow password-less sudo command for this user (here is a thread talking about how to do it: `visudo  <http://askubuntu.com/questions/504652/adding-nopasswd-in-etc-sudoers-doesnt-work/504666/>`_)

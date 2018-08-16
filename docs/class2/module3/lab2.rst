@@ -117,3 +117,25 @@ On the **kube-master** we will create all the required files:
 
     .. image:: images/f5-container-connector-list-frontend-iptables.png
         :align: center
+
+#. Scale the f5-hello-world app
+
+    .. code-block:: console
+
+        kubectl scale --replicas=10 deployment/f5-hello-world -n default
+
+#. Check that the pods were created
+
+    .. code-block:: console
+
+        kubectl get pods
+
+    .. image:: images/f5-hello-world-pods-scale10.png
+        :align: center
+
+#.  Check the pool was updated on big-ip
+
+    .. image:: images/f5-hello-world-pool-scale10.png
+        :align: center
+
+    .. attention:: Why are there only 2 pool members?

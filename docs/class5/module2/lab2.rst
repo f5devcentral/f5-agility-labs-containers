@@ -3,18 +3,19 @@ Module 2: Working with BIG-IP HA Pairs or Device Groups
 
 Each Container Connector is uniquely suited to its specific container orchestration environment and purpose, utilizing the architecture and language appropriate for the environment. Application Developers interact with the platform’s API; the CCs watch the API for certain events, then act accordingly.
 
-The Container Connector is stateless. The inputs are:
+The Container Connector is stateless (Stateless means there is no record of previous interactions and each interaction request has to be handled based entirely on information that comes with it). 
+The inputs are:
 
 * the container orchestration environment’s config
 * the BIG-IP device config
-* the CC config (provided via the appropriate means for the container orchestration environment).
+* the CC config (provided via the appropriate means from the container orchestration environment).
 
 Wherever a Container Connector runs, it always watches the API and attempts to bring the BIG-IP up-to-date with the latest applicable configurations.
 
 Managing BIG-IP HA Clusters in OpenShift
 ----------------------------------------
 
-You can use the F5 Container Connectors to manage a BIG-IP HA active-standby pair or device group. The deployment details vary depending on the platform. For most, the basic principle is the same: You should run one BIG-IP Controller instance for each BIG-IP device. You will deploy two BIG-IP Controller instances - one for each BIG-IP device. To help ensure Controller HA, you will deploy each Controller instance on a separate Node in the cluster.
+You can use the F5 Container Connectors (also called F5 BIG-IP Controller) to manage a BIG-IP HA active-standby pair or device group. The deployment details vary depending on the platform. For most, the basic principle is the same: You should run one BIG-IP Controller instance for each BIG-IP device. You will deploy two BIG-IP Controller instances - one for each BIG-IP device. To help ensure Controller HA, you will deploy each Controller instance on a separate Node in the cluster.
 
 .. image:: /_static/class5/ha-cluster.jpg
     :align: center
@@ -24,9 +25,9 @@ BIG-IP Config Sync
 
 **Important**
 
-Each Container Connector monitors the BIG-IP partition it manages for configuration changes. If it discovers changes, the Connector reapplies its own configuration to the BIG-IP. F5 does not recommend making configuration changes to objects in any partition managed by a BIG-IP Controller via any other means (for example, the configuration utility, TMOS, or by syncing configuration from another device or service group). Doing so may result in disruption of service or unexpected behavior. 
+Each Container Connector monitors the BIG-IP partition it manages for configuration changes. If its configuration changes, the Connector reapplies its own configuration to the BIG-IP. F5 does not recommend making configuration changes to objects in any partition managed by a F5 Container Connector via any other means (for example, the configuration utility, TMOS, or by syncing configuration from another device or service group). Doing so may result in disruption of service or unexpected behavior. 
 
-The Container Connector for OpenShift uses FDB entries and ARP records to identify the Cluster resources associated with BIG-IP Nodes. Because BIG-IP config sync doesn’t include FDB entries or ARP records, F5 does not recommend using automatic configuration sync when managing a BIG-IP HA pair or cluster with the BIG-IP Controller. You must diable config sync when using tunnels.
+The Container Connector for OpenShift uses FDB entries and ARP records to identify the Cluster resources associated with BIG-IP Nodes. Because BIG-IP config sync doesn’t include FDB entries or ARP records, F5 does not recommend using automatic configuration sync when managing a BIG-IP HA pair or cluster with the F5 Container Connector. You must disable config sync when using tunnels.
 
 Complete the steps below to set up the solution shown in the diagram. Be sure to use the correct IP addresses and subnet masks for your OpenShift Cluster
 
@@ -116,6 +117,8 @@ The purpose of this lab is not to cover BIG-IP High Availability (HA) in depth b
 
 Before adding the BIG-IP devices to OpenShift make sure your High Availability (HA) device trust group, license, selfIP, vlans are configured correctly
 
+.. note:: You have shortcuts to connect to your BIG-IPs in Chrome. Login: **admin**, Password: **admin**
+
 Validate that SDN services license is active
 
 .. note:: In your lab environment the BIG-IP VE LAB license includes the SDN license.  The following is provided as a reference of what you may see in a production license.  The SDN license is also included in the -V16 version of the BIG-IP VE license.
@@ -131,12 +134,12 @@ Validate the vlan configuration
 
 Validate bigip01 self IP configuration
 
-.. image:: /_static/class5/self-ip-bigip01.png
+.. image:: /_static/class5/self-ip-bigip02.png
     :align: center
 
 Validate bigip02 self IP configuration
 
-.. image:: /_static/class5/self-ip-bigip02.png
+.. image:: /_static/class5/self-ip-bigip01.png
     :align: center
 
 Validate the device group HA settings and make sure bigip01 and bigip02 are in sync. If out of sync, sync the bigip
@@ -158,9 +161,13 @@ Upload the HostSubnet Files to the OpenShift API Server
 
 **Step 2:** Create a new OpenShift HostSubnet
 
-HostSubnets must use valid YAML. You can upload the files individually using separate oc create commands. Create one HostSubnet for each BIG-IP device. These will handle health monitor traffic. Also create one HostSubnet to pass client traffic. You will create the floating IP address for the active device in this subnet as shown in the diagram above. 
+HostSubnets must use valid YAML. You can upload the files individually using separate oc create commands. 
 
-.. attention:: We have created the YAML files to save time. The files are located at **/root/agility2018/ocp**
+Create one HostSubnet for each BIG-IP device. These will handle health monitor traffic. 
+
+Also create one HostSubnet to pass client traffic. You will create the floating IP address for the active device in this subnet as shown in the diagram above. 
+
+.. attention:: We have created the YAML files to save time. The files are located at **/root/agility2018/ocp** on the **master** (ose-master)
 
     cd /root/agility2018/ocp
 
@@ -185,7 +192,7 @@ hs-bigip-float.yaml
   :language: yaml
   :emphasize-lines: 3,4,9
 
-Create the HostSubnet files to the OpenShift API server
+Create the HostSubnet files to the OpenShift API server. Run the following commands from the **master**
 
 .. code-block:: console
 
@@ -218,7 +225,7 @@ Set up VXLAN on the BIG-IP Devices
 
     Its recommended to create all HA using the /Common partition
 
-.. note:: You can copy and paste the following commands to be run directly from the OpenShift master (ose-mstr01).  To paste content into mRemoteNG; use your right mouse button.
+.. note:: You can copy and paste the following commands to be run directly from the OpenShift **master** (ose-mstr01).  To paste content into mRemoteNG; use your right mouse button.
 
 * ssh root@10.10.200.98 tmsh create auth partition ocp
 * ssh root@10.10.200.99 tmsh create auth partition ocp
@@ -279,8 +286,8 @@ Check the ocp-tunnel configuration (under Network -> Tunnels). Note the local-ad
 
 .. _openshift deploy kctlr ha:
 
-Deploy the BIG-IP Controller
-----------------------------
+Deploy the BIG-IP Controller (F5 Container Connector)
+-----------------------------------------------------
 
 Take the steps below to deploy a contoller for each BIG-IP device in the cluster.
 
@@ -300,7 +307,7 @@ You can create RBAC resources in the project in which you will run your BIG-IP C
 
 **Step 4.2:** Create a Cluster Role and Cluster Role Binding with the required permissions.
 
-The following file has already being created **f5-kctlr-openshift-clusterrole.yaml** which is located in /root/agility2018/ocp
+The following file has already being created **f5-kctlr-openshift-clusterrole.yaml** which is located in **/root/agility2018/ocp** on the **master**
 
 .. literalinclude:: ../../../openshift/advanced/ocp/f5-kctlr-openshift-clusterrole.yaml
   :language: yaml
@@ -351,26 +358,28 @@ Verify the deployment and pods that are created
 
 .. code-block:: console
 
-     [root@ose-mstr01 ocp]# oc get deployment
+     [root@ose-mstr01 ocp]# oc get deployment -n kube-system
      NAME           DESIRED   CURRENT   UP-TO-DATE   AVAILABLE   AGE
      bigip01-ctlr   1         1         1            1           42s
      bigip02-ctlr   1         1         1            1           36s
 
+.. note:: Check in your lab that you have your two controllers as **AVAILABLE**. If Not, you won't be able to do the lab. It may take up to 10 minutes for them to be available
+
 .. code-block:: console
 
-     [root@ose-mstr01 ocp]# oc get deployment bigip01-ctlr
+     [root@ose-mstr01 ocp]# oc get deployment bigip01-ctlr -n kube-system
      NAME           DESIRED   CURRENT   UP-TO-DATE   AVAILABLE   AGE
      bigip01-ctlr   1         1         1            1           1m
 
 .. code-block:: console
 
-     [root@ose-mstr01 ocp]# oc get pods
+     [root@ose-mstr01 ocp]# oc get pods -n kube-system
      NAME                           READY     STATUS    RESTARTS   AGE
      bigip01-ctlr-242733768-dbwdm   1/1       Running   0          1m
      bigip02-ctlr-66171581-q87kb    1/1       Running   0          1m
      [root@ose-mstr01 ocp]#
 
-You can also use the web conole in OpenShift to view the bigip controller. Go the kube-system project
+You can also use the web console in OpenShift to view the bigip controller (login: **demouser**, password: **demouser**). Go the kube-system project
 
 .. image:: /_static/class5/kube-system.png
     :align: center
@@ -393,12 +402,12 @@ pool-only.yaml
      configmap "k8s.poolonly" created
      [root@ose-mstr01 ocp]#
 
-**Step 4.5:** Check bigip01 and bigip02 to make sure the pool got created (make sure you are looking at the "ocp" partition). Validate that both bigip01 and bigip02 can reach the pool members. Pool members should show green
+**Step 4.5:** Check **bigip01** and **bigip02** to make sure the pool got created (make sure you are looking at the **"ocp" partition**). Validate that both bigip01 and bigip02 can reach the pool members. Pool members should show green
 
 .. image:: /_static/class5/pool-members.png
     :align: center
 
-**Step 4.6:** Increase the replication of the f5demo project pods
+**Step 4.6:** Increase the replicas of the f5demo project pods. Replicas specified the required number of instances to run
 
 .. code-block:: console
 
@@ -406,19 +415,25 @@ pool-only.yaml
        deployment "f5demo" scaled
        [root@ose-mstr01 ocp]#
 
+..note:: it may take time to have your replicas up and running. don't hesitate to track this by using the command. Check the number of **AVAILABLE** instances
+
+    .. code-block:: console
+
+        oc get deployment f5demo -n f5demo
+
 .. image:: /_static/class5/10-containers.png
     :align: center
 
-Validate that bigip01 and bigip02 are updated with the additional pool members and they health monitor works. If the monitor is failing check the tunnel and selfIP.
+Validate that bigip01 and bigip02 are updated with the additional pool members and their health monitor works. If the monitor is failing check the tunnel and selfIP.
 
 Validation and Troubleshooting
 ------------------------------
 
-Now that you have HA configured and uploaded the deployment its time to generate traffic through bigip. 
+Now that you have HA configured and uploaded the deployment, it is time to generate traffic through our BIG-IPs. 
 
 **Step 5.1:** Create a virtual IP address for the deployment
 
-Add a virtual IP to the the configmap. You can edit the pool-only.yaml configmap. There are multuple ways to edit the configmap which will be covered in module 3. In this task remove the deployment, edit the yaml file and re-apply the deployment
+Add a virtual IP to the the configmap. You can edit the pool-only.yaml configmap. There are multiple ways to edit the configmap which will be covered in module 3. In this task remove the deployment, edit the yaml file and re-apply the deployment
 
 .. code-block:: console
 
@@ -426,8 +441,6 @@ Add a virtual IP to the the configmap. You can edit the pool-only.yaml configmap
      configmap "k8s.poolonly" deleted
      [root@ose-mstr01 ocp]#
   
-.. code-block:: console
-
 Edit the pool-only.yaml and add the bindAddr 
 
 vi pool-only.yaml
@@ -439,7 +452,9 @@ vi pool-only.yaml
             "port": 80,
             "bindAddr": "10.10.201.220"
 
-.. tip:: Don't forget the "," at the end of the ""port": 80," line.
+.. tip:: 
+    Do not use TAB in the file, only spaces.
+    Don't forget the "," at the end of the ""port": 80," line.
 
 Create the modified pool-only deployment
 
@@ -449,9 +464,9 @@ Create the modified pool-only deployment
      configmap "k8s.poolonly" created
      [root@ose-mstr01 ocp]#
 
-Connect to the virtual server at http://10.10.201.220. Does the connection work If not, try the following troubleshooting options:
+Connect to the virtual server at http://10.10.201.220. Does the connection work? If not, try the following troubleshooting options:
 
-  1) Capture the http request to see if the connection is established with the bigip
+  1) Capture the http request to see if the connection is established with the BIG-IP
   2) Follow the following network troubleshooting section
 
 Network Troubleshooting
@@ -504,7 +519,9 @@ How do I verify connectivity between the BIG-IP VTEP and the OSE Node?
       4 packets transmitted, 4 received, 0% packet loss, time 3005ms
       rtt min/avg/max/mdev = 1.748/2.303/2.774/0.372 ms
       
-   .. note:: When pinging the VTEP IP directly the BIG-IP was L2 adjacent to the device and could send a large MTU.  In the second example the packet is dropped across the VxLAN tunnel.  In the third example the packet is able to traverse the VxLAN tunnel.
+   .. note:: When pinging the VTEP IP directly the BIG-IP was L2 adjacent to the device and could send a large MTU.  
+        In the second example, the packet is dropped across the VxLAN tunnel.  
+        In the third example, the packet is able to traverse the VxLAN tunnel.
 
 #. In a TMOS shell, output the REST requests from the BIG-IP logs.
 
@@ -589,7 +606,7 @@ How do I verify connectivity between the BIG-IP VTEP and the OSE Node?
 
 #. Test failover and make sure you can connect to the virtual. 
 
-**Congraulation** for completeing the HA clusterting setup. Before moving to the next module cleanup the deployed resource:
+**Congratulations** for completing the HA clustering setup. Before moving to the next module cleanup the deployed resource:
 
 .. code-block:: console
 

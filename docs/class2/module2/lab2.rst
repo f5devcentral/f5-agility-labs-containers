@@ -8,7 +8,7 @@ The master is the system where the "control plane" components run, including etc
 
 .. important:: The following commands need to be run on the **master** only unless otherwise specified.
 
-#. Swtich back to the ssh session connected to kube-master
+#. Switch back to the ssh session connected to kube-master
 
     .. tip:: This session should be running from the previous if lab.  If not simply open **mRemoteNG** and connect via the saved session.
 
@@ -68,7 +68,7 @@ The master is the system where the "control plane" components run, including etc
 
     .. note:: You must install a *pod* network add-on so that your *pods* can communicate with each other. **It is necessary to do this before you try to deploy any applications to your cluster**, and before "coredns" will start up.
 
-#. If everything installs and starts as expected you should have "coredns" and all services status "Running". To check the status of core services, you can run the followin command:
+#. If everything installs and starts as expected you should have "coredns" and all services status "Running". To check the status of core services, you can run the following command:
 
     .. code-block:: console
 
@@ -81,7 +81,7 @@ The master is the system where the "control plane" components run, including etc
 
     .. important:: Before moving to the next section, "Setup the nodes" wait for all system pods to show status “Running”.
 
-#.  Addional kubernetes status checks.
+#.  Additional kubernetes status checks.
 
     .. code-block:: console
 
@@ -218,4 +218,4 @@ To install the UI you have two options:
         :align: center
 
 
-CONGRATUATIONS!  You just did the hardest part of todays lab - building a Kubernetes cluster.  While we didn't cover each step in great detail, due to time of other labs we need to complete today, this is one path to the overall steps to build your own cluster with a few linux boxes in your own lab.  All this content is publicaly online/available at clouddocs.f5.com. 
+CONGRATUATIONS!  You just did the hardest part of todays lab - building a Kubernetes cluster.  While we didn't cover each step in great detail, due to time of other labs we need to complete today, this is one path to the overall steps to build your own cluster with a few linux boxes in your own lab.  All this content is publicly online/available at clouddocs.f5.com. 

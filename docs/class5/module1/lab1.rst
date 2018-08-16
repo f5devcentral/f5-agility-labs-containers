@@ -30,7 +30,7 @@ Use the following username and password
 * Note: Use the Send Text to Client option to paste the password
 
 * We are using RHEL in this blueprint
-* We updated on all the nodes the /etc/hosts file so that each node is reachable via its name
+* We updated on all the nodes (ose-node1, ose-node2) the /etc/hosts file so that each node is reachable via its name
 
   .. code-block:: console
 
@@ -44,7 +44,9 @@ Use the following username and password
   nodes. This way you can use ose-mstr01 as needed to connect to all nodes without
   authentication if wanting to jump around using ssh i.e. ssh root@10.10.199.101 from ose-mstr01
 
-**Step 2:** Access the master using an mRemoteNG client from the Win7 Jump box
+**Step 2:** Access the master using the mRemoteNG client from the Win7 Jump box (there is a shortcut in the taskbar). 
+In the nRemoteNG client, Expand **Connections > Agility2018 > OpenShiftenterprise > OSE-cluster**. Here, you'll have shortcuts to the
+different Openshift nodes (Master and nodes) and to your BIG-IPs.
 
 * Master Mgmt IP: 10.10.199.100 **root/default**
 * BIGIP01 – 10.10.200.98 **root/default admin/admin**
@@ -52,11 +54,11 @@ Use the following username and password
 
 **Accessing OpenShift**
 
-OpenShift provides a web console that allow you to perform various tasks via a web browser. Additionally, you can utilize a command line tool to perfrom tasks. Let's get started by logging into both of these and checking the status of the platform.
+OpenShift provides a web console that allow you to perform various tasks via a web browser. Additionally, you can utilize a command line tool to perform tasks. Let's get started by logging into both of these and checking the status of the platform.
 
 **Step 3:** Login to OpenShift master
 
-Open a terminal and login using the same URI/user/password with following command:
+Open a terminal on the master (click on **ose-master** in the mRemoteNG client) and login using the same URI/user/password with following command:
 
 .. code-block:: console
 
@@ -228,7 +230,7 @@ You will be using these projects in the lab
      
 **Step 8:** Access OpenShift web console
 
-From the jumpbox navigate to the URI provided by your instructor and login with the user/password provided (there is favorite on chrome).
+From the jumpbox navigate to the URI provided by your instructor and login with the user/password provided (there is a favorite on **chrome** called **Login - OpenShift Container Platform**).
 
 Use the following username and password
 username: **demouser**
@@ -240,7 +242,7 @@ password: **demouser**
 Troubleshooting OpenShift!
 --------------------------
 
-If you have a problem in your OpenShift Container Platform 3 environment how do you investigate
+If you have a problem in your OpenShift Container Platform 3 environment, how do you investigate
 
 * How can I troubleshoot it?
 * What logs can I inspect?

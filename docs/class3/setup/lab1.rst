@@ -12,7 +12,7 @@ Prep Ubuntu
     - mesos-master2
     - mesos-master3
 
-#. Elivate to "root"
+#. Elevate to "root"
 
     .. code-block:: console
 
