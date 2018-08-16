@@ -1,0 +1,25 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: vs-f5demo-ingress
+  namespace: f5demo
+  annotations:
+    virtual-server.f5.com/partition: "ocp"
+    virtual-server.f5.com/balance: "round-robin"
+    virtual-server.f5.com/health: |
+          [
+            {
+              "path":     "www.f5.com/",
+              "send":     "GET / HTTP/1.1\r\nHost: \r\nConnection: Close\r\n\r\n",
+              "interval": 5,
+              "timeout":  16
+            }
+          ]
+spec:
+  rules:
+  - host: www.f5.com
+    http:
+      paths:
+      - backend:
+          serviceName: f5-demo-app
+          servicePort: 8080
