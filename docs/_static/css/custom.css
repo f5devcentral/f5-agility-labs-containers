@@ -1,0 +1,39 @@
+.section ol.loweralpha > li { 
+	list-style: lower-alpha;
+	padding-bottom: 5px;
+}
+
+.section ol.upperalpha > li { 
+	list-style: upper-alpha;
+	padding-bottom: 5px;
+}
+
+.section ol.arabic > li {
+	list-style: decimal;
+	padding-bottom: 5px;
+}
+
+.section ol.lowerroman > li {
+	list-style: lower-roman;
+	padding-bottom: 5px;
+}
+
+.section ol.upperroman > li {
+	list-style: upper-roman;
+	padding-bottom: 5px;
+}
+
+div[class^='highlight'] pre, div[class~='docutils'], code, .code.descname {
+    background: lightgrey !important;
+    margin: 5px;
+}
+
+img {
+/*	max-width: 100%;
+    height: auto;*/
+	margin-bottom: 12px;
+}
+
+table {
+	margin-bottom: 12px;
+}
