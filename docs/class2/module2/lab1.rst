@@ -1,16 +1,9 @@
 Lab 2.1 - Prep Ubuntu
 =====================
 
-Overview
---------
-
-This installation will utilize Ubuntu v16.04 (Xenial) and **kubeadm**
-
-.. note::  You can find a more thorough installation guide here:
+.. note::  This installation will utilize Ubuntu v16.04 (Xenial) and
+   **kubeadm** You can find a more thorough installation guide here:
    `Ubuntu getting started guide 16.04 <http://kubernetes.io/docs/getting-started-guides/kubeadm/>`_
-
-Setup
------
 
 .. important:: The following commands need to be run on all three nodes
    unless otherwise specified.
@@ -56,7 +49,7 @@ Setup
 
    .. code-block:: console
 
-      10.1.10.21    kube-master
+      10.1.10.21    kube-master1
       10.1.10.22    kube-node1
       10.1.10.23    kube-node2
 

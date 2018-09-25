@@ -8,7 +8,6 @@ This introductory class covers the following topics:
    :glob:
 
    module*/module*
-   appendix
 
 Expected time to complete: **1 hours**
 

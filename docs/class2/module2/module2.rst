@@ -17,10 +17,10 @@ As a reminder, in this module, our cluster setup is:
      - Master
    * - kube-node1
      - 10.1.10.22
-     - node
+     - Node
    * - kube-node2
      - 10.1.10.23
-     - node
+     - Node
 
 .. toctree::
    :maxdepth: 1

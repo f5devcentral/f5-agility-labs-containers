@@ -26,10 +26,10 @@ URL: https://10.1.1.245
 
    .. code-block:: console
 
-      From the CLI:
+      #From the CLI:
       tmsh create auth partition kubernetes
 
-      From the UI:
+      #From the UI:
       GoTo System --> Users --> Partition List
       - Create a new partition called "kubernetes" (use default settings)
       - Click Finished
