@@ -58,7 +58,7 @@ Lab 2.1 - Prep Ubuntu
       10.1.10.23    kube-node2
 
 #. The linux swap file needs to be disabled, this is not the case by default.
-   Again for your convenience we disabled swap.  Verify the setting
+   Again for your convenience we disabled swap. Verify the setting
 
    .. important:: Running a swap file is incompatible with Kubernetes.  Lets
       use the linux top command, which allows users to monitor processes and
@@ -71,7 +71,7 @@ Lab 2.1 - Prep Ubuntu
    .. image:: images/top.png
 
    If you see a number other than "0" you need to run the following commands
-   (else press q to quit top)
+   (press 'q' to quit top)
 
    .. code-block:: bash
 

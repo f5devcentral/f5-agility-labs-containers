@@ -67,11 +67,11 @@ Lab 2.4 - Setup the Kubernetes UI
    .. image:: images/cluster-setup-guide-check-port-ui.png
       :align: center
 
-   .. note:: In our service we are assigned port "32005" (NodePort), you'll be
+   .. note:: In our service we are assigned port "30156" (NodePort), you'll be
       assigned a different port.
 
    We can now access the dashboard by connecting to the following uri
-   http://10.1.10.21:32005
+   http://10.1.10.21:30156
 
    .. image:: images/cluster-setup-guide-access-ui.png
       :align: center

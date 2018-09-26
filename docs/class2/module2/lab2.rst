@@ -36,17 +36,15 @@ communicates with). All of these components run in pods started by kubelet
    .. image:: images/cluster-setup-guide-kubeadm-init-master.png
       :align: center
 
-   .. important:: Be sure to save the highlighted output from this command to
-      notepad. You'll need this information to add your worker nodes and
-      configure user administration.
+   .. important:: 
+      - Be sure to save the highlighted output from this command to notepad.
+        You'll need this information to add your worker nodes and configure
+        user administration.
 
-   .. image:: images/cluster-setup-guide-kubeadm-init-master-join.png
-      :align: center
-
-   .. important:: The "kubeadm join" command is run on the nodes to register
-      themselves with the master. Keep the secret safe since anyone with this
-      token can add an authenticated node to your cluster. This is used for
-      mutual auth between the master and the nodes.
+      - The "kubeadm join" command is run on the nodes to register themselves
+        with the master. Keep the secret safe since anyone with this token can
+        add an authenticated node to your cluster. This is used for mutual auth
+        between the master and the nodes.
 
 #. Configure kubernetes administration. At this point you should be logged in
    as root. The following will update both root and ubuntu user accounts for
@@ -134,4 +132,4 @@ communicates with). All of these components run in pods started by kubelet
       kubeadm reset
       
       # This removes the admin references to the broken cluster
-      rm -rf /home/ubuntu/.kube
+      rm -rf /home/ubuntu/.kube /root/.kube

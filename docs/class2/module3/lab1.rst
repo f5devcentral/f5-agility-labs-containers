@@ -177,7 +177,7 @@ check the logs of your container, kubectl command or docker command.
    .. code-block:: bash
 
       # For example:
-      kubectl logs k8s-bigip-ctlr-deployment-79fcf97bcc-48qs7 -n kube-system
+      kubectl logs k8s-bigip-ctlr-deployment-5b74dd769-x55vx -n kube-system
 
    .. image:: images/f5-container-connector-check-logs-kubectl.png
       :align: center
@@ -190,7 +190,7 @@ check the logs of your container, kubectl command or docker command.
 
       sudo docker ps
 
-   Here we can see our container ID is "b91d400df115"
+   Here we can see our container ID is "01a7517b50c5"
 
    .. image:: images/f5-container-connector-find-dockerID--controller-container.png
       :align: center
@@ -199,10 +199,13 @@ check the logs of your container, kubectl command or docker command.
 
    .. code-block:: bash
 
-      sudo docker logs b91d400df115
+      sudo docker logs 01a7517b50c5
 
    .. image:: images/f5-container-connector-check-logs-controller-container.png
       :align: center
+
+   .. note:: The log messages here are identical to the log messages displayed
+      in the previous kubectl logs command. 
 
 #. You can connect to your container with kubectl as well:
 

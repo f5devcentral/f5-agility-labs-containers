@@ -11,12 +11,13 @@ cluster.
    initialization. You'll need to use the command saved to notepad in an
    earlier step.
 
-   .. warning:: This is just an example!! **DO not cut/paste the one below.**
-      You should have saved this command after successfully initializing the
-      master with step 2 above.   Scroll up in your CLI history to find the
-      hash your kube-master1 generated to add nodes.
+   .. warning:: 
+      - This is just an example!! **DO not cut/paste the one below.** You
+        should have saved this command after successfully initializing the
+        master with step 2 above. Scroll up in your CLI history to find the
+        hash your kube-master1 generated to add nodes.
 
-   .. warning:: This command needs to be run on **node1** and **node2** only!
+      - This command needs to be run on **node1** and **node2** only!
 
    .. code-block:: bash
 
