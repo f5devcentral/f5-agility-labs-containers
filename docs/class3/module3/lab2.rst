@@ -4,11 +4,14 @@ Lab 3.2 - F5 Container Connector Usage
 Now that our container connector is up and running, let’s deploy an
 application and leverage our F5 CC.
 
+For this lab we'll use a simple pre-configured docker image called 
+"f5-hello-world". It can be found on docker hub at
+`f5devcentral/f5-hello-world <https://hub.docker.com/r/f5devcentral/f5-hello-world/>`_
+
 App Deployment
 --------------
 
-From the jumpbox connect to the Marathon UI on
-`http://10.2.10.10:8080 <http://10.2.10.10:8080>`_ and click
+From the jumpbox connect to the Marathon UI at http://10.2.10.21:8080 and click
 "Create Application".
 
 .. image:: images/f5-container-connector-create-application-button.png
@@ -79,13 +82,9 @@ From the jumpbox connect to the Marathon UI on
    .. image:: images/f5-container-connector-access-BIGIP-VS.png
       :align: center
 
-Scale the application via Marathon
-----------------------------------
-
-We can try to increase the number of containers delivering our application. 
-
-#. Go back to the Marathon UI (http://10.2.10.10:8080). Go to Applications -->
-   "f5-hello-world" and click "Scale Application". 
+#. Scale the f5-hello-world app. Go back to the Marathon UI
+   (http://10.2.10.21:8080). Go to Applications --> "f5-hello-world" and click
+   "Scale Application".
 
    Let's increase the number from `2` to `10` instances and click on
    "Scale Application".

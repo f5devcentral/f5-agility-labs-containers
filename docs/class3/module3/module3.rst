@@ -20,6 +20,9 @@ Labels” that tell it:
 You can manage BIG-IP objects directly, or deploy iApps, with the F5 Marathon
 BIG-IP Controller.
 
+.. seealso:: The official F5 documentation is here:
+   `F5 Container Connector - Marathon <https://clouddocs.f5.com/containers/v2/marathon/>`_
+
 Architecture
 ------------
 
@@ -38,7 +41,7 @@ Application’s tasks.
 
 .. seealso:: If you want to have more details about the F5 Application Labels,
    you may go to the F5 official documentation here:
-   `F5 Marathon BIG-IP Controller <http://clouddocs.f5.com/products/connectors/marathon-bigip-ctlr/v1.1/>`_
+   `F5 BIG-IP Controller for Marathon <http://clouddocs.f5.com/products/connectors/marathon-bigip-ctlr/v1.1/>`_
 
 Prerequisites
 -------------

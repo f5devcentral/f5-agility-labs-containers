@@ -10,7 +10,7 @@ CC - Kubernetes allows you to expose a Kubernetes Service outside the cluster
 as a virtual server on a BIG-IP® device entirely through the Kubernetes API.
 
 .. seealso:: The official F5 documentation is here:
-   `F5 Kubernetes Container Integration <http://clouddocs.f5.com/containers/v2/kubernetes/>`_
+   `F5 Container Connector - Kubernetes <http://clouddocs.f5.com/containers/v2/kubernetes/>`_
 
 Architecture
 ------------

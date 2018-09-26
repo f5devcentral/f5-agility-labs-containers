@@ -28,7 +28,7 @@ To deploy our application, we will need to do the following:
 App Deployment
 --------------
 
-On the **kube-master1** we will create all the required files:
+On **kube-master1** we will create all the required files:
 
 #. Create a file called ``f5-hello-world-deployment.yaml``
 
@@ -79,7 +79,8 @@ On the **kube-master1** we will create all the required files:
    .. code-block:: bash
 
       kubectl get pods -o wide
-      (This can take a few seconds to a minute to create these hello-world containers to running state)
+
+      # This can take a few seconds to a minute to create these hello-world containers to running state.
 
    .. image:: images/f5-hello-world-pods.png
       :align: center

@@ -15,23 +15,29 @@ To use F5 Container connector, you'll need a BIG-IP up and running first.
 Through the Jumpbox, you should have a BIG-IP available at the following
 URL: https://10.1.1.245
 
-.. warning:: Connect to your BIG-IP and check it is active and licensed. Its
-   login and password are: **admin/admin**
+.. warning:: 
+   - Connect to your BIG-IP and check it is active and licensed. Its
+     login and password are: **admin/admin**
 
-   If your BIG-IP has no license or its license expired, renew the license.
-   You just need a LTM VE license for this lab. No specific add-ons are
-   required (ask a lab instructor for eval licenses if your license has expired)
+   - If your BIG-IP has no license or its license expired, renew the license.
+     You just need a LTM VE license for this lab. No specific add-ons are
+     required (ask a lab instructor for eval licenses if your license has
+     expired)
+
+   - Be sure to be in the ``Common`` partition before creating the following
+     objects.
+
+     .. image:: images/f5-check-partition.png
+        :align: center
 
 #. You need to setup a partition that will be used by F5 Container Connector.
 
-   .. warning:: Be sure to change back to the "Common" partition.
+   .. code-block:: bash
 
-   .. code-block:: console
-
-      From the CLI:
+      # From the CLI:
       tmsh create auth partition ose
 
-      From the UI:
+      # From the UI:
       GoTo System --> Users --> Partition List
       - Create a new partition called "ose" (use default settings)
       - Click Finished
@@ -41,17 +47,12 @@ URL: https://10.1.1.245
 
 #. Create a vxlan tunnel profile
 
-   .. note:: Navigate back to Partition Common - the VXLAN tunnel needs to be
-      created in Common partition.  Note: This is currently in discussion with
-      PD to decide if this stays at Common or goes within the Partition you
-      just created. 
+   .. code-block:: bash
 
-   .. code-block:: console
-
-      From the CLI:
+      # From the CLI:
       tmsh create net tunnel vxlan ose-vxlan {app-service none flooding-type multipoint}
 
-      From the UI:
+      # From the UI:
       GoTo Network --> Tunnels --> Profiles --> VXLAN
       - Create a new profile called "ose-vxlan"
       - Set the Flooding Type = Multipoint
@@ -62,12 +63,12 @@ URL: https://10.1.1.245
 
 #. Create a vxlan tunnel
 
-   .. code-block:: console
+   .. code-block:: bash
 
-      From the CLI:
+      # From the CLI:
       tmsh create net tunnel tunnel ose-tunnel {key 0 local-address 10.10.199.60 profile ose-vxlan}
 
-      From the UI:
+      # From the UI:
       GoTo Network --> Tunnels --> Tunnel List
       - Create a new tunnel called "ose-tunnel"
       - Set the Local Address to 10.10.199.60
@@ -80,7 +81,7 @@ URL: https://10.1.1.245
 Container Connector Deployment
 ------------------------------
 
-.. note:: For a more thorough explanation of all the settings and options see
+.. seealso:: For a more thorough explanation of all the settings and options see
    `F5 Container Connector - Openshift <https://clouddocs.f5.com/containers/v2/openshift/>`_
 
 Now that BIG-IP is licensed and prepped with the "ose" partition, we need to
@@ -107,7 +108,7 @@ to hide our bigip credentials.
    .. note:: These files should be here by default, if **NOT** run the
       following commands.
 
-   .. code-block:: console
+   .. code-block:: bash
 
       git clone https://github.com/f5devcentral/f5-agility-labs-containers.git ~/agilitydocs
 
@@ -118,7 +119,7 @@ to hide our bigip credentials.
    .. note:: Here we're using a prebuilt user "demouser" and prompted for a
       password, which is: demouser
 
-   .. code-block:: console
+   .. code-block:: bash
 
       oc login -u demouser -n default
 
@@ -130,7 +131,7 @@ to hide our bigip credentials.
 
 #. Create bigip login secret
 
-   .. code-block:: console
+   .. code-block:: bash
 
       oc create secret generic bigip-login -n kube-system --from-literal=username=admin --from-literal=password=admin
 
@@ -141,7 +142,7 @@ to hide our bigip credentials.
 
 #. Create kubernetes service account for bigip controller
 
-   .. code-block:: console
+   .. code-block:: bash
 
       oc create serviceaccount k8s-bigip-ctlr -n kube-system
 
@@ -154,7 +155,7 @@ to hide our bigip credentials.
 #. Create cluster role for bigip service account (admin rights, but can be
    modified for your environment)
 
-   .. code-block:: console
+   .. code-block:: bash
 
       oc create clusterrolebinding k8s-bigip-ctlr-clusteradmin --clusterrole=cluster-admin --serviceaccount=kube-system:k8s-bigip-ctlr
 
@@ -165,7 +166,7 @@ to hide our bigip credentials.
 
 #. Next let's explore the f5-hostsubnet.yaml file
 
-   .. code-block:: console
+   .. code-block:: bash
 
       cd /root/agilitydocs/openshift
 
@@ -176,15 +177,15 @@ to hide our bigip credentials.
    .. literalinclude:: ../../../openshift/f5-bigip-hostsubnet.yaml
       :language: yaml
       :linenos:
-      :emphasize-lines: 2,9
+      :emphasize-lines: 2,9,10
 
    .. attention:: This YAML file creates an OpenShift Node and the Host is the
-      BIG-IP with /23 subnet of IP's (3 images down).
+      BIG-IP with an assigned /23 subnet of IP 10.131.0.0 (3 imagas down).
 
 #. Next let's look at the current cluster,  you should see 3 members
    (1 master, 2 nodes)
 
-   .. code-block:: console
+   .. code-block:: bash
 
       oc get hostsubnet
 
@@ -194,7 +195,7 @@ to hide our bigip credentials.
 #. Now create the connector to the BIG-IP device, then look before and after
    at the attached devices
 
-   .. code-block:: console
+   .. code-block:: bash
 
       oc create -f f5-bigip-hostsubnet.yaml
 
@@ -206,7 +207,7 @@ to hide our bigip credentials.
 #. At this point nothing has been done to the BIG-IP, this only was done in
    the OpenShift environment.
 
-   .. code-block:: console
+   .. code-block:: bash
 
       oc get hostsubnet
 
@@ -215,16 +216,17 @@ to hide our bigip credentials.
    .. image:: images/F5-OC-HOSTSUBNET2.png
       :align: center
 
-   .. important:: The Subnet assignment, in this case is 10.129.2.0/23. We
-      need to know this subnet to configure the self-ip for the vxlan tunnel on BIG-IP.
+   .. important:: The Subnet assignment, in this case is 10.131.0.0/23, was
+      assigned by the **subnet: "10.131.0.0/23"** line in "HostSubnet" yaml
+      file.
 
-   .. note:: In this lab OpenShift is auto assigning a subnet. We have the
-      options to set this by adding **subnet: "10.131.0.0/23"** at the end of
-      the "hostsubnet" yaml file and setting the **assign-subnet: "false"**.
-      It would look something like this:
+   .. note:: In this lab we're manually assigning a subnet. We have the option
+      to let openshift auto assign ths by removing **subnet: "10.131.0.0/23"**
+      line at the end of the "hostsubnet" yaml file and setting the
+      **assign-subnet: "true"**. It would look like this:
 
       .. code-block:: yaml
-         :emphasize-lines: 7,10
+         :emphasize-lines: 7
 
          apiVersion: v1
          kind: HostSubnet
@@ -232,33 +234,32 @@ to hide our bigip credentials.
             name: openshift-f5-node
             annotations:
                pod.network.openshift.io/fixed-vnid-host: "0"
-               pod.network.openshift.io/assign-subnet: "false"
+               pod.network.openshift.io/assign-subnet: "true"
          host: openshift-f5-node
          hostIP: 10.10.199.60
-         subnet: "10.131.0.0/23"
 
 #. Create the vxlan tunnel self-ip
 
-   .. important:: For your SELF-IP subnet, remember it is a /14 and not a /23 -
-      Why?  The Self-IP has to be able to understand those other /23 subnets
-      are local in the namespace in the example above for Master, Node1, Node2,
-      etc. Many students accidently use /23, but then the self-ip  will be only
-      to communicate to one subnet on the openshift-f5-node.  When trying to
+   .. tip:: For your SELF-IP subnet, remember it is a /14 and not a /23 -
+      Why? The Self-IP has to be able to understand those other /23 subnets are
+      local in the namespace in the example above for Master, Node1, Node2,
+      etc. Many students accidently use /23, but then the self-ip will be only
+      to communicate to one subnet on the openshift-f5-node. When trying to
       ping across to services on other /23 subnets from the BIG-IP for instance,
-      communication will fail as your self-ip doesn't have the proper subne
+      communication will fail as your self-ip doesn't have the proper subnet
       mask to know those other subnets are local.
+      
+   .. code-block:: bash
+      
+      # From the CLI:
+      tmsh create net self ose-vxlan-selfip address 10.131.0.1/14 vlan ose-tunnel
 
-   .. code-block:: console
-
-      From the CLI:
-      tmsh create net self ose-vxlan-selfip address 10.129.2.1/14 vlan ose-tunnel
-        
-      From the UI:
+      # From the UI:
       GoTo Network --> Self IP List
       - Create a new Self-IP called "ose-vxlan-selfip"
-      - Set the IP Address to an IP from the subnet assigned in the previous step. In this case we'll ue "10.129.2.1"
+      - Set the IP Address to "10.131.0.1". (An IP from the subnet assigned in the previous step.)
       - Set the Netmask to "255.252.0.0"
-      - Set the VLAN / Tunnel to "ose-tunnel" (created earlier)
+      - Set the VLAN / Tunnel to "ose-tunnel" (Created earlier)
       - Set Port Lockdown to "Allow All"
       - Click Finished
 
@@ -268,7 +269,7 @@ to hide our bigip credentials.
 #. Now we'll create an Openshift F5 Container Connector to do the API calls
    to/from the F5 device. First we need the "deployment" file.
 
-   .. code-block:: console
+   .. code-block:: bash
 
       cd /root/agilitydocs/openshift
 
@@ -283,13 +284,13 @@ to hide our bigip credentials.
 
 #. Create the container connector deployment with the following command
 
-   .. code-block:: console
+   .. code-block:: bash
 
       oc create -f f5-cluster-deployment.yaml
 
 #. Check for successful creation:
 
-   .. code-block:: console
+   .. code-block:: bash
 
       oc get pods -n kube-system -o wide
 
@@ -299,13 +300,13 @@ to hide our bigip credentials.
 #. If the tunnel is up and running big-ip should be able to ping the cluster
    nodes. SSH to big-ip and run one or all of the following ping tests:
 
-   .. code-block:: console
+   .. code-block:: bash
 
-      ...to ping ose-master
+      # ping ose-master
       ping 10.128.0.1
 
-      ...to ping ose-node1
+      # ping ose-node1
       ping 10.129.0.1
 
-      ...to ping ose-node2
+      # ping ose-node2
       ping 10.130.0.1
