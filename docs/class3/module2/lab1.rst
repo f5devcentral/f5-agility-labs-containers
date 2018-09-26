@@ -14,11 +14,16 @@ Lab 2.1 - Prep Ubuntu
    - mesos-agent2
    - mesos-agent3
 
+   .. image:: images/MremoteNG.png
+      :align: center
+
 #. Elevate to "root"
 
    .. code-block:: bash
 
-      su - ( when prompted for password enter "default" without the quotes )
+      su -
+      
+      #When prompted for password enter "default" without the quotes
 
 #. For your convenience we've already added the host IP & names to /etc/hosts.
    Verify the file
@@ -32,10 +37,14 @@ Lab 2.1 - Prep Ubuntu
    .. image:: images/ubuntu-hosts-file.png
       :align: center
 
-   If not there add the following lines to the bottom of the file with
-   "vim /etc/hosts"
+   If entries are not there add them to the bottom of the file be editing
+   "/etc/hosts" with 'vim'
 
    .. code-block:: bash
+
+      vim /etc/hosts
+
+      #cut and paste the following lines to /etc/hosts
 
       10.2.10.21    mesos-master1
       10.2.10.22    mesos-agent1
@@ -47,16 +56,7 @@ Lab 2.1 - Prep Ubuntu
 
       apt update && apt upgrade -y
 
-      (This can take a few seconds to a minute depending on demand to download
-      the latest updates for the OS)
-
-#. Once this is done, we need to install java for the mesos and marathon
-   processes.
-
-   .. code-block:: bash
-
-      apt install -y openjdk-8-jdk
-      export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/
+      #This can take a few seconds to several minute depending on demand to download the latest updates for the OS.
 
 #. Add the docker repo
 
@@ -80,5 +80,13 @@ Lab 2.1 - Prep Ubuntu
 
    If everything is working properly you should see the following message
 
-   .. image:: images/setup-slave-test-docker.png
+   .. image:: images/setup-test-docker.png
       :align: center
+
+#. Install java for the mesos and marathon processes.
+
+   .. code-block:: bash
+
+      apt install -y openjdk-8-jdk
+      
+      export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/

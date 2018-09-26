@@ -14,11 +14,11 @@ cluster.
    .. warning:: This is just an example!! **DO not cut/paste the one below.**
       You should have saved this command after successfully initializing the
       master with step 2 above.   Scroll up in your CLI history to find the
-      hash your kube-master generated to add nodes.
+      hash your kube-master1 generated to add nodes.
 
    .. warning:: This command needs to be run on **node1** and **node2** only!
 
-   .. code-block:: console
+   .. code-block:: bash
 
       kubeadm join 10.1.10.21:6443 --token 12rmdx.z0cbklfaoixhhdfj --discovery-token-ca-cert-hash sha256:c624989e418d92b8040a1609e493c009df5721f4392e90ac6b066c304cebe673
 
@@ -28,9 +28,9 @@ cluster.
       :align: center
 
 #. To verify the *nodes* have joined the cluster, run the following command
-   on the **kube-master**:
+   on the **kube-master1**:
 
-   .. code-block:: console
+   .. code-block:: bash
 
       kubectl get nodes
 
@@ -40,11 +40,11 @@ cluster.
       :align: center
 
 
-#. Verify all the services are started as expected (run on the **kube-master**)
+#. Verify all the services are started as expected (run on the **kube-master1**)
    Don't worry about last 5 characters matching on most services, as they are
    randomly generated:
 
-   .. code-block:: console
+   .. code-block:: bash
 
       kubectl get pods --all-namespaces
 

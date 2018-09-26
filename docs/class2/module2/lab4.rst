@@ -1,5 +1,5 @@
-Lab 2.4 - Install the Kubernetes UI
-===================================
+Lab 2.4 - Setup the Kubernetes UI
+=================================
 
 .. important:: The following commands need to be run on the **master** only.
 
@@ -16,7 +16,7 @@ Lab 2.4 - Install the Kubernetes UI
    .. note:: These files should be here by default, if **NOT** run the
       following commands.
 
-   .. code-block:: console
+   .. code-block:: bash
 
       git clone https://github.com/f5devcentral/f5-agility-labs-containers.git ~/agilitydocs
 
@@ -27,7 +27,7 @@ Lab 2.4 - Install the Kubernetes UI
    .. note:: A script is included in the cloned git repo from the previous
       step. In the interest of time you can simply use the script.
 
-   .. code-block:: console
+   .. code-block:: bash
 
       cd /home/ubuntu/agilitydocs/kubernetes
 
@@ -35,7 +35,7 @@ Lab 2.4 - Install the Kubernetes UI
 
    or run through the following steps:
 
-   .. code-block:: console
+   .. code-block:: bash
 
       kubectl create serviceaccount kubernetes-dashboard -n kube-system
 
@@ -53,14 +53,14 @@ Lab 2.4 - Install the Kubernetes UI
 
    Apply Kubernetes manifest file:
 
-   .. code-block:: console
+   .. code-block:: bash
 
       kubectl apply -f kube-dashboard.yaml
 
 #. To access the dashboard, you need to see which port it is listening on.
    You can find this information with the following command:
 
-   .. code-block:: console
+   .. code-block:: bash
 
       kubectl describe svc kubernetes-dashboard -n kube-system
 

@@ -21,34 +21,26 @@ We will leverage the following setup to configure the OpenShift environment.
 
    * - **Hostname**
      - **IP-ADDR**
-     - **VLAN**
      - **Credentials**
    * - jumpbox
      - 10.1.1.250
-     - mgmt: 10.1.1.0/24
      - user/Student!Agility!
    * - bigip1
      - 10.1.1.245
 
        10.10.199.60
 
-     - mgmt: 10.1.1.0/24
-
-       external-ose 10.10.199.0/24
      - admin/admin
 
        root/default
    * - ose-mstr01
      - 10.10.199.100
-     - external-ose: 10.10.199.0/24
      - root/default
    * - ose-node01
      - 10.10.199.101
-     - external-ose: 10.10.199.0/24
      - root/default
    * - ose-node02
      - 10.10.199.102
-     - external-ose: 10.10.199.0/24
      - root/default
 
 In case you don't use the Ravello BluePrint, here are a few things to know

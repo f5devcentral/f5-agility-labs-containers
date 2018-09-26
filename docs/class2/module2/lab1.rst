@@ -1,9 +1,7 @@
 Lab 2.1 - Prep Ubuntu
 =====================
 
-.. note::  This installation will utilize Ubuntu v16.04 (Xenial) and
-   **kubeadm** You can find a more thorough installation guide here:
-   `Ubuntu getting started guide 16.04 <http://kubernetes.io/docs/getting-started-guides/kubeadm/>`_
+.. note::  This installation will utilize Ubuntu v18.04 (Bionic)
 
 .. important:: The following commands need to be run on all three nodes
    unless otherwise specified.
@@ -12,21 +10,23 @@ Lab 2.1 - Prep Ubuntu
    following servers. The sessions are pre-configured to connect with the
    default user “ubuntu”.
 
-   - kube-master
+   - kube-master1
    - kube-node1
    - kube-node2
 
    .. tip:: These sessions should be running from the previous Docker lab.
 
-   .. image:: images/MremoteNG-1.png
+   .. image:: images/MremoteNG.png
       :align: center
 
 #. If not already done from the previous Docker lab elevate to "root"
 
-   .. code-block:: console
+   .. code-block:: bash
 
-      su - ( when prompted for password enter "default" without the quotes )
-
+      su - 
+      
+      #When prompted for password enter "default" without the quotes
+      
    Your prompt should change to root@ at the start of the line :
 
    .. image:: images/rootuser.png
@@ -35,7 +35,7 @@ Lab 2.1 - Prep Ubuntu
 #. For your convenience we've already added the host IP & names to /etc/hosts.
    Verify the file
 
-   .. code-block:: console
+   .. code-block:: bash
 
       cat /etc/hosts
 
@@ -44,10 +44,14 @@ Lab 2.1 - Prep Ubuntu
    .. image:: images/ubuntu-hosts-file.png
       :align: center
 
-   If not there add the following lines to the bottom of the file with
-   "vim /etc/hosts"
+   If entries are not there add them to the bottom of the file be editing
+   "/etc/hosts" with 'vim'
 
-   .. code-block:: console
+   .. code-block:: bash
+
+      vim /etc/hosts
+
+      #cut and paste the following lines to /etc/hosts
 
       10.1.10.21    kube-master1
       10.1.10.22    kube-node1
@@ -60,7 +64,7 @@ Lab 2.1 - Prep Ubuntu
       use the linux top command, which allows users to monitor processes and
       system resource usage
 
-   .. code-block:: console
+   .. code-block:: bash
 
       top
 
@@ -69,14 +73,13 @@ Lab 2.1 - Prep Ubuntu
    If you see a number other than "0" you need to run the following commands
    (else press q to quit top)
 
-   .. code-block:: console
+   .. code-block:: bash
 
       swapoff -a
 
       vim /etc/fstab
 
-      and rem out the highlighted line below by adding "#" to the beginning of
-      the line, write and save the file, ":wq"
+      #rem out the highlighted line below by adding "#" to the beginning of the line, write and save the file by typing ":wq"
 
    .. image:: images/disable-swap.png
       :align: center
@@ -85,12 +88,11 @@ Lab 2.1 - Prep Ubuntu
 
    .. tip:: You can skip this step if it was done in the previous Docker lab.
 
-   .. code-block:: console
+   .. code-block:: bash
 
       apt update && apt upgrade -y
 
-      (This can take a few seconds to a minute depending on demand to download
-      the latest updates for the OS)
+      #This can take a few seconds to several minute depending on demand to download the latest updates for the OS.
 
 #. Install docker-ce
 
@@ -103,11 +105,11 @@ Lab 2.1 - Prep Ubuntu
    .. important:: The cgroupdrive for docker and kubernetes have to match. In
       this lab "cgroupfs" is the correct driver.
 
-   .. note:: This next part can be a bit tricky - just cut/paste the 5 lines
+   .. note:: This next part can be a bit tricky - just copy/paste the 5 lines
       below exactly as they are and paste via buffer to the CLI (and press
       return when done)
 
-   .. code-block:: console
+   .. code-block:: bash
 
       cat << EOF > /etc/docker/daemon.json
       {
@@ -122,7 +124,7 @@ Lab 2.1 - Prep Ubuntu
 
 #. Add the kubernetes repo
 
-   .. code-block:: console
+   .. code-block:: bash
 
       curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
 
@@ -132,15 +134,15 @@ Lab 2.1 - Prep Ubuntu
 
 #. Install the kubernetes packages
 
-   .. code-block:: console
+   .. code-block:: bash
 
       apt update && apt install kubelet kubeadm kubectl -y
 
 Limitations
 -----------
 
-For a full list of the limitations go here:
-`kubeadm limitations <http://kubernetes.io/docs/getting-started-guides/kubeadm/#limitations>`_
+.. seealso:: For a full list of the limitations go here:
+   `kubeadm limitations <http://kubernetes.io/docs/getting-started-guides/kubeadm/#limitations>`_
 
 .. important:: The cluster created has a single master, with a single etcd
    database running on it. This means that if the master fails, your cluster

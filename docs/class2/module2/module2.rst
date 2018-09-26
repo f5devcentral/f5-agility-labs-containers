@@ -12,7 +12,7 @@ As a reminder, in this module, our cluster setup is:
    * - **Hostname**
      - **IP-ADDR**
      - **Role**
-   * - kube-master
+   * - kube-master1
      - 10.1.10.21
      - Master
    * - kube-node1

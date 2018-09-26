@@ -24,7 +24,7 @@ URL: https://10.1.1.245
 
 #. You need to setup a partition that will be used by F5 Container Connector.
 
-   .. code-block:: console
+   .. code-block:: bash
 
       #From the CLI:
       tmsh create auth partition kubernetes
@@ -62,7 +62,7 @@ to hide our bigip credentials.
 
    On your desktop select **MRemoteNG**, once launched you'll see a few tabs
    similar to the example below.  Open up the Kubernetes / Kubernetes-Cluster
-   folder and double click kube-master.
+   folder and double click kube-master1.
 
    .. image:: images/MRemoteNG-kubernetes.png
       :align: center
@@ -72,7 +72,7 @@ to hide our bigip credentials.
    .. note:: These files should be here by default, if **NOT** run the
       following commands.
 
-   .. code-block:: console
+   .. code-block:: bash
 
       git clone https://github.com/f5devcentral/f5-agility-labs-containers.git ~/agilitydocs
 
@@ -80,7 +80,7 @@ to hide our bigip credentials.
 
 #. Create bigip login secret
 
-   .. code-block:: console
+   .. code-block:: bash
 
       kubectl create secret generic bigip-login -n kube-system --from-literal=username=admin --from-literal=password=admin
 
@@ -91,7 +91,7 @@ to hide our bigip credentials.
 
 #. Create kubernetes service account for bigip controller
 
-   .. code-block:: console
+   .. code-block:: bash
 
       kubectl create serviceaccount k8s-bigip-ctlr -n kube-system
 
@@ -104,7 +104,7 @@ to hide our bigip credentials.
 #. Create cluster role for bigip service account (admin rights, but can be
    modified for your environment)
 
-   .. code-block:: console
+   .. code-block:: bash
 
       kubectl create clusterrolebinding k8s-bigip-ctlr-clusteradmin --clusterrole=cluster-admin --serviceaccount=kube-system:k8s-bigip-ctlr
 
@@ -140,13 +140,13 @@ to hide our bigip credentials.
    It will start our f5-k8s-controller container on one of our nodes (may take
    around 30sec to be in a running state):
 
-   .. code-block:: console
+   .. code-block:: bash
 
       kubectl create -f f5-nodeport-deployment.yaml
 
 #. Verify the deployment "deployed"
 
-   .. code-block:: console
+   .. code-block:: bash
 
       kubectl get deployment k8s-bigip-ctlr-deployment --namespace kube-system
 
@@ -156,7 +156,7 @@ to hide our bigip credentials.
 #. To locate on which node the container connector is running, you can use the
    following command:
 
-   .. code-block:: console
+   .. code-block:: bash
 
       kubectl get pods -o wide -n kube-system
 
@@ -175,9 +175,9 @@ to hide our bigip credentials.
    #. Using kubectl command: you need to use the full name of your pod as
       showed in the previous image
 
-      .. code-block:: console
+      .. code-block:: bash
 
-         For example:
+         # For example:
          kubectl logs k8s-bigip-ctlr-deployment-79fcf97bcc-48qs7 -n kube-system
 
       .. image:: images/f5-container-connector-check-logs-kubectl.png
@@ -187,7 +187,7 @@ to hide our bigip credentials.
       is running on kube-node1.  Via mRemoteNG open a session to kube-node1 and
       run the following commands:
 
-      .. code-block:: console
+      .. code-block:: bash
 
          sudo docker ps
 
@@ -198,7 +198,7 @@ to hide our bigip credentials.
 
       Now we can check our container logs:
 
-      .. code-block:: console
+      .. code-block:: bash
 
          sudo docker logs b91d400df115
 
@@ -207,7 +207,7 @@ to hide our bigip credentials.
 
    #. You can connect to your container with kubectl as well:
 
-      .. code-block:: console
+      .. code-block:: bash
 
          kubectl exec -it k8s-bigip-ctlr-deployment-79fcf97bcc-48qs7 -n kube-system  -- /bin/sh
 

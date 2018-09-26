@@ -24,12 +24,12 @@ URL: https://10.1.1.245
 
 #. You need to setup a partition that will be used by F5 Container Connector.
 
-   .. code-block:: console
+   .. code-block:: bash
 
-      From the CLI:
+      # From the CLI:
       tmsh create auth partition mesos
 
-      From the UI:
+      # From the UI:
       GoTo System --> Users --> Partition List
       - Create a new partition called "mesos" (use default settings)
       - Click Finished
@@ -121,7 +121,7 @@ the Marathon REST API.  For this class we will be using the Marathon UI.
 
    #. Connect via SSH to **f5-mesos-agent1** and run the following commands:
 
-      .. code-block:: console
+      .. code-block:: bash
 
          sudo docker ps
 
@@ -133,7 +133,7 @@ the Marathon REST API.  For this class we will be using the Marathon UI.
 
       #. To check the logs of our Controller:
 
-         .. code-block:: console
+         .. code-block:: bash
 
             sudo docker logs 43c11f8d0cfa
 
@@ -142,7 +142,7 @@ the Marathon REST API.  For this class we will be using the Marathon UI.
 
       #. To connect to our container with a Shell:
 
-         .. code-block:: console
+         .. code-block:: bash
 
             sudo docker exec -it 43c11f8d0cfa /bin/sh
 

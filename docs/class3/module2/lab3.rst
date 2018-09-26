@@ -1,47 +1,45 @@
 Lab 2.3 - Setup the Agents
 ==========================
 
-Once the master is setup and running, we need to setup and join our *agents* to
-the cluster.
+Once the master is setup and running, we need to setup and join our **agents**
+to the cluster.
 
-.. important:: The following commands need to be run on both agent nodes unless
-   otherwise specified.
+.. important:: The following commands need to be run on both **agent** nodes
+   unless otherwise specified.
 
 Install Mesos
 -------------
 
-#. Point apt to the relevant repo
+#. Add the mesos/marathon repo
 
    Run the following commands:
 
    .. code-block:: bash
 
-      #retrieve the key
       apt-key adv --keyserver keyserver.ubuntu.com --recv E56151BF
 
-      #create a new repo to have access to mesosphere packages related to this distro/release
       cat <<EOF >> /etc/apt/sources.list.d/mesosphere.list
       deb http://repos.mesosphere.com/ubuntu $(lsb_release -cs) main
       EOF
 
-#. Finally we can install mesos on our agents
+#. Install the mesos packages
 
    .. code-block:: bash
 
       apt update && apt-get install mesos -y
 
 Setup Mesos
----------------
+-----------
 
-#. Setup the following files with the relevant information:
-
-   - /etc/mesos-slave/ip
-   - /etc/mesos-slave/hostname (specify the IP address of your node)
-   - /etc/mesos/zk (to have zookeeper handle HA for mesos)
+#. Create mesos `ip` file /etc/mesos-slave/ip
+#. Create mesos `hostname` file /etc/mesos-slave/hostname (specify the IP
+   address of your node)
+#. Point zookeeper to the master instance. This is done in the file
+   /etc/mesos/zk
 
    .. code-block:: bash
 
-      #On agent1
+      # On agent1
       echo "10.2.10.22" > /etc/mesos-slave/ip
       echo "10.2.10.22" > /etc/mesos-slave/hostname
       echo "zk://10.2.10.21:2181/mesos" > /etc/mesos/zk
@@ -51,7 +49,7 @@ Setup Mesos
       echo "10.2.10.23" > /etc/mesos-slave/hostname
       echo "zk://10.2.10.21:2181/mesos" > /etc/mesos/zk
 
-#. Make the following changes to allow docker containers in mesos.
+#. Make the following changes to allow "docker" containers with mesos.
 
    .. code-block:: bash
 
@@ -85,34 +83,34 @@ Start Services
       systemctl start mesos-slave
       systemctl enable mesos-slave
 
-#. Check on one of your master with mesos interface (port 5050) if your agents
-   registered successfully. You should see both agent1 and agent2 on the agent
-   page
+#. Check on master with mesos interface (port 5050) if your agents registered
+   successfully. You should see both agent1 and agent2 on the agent page.
 
    .. image:: images/setup-slave-check-agent-registration.png
       :align: center
 
-Test your setup
+Test Your Setup
 ---------------
 
-#. Connect to Marathon through one of the master (:8080) and launch an
-   application
+Connect to Marathon through one of the master (8080) and launch an application.
 
-   #. Click on *create application* and make the following settings:
+#. Click on *create application*
 
-      .. image:: images/setup-slave-test-create-application-button.png
-         :align: center
+   .. image:: images/setup-slave-test-create-application-button.png
+      :align: center
 
-      - ID: Test
-      - CPU: 0.1
-      - Memory: 32M
-      - Command: echo Test; sleep 10
-    
-      .. image:: images/setup-slave-test-create-application-command-def.png
-         :align: center
+#. Make the following settings and click "Create Application"
 
-#. Once it runs, if you connect to the mesos framework, you should see more
-   and more completed tasks. Name of the task should be "Test" (our ID).
+   - ID: test
+   - CPU: 0.1
+   - Memory: 32M
+   - Command: echo TEST; sleep 5
+   
+   .. image:: images/setup-slave-test-create-application-command-def.png
+      :align: center
+
+#. Once it starts, connect to the mesos framework.  Here you should see more
+   and more completed tasks. Name of the task should be "test" (our ID).
 
    .. image:: images/setup-slave-test-create-application-command-exec1.png
       :align: center
@@ -130,11 +128,14 @@ Test your setup
    .. image:: images/setup-slave-test-create-application-command-delete.png
       :align: center
 
-Launch a container
+Launch A Container
 ------------------
 
-#. To test our containers from marathon, click on create an application, switch
-   to JSON mode and use the following to start an apache in a container.
+To test our containers from marathon. We will start a simple apache container.
+
+#. Click on create an application, switch to JSON mode and replace
+   the default 8 lines of json with the following and Click "Create
+   Application"
 
    .. note:: This may takes some time since we will have to retrieve the
       image first
@@ -160,16 +161,15 @@ Launch a container
    .. image:: images/setup-slave-test-create-container-def.png
       :align: center
 
-#. It may take some time to switch from ``Deploying`` to ``Running``. Once
-   it's in a ``Running`` state, check the port used by the container and try
-   to access it (slave ``IP:port``)
+#. It may take some time to switch from ``Deploying`` to ``Running``.
 
    .. image:: images/setup-slave-test-create-container-run.png
       :align: center
 
-#. Click on your application and here you'll see the port associated to your
-   instance (here it is ``31755``) and on which host it run (here slave1 -
-   ``10.1.20.51``)
+#. Once it's in a ``Running`` state, find the port used by the container and
+   try to access it at agent IP:port. Click on your application "my-website".
+   Here you'll see the port associated to your instance. In this case it's
+   ``31870`` and on ``agent1 - 10.2.10.22``
 
    .. image:: images/setup-slave-test-create-container-check-port.png
       :align: center

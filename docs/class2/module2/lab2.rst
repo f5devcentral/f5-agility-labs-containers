@@ -9,34 +9,36 @@ communicates with). All of these components run in pods started by kubelet
 .. important:: The following commands need to be run on the **master** only
    unless otherwise specified.
 
-#. Switch back to the ssh session connected to kube-master
+#. Switch back to the ssh session connected to kube-master1
 
    .. tip:: This session should be running from the previous if lab.
       If not simply open **mRemoteNG** and connect via the saved session.
 
 #. Initialize kubernetes
 
-   .. code-block:: console
+   .. code-block:: bash
 
       kubeadm init --apiserver-advertise-address=10.1.10.21 --pod-network-cidr=10.244.0.0/16
 
-   .. note:: The IP address used to advertise the master. 10.1.10.0/24 is the
-      network for our control plane. if you don't specify the
-      --apiserver-advertise-address argument, kubeadm will pick the first
-      interface with a default gateway (because it needs internet access).
+   .. note::
+      - The IP address used to advertise the master. 10.1.10.0/24 is the
+        network for our control plane. if you don't specify the
+        --apiserver-advertise-address argument, kubeadm will pick the first
+        interface with a default gateway (because it needs internet access).
 
-   .. note:: 10.244.0.0/16 is the default network used by flannel.  We'll setup
-      flannel in a later step.
+      - 10.244.0.0/16 is the default network used by flannel. We'll setup
+        flannel in a later step.
 
-   Be patient this step takes a few minutes.  The initialization is successful
-   if you see "Your Kubernetes master has initialized successfully!".
+      - Be patient this step takes a few minutes. The initialization is
+        successful if you see "Your Kubernetes master has initialized
+        successfully!".
 
    .. image:: images/cluster-setup-guide-kubeadm-init-master.png
       :align: center
 
    .. important:: Be sure to save the highlighted output from this command to
-      notepad and save for use in this lab. You'll need this to add your worker
-      nodes and configure user administration.
+      notepad. You'll need this information to add your worker nodes and
+      configure user administration.
 
    .. image:: images/cluster-setup-guide-kubeadm-init-master-join.png
       :align: center
@@ -50,7 +52,7 @@ communicates with). All of these components run in pods started by kubelet
    as root. The following will update both root and ubuntu user accounts for
    kubernetes administration.
 
-   .. code-block:: console
+   .. code-block:: bash
 
       mkdir -p $HOME/.kube
       sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
@@ -64,7 +66,7 @@ communicates with). All of these components run in pods started by kubelet
 #. Verify kubernetes is up and running. You can monitor the services are
    running by using the following command.
 
-   .. code-block:: console
+   .. code-block:: bash
 
       kubectl get pods --all-namespaces
 
@@ -78,7 +80,7 @@ communicates with). All of these components run in pods started by kubelet
 
 #. Install flannel
 
-   .. code-block:: console
+   .. code-block:: bash
 
       kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
 
@@ -91,7 +93,7 @@ communicates with). All of these components run in pods started by kubelet
    all services status "Running". To check the status of core services, you
    can run the following command:
 
-   .. code-block:: console
+   .. code-block:: bash
 
       kubectl get pods --all-namespaces
 
@@ -105,14 +107,14 @@ communicates with). All of these components run in pods started by kubelet
 
 #. Additional kubernetes status checks.
 
-   .. code-block:: console
+   .. code-block:: bash
 
       kubectl get cs
 
    .. image:: images/cluster-setup-guide-kubeadmin-init-check-cluster.png
       :align: center
 
-   .. code-block:: console
+   .. code-block:: bash
 
       kubectl cluster-info
       
@@ -125,7 +127,8 @@ communicates with). All of these components run in pods started by kubelet
    .. code-block:: bash
 
       # If you followed the instructions you should be currently connected as user **ubuntu**
-      su - ( when prompted for password enter "default" without the quotes )
+      # When prompted for password enter "default" without the quotes
+      su -
 
       # This resets the master to default settings
       kubeadm reset
