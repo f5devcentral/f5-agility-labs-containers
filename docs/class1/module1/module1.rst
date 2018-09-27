@@ -67,7 +67,7 @@ occur behind the scenes and, as the user, you don’t really have to worry about
 them. Still, the fact that Docker on Windows runs a virtual machine in the
 background is a major difference between Docker on Windows and Docker on Linux.
 
-.. tip:: For more information please come back and visit any of these links
+.. seealso:: For more information please come back and visit any of these links
    below:
 
    https://www.docker.com

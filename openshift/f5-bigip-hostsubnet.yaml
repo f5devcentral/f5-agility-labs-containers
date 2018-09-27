@@ -4,6 +4,7 @@ metadata:
   name: openshift-f5-node
   annotations:
     pod.network.openshift.io/fixed-vnid-host: "0"
-    pod.network.openshift.io/assign-subnet: "true"
+    pod.network.openshift.io/assign-subnet: "false"
 host: openshift-f5-node
 hostIP: 10.10.199.60
+subnet: "10.131.0.0/23"

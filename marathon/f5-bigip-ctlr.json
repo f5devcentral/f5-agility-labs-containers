@@ -11,7 +11,7 @@
     }
   },
   "env": {
-    "MARATHON_URL": "http://10.2.10.10:8080",
+    "MARATHON_URL": "http://10.2.10.21:8080",
     "F5_CC_PARTITIONS": "mesos",
     "F5_CC_BIGIP_HOSTNAME": "10.2.10.60",
     "F5_CC_BIGIP_USERNAME": "admin",

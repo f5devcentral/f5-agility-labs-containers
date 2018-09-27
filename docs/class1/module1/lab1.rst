@@ -1,29 +1,28 @@
 Lab 1.1 Install Docker
 ======================
 
-.. important:: The following commands need to be run on all three nodes unless
-   otherwise specified.
-
+.. important:: The following commands need to be **run on all three nodes**
+   unless otherwise specified.
 
 #. From the jumpbox open **mRemoteNG** and start a session to each of the
    following servers. The sessions are pre-configured to connect with the
    default user “ubuntu”.
 
-   - kube-master
+   - kube-master1
    - kube-node1
    - kube-node2
 
-   .. image:: images/MremoteNG-1.png
+   .. image:: images/MremoteNG.png
       :align: center
 
-#. Once connected via CLI(SSH) to kube-master as ubuntu user (it's the user
-   already setup in the MremoteNG settings), let's elevate to root:
+#. Once connected via CLI(SSH) to **ALL** three nodes as user `ubuntu` (it's
+   the user already setup in the MremoteNG settings), let's elevate to root:
 
-   .. code-block:: console
+   .. code-block:: bash
       
       su -
 
-      (When prompted for password enter "default" without the quotes )
+      #When prompted for password enter "default" without the quotes
 
    Your prompt should change to root@ at the start of the line :
 
@@ -32,16 +31,16 @@ Lab 1.1 Install Docker
 
 #. Then, to ensure the OS is up to date, run the following command
 
-   .. code-block:: console
+   .. code-block:: bash
 
       apt update && apt upgrade -y
 
-   .. note:: This can take a few seconds to a minute depending on demand to
-      download the latest updates for the OS.
+   .. note:: This can take a few seconds to several minute depending on demand
+      to download the latest updates for the OS.
 
 #. Add the docker repo
 
-   .. code-block:: console
+   .. code-block:: bash
 
       curl \-fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add \-
 
@@ -49,13 +48,13 @@ Lab 1.1 Install Docker
 
 #. Install the docker packages
 
-   .. code-block:: console
+   .. code-block:: bash
 
       apt update && apt install docker-ce -y
 
 #. Verify docker is up and running
 
-   .. code-block:: console
+   .. code-block:: bash
 
       docker run --rm hello-world
 

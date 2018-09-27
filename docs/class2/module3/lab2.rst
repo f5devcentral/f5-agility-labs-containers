@@ -1,5 +1,5 @@
-Lab 3.2 - F5 Container Connector(CC) Usage
-==========================================
+Lab 3.2 - F5 Container Connector Usage
+======================================
 
 Now that our container connector is up and running, let's deploy an application
 and leverage our F5 CC.
@@ -28,7 +28,7 @@ To deploy our application, we will need to do the following:
 App Deployment
 --------------
 
-On the **kube-master** we will create all the required files:
+On **kube-master1** we will create all the required files:
 
 #. Create a file called ``f5-hello-world-deployment.yaml``
 
@@ -65,7 +65,7 @@ On the **kube-master** we will create all the required files:
 
 #. We can now launch our application:
 
-   .. code-block:: console
+   .. code-block:: bash
 
       kubectl create -f f5-hello-world-deployment.yaml
       kubectl create -f f5-hello-world-configmap.yaml
@@ -76,15 +76,16 @@ On the **kube-master** we will create all the required files:
 
 #. To check the status of our deployment, you can run the following commands:
 
-   .. code-block:: console
+   .. code-block:: bash
 
       kubectl get pods -o wide
-      (This can take a few seconds to a minute to create these hello-world containers to running state)
+
+      # This can take a few seconds to a minute to create these hello-world containers to running state.
 
    .. image:: images/f5-hello-world-pods.png
       :align: center
 
-   .. code-block:: console
+   .. code-block:: bash
 
       kubectl describe svc f5-hello-world
 
@@ -139,7 +140,7 @@ On the **kube-master** we will create all the required files:
    kube-proxy instances. On either of the nodes, SSH in and run the following
    command:
 
-   .. code-block:: console
+   .. code-block:: bash
 
       sudo iptables-save | grep f5-hello-world
 
@@ -151,13 +152,13 @@ On the **kube-master** we will create all the required files:
 
 #. Scale the f5-hello-world app
 
-   .. code-block:: console
+   .. code-block:: bash
 
       kubectl scale --replicas=10 deployment/f5-hello-world -n default
 
 #. Check that the pods were created
 
-   .. code-block:: console
+   .. code-block:: bash
 
       kubectl get pods
 

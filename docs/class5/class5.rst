@@ -21,8 +21,8 @@ and two nodes. There is a pair of BIG-IPs setup in an HA configuration:
    :header-rows: 1
 
    * - **Hostname**
-     - **Mgt-IP**
-     - **Login / Password**
+     - **IP-ADDR**
+     - **Credentials**
    * - jumpbox
      - 10.10.200.199
      - user/Student!Agility!

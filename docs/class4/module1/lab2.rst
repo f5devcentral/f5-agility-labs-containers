@@ -57,7 +57,7 @@ On the **ose-master** we will create all the required files:
 
 #. We can now launch our application:
 
-   .. code-block:: console
+   .. code-block:: bash
 
       oc create -f f5-hello-world-deployment.yaml
       oc create -f f5-hello-world-configmap.yaml
@@ -68,21 +68,21 @@ On the **ose-master** we will create all the required files:
 
 #. To check the status of our deployment, you can run the following commands:
 
-   .. code-block:: console
+   .. code-block:: bash
 
       oc get pods -o wide
 
    .. image:: images/f5-hello-world-pods.png
       :align: center
 
-   .. code-block:: console
+   .. code-block:: bash
 
       oc describe svc f5-hello-world
         
    .. image:: images/f5-container-connector-check-app-definition.png
       :align: center
 
-#. To test the app you need to pay attention to:
+#. To test the app you need to pay attention to: 
 
    **The Endpoints**, that's our 2 instances (defined as replicas in our
    deployment file) and the port assigned to the service: port 8080.
@@ -124,13 +124,13 @@ On the **ose-master** we will create all the required files:
 
 #. Scale the f5-hello-world app
 
-   .. code-block:: console
+   .. code-block:: bash
 
       oc scale --replicas=10 deployment/f5-hello-world
 
 #. Check the pods were created
 
-   .. code-block:: console
+   .. code-block:: bash
 
       oc get pods
 
@@ -142,4 +142,4 @@ On the **ose-master** we will create all the required files:
    .. image:: images/f5-hello-world-pool-scale10.png
         :align: center
 
-   .. attention:: What network were the IPs allocated from?
+   .. attention:: What networks were the IPs allocated from?

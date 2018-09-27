@@ -1,19 +1,28 @@
 Getting Started
 ===============
 
-Please follow the instructions provided by the instructor to start your lab
-and access your jump host.
-
-.. important:: 
+.. important::
    * **The instructor will provide the necessary details to
      connect to lab environment.**
 
-   * All work for this lab will be performed exclusively from the Windows
-     jumpbox via RDP. No installation or interaction with your local system
-     is required.
+   * Please follow the instructions provided to start your lab and access your
+     jump host.
 
-.. attention:: To access the lab environment follow this link
-   http://training.f5agility.com
+   * All work for this lab will be performed exclusively from the Windows
+     jumpbox via RDP. 
+     
+   * No installation or interaction with your local system is required.
+
+.. attention::
+   * This lab is based on Ravello blueprint
+     ``Agility 2018-Containers (Exp Nov 9th, 2018)-vtog-2.1.0``
+
+   * To access the lab environment follow this link
+     http://training.f5agility.com
+
+   * Once you have established remote access to your lab jumpbox,
+     launch Google Chrome and mRemoteNG (both have shortcuts on the desktop
+     and taskbar).
 
 .. image:: /_static/intro/welcome.png
    :align: center
@@ -22,31 +31,14 @@ and access your jump host.
    may not be able to access your jumpbox otherwise. It is available in the
    App store (FREE).
 
-.. attention:: Once you have established remote access to your lab jumpbox,
-   launch Google Chrome and mRemoteNG (both have shortcuts on the desktop and
-   taskbar).
+.. tip:: The default keyboard mapping is set to english. If you need to change
+   it, follow these steps:
 
-.. tip:: mRemoteNG has shortcuts pre-defined within the application. To open
-   terminal access to any host in the lab, double click on the appropriate
-   folder, and double click on the host.
-
-   .. image:: /_static/intro/mremoteng.png
-      :align: center
-
-.. tip:: Change keyboard input
-
-   The default keyboard mapping is set to english. If you need to change it,
-   here is the method:
-
-   * Click on the start menu button and type 'Language' in the search field.
-   * Click on 'Language' option in the search list
-
-     .. image:: /_static/intro/select-region-language.png
-        :align: center
-
-   * Click on 'Add a language'
-
-     .. image:: /_static/intro/select-change-keyboard.png
-        :align: center
-
-   * Add the language you want to have for your keyboard mapping.
+   #. Click on the start menu button and type 'language' in the search field
+   #. Click on 'Change keyboards or other input methods' in the search list
+   #. Click on 'Change keyboards...'
+   #. Click 'Add...'
+   #. Select the language you want for your keyboard mapping and click 'OK'
+   #. Change the 'Default input language' in the drop down list to the language
+      added in the previous step
+   #. Click 'Apply' --> Click 'OK' --> Click 'OK'
