@@ -1,7 +1,10 @@
 Lab 1.1 - Prep CentOS
 =====================
 
-.. note::  This installation will utilize centOS v7.5
+.. note::
+   - This installation will utilize centOS v7.5.
+   - SSH keys were configured to allow the jumphost to login without a passwd
+     as well as between the master & nodes to facilitate the Ansible playbooks.
 
 .. important:: The following commands need to be run on all three nodes
    unless otherwise specified.
@@ -67,20 +70,3 @@ Lab 1.1 - Prep CentOS
 
    .. image:: images/setup-test-docker.png
       :align: center
-
-#. Setup SSH connectivity between master and nodes
-
-   A. Generate private/public key on master
-   
-      .. code-block:: bash
-
-         ssh-keygen -t rsa
-
-         # Don't set the password
-
-   #. Copy public key to nodes
-
-      .. code-block:: bash
-
-         ssh-copy-id centos@10.3.10.22
-         ssh-copy-id centos@10.3.10.23
