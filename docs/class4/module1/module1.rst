@@ -1,22 +1,29 @@
-Module 1: F5 Container Connector with RedHat OpenShift
-======================================================
+Module 1: Build an Openshift Cluster
+====================================
 
-Red Hat’s OpenShift Origin is a containerized application platform with a
-native Kubernetes integration. The BIG-IP Controller for Kubernetes enables
-use of a BIG-IP device as an edge load balancer, proxying traffic from outside
-networks to pods inside an OpenShift cluster. OpenShift Origin uses a pod
-network defined by the OpenShift SDN.
+In this module, we will build a 3 node cluster (1x master and 2x nodes) 
+utilizing CentOS server images.
 
-The F5 Integration for Kubernetes overview describes how the BIG-IP Controller
-works with Kubernetes. Because OpenShift has a native Kubernetes integration,
-the BIG-IP Controller works essentially the same in both environments. It does
-have a few OpenShift-specific prerequisites.
+As a reminder, in this module, our cluster setup is:
 
-Today we are going to go through a prebuilt OpenShift environment with some
-locally deployed yaml files.  
+.. list-table::
+   :header-rows: 1
+
+   * - **Hostname**
+     - **IP-ADDR**
+     - **Role**
+   * - ose-master1
+     - 10.3.10.21
+     - Master
+   * - ose-node1
+     - 10.3.10.22
+     - Node
+   * - ose-node2
+     - 10.3.10.23
+     - Node
 
 .. toctree::
    :maxdepth: 1
    :glob:
-   
+
    lab*

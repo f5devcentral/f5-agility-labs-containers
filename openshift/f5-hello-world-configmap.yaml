@@ -15,7 +15,7 @@ data:
           "mode": "http",
           "partition": "ose",
           "virtualAddress": {
-            "bindAddr": "10.10.199.81",
+            "bindAddr": "10.3.10.81",
             "port": 80
           }
         },
