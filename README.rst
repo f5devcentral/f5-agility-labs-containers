@@ -29,7 +29,9 @@ The purpose of these labs is to give you better understanding of...
    - How to configure BIG-IP HA with OpenShift
    - Configure advanced OpenShift configuration working with BIG-IP
 
-The lab guide is hosted here: https://clouddocs.f5.com/training/community/containers/html/
+.. attention::
+   * The lab guide is hosted here:
+     https://clouddocs.f5.com/training/community/containers/html/
 
-The lab is based on Ravello blueprint
-``Agility 2018-Containers (Exp Nov 9th,2018)-vtog-2.2.2``
+   * The lab is based on Ravello blueprint
+     ``Agility 2018-Containers (Exp Nov 9th,2018)-vtog-2.2.2``
