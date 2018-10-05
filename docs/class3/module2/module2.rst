@@ -1,6 +1,9 @@
 Module 2: Build a Mesos / Marathon Cluster
 ==========================================
 
+.. attention:: **THIS MODULE CAN BE SKIPPED. THE BLUEPRINT IS PRE-CONFIGURED
+   WITH A WORKING CLUSTER. THIS MODULE IS FOR DOCUMENTION PURPOSES ONLY.**
+
 In this module, we will build a 3 node cluster (1x masters and 2x nodes)
 utilizing Ubuntu server images.
 

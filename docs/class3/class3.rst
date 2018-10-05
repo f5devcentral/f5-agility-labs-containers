@@ -11,6 +11,10 @@ This introductory class covers the following topics:
 
 Expected time to complete: **1 hours**
 
+.. attention:: **MODULE 2: BUILD A MESOS / MARATHON CLUSTER CAN BE SKIPPED. THE
+   BLUEPRINT IS PRE-CONFIGURED WITH A WORKING CLUSTER. THIS MODULE IS FOR
+   DOCUMENTION PURPOSES ONLY.**
+
 Lab Setup
 ---------
 
