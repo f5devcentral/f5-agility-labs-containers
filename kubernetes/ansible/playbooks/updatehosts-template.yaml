@@ -1,4 +1,4 @@
-- hosts: kubernetes
+- hosts: kube-all
   gather_facts: False
   tasks:
   - name: update /etc/hosts file

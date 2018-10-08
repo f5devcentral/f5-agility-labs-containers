@@ -1,7 +1,7 @@
 ---
 
 - name: Install Docker
-  hosts: kubernetes
+  hosts: kube-all
 
   tasks:
     - name: Update Ubuntu

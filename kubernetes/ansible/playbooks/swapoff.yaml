@@ -1,7 +1,7 @@
 ---
 
 - name: Disable swap file permanantly 
-  hosts: kube-master1
+  hosts: kube-all
 
   tasks:
     - name: Remove swapfile from /etc/fstab
