@@ -1,0 +1,11 @@
+---
+
+- name: An example template playbook
+  hosts: kube-master1
+
+  tasks:
+    - name: Template a file to disk
+      become: true
+      template:
+        src: ../templates/template.txt
+        dest: /tmp/sample-template.txt

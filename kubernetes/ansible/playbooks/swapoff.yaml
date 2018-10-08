@@ -1,0 +1,17 @@
+---
+
+- name: Disable swap file permanantly 
+  hosts: kube-master1
+
+  tasks:
+    - name: Remove swapfile from /etc/fstab
+      become: true
+      lineinfile:
+        backup: yes
+        dest: /etc/fstab
+        regexp: '^UUID=.*\s+none\s+swap'
+        state: absent
+    - name: Disable swap
+      become: true
+      command: swapoff -a
+      when: ansible_swaptotal_mb > 0

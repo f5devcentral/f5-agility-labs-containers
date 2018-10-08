@@ -1,0 +1,7 @@
+retry....This was uploaded by Ansible. The remote machine info is,
+
+name: {{ inventory_hostname }}
+
+ip: {{ ansible_host }}
+
+

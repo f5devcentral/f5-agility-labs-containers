@@ -1,0 +1,11 @@
+---
+
+- name: Copy local file to remote system
+  hosts: kube-master1
+
+  tasks:
+    - name: Copy local file to remote system
+      become: true
+      copy:
+        src: ../files/sample-download.txt
+        dest: /var/www/html/sample-download.txt
