@@ -1,0 +1,12 @@
+---
+
+- name: Remove swapfile from /etc/fstab
+  replace:
+    dest: /etc/fstab
+    backup: yes
+    regexp: '(^UUID=.*none.*swap.*)'
+    replace: '#\1'
+
+- name: Disable swap
+  shell: "swapoff -a"
+  when: ansible_swaptotal_mb > 0

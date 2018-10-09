@@ -1,0 +1,11 @@
+[kube-all]
+kube-master1 ansible_host=10.1.10.21
+kube-node1 ansible_host=10.1.10.22
+kube-node2 ansible_host=10.1.10.23
+
+[kube-masters]
+kube-master1 ansible_host=10.1.10.21
+
+[kube-nodes]
+kube-node1 ansible_host=10.1.10.22
+kube-node2 ansible_host=10.1.10.23

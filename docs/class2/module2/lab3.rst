@@ -12,12 +12,19 @@ cluster.
    earlier step.
 
    .. warning:: 
-      - This is just an example!! **DO not cut/paste the one below.** You
-        should have saved this command after successfully initializing the
-        master with step 2 above. Scroll up in your CLI history to find the
+      - This following is just an example!! **DO not cut/paste the one below.**
+        You should have saved this command after successfully initializing the
+        master in the previous lab. Scroll up in your CLI history to find the
         hash your kube-master1 generated to add nodes.
-
       - This command needs to be run on **node1** and **node2** only!
+
+   .. hint:: If you missed the step to save the "kubeadm join..." command from
+      the previous lab, run the following and use the output to join your nodes
+      to the cluster.
+
+      .. code-block:: bash
+
+         kubeadm token create --print-join-command   
 
    .. code-block:: bash
 
@@ -41,9 +48,9 @@ cluster.
       :align: center
 
 
-#. Verify all the services are started as expected (run on the **kube-master1**)
-   Don't worry about last 5 characters matching on most services, as they are
-   randomly generated:
+#. Verify all the services are started as expected (run on the
+   **kube-master1**) Don't worry about last 5 characters matching on most
+   services, as they are randomly generated:
 
    .. code-block:: bash
 

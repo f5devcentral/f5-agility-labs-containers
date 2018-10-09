@@ -129,7 +129,7 @@ communicates with). All of these components run in pods started by kubelet
       su -
 
       # This resets the master to default settings
-      kubeadm reset
+      kubeadm reset --force
       
       # This removes the admin references to the broken cluster
       rm -rf /home/ubuntu/.kube /root/.kube
