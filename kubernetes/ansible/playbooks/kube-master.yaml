@@ -8,18 +8,17 @@
   register: reset_cluster
 
 - name: Generate token
-  shell: kubeadm token generate
+  shell: "kubeadm token generate"
   register: token
 
 - name: Initialize master
   when: reset_cluster is successful
-  shell: |
-    kubeadm init --token {{ token.stdout }} --apiserver-advertise-address=10.1.10.21 --pod-network-cidr=10.244.0.0/16
+  shell: "kubeadm init --token {{ token.stdout }} --apiserver-advertise-address=10.1.10.21 --pod-network-cidr=10.244.0.0/16"
   register: init_cluster
 
 - name: Create kube admin dir (root)
   file:
-    dest: ~/.kube/
+    dest: /root/.kube/
     state: directory
 
 - name: Create kube admin dir (ubuntu)
@@ -32,7 +31,7 @@
 - name: Copy kube admin file (root)
   copy:
     src: /etc/kubernetes/admin.conf
-    dest: ~/.kube/config
+    dest: /root/.kube/config
     remote_src: yes
 
 - name: Copy kube admin file (ubuntu)
@@ -48,7 +47,7 @@
 
 - name: Setup flannel
   when: init_cluster is successful
-  shell: kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
+  shell: "kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml"
 
 - name: Get command to join nodes to the master
   shell: "kubeadm token create --print-join-command"
@@ -56,4 +55,3 @@
 - set_fact:
    kubeadm_join: "{{ kubeadm_join.stdout }}"
 #- debug: msg={{ hostvars['kube-master1']['kubeadm_join'] }}
-
