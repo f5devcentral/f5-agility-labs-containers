@@ -7,13 +7,9 @@
     rm -rf /root/.kube
   register: reset_cluster
 
-- name: Generate token
-  shell: "kubeadm token generate"
-  register: token
-
 - name: Initialize master
   when: reset_cluster is successful
-  shell: "kubeadm init --token {{ token.stdout }} --apiserver-advertise-address=10.1.10.21 --pod-network-cidr=10.244.0.0/16"
+  shell: "kubeadm init --apiserver-advertise-address=10.1.10.21 --pod-network-cidr=10.244.0.0/16"
   register: init_cluster
 
 - name: Create kube admin dir (root)
@@ -43,7 +39,7 @@
     remote_src: yes
 
 - pause:
-   seconds: 60
+   seconds: 90
 
 - name: Setup flannel
   when: init_cluster is successful
