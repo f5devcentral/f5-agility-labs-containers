@@ -1,0 +1,10 @@
+---
+
+- name: Deploy Kubernetes
+  hosts: all
+
+- import_playbook: update-ubuntu.yaml
+- import_playbook: updatehosts-linein.yaml
+- import_playbook: swapoff.yaml
+- import_playbook: install-docker.yaml
+- import_playbook: install-kubernetes.yaml

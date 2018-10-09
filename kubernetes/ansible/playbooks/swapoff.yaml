@@ -6,11 +6,11 @@
   tasks:
     - name: Remove swapfile from /etc/fstab
       become: true
-      lineinfile:
-        backup: yes
+      replace:
         dest: /etc/fstab
-        regexp: '^UUID=.*\s+none\s+swap'
-        state: absent
+        backup: yes
+        regexp: '(^UUID=.*none.*swap.*)'
+        replace: '#\1'
     - name: Disable swap
       become: true
       command: swapoff -a

@@ -4,14 +4,6 @@
   hosts: kube-all
 
   tasks:
-    - name: Update Ubuntu
-      become: true
-      apt:
-        name: "*"
-        force_apt_get: yes
-        update_cache: yes
-        autoremove: yes
-        state: latest
     - name: Add docker GPG key
       become: true
       apt_key:
@@ -29,3 +21,12 @@
         name: docker-ce
         update_cache: yes
         state: present
+    - name: Update cgroupdriver
+      become: true
+      copy:
+        dest: /etc/docker/daemon.json
+        content: |
+          {
+          "exec-opts": ["native.cgroupdriver=cgroupfs"]
+          }
+

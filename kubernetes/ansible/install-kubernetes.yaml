@@ -1,0 +1,17 @@
+---
+
+- name: Install Kubernetes
+  hosts: kube-all
+
+  tasks:
+    - name: Fix dpkg
+      become: true
+      shell: "dpkg --configure -a"
+      
+    - name: Update Ubuntu
+      become: true
+      apt:
+        force_apt_get: yes
+        update_cache: yes
+        autoremove: yes
+        state: latest
