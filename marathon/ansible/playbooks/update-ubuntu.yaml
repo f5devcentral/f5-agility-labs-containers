@@ -1,0 +1,12 @@
+---
+  
+- name: Fix dpkg
+  shell: "dpkg --configure -a"
+
+- name: Update All Packages
+  apt:
+    name: "*"
+    force_apt_get: yes
+    update_cache: yes
+    autoremove: yes
+    state: latest
