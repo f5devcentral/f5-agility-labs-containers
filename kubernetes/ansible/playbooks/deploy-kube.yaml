@@ -8,7 +8,7 @@
   - import_tasks: update-hosts.yaml
   - import_tasks: swapoff.yaml
   - import_tasks: install-docker.yaml
-  - import_tasks: install-kubernetes.yaml
+  - import_tasks: prep-kube.yaml
 
 - name: Initialize Master
   hosts: kube-masters

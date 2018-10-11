@@ -45,7 +45,7 @@
   when: init_cluster is successful
   shell: "kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml"
 
-- name: Get command to join nodes to the master
+- name: Get token to join nodes to the master
   shell: "kubeadm token create --print-join-command"
   register: kubeadm_join
 - set_fact:
