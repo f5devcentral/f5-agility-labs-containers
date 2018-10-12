@@ -10,3 +10,95 @@
     - mesos
     - marathon
     - zookeeperd
+
+- name: Find all master IP's
+  vars:
+    master_ips: []
+  set_fact:
+    master_ips: "{{ master_ips }} + [ '{{ hostvars[item].ansible_host }}' ]"
+  with_items: "{{ groups['mesos-masters'] }}"
+- debug: var=master_ips
+
+- name: Find number of master hosts
+  vars:
+    host_count: 0
+  set_fact:
+    host_count: "{{ master_ips | length }}"
+- debug: var=host_count
+
+- name: Add zookeeper unique id
+  copy:
+    dest: /etc/zookeeper/conf/myid
+    content: "{{ inventory_hostname | last }}"
+
+- name: Remove zookeeper server entries if exist (make idompotent)
+  lineinfile:
+    dest: /etc/zookeeper/conf/zoo.cfg
+    regexp: '^server\..=.*:2888:3888'
+    state: absent
+
+- name: Add zookeeper server entries
+  lineinfile:
+    dest: /etc/zookeeper/conf/zoo.cfg
+    insertafter: '(^#server.3=zookeeper3:2888:3888)'
+    line: server.{{ idx + 1 }}={{ item }}:2888:3888
+    state: present
+  with_items: "{{ master_ips }}"
+  loop_control:
+    index_var: idx
+
+- name: Add mesos ip
+  copy:
+    dest: /etc/mesos-master/ip
+    content: "{{ ansible_host }}"
+
+- name: Add mesos hostname
+  copy:
+    dest: /etc/mesos-master/hostname
+    content: "{{ ansible_host }}"
+
+- name: Update quorom
+  copy:
+    dest: /etc/mesos-master/quorum
+    content: "{{ ((host_count | int) / 2) | round | int }}"
+    #content: "{{ ((groups['mesos-masters'] | length)/2) | round | int  }}"
+
+- name: Point zookeeper at the master instance
+  copy:
+    dest: /etc/mesos/zk
+    content: "zk://{{ master_ips|join(':2181,') }}:2181/mesos"
+
+- name: Update marathon
+  copy:
+    dest: /etc/default/marathon
+    content: |
+      MARATHON_MASTER=zk://{{ master_ips|join(':2181,') }}:2181/mesos
+      MARATHON_ZK=zk://{{ master_ips|join(':2181,') }}:2181/marathon
+
+- name: Disable mesos-slave
+  systemd:
+    name: mesos-slave
+    enabled: no
+    state: stopped
+
+- name: Restart zookeeper
+  systemd:
+    name: zookeeper
+    enabled: yes
+    state: restarted
+
+- name: Start mesos-master
+  systemd:
+    name: mesos-master
+    enabled: yes
+    state: started
+
+- name: Start marathon
+  systemd:
+    name: marathon
+    state: started
+
+- name: testing
+  command: echo {{ item.key }}
+  loop: "{{ query('dict', mydict|default({})) }}"
+  when: item.value > 5
