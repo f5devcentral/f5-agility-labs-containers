@@ -1,0 +1,66 @@
+---
+
+- name: Install mesos
+  apt:
+    name: "{{ packages }}"
+    update_cache: yes
+    state: present
+  vars:
+    packages:
+    - mesos
+
+- name: Find all master IP's
+  vars:
+    master_ips: []
+  set_fact:
+    master_ips: "{{ master_ips }} + [ '{{ hostvars[item].ansible_host }}' ]"
+  with_items: "{{ groups['mesos-masters'] }}"
+- debug: var=master_ips
+
+- name: Add mesos ip
+  copy:
+    dest: /etc/mesos-slave/ip
+    content: "{{ ansible_host }}"
+
+- name: Add mesos hostname
+  copy:
+    dest: /etc/mesos-slave/hostname
+    content: "{{ ansible_host }}"
+
+- name: Point zookeeper at all the master instance's
+  copy:
+    dest: /etc/mesos/zk
+    content: "zk://{{ master_ips|join(':2181,') }}:2181/mesos"
+
+- name: Configure mesos to use docker containers
+  copy:
+    dest: /etc/mesos-slave/containerizers
+    content: "docker,mesos"
+
+- name: Increase timeout for docker image pull
+  copy:
+    dest: /etc/mesos-slave/executor_registration_timeout
+    content: "5mins"
+
+- name: Allow non-marathon users ability to create jobs
+  copy:
+    dest: /etc/mesos-slave/switch_user
+    content: "false"
+
+- name: Disable zookeeper
+  systemd:
+    name: zookeeper
+    enabled: no
+    state: stopped
+
+- name: mesos-master
+  systemd:
+    name: mesos-master
+    enabled: no
+    state: stopped
+
+- name: Start mesos-slave
+  systemd:
+    name: mesos-slave
+    enabled: yes
+    state: started

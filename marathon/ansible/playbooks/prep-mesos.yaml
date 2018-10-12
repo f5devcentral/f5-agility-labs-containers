@@ -1,0 +1,25 @@
+---
+
+- name: Install JAVA
+  apt:
+    name: openjdk-8-jdk
+    state: present
+
+- name: Expoert JAVA_HOME environment variable
+  lineinfile:
+    path: /etc/environment
+    insertafter: EOF
+    line: "export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/"
+    state: present
+
+- name: Add Mesos GPG key
+  apt_key:
+    keyserver: keyserver.ubuntu.com
+    id: E56151BF
+    state: present
+
+- name: Add Mesos repo
+  apt_repository:
+    filename: mesosphere
+    repo: deb http://repos.mesosphere.com/ubuntu {{ansible_distribution_release}} main
+    state: present

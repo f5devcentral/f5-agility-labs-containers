@@ -1,0 +1,24 @@
+---
+
+- name: Prep Ubuntu
+  hosts: mesos-all
+  become: yes
+  tasks:
+  - import_tasks: update-ubuntu.yaml
+  - import_tasks: update-hosts.yaml
+  - import_tasks: install-docker.yaml
+  - import_tasks: prep-mesos.yaml
+
+- name: Initialize Master
+  hosts: mesos-masters
+  become: yes
+  gather_facts: no
+  tasks:
+  - import_tasks: mesos-master.yaml
+
+- name: Initialize Agent
+  hosts: mesos-agents
+  become: yes
+  gather_facts: no
+  tasks:
+  - import_tasks: mesos-agent.yaml
