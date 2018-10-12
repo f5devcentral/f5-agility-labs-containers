@@ -61,7 +61,6 @@
   copy:
     dest: /etc/mesos-master/quorum
     content: "{{ ((host_count | int) / 2) | round | int }}"
-    #content: "{{ ((groups['mesos-masters'] | length)/2) | round | int  }}"
 
 - name: Point zookeeper at the master instance
   copy:

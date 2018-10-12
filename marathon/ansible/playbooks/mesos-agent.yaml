@@ -35,17 +35,17 @@
 - name: Configure mesos to use docker containers
   copy:
     dest: /etc/mesos-slave/containerizers
-    content: docker,mesos
+    content: "docker,mesos"
 
 - name: Increase timeout for docker image pull
   copy:
     dest: /etc/mesos-slave/executor_registration_timeout
-    content: 5mins
+    content: "5mins"
 
 - name: Allow non-marathon users ability to create jobs
   copy:
     dest: /etc/mesos-slave/switch_user
-    content: false
+    content: "false"
 
 - name: Disable zookeeper
   systemd:

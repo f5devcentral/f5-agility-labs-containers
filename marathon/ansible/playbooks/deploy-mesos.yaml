@@ -21,4 +21,4 @@
   become: yes
   gather_facts: no
   tasks:
-#  - import_tasks: mesos-agent.yaml
+  - import_tasks: mesos-agent.yaml
