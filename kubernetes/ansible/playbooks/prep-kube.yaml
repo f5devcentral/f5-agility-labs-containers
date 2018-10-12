@@ -11,6 +11,14 @@
   shell: "swapoff -a"
   when: ansible_swaptotal_mb > 0
 
+- name: Update cgroupdriver
+  copy:
+    dest: /etc/docker/daemon.json
+    content: |
+      {
+      "exec-opts": ["native.cgroupdriver=cgroupfs"]
+      }
+
 - name: Add kubernetes GPG key
   apt_key:
     url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
