@@ -34,4 +34,4 @@ The purpose of these labs is to give you better understanding of...
      https://clouddocs.f5.com/training/community/containers/html/
 
    * The lab is based on Ravello blueprint
-     ``Agility 2018-Containers (Exp Nov 9th,2018)-vtog-2.2.2``
+     ``Agility 2018-Containers (Exp 01/19/19)-vtog-2.2.3``
