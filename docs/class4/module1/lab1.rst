@@ -45,13 +45,13 @@ Lab 1.1 - Prep CentOS
       10.3.10.22    ose-node1
       10.3.10.23    ose-node2
 
-#. Ensure the OS is up to date and running Ansible
+#. Ensure the OS is up to date
 
    .. code-block:: bash
 
       sudo yum update -y
 
-      #This can take a few seconds to several minute depending on demand to download the latest updates for the OS.
+      #This can take a few seconds to several minutes depending on demand to download the latest updates for the OS.
 
 #. Install the docker packages
 

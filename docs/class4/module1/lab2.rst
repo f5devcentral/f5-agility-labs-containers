@@ -11,6 +11,17 @@ Lab 1.2 - Install Openshift
       sudo yum install -y epel-release
       sudo yum install -y ansible
 
+#. Disable "epel-release"
+
+   .. code-block:: bash
+
+      vim /etc/yum.repos.d/epel.repo
+
+      # Change the value enabled=1 to 0 (zero).
+
+   .. note:: This is done to prevent future OS updates from including packages
+      from outside the standard packages.
+
 #. Prep openshift AUTH
 
    .. code-block:: bash
@@ -30,6 +41,12 @@ Lab 1.2 - Install Openshift
 
       ansible-playbook -i $HOME/agilitydocs/openshift/ansible/inventory.ini $HOME/openshift-ansible/playbooks/prerequisites.yml
       ansible-playbook -i $HOME/agilitydocs/openshift/ansible/inventory.ini $HOME/openshift-ansible/playbooks/deploy_cluster.yml
+
+   .. note:: If needed, to uninstall Openshift run the following command:
+
+      .. code-block:: bash
+
+         ansible-playbook -i $HOME/agilitydocs/openshift/ansible/inventory.ini $HOME/openshift-ansible/playbooks/adhoc/uninstall.yml
 
    Here's the "inventory" (refrenced by our ansible playbook) used for the
    deployment.
