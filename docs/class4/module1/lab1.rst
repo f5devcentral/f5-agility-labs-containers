@@ -53,6 +53,19 @@ Lab 1.1 - Prep CentOS
 
       #This can take a few seconds to several minutes depending on demand to download the latest updates for the OS.
 
+#. Install various support packages
+
+   .. code-blockl:: bash
+
+      sudo yum install -y vim ntp make python git curl
+
+#. Install NetworkManager (openshift required)
+
+   .. code-block:: bash
+
+      sudo yum install -y NetworkManager
+      sudo systemctl start NetworkManager && sudo systemctl enable NetworkManager
+
 #. Install the docker packages
 
    .. code-block:: bash

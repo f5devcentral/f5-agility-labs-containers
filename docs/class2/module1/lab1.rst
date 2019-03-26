@@ -43,7 +43,7 @@ applications' desired state, scaling applications, and rolling out new updates.
 Kubernetes cluster**. Each *node* has a *Kubelet*, which is an agent for
 managing the node and communicating with the Kubernetes master. The node should
 also have tools for handling container operations, such as Docker or rkt. A 
-ubernetes cluster that handles production traffic should have a minimum of
+kubernetes cluster that handles production traffic should have a minimum of
 three nodes.
 
 *Masters* manage the cluster and the *nodes* are used to host the running
