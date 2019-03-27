@@ -55,7 +55,7 @@ Lab 1.1 - Prep CentOS
 
 #. Install various support packages
 
-   .. code-blockl:: bash
+   .. code-block:: bash
 
       sudo yum install -y vim ntp make python git curl
 
