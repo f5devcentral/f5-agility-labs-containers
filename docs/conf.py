@@ -83,7 +83,6 @@ print "on_snops = %s" % on_snops
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
-  'sphinxjp.themes.basicstrap',
   'sphinx.ext.todo',
   #'sphinx.ext.autosectionlabel'
 ]

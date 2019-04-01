@@ -15,7 +15,7 @@ Lab 1.2 - Install Openshift
 
    .. code-block:: bash
 
-      vim /etc/yum.repos.d/epel.repo
+      sudo vim /etc/yum.repos.d/epel.repo
 
       # Change the value enabled=1 to 0 (zero).
 
@@ -33,7 +33,7 @@ Lab 1.2 - Install Openshift
 
    .. code-block:: bash
 
-      git clone -b release-3.10 https://github.com/openshift/openshift-ansible.git $HOME/openshift-ansible
+      git clone -b release-3.11 https://github.com/openshift/openshift-ansible.git $HOME/openshift-ansible
 
 #. Install Openshift with Ansible
 
@@ -42,7 +42,14 @@ Lab 1.2 - Install Openshift
       ansible-playbook -i $HOME/agilitydocs/openshift/ansible/inventory.ini $HOME/openshift-ansible/playbooks/prerequisites.yml
       ansible-playbook -i $HOME/agilitydocs/openshift/ansible/inventory.ini $HOME/openshift-ansible/playbooks/deploy_cluster.yml
 
-   .. note:: If needed, to uninstall Openshift run the following command:
+   .. tip:: For troubleshooting you can validate system variables with the
+      following command:
+
+      .. code-block:: bash
+
+         ansible-playbook -i $HOME/agilitydocs/openshift/ansible/inventory.ini $HOME/openshift-ansible/playbooks/byo/openshift_facts.yml
+
+   .. tip:: If needed, to uninstall Openshift run the following command:
 
       .. code-block:: bash
 
