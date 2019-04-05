@@ -1,5 +1,5 @@
-Class 5: Advanced Labs for Red Hat OpenShift Container Platform (OCP)
-=====================================================================
+Class 5: Advanced Red Hat OpenShift
+===================================
 
 The purpose of this lab is to give you more visibility on
 
@@ -7,7 +7,8 @@ The purpose of this lab is to give you more visibility on
    :maxdepth: 1
    :glob:
 
-   module*/*
+   module*/module*
+   appendix*/appendix*
 
 Expected time to complete: **3 hours**
 
@@ -24,24 +25,36 @@ and two nodes. There is a pair of BIG-IPs setup in an HA configuration:
      - **IP-ADDR**
      - **Credentials**
    * - jumpbox
-     - 10.10.200.199
+     - 10.1.1.250
      - user/Student!Agility!
-   * - bigip01
-     - 10.10.200.98
+   * - bigip1
+     - 10.1.1.245
+
+       10.3.10.60
+
      - admin/admin
 
        root/default
-   * - bigip02
-     - 10.10.200.99
+   * - bigip1
+     - 10.1.1.246
+
+       10.3.10.61
+
      - admin/admin
 
        root/default
-   * - ose-mstr01
-     - 10.10.199.100
-     - root/default
-   * - ose-node01
-     - 10.10.199.101
-     - root/default
-   * - ose-node02
-     - 10.10.199.102
-     - root/default
+   * - ose-master1
+     - 10.3.10.21
+     - centos/centos
+
+       root/default
+   * - ose-node1
+     - 10.3.10.22
+     - centos/centos
+
+       root/default
+   * - ose-node2
+     - 10.3.10.23
+     - centos/centos
+
+       root/default

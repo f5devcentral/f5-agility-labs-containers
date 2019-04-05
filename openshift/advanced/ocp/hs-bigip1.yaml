@@ -1,0 +1,10 @@
+{
+    "apiVersion": "v1",
+    "host": "openshift-f5-bigip1",
+    "hostIP": "10.3.10.60",
+    "kind": "HostSubnet",
+    "metadata": {
+        "name": "openshift-f5-bigip1"
+    },
+    "subnet": "10.131.0.0/23"
+}

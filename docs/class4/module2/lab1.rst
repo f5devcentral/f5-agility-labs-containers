@@ -180,7 +180,7 @@ to hide our bigip credentials.
       :emphasize-lines: 2,9
 
    .. attention:: This YAML file creates an OpenShift Node and the Host is the
-      BIG-IP with an assigned /23 subnet of IP 10.131.0.0 (3 imagas down).
+      BIG-IP with an assigned /23 subnet of IP 10.131.0.0 (3 images down).
 
 #. Next let's look at the current cluster,  you should see 3 members
    (1 master, 2 nodes)
