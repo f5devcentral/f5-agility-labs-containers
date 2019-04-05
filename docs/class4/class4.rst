@@ -8,12 +8,9 @@ This introductory class covers the following topics:
    :glob:
 
    module*/module*
+   appendix*/appendix*
 
 Expected time to complete: **30 minutes**
-
-.. attention:: **MODULE 1: BUILD AN OPENSHIFT CLUSTER CAN BE SKIPPED. THE
-   BLUEPRINT IS PRE-CONFIGURED WITH A WORKING CLUSTER. THIS MODULE IS FOR
-   DOCUMENTION PURPOSES ONLY.**
 
 Lab Setup
 ---------

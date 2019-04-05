@@ -1,0 +1,45 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: bigip1-ctlr
+  namespace: kube-system
+spec:
+  replicas: 1
+  template:
+    metadata:
+      name: k8s-bigip-ctlr1
+      labels:
+        app: k8s-bigip-ctlr1
+    spec:
+      serviceAccountName: bigip-ctlr
+      containers:
+        - name: k8s-bigip-ctlr
+          image: "f5networks/k8s-bigip-ctlr:latest"
+          command: ["/app/bin/k8s-bigip-ctlr"]
+          args: [
+            "--credentials-directory=/tmp/creds",
+            "--bigip-url=10.3.10.60",
+            "--bigip-partition=ocp",
+            "--pool-member-type=cluster",
+            "--manage-routes=true",
+            "--node-poll-interval=5",
+            "--verify-interval=5",
+            "--namespace=demoproj",
+            "--namespace=yelb",
+            "--namespace=guestbook",
+            "--namespace=f5demo",
+            "--route-vserver-addr=10.3.10.120",
+            "--route-http-vserver=ocp-vserver",
+            "--route-https-vserver=ocp-https-vserver",
+            "--openshift-sdn-name=/Common/ocp-tunnel"
+          ]
+          volumeMounts:
+          - name: bigip-creds
+            mountPath: "/tmp/creds"
+            readOnly: true
+      volumes:
+      - name: bigip-creds
+        secret:
+          secretName: bigip-login
+      imagePullSecrets:
+        - name: f5-docker-images

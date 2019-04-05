@@ -9,7 +9,7 @@ This introductory class covers the following topics:
 
    module*/module*
 
-Expected time to complete: **1 hours**
+Expected time to complete: **1.5 hours**
 
 Lab Setup
 ---------

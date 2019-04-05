@@ -1,92 +1,151 @@
-Lab 2.1 - Prep Ubuntu
-=====================
+Lab 3.1 - F5 Container Connector Setup
+======================================
 
-.. note::  This installation will utilize Ubuntu v16.04 (Xenial)
+The BIG-IP Controller for Marathon installs as an
+`Application <https://mesosphere.github.io/marathon/docs/application-basics.html>`_
 
-.. important:: The following commands need to be run on all three nodes unless
-   otherwise specified.
+.. seealso:: The official CC documentation is here:
+   `Install the BIG-IP Controller: Marathon <http://clouddocs.f5.com/containers/v2/marathon/mctlr-app-install.html>`_
 
-#. From the jumpbox open **mRemoteNG** and start a session to each of the
-   following servers. The sessions are pre-configured to connect with the
-   default user “ubuntu”.
+BIG-IP Setup
+------------
 
-   - mesos-master1
-   - mesos-agent2
-   - mesos-agent3
+To use F5 Container connector, you'll need a BIG-IP up and running first.
 
-   .. image:: images/MremoteNG.png
+Through the Jumpbox, you should have a BIG-IP available at the following
+URL: https://10.1.1.245
+
+.. warning:: Connect to your BIG-IP and check it is active and licensed. Its
+   login and password are: **admin/admin**
+
+   If your BIG-IP has no license or its license expired, renew the license. You
+   just need a LTM VE license for this lab. No specific add-ons are required
+   (ask a lab instructor for eval licenses if your license has expired)
+
+#. You need to setup a partition that will be used by F5 Container Connector.
+
+   .. code-block:: bash
+
+      # From the CLI:
+      tmsh create auth partition mesos
+
+      # From the UI:
+      GoTo System --> Users --> Partition List
+      - Create a new partition called "mesos" (use default settings)
+      - Click Finished
+
+   .. image:: images/f5-container-connector-bigip-partition-setup.png
       :align: center
 
-#. Elevate to "root"
+   With the new partition created, we can go back to Marathon to setup the
+   F5 Container connector.
 
-   .. code-block:: bash
+Container Connector Deployment
+------------------------------
 
-      su -
-      
-      #When prompted for password enter "default" without the quotes
+.. seealso:: For a more thorough explanation of all the settings and options see
+   `F5 Container Connector - Marathon <https://clouddocs.f5.com/containers/v2/marathon/>`_
 
-#. For your convenience we've already added the host IP & names to /etc/hosts.
-   Verify the file
+Now that BIG-IP is licensed and prepped with the "mesos" partition, we need to
+deploy our Marathon BIG-IP Controller, we can either use Marathon UI or use
+the Marathon REST API.  For this class we will be using the Marathon UI.
 
-   .. code-block:: bash
+#. From the jumpbox connect to the Marathon UI at http://10.2.10.21:8080 and
+   click "Create Application".
 
-      cat /etc/hosts
-
-   The file should look like this:
-
-   .. image:: images/ubuntu-hosts-file.png
+   .. image:: images/f5-container-connector-create-application-button.png
       :align: center
 
-   If entries are not there add them to the bottom of the file be editing
-   "/etc/hosts" with 'vim'
+#. Click on "JSON mode" in the top-right corner
 
-   .. code-block:: bash
+   .. image:: images/f5-container-connector-json-mode.png
+        :align: center
 
-      vim /etc/hosts
+#. **REPLACE** the 8 lines of default JSON code shown with the following JSON
+   code and click Create Application
 
-      #cut and paste the following lines to /etc/hosts
+   .. literalinclude:: ../../../marathon/f5-bigip-ctlr.json
+      :language: json
+      :linenos:
+      :emphasize-lines: 9,14,15
 
-      10.2.10.21    mesos-master1
-      10.2.10.22    mesos-agent1
-      10.2.10.23    mesos-agent2
+   .. image:: images/f5-container-connector-create-f5-cc.png
 
-#. Ensure the OS is up to date, run the following command
+#. After a few seconds you should have a new folder labeled “f5” as shown in
+   this picture.
 
-   .. code-block:: bash
-
-      apt update && apt upgrade -y
-
-      #This can take a few seconds to several minute depending on demand to download the latest updates for the OS.
-
-#. Add the docker repo
-
-   .. code-block:: bash
-
-      curl \-fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add \-
-
-      add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
-
-#. Install the docker packages
-
-   .. code-block:: bash
-
-      apt update && apt install docker-ce -y
-
-#. Verify docker is up and running
-
-   .. code-block:: bash
-
-      docker run --rm hello-world
-
-   If everything is working properly you should see the following message
-
-   .. image:: images/setup-test-docker.png
+   .. image:: images/f5-container-connector-clickF5folder.png
       :align: center
 
-#. Install java for the mesos and marathon processes.
+#. Click on the “f5” folder and you should have "Running", the BIG-IP
+   North/South Controller labeled marathon-bigip-ctrl.
+
+   .. image:: images/f5-container-connector-f5-folder-shown.png
+      :align: center
+
+   .. note:: If you're running the lab outside of Agility, you need may need
+      to update the field *image* with the appropriate path to your image:
+
+      - Load it on **all your agents/nodes** with the docker pull command.
+        **sudo docker pull f5networks/marathon-bigip-ctlr:latest** for the
+        latest version.
+      - Load it on a system and push it into your registry if needed.
+      - If your Mesos environment use authentication, here is a link explaining
+        how to handle authentication with the Marathon BIG-IP Controller:
+        `Set up authentication to your secure DC/OS cluster
+        <http://clouddocs.f5.com/containers/v1/marathon/mctlr-authenticate-dcos.html#mesos-authentication>`_
+
+Troubleshooting
+---------------
+
+If you need to troubleshoot your container, you have two different ways to
+check the logs of your container, Marathon UI or Docker command.
+
+#. Using the Marathon UI Click on Applications --> the f5 folder -->
+   marathon-bigip-ctlr. From here you can download and view the logs from the
+   text editor of choice.
+
+   You should see something like this:
+
+   .. image:: images/f5-container-connector-logs.png
+      :align: center
+
+#. Using docker log command: You need to identify where the Controller is
+   running. From the previous step we can see it's running on 10.2.10.22
+   (which is **mesos-agent1**).
+
+   .. image:: images/f5-container-connector-locate-bigip-controller.png
+      :align: center
+
+   Connect via SSH to **mesos-agent1** and run the following commands:
 
    .. code-block:: bash
 
-      apt install -y openjdk-8-jdk
-      
-      export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/
+      sudo docker ps
+
+   This command will give us the Controllers Container ID, here it is:
+   4fdee0a49dcb. We need this ID for the next command.
+
+   .. image:: images/f5-container-connector-get-bigip-ctlr-container-id.png
+      :align: center
+
+   To check the logs of our Controller:
+
+   .. code-block:: bash
+
+      sudo docker logs 4fdee0a49dcb
+
+   .. image:: images/f5-container-connector-check-logs-bigip-ctlr.png
+      :align: center
+
+#. You can connect to your container with docker as well:
+
+   .. code-block:: bash
+
+      sudo docker exec -it 4fdee0a49dcb /bin/sh
+
+      cd /app
+
+      ls -la
+
+      exit

@@ -1,15 +1,45 @@
-Lab 1.1 - Prep CentOS
-=====================
+Lab 1.1 - Redhat OpenShift Overview
+===================================
 
-.. note:: This installation will utilize centOS v7.6.
+Red Hat’s OpenShift Origin is a containerized application platform with a
+native Kubernetes integration. The BIG-IP Controller for Kubernetes enables
+use of a BIG-IP device as an edge load balancer, proxying traffic from outside
+networks to pods inside an OpenShift cluster. OpenShift Origin uses a pod
+network defined by the OpenShift SDN.
 
-.. warning:: The lab assumes that each VM is a single interface only. If
-   multi-interface be sure to update default route to use the interface
-   required for your deployment. Openshift always defaults to the interface
-   with a default route.
+We will be using the following terms throughout this class so here are some
+basic definitions you should be familiar with. And you'll learn more terms
+along the way, but these are the basics to get you started.
 
-.. important:: The following commands need to be run on all three nodes
-   unless otherwise specified.
+- Container - Your software wrapped in a complete filesystem containing
+  everything it needs to run
+- Image - We are talking about Docker images; read-only and used to create
+  containers
+- Pod - One or more docker containers that run together
+- Service - Provides a common DNS name to access a pod (or replicated set of
+  pods)
+- Project - A project is a group of services that are related logically (for
+  this workshop we have setup your account to have access to just a single
+  project)
+- Deployment - an update to your application triggered by a image change or
+  config change
+- Build - The process of turning your source code into a runnable image
+- BuildConfig - configuration data that determines how to manage your build
+- Route - a labeled and DNS mapped network path to a service from outside
+  OpenShift
+- Master - The foreman of the OpenShift architecture, the master schedules
+  operations, watches for problems, and orchestrates everything
+- Node - Where the compute happens, your software is run on nodes
+
+Access The JumpBox
+------------------
+
+#. Access the Win7 Jumpbox, use the following username and password:
+
+   - username: **user**
+   - password: **Student!Agility!**
+
+   .. tip:: Use the Send Text to Client option to paste the password.
 
 #. From the jumpbox open **mRemoteNG** and start a session to each of the
    following servers. The sessions are pre-configured to connect with the
@@ -22,39 +52,8 @@ Lab 1.1 - Prep CentOS
    .. image:: images/MremoteNG.png
       :align: center
 
-#. "git" the demo files
-
-   .. note:: These files should be here by default, if **NOT** run the
-      following commands.
-
-   .. code-block:: bash
-
-      git clone https://github.com/f5devcentral/f5-agility-labs-containers.git ~/agilitydocs
-
-      cd ~/agilitydocs/openshift
-
-#. Ensure the OS is up to date
-
-   .. code-block:: bash
-
-      sudo yum update -y
-
-      #This can take a few seconds to several minutes depending on demand to download the latest updates for the OS.
-
-#. Install various support packages
-
-   .. code-block:: bash
-
-      sudo yum install -y vim ntp make python git curl tcpdump
-
-#. Reboot to ensure fully operational OS
-
-   .. code-block:: bash
-
-      sudo reboot
-
 #. For your convenience we've already added the host IP & names to /etc/hosts.
-   Verify the file:
+   Verify the file is correct on each node.
 
    .. code-block:: bash
 
@@ -78,72 +77,157 @@ Lab 1.1 - Prep CentOS
       10.3.10.22    ose-node1
       10.3.10.23    ose-node2
 
-#. The lab VM's have updated host names and should match the "hosts" file.
-   Verify the hostname:
+Accessing OpenShift
+-------------------
+
+OpenShift provides a web console that allow you to perform various tasks via a
+web browser. Additionally, you can utilize a command line tool to perform
+tasks. Let's get started by logging into both of these and checking the status
+of the platform.
+
+#. Login to OpenShift master
+
+   From the previous step go back to the open terminal on **ose-master1** and
+   login to openshift using the following command:
 
    .. code-block:: bash
 
-      hostname
+      oc login -u centos
+      
+   When prompted the password is **centos**
 
-   If the hostname are incorrect on any of the VM's use the appropriate command
-   below:
-
-   .. code-block:: bash
-
-      sudo hostnamectl set-hostname ose-master1
-      sudo hostnamectl set-hostname ose-node1
-      sudo hostnamectl set-hostname ose-node2
-
-#. Create, share, and test the SSH key. **Master only**
-
-   .. note:: SSH keys were configured to allow the jumphost to login without a
-      passwd as well as between the master & nodes to facilitate the Ansible
-      playbooks. The following steps are only necessary if SSH connectivity
-      fails.
-
-   Create the key:
-
-   .. code-block:: bash
-
-      ssh-keygen #Accept the defaults.
-
-   Share the public key with each node:
-
-   .. code-block:: bash
-
-      ssh-copy-id -i ~/.ssh/id_rsa.pub centos@ose-master1
-      ssh-copy-id -i ~/.ssh/id_rsa.pub centos@ose-node1
-      ssh-copy-id -i ~/.ssh/id_rsa.pub centos@ose-node2
-
-   Test SSH connectivity from master to nodes:
-
-   .. code-block:: bash
-
-      ssh ose-master1
-      ssh ose-node1
-      ssh ose-node2
-
-#. Install NetworkManager (openshift required)
-
-   .. code-block:: bash
-
-      sudo yum install -y NetworkManager
-      sudo systemctl start NetworkManager && sudo systemctl enable NetworkManager
-
-#. Install the docker packages
-
-   .. code-block:: bash
-
-      sudo yum install -y docker
-      sudo systemctl start docker && sudo systemctl enable docker
-
-#. Verify docker is up and running
-
-   .. code-block:: bash
-
-      sudo docker run --rm hello-world
-   
-   If everything is working properly you should see the following message
-
-   .. image:: images/setup-test-docker.png
+   .. image:: images/oc-login.png
       :align: center
+
+#. Check the OpenShift status
+
+   The **oc status** command shows a high level overview of the project
+   currently in use, with its components and their relationships, as shown in
+   the following example:
+
+   .. code-block:: bash
+
+      oc status
+
+   .. image:: images/oc-status.png
+      :align: center
+
+#. Check the OpenShift nodes
+
+   You can manage nodes in your instance using the CLI. The CLI interacts with
+   node objects that are representations of actual node hosts. The master uses
+   the information from node objects to validate nodes with health checks.
+
+   To list all nodes that are known to the master:
+
+   .. code-block:: bash
+
+      oc get nodes
+
+   .. image:: images/oc-get-nodes.png
+      :align: center
+
+   .. attention:: If the **node** status shows **NotReady** or
+      **SchedulingDisabled** contact the lab proctor. The node is not passing
+      the health checks performed from the master and Pods cannot be scheduled
+      for placement on the node.
+
+#. To get more detailed information about a specific node, including the reason
+   for the current condition use the oc describe node command. This does
+   provide alot of very useful information and can assist with throubleshooting
+   issues.
+
+   .. code-block:: bash
+
+      oc describe node ose-master1
+
+   .. image:: images/oc-get-nodes.png
+      :align: center
+
+#. Check to see what projects you have access to:
+
+   .. code-block:: bash
+
+      oc get projects
+
+   .. image:: images/oc-get-projects.png
+      :align: center
+
+   .. note:: You will be using these projects in the lab.
+
+#. Check to see what host subnests are created on OpenShift:
+
+   .. code-block:: bash
+
+      oc get hostsubnets
+
+   .. image:: images/oc-get-hostsubnets.png
+      :align: center
+     
+#. Access OpenShift web console
+
+   From the jumpbox open a browser and navigate to https://ose-master1:8443 and
+   login with the user/password provided.
+
+   Use the following username and password
+   username: **centos**
+   password: **centos**
+
+   .. image:: images/webconsole.png
+      :align: center
+
+Troubleshooting OpenShift!
+--------------------------
+
+If you have a problem in your OpenShift environment, how do you investigate:
+
+- How can I troubleshoot it?
+- What logs can I inspect?
+- How can I modify the log level / detail that openshift generates?
+- I need to provide supporting data to technical support for analysis. What
+  information is needed?
+
+A starting point for data collection from an OpenShift master or node is a
+sosreport that includes docker and OpenShift related information. The process
+to collect a sosreport is the same as with any other Red Hat Enterprise Linux
+(RHEL) based system:
+
+.. note:: The following is provided for informational purposes. You do not
+   need to run these commands for the lab.
+
+.. code-block:: bash
+
+   yum update sos
+   sosreport
+
+Openshift has five log message severities. Messages with FATAL, ERROR, WARNING
+and some INFO severities appear in the logs regardless of the log configuration.
+
+.. code-block:: bash
+
+   0 - Errors and warnings only
+   2 - Normal information
+   4 - Debugging-level information
+   6 - API-level debugging information (request / response)
+   8 - Body-level API debugging information 
+
+This parameter can be set in the OPTIONS for the relevant services environment
+file within /etc/sysconfig/
+
+For example to set OpenShift master's log level to debug, add or edit this
+line in /etc/sysconfig/atomic-openshift-master
+
+.. code-block:: bash
+
+   OPTIONS='--loglevel=4'
+
+   and then restart the service with
+  
+   systemctl restart atomic-openshift-master
+
+Key files / directories
+
+.. code-block:: console
+
+   /etc/origin/{node,master}/
+   /etc/origin/{node,master}/{node.master}-config.yaml
