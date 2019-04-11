@@ -65,7 +65,6 @@ Lab 2.4 - Setup the Kubernetes UI
       kubectl describe svc kubernetes-dashboard -n kube-system
 
    .. image:: images/cluster-setup-guide-check-port-ui.png
-      :align: center
 
    .. note:: In our service we are assigned port "30156" (NodePort), you'll be
       assigned a different port.
@@ -74,4 +73,3 @@ Lab 2.4 - Setup the Kubernetes UI
    http://10.1.10.21:30156
 
    .. image:: images/cluster-setup-guide-access-ui.png
-      :align: center

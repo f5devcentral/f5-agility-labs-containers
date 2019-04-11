@@ -108,14 +108,16 @@ A typical use case is:
 
 - Create a Deployment to bring up a Replica Set and Pods.
 - Check the status of a Deployment to see if it succeeds or not.
-- Later, update that Deployment to recreate the Pods (for example, to use a new image).
-- Rollback to an earlier Deployment revision if the current Deployment isn’t stable.
+- Later, update that Deployment to recreate the Pods (for example, to use a new
+  image).
+- Rollback to an earlier Deployment revision if the current Deployment isn’t
+  stable.
 - Pause and resume a Deployment
 
 **ConfigMap**: `Kubernetes ConfigMap <https://kubernetes.io/docs/user-guide/configmap/>`_
 Any applications require configuration via some combination of config files,
-command line arguments, and environment variables. These configuration artifacts
-should be decoupled from image content in order to keep containerized
+command line arguments, and environment variables. These configuration
+artifacts should be decoupled from image content in order to keep containerized
 applications portable. The ConfigMap API resource provides mechanisms to inject
 containers with configuration data while keeping containers agnostic of
 Kubernetes. ConfigMap can be used to store fine-grained information like

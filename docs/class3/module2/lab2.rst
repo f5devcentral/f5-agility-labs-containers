@@ -15,12 +15,10 @@ From the jumpbox connect to the Marathon UI at http://10.2.10.21:8080 and click
 "Create Application".
 
 .. image:: images/f5-container-connector-create-application-button.png
-   :align: center
 
 #. Click on "JSON mode" in the top-right corner
 
    .. image:: images/f5-container-connector-json-mode.png
-      :align: center
 
 #. **REPLACE** the 8 lines of default JSON code shown with the following JSON
    code and click Create Application
@@ -44,18 +42,15 @@ From the jumpbox connect to the Marathon UI at http://10.2.10.21:8080 and click
    state.
 
    .. image:: images/f5-container-connector-check-application-running.png
-      :align: center
 
 #. Click on "f5-hello-world". Here you will see two instance deployed, with
    their node IP and Port.
 
    .. image:: images/f5-container-connector-check-application-instance.png
-      :align: center
 
 #. Click on one of the <IP:Port> assigned to be redirect there:
 
    .. image:: images/f5-container-connector-access-application-instance.png
-      :align: center
 
 #. We can check whether the Marathon BIG-IP Controller has updated our BIG-IP
    configuration accordingly. Connect to your BIG-IP on https://10.1.1.245 and
@@ -67,20 +62,17 @@ From the jumpbox connect to the Marathon UI at http://10.2.10.21:8080 and click
    You should have something like this:
 
    .. image:: images/f5-container-connector-check-app-on-BIG-IP-VS.png
-      :align: center
 
 #. Go to Local Traffic --> Pool --> "f5-hello-world_80" --> Members. Here we
    can see that two pool members are defined and the IP:Port match ou
    deployed app in Marathon.
 
    .. image:: images/f5-container-connector-check-app-on-BIG-IP-Pool_members.png
-      :align: center
 
 #. You should be able to access the application. In your browser try to
    connect to http://10.2.10.81
 
    .. image:: images/f5-container-connector-access-BIGIP-VS.png
-      :align: center
 
 #. Scale the f5-hello-world app. Go back to the Marathon UI
    (http://10.2.10.21:8080). Go to Applications --> "f5-hello-world" and click
@@ -90,17 +82,14 @@ From the jumpbox connect to the Marathon UI at http://10.2.10.21:8080 and click
    "Scale Application".
 
    .. image:: images/f5-container-connector-scale-application-UI.png
-      :align: center
 
    Once it is done you should see 10 "healthy instances" running in Marathon UI.
 
    .. image:: images/f5-container-connector-scale-application-UI-10-done.png
-      :align: center
 
    You can also check your pool members list on your BIG-IP.
 
    .. image:: images/f5-container-connector-scale-application-BIGIP-10-done.png
-      :align: center
 
    As we can see, the Marathon BIG-IP Controller is adapting the pool members
    setup based on the number of instances delivering this application

@@ -50,7 +50,6 @@ Access The JumpBox
    - ose-node2
 
    .. image:: images/MremoteNG.png
-      :align: center
 
 #. For your convenience we've already added the host IP & names to /etc/hosts.
    Verify the file is correct on each node.
@@ -62,7 +61,6 @@ Access The JumpBox
    The file should look like this:
 
    .. image:: images/centos-hosts-file.png
-      :align: center
 
    If entries are not there add them to the bottom of the file be editing
    "/etc/hosts" with 'vim'
@@ -97,7 +95,6 @@ of the platform.
    When prompted the password is **centos**
 
    .. image:: images/oc-login.png
-      :align: center
 
 #. Check the OpenShift status
 
@@ -110,7 +107,6 @@ of the platform.
       oc status
 
    .. image:: images/oc-status.png
-      :align: center
 
 #. Check the OpenShift nodes
 
@@ -125,7 +121,6 @@ of the platform.
       oc get nodes
 
    .. image:: images/oc-get-nodes.png
-      :align: center
 
    .. attention:: If the **node** status shows **NotReady** or
       **SchedulingDisabled** contact the lab proctor. The node is not passing
@@ -141,8 +136,7 @@ of the platform.
 
       oc describe node ose-master1
 
-   .. image:: images/oc-get-nodes.png
-      :align: center
+   .. image:: images/oc-describe-node.png
 
 #. Check to see what projects you have access to:
 
@@ -151,7 +145,6 @@ of the platform.
       oc get projects
 
    .. image:: images/oc-get-projects.png
-      :align: center
 
    .. note:: You will be using these projects in the lab.
 
@@ -162,7 +155,6 @@ of the platform.
       oc get hostsubnets
 
    .. image:: images/oc-get-hostsubnets.png
-      :align: center
      
 #. Access OpenShift web console
 
@@ -174,7 +166,6 @@ of the platform.
    password: **centos**
 
    .. image:: images/webconsole.png
-      :align: center
 
 Troubleshooting OpenShift!
 --------------------------

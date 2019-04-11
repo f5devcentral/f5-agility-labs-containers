@@ -80,7 +80,6 @@ handles the connection routing based on the assigned weights.
       oc get route -n f5demo
 
    .. image:: images/oc-get-route.png
-      :align: center
 
    .. attention:: *Knowledge Check: What would the Route percentages be if the
       weights were 10 and 40?*
@@ -93,7 +92,6 @@ handles the connection routing based on the assigned weights.
    in the upper right.
 
    .. image:: images/bigip01-route-bg-pool.png
-      :align: center
 
    .. note:: There are two pools defined: one pool for the **Blue** application
       and a second pool for the **Green** application. Additionally, the
@@ -114,10 +112,8 @@ handles the connection routing based on the assigned weights.
    **Blue** application as noted by the colors on the page.
 
    .. image:: images/f5-demo-app-blue.png
-      :align: center
 
    .. image:: images/f5-demo-app-green.png
-      :align: center
 
 #. Generate some request traffic. Use the Linux **curl** utility to send a
    large volume of requests to the application.
@@ -140,12 +136,11 @@ handles the connection routing based on the assigned weights.
    to see how the requests were distributed between the **Blue** application
    and the **Green** application.
 
-   Using the Chrome web browser, navigate to
-   **Local Traffic -> Pools -> Statistics** and change the partition to **ocp**
-   using the dropdown in the upper right.
+   Using the Chrome web browser, navigate to :menuselection:`Local Traffic -->
+   Pools --> Statistics` and change the partition to **ocp** using the dropdown
+   in the upper right.
 
    .. image:: images/bigip-blue-green-pool-stats.png
-      :align: center
 
 #. Cleanup deployed resources. Remove the Deployment, Service and Route
    resources you created in the previous steps using the OpenShift

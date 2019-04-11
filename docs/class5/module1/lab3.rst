@@ -85,18 +85,15 @@ Create & Verify CC Deployment
       10 minutes for them to be available.
 
    .. image:: images/oc-get-deployment.png
-      :align: center
 
    .. code-block:: bash
 
       oc get pods -n kube-system
 
    .. image:: images/oc-get-pods.png
-      :align: center
 
    You can also use the web console in OpenShift (https://ose-master1:8443/) to
    view the bigip controller (login: **centos**, password: **centos**). Go to
    the kube-system project
 
    .. image:: images/kube-system.png
-      :align: center

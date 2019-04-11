@@ -28,7 +28,6 @@ URL: https://10.1.1.245
      objects.
 
      .. image:: images/f5-check-partition.png
-        :align: center
 
 #. You need to setup a partition that will be used by F5 Container Connector.
 
@@ -43,7 +42,6 @@ URL: https://10.1.1.245
       - Click Finished
 
    .. image:: images/f5-container-connector-bigip-partition-setup.png
-      :align: center
 
 #. Create a vxlan tunnel profile
 
@@ -59,7 +57,6 @@ URL: https://10.1.1.245
       - Click Finished
 
    .. image:: images/create-ose-vxlan-profile.png
-      :align: center
 
 #. Create a vxlan tunnel
 
@@ -76,7 +73,6 @@ URL: https://10.1.1.245
       - Click Finished
 
    .. image:: images/create-ose-vxlan-tunnel.png
-      :align: center
 
 Container Connector Deployment
 ------------------------------
@@ -101,7 +97,6 @@ to hide our bigip credentials.
    OSE-Cluster folder and double click ose-master.
 
    .. image:: images/MRemoteNG-ose.png
-      :align: center
 
 #. "git" the demo files
 
@@ -116,6 +111,8 @@ to hide our bigip credentials.
 
 #. Log in with an Openshift Client.
 
+   .. attention:: You can skip this step if done in the previous module.
+
    .. note:: Here we're using a user "centos", added when we built the cluster.
       When prompted for password, enter "centos".
 
@@ -124,7 +121,6 @@ to hide our bigip credentials.
       oc login -u centos -n default
 
    .. image:: images/OC-DEMOuser-Login.png
-      :align: center
 
    .. important:: Upon logging in you'll notice access to several projects. In
       our lab well be working from the default "default".
@@ -138,7 +134,6 @@ to hide our bigip credentials.
    You should see something similar to this:
 
    .. image:: images/f5-container-connector-bigip-secret.png
-      :align: center
 
 #. Create kubernetes service account for bigip controller
 
@@ -149,8 +144,6 @@ to hide our bigip credentials.
    You should see something similar to this:
 
    .. image:: images/f5-container-connector-bigip-serviceaccount.png
-      :align: center
-
 
 #. Create cluster role for bigip service account (admin rights, but can be
    modified for your environment)
@@ -162,7 +155,6 @@ to hide our bigip credentials.
    You should see something similar to this:
 
    .. image:: images/f5-container-connector-bigip-clusterrolebinding.png
-      :align: center
 
 #. Next let's explore the f5-hostsubnet.yaml file
 
@@ -190,7 +182,6 @@ to hide our bigip credentials.
       oc get hostsubnet
 
    .. image:: images/F5-OC-HOSTSUBNET1.png
-      :align: center
 
 #. Now create the connector to the BIG-IP device, then look before and after
    at the attached devices
@@ -202,7 +193,6 @@ to hide our bigip credentials.
    You should see a successful creation of a new OpenShift Node.
 
    .. image:: images/F5-OS-NODE.png
-      :align: center
 
 #. At this point nothing has been done to the BIG-IP, this only was done in
    the OpenShift environment.
@@ -214,7 +204,6 @@ to hide our bigip credentials.
    You should now see OpenShift configured to communicate with the BIG-IP
 
    .. image:: images/F5-OC-HOSTSUBNET2.png
-      :align: center
 
    .. important:: The Subnet assignment, in this case is 10.131.0.0/23, was
       assigned by the **subnet: "10.131.0.0/23"** line in "HostSubnet" yaml
@@ -264,7 +253,6 @@ to hide our bigip credentials.
       - Click Finished
 
    .. image:: images/create-ose-vxlan-selfip.png
-      :align: center
 
 #. Now we'll create an Openshift F5 Container Connector to do the API calls
    to/from the F5 device. First we need the "deployment" file.
@@ -295,7 +283,6 @@ to hide our bigip credentials.
       oc get pods -n kube-system -o wide
 
    .. image:: images/F5-CTRL-RUNNING.png
-      :align: center
 
 #. If the tunnel is up and running big-ip should be able to ping the cluster
    nodes. SSH to big-ip and run one or all of the following ping tests.
@@ -303,15 +290,14 @@ to hide our bigip credentials.
    .. hint:: To SSH to big-ip use mRemoteNG and the bigip1 shortcut
 
       .. image:: images/MRemoteNG-bigip.png
-         :align: center
          
    .. code-block:: bash
 
       # ping ose-master
-      ping 10.128.0.1
+      ping -c 4 10.128.0.1
 
       # ping ose-node1
-      ping 10.129.0.1
+      ping -c 4 10.129.0.1
 
       # ping ose-node2
-      ping 10.130.0.1
+      ping -c 4 10.130.0.1

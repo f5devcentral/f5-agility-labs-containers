@@ -35,7 +35,7 @@ and two nodes. There is a pair of BIG-IPs setup in an HA configuration:
      - admin/admin
 
        root/default
-   * - bigip1
+   * - bigip2
      - 10.1.1.246
 
        10.3.10.61

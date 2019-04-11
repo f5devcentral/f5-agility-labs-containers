@@ -20,7 +20,6 @@ Lab 1.1 - Prep CentOS
    - ose-node2
 
    .. image:: images/MremoteNG.png
-      :align: center
 
 #. "git" the demo files
 
@@ -63,7 +62,6 @@ Lab 1.1 - Prep CentOS
    The file should look like this:
 
    .. image:: images/centos-hosts-file.png
-      :align: center
 
    If entries are not there add them to the bottom of the file be editing
    "/etc/hosts" with 'vim'
@@ -146,4 +144,3 @@ Lab 1.1 - Prep CentOS
    If everything is working properly you should see the following message
 
    .. image:: images/setup-test-docker.png
-      :align: center

@@ -85,7 +85,6 @@ the application is running.
    upper right.
 
    .. image:: images/bigip01-network-map-route.png
-      :align: center
 
    The network map view shows two virtual servers that were created by the
    Container Connector when it procssed the Route resource created in the
@@ -96,7 +95,6 @@ the application is running.
    virtual server named **ocp-vserver**
 
    .. image:: images/bigip01-route-vs-hover.png
-      :align: center
 
    .. attention:: *Knowledge Check: Which OpenShift resource type defines the
       names of the two virtual servers?*
@@ -108,22 +106,16 @@ the application is running.
    change the partition to **ocp** using the drop down in the upper right.
 
    .. image:: images/bigip01-route-policy-list.png
-      :align: center
 
    Click on the traffic policy listed uner **Published Policies** to view the
    policy page for the selected policy:
 
    .. image:: images/bigip01-route-policy.png
-      :align: center
 
    Click on the rule name listed under the **Rules** section of the policy page
    to view the rule page for the selected rule:
 
-   .. warning:: Due to the version of TMOS used in this lab you will not see the
-      correct "hostname" due to a GUI issue.
-
    .. image:: images/bigip01-route-rule.png
-      :align: center
 
    On the rule page, review the configuration of the rule and note the match
    condition and rule action settings.
@@ -142,7 +134,6 @@ the application is running.
    in to the address bar:
 
    .. image:: images/f5-demo-app-route.png
-      :align: center
 
    .. note:: On the application page, the **Server IP** is the pool member
       (pod) IP address; the **Server Port** is the port of the virtual server;

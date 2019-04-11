@@ -44,7 +44,6 @@ Lab 1.2 Run a Container on Docker
       docker ps -f name=myapache
 
    .. image:: images/docker-ps-myapache.png
-      :align: center
 
    .. note:: The "PORTS" section shows the container mapping.  In this case the
       nodes local IP and port 32768 are mapped to the container.  We can use
@@ -58,7 +57,6 @@ Lab 1.2 Run a Container on Docker
       http://ip:port
 
    .. image:: images/myapache.png
-      :align: center
 
 .. attention:: That's it, you installed docker, downloaded a container, ran the
    Hello World container, ran a web server container, and accessed your web

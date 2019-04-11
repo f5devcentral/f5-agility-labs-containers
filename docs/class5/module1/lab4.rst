@@ -1,7 +1,14 @@
 Lab 1.4 - F5 Container Connector Usage
 ======================================
 
-#. For the following yaml files to work you need to be the "f5demo" project.
+#. This class and following labs need these namespaces/projects created.
+
+   .. code-block:: bash
+
+      oc create namespace f5demo
+      oc create namespace demoproj
+
+#. For the following yaml files to work you need to be in the "f5demo" project.
 
    .. attention:: In the previous lab, upon OpenShift login, you were placed in
       the "default" project.
@@ -59,7 +66,6 @@ Lab 1.4 - F5 Container Connector Usage
    .. attention:: Make sure you are looking at the **"ocp" partition**
 
    .. image:: images/pool-members.png
-      :align: center
 
 #. Increase the replicas of the f5demo project pods. Replicas specified the
    required number of instances to run
@@ -78,7 +84,6 @@ Lab 1.4 - F5 Container Connector Usage
       oc get deployment f5demo -n f5demo
 
    .. image:: images/10-containers.png
-      :align: center
 
    Validate that bigip1 and bigip2 are updated with the additional pool members
    and their health monitor works. If the monitor is failing check the tunnel
@@ -182,7 +187,6 @@ How do I verify connectivity between the BIG-IP VTEP and the OSE Node?
       tmsh show /net fdb tunnel ocp-tunnel
 
    .. image:: images/net-fdb-entries.png
-      :align: center
 
 #. In a TMOS shell, view the ARP entries.
 
@@ -194,7 +198,6 @@ How do I verify connectivity between the BIG-IP VTEP and the OSE Node?
       tmsh show /net arp
 
    .. image:: images/net-arp-entries.png
-      :align: center
 
 #. Validate floating IP address for ocp-tunnel. Check to validate if the
    configuration is correct from the earlier config step. Make sure the self-IP
@@ -202,12 +205,10 @@ How do I verify connectivity between the BIG-IP VTEP and the OSE Node?
    If the traffic is local non-floating change to floating.
 
    .. image:: images/floating.png
-      :align: center
 
 #. Connect to the viutal IP address.
 
    .. image:: images/success.png
-      :align: center
 
 #. Test failover and make sure you can connect to the virtual. 
 

@@ -16,7 +16,6 @@ entirely on information that comes with it). The inputs are:
   orchestration environment).
 
 .. image:: images/ha-cluster.jpg
-   :align: center
 
 Wherever a Container Connector runs, it always watches the API and attempts to
 bring the BIG-IP up-to-date with the latest applicable configurations.
@@ -28,6 +27,11 @@ should run one BIG-IP Controller instance for each BIG-IP device. You will
 deploy two BIG-IP Controller instances - one for each BIG-IP device. To help
 ensure Controller HA, you will deploy each Controller instance on a separate
 Node in the cluster.
+
+.. warning:: If Class 4 was previously attempted be sure to remove the
+   objects created before attempting this lab. See
+   `Class 4 / Module 2 / Lab 2.2 - F5 Container Connector Usage <../../class4/module2/lab2.html>`_
+   and scroll down to bottom of the page for instructions.
 
 .. toctree::
    :maxdepth: 1

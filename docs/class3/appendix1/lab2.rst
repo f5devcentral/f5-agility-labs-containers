@@ -125,12 +125,10 @@ Start your services
    Mesos:
 
    .. image:: images/setup-master-check-UI-mesos-master.png
-      :align: center
 
    Marathon:
 
    .. image:: images/setup-master-check-UI-marathon.png
-      :align: center
 
 #. If you want to check whether the service started as expected, you can use
    the following commands:
@@ -146,19 +144,16 @@ Start your services
    Mesos:
 
    .. image:: images/setup-master-check-service-mesos-master.png
-      :align: center
 
    Marathon:
 
    .. image:: images/setup-master-check-service-marathon.png
-      :align: center
 
 #. For more information about the marathon service, check the *about* section
    in marathon by clicking the ``?`` drop down in the upper right hand side of
    the marathon page.
 
    .. image:: images/setup-master-about-marathon.png
-      :align: center
 
 #. If multiple ``masters`` were configured for high availability you can do the
    following to test the HA of marathon:
@@ -173,4 +168,3 @@ Start your services
      "mesos-master2, 3, etc."
 
    .. image:: images/setup-master-test-HA-marathon.png
-      :align: center

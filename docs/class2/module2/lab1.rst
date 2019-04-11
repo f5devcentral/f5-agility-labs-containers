@@ -17,7 +17,6 @@ Lab 2.1 - Prep Ubuntu
    .. tip:: These sessions should be running from the previous Docker lab.
 
    .. image:: images/MremoteNG.png
-      :align: center
 
 #. If not already done from the previous Docker lab elevate to "root"
 
@@ -30,7 +29,6 @@ Lab 2.1 - Prep Ubuntu
    Your prompt should change to root@ at the start of the line :
 
    .. image:: images/rootuser.png
-      :align: center
 
 #. For your convenience we've already added the host IP & names to /etc/hosts.
    Verify the file
@@ -42,7 +40,6 @@ Lab 2.1 - Prep Ubuntu
    The file should look like this:
 
    .. image:: images/ubuntu-hosts-file.png
-      :align: center
 
    If entries are not there add them to the bottom of the file be editing
    "/etc/hosts" with 'vim'
@@ -82,7 +79,6 @@ Lab 2.1 - Prep Ubuntu
       #rem out the highlighted line below by adding "#" to the beginning of the line, write and save the file by typing ":wq"
 
    .. image:: images/disable-swap.png
-      :align: center
 
 #. Ensure the OS is up to date, run the following command
 
@@ -120,7 +116,6 @@ Lab 2.1 - Prep Ubuntu
    It should look something like this image below:
 
    .. image:: images/goodEOL.png
-      :align: center
 
 #. Add the kubernetes repo
 

@@ -15,7 +15,6 @@ Lab 2.1 - Prep Ubuntu
    - mesos-agent3
 
    .. image:: images/MremoteNG.png
-      :align: center
 
 #. Elevate to "root"
 
@@ -35,7 +34,6 @@ Lab 2.1 - Prep Ubuntu
    The file should look like this:
 
    .. image:: images/ubuntu-hosts-file.png
-      :align: center
 
    If entries are not there add them to the bottom of the file be editing
    "/etc/hosts" with 'vim'
@@ -81,7 +79,6 @@ Lab 2.1 - Prep Ubuntu
    If everything is working properly you should see the following message
 
    .. image:: images/setup-test-docker.png
-      :align: center
 
 #. Install java for the mesos and marathon processes.
 

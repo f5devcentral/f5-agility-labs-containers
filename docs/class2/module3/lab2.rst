@@ -72,7 +72,6 @@ On **kube-master1** we will create all the required files:
       kubectl create -f f5-hello-world-service.yaml
 
    .. image:: images/f5-container-connector-launch-app.png
-      :align: center
 
 #. To check the status of our deployment, you can run the following commands:
 
@@ -83,14 +82,12 @@ On **kube-master1** we will create all the required files:
       # This can take a few seconds to a minute to create these hello-world containers to running state.
 
    .. image:: images/f5-hello-world-pods.png
-      :align: center
 
    .. code-block:: bash
 
       kubectl describe svc f5-hello-world
 
    .. image:: images/f5-container-connector-check-app-definition.png
-      :align: center
 
 #. To test the app you need to pay attention to:
 
@@ -110,14 +107,12 @@ On **kube-master1** we will create all the required files:
    listening on 10.1.10.81.
 
    .. image:: images/f5-container-connector-check-app-bigipconfig.png
-      :align: center
 
    Check the Pools to see a new pool and the associated pool members:
    Local Traffic --> Pools --> "cfgmap_default_f5-hello-world_f5-hello-world"
    --> Members
 
    .. image:: images/f5-container-connector-check-app-bigipconfig2.png
-      :align: center
 
    .. note:: You can see that the pool members listed are all the kubernetes
       nodes. (**NodePort mode**)
@@ -125,7 +120,6 @@ On **kube-master1** we will create all the required files:
 #. Now you can try to access your application via your BIG-IP VIP: 10.1.10.81
 
    .. image:: images/f5-container-connector-access-app.png
-      :align: center
 
 #. Hit Refresh many times and go back to your **BIG-IP** UI, go to Local
    Traffic --> Pools --> Pool list -->
@@ -133,7 +127,6 @@ On **kube-master1** we will create all the required files:
    traffic is distributed as expected.
 
    .. image:: images/f5-container-connector-check-app-bigip-stats.png
-      :align: center
 
 #. How is traffic forwarded in Kubernetes from the <node IP>:30507 to the
    <container IP>:8080? This is done via iptables that is managed via the
@@ -148,7 +141,6 @@ On **kube-master1** we will create all the required files:
    service.
 
    .. image:: images/f5-container-connector-list-frontend-iptables.png
-      :align: center
 
 #. Scale the f5-hello-world app
 
@@ -163,11 +155,9 @@ On **kube-master1** we will create all the required files:
       kubectl get pods
 
    .. image:: images/f5-hello-world-pods-scale10.png
-      :align: center
 
 #. Check the pool was updated on big-ip
 
    .. image:: images/f5-hello-world-pool-scale10.png
-      :align: center
 
    .. attention:: Why are there only 2 pool members?

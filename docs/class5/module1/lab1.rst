@@ -84,32 +84,26 @@ each BIG-IP:
       `-V16` version of the BIG-IP VE license.
 
    .. image:: images/license.png
-      :align: center
 
-#. Validate the vlan configuration
+#. Validate the vlan configuration on both **bigip1** & **bigip2**
 
    .. image:: images/vlans.png
-      :align: center
 
-#. Validate bigip1 self IP configuration
-
-   .. image:: images/self-ip-bigip02.png
-      :align: center
-
-#. Validate bigip2 self IP configuration
+#. Validate **bigip1** self IP configuration
 
    .. image:: images/self-ip-bigip01.png
-      :align: center
+
+#. Validate **bigip2** self IP configuration
+
+   .. image:: images/self-ip-bigip02.png
 
 #. Validate the device group HA settings and make sure bigip1 and bigip2 are in
    sync. If out of sync, sync the device group:
 
    .. image:: images/device-group-sync.png
-      :align: center
 
    All synced.
    
    .. note:: The sync-failover configuration is set to manual sync
 
    .. image:: images/synced.png
-      :align: center
