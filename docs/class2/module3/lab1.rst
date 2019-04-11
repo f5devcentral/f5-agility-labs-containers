@@ -35,7 +35,6 @@ URL: https://10.1.1.245
       - Click Finished
 
    .. image:: images/f5-container-connector-bigip-partition-setup.png
-      :align: center
 
    With the new partition created, we can go back to Kubernetes to setup the
    F5 Container connector.
@@ -65,7 +64,6 @@ to hide our bigip credentials.
    folder and double click kube-master1.
 
    .. image:: images/MRemoteNG-kubernetes.png
-      :align: center
 
 #. "git" the demo files
 
@@ -87,7 +85,6 @@ to hide our bigip credentials.
    You should see something similar to this:
 
    .. image:: images/f5-container-connector-bigip-secret.png
-      :align: center
 
 #. Create kubernetes service account for bigip controller
 
@@ -98,8 +95,6 @@ to hide our bigip credentials.
    You should see something similar to this:
 
    .. image:: images/f5-container-connector-bigip-serviceaccount.png
-      :align: center
-
 
 #. Create cluster role for bigip service account (admin rights, but can be
    modified for your environment)
@@ -111,7 +106,6 @@ to hide our bigip credentials.
    You should see something similar to this:
 
    .. image:: images/f5-container-connector-bigip-clusterrolebinding.png
-      :align: center
 
 #. At this point we have two deployment mode options, Nodeport or Cluster.
    For more information see
@@ -151,7 +145,6 @@ to hide our bigip credentials.
       kubectl get deployment k8s-bigip-ctlr-deployment --namespace kube-system
 
    .. image:: images/f5-container-connector-launch-deployment-controller.png
-      :align: center
 
 #. To locate on which node the container connector is running, you can use the
    following command:
@@ -163,7 +156,6 @@ to hide our bigip credentials.
    We can see that our container is running on kube-node2 below.
 
    .. image:: images/f5-container-connector-locate-controller-container.png
-      :align: center
 
 Troubleshooting
 ---------------
@@ -180,7 +172,6 @@ check the logs of your container, kubectl command or docker command.
       kubectl logs k8s-bigip-ctlr-deployment-5b74dd769-x55vx -n kube-system
 
    .. image:: images/f5-container-connector-check-logs-kubectl.png
-      :align: center
 
 #. Using docker logs command: From the previous check we know the container
    is running on kube-node1.  Via mRemoteNG open a session to kube-node1 and
@@ -193,7 +184,6 @@ check the logs of your container, kubectl command or docker command.
    Here we can see our container ID is "01a7517b50c5"
 
    .. image:: images/f5-container-connector-find-dockerID--controller-container.png
-      :align: center
 
    Now we can check our container logs:
 
@@ -202,7 +192,6 @@ check the logs of your container, kubectl command or docker command.
       sudo docker logs 01a7517b50c5
 
    .. image:: images/f5-container-connector-check-logs-controller-container.png
-      :align: center
 
    .. note:: The log messages here are identical to the log messages displayed
       in the previous kubectl logs command. 

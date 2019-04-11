@@ -108,13 +108,11 @@ Container Connector should configure on the BIG-IP.
    **bigip1.agility-labs.io** to access the BIG-IP GUI:
 
    .. image:: images/bigip01-bookmark.png
-      :align: center
 
    From the BIG-IP login page, enter username=admin and password=admin and
    click the **Log in** button:
 
    .. image:: images/bigip01-login-page.png
-      :align: center
 
    Navigate to :menuselection:`Local Traffic --> Network Map` and change the
    partition to **ocp** using the dropdown in the upper right. The network map
@@ -123,7 +121,6 @@ Container Connector should configure on the BIG-IP.
    ConfigMap.
 
    .. image:: images/bigip01-network-map-cfgmap.png
-      :align: center
 
    .. attention:: *Knowledge Check: In the network map view, what OpenShift
       object type does the pool member IP address represent?  How was the IP
@@ -133,7 +130,6 @@ Container Connector should configure on the BIG-IP.
    of the virtual server:
 
    .. image:: images/bigip01-vs-ip-hover.png
-      :align: center
 
    .. attention:: *Knowledge Check: What OpenShift resource type was used to
       define the virtual server IP address?*
@@ -145,7 +141,6 @@ Container Connector should configure on the BIG-IP.
    server in to the address bar:
 
    .. image:: images/f5-demo-app-url.png
-      :align: center
 
    .. note:: On the application page, the **Server IP** is the pool member
       (pod) IP address; the **Server Port** is the port of the virtual server;
@@ -173,7 +168,6 @@ Container Connector should configure on the BIG-IP.
    You will use that name for the next command.
 
    .. image:: images/oc-get-deployment1.png
-      :align: center
 
    From the ose-master1 host, entering the following command to set the replica
    count for the deployment to 10 instances:
@@ -189,7 +183,6 @@ Container Connector should configure on the BIG-IP.
    partition to **ocp** using the dropdown in the upper right.
 
    .. image:: images/bigip01-network-map-scaled.png
-      :align: center
 
    .. attention:: *Knowledge Check: How many pool members are shown in the
       network map view? What do you think would happen if you scaled the
@@ -202,7 +195,6 @@ Container Connector should configure on the BIG-IP.
    virtual server in to the address bar:
 
    .. image:: images/f5-demo-app-url.png
-      :align: center
 
    If you reload the page every few seconds, you should see the **Server IP**
    address change.  Because there is more than one instance of the application

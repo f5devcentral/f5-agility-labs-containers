@@ -33,7 +33,6 @@ cluster.
    The output should be similar to this:
 
    .. image:: images/cluster-setup-guide-node-setup-join-master.png
-      :align: center
 
 #. To verify the *nodes* have joined the cluster, run the following command
    on the **kube-master1**:
@@ -45,8 +44,6 @@ cluster.
    You should see your cluster (ie *master* + *nodes*)
 
    .. image:: images/cluster-setup-guide-node-setup-check-nodes.png
-      :align: center
-
 
 #. Verify all the services are started as expected (run on the
    **kube-master1**) Don't worry about last 5 characters matching on most
@@ -57,7 +54,6 @@ cluster.
       kubectl get pods --all-namespaces
 
    .. image:: images/cluster-setup-guide-node-setup-check-services.png
-      :align: center
 
 .. attention:: CONGRATUATIONS! You just did the hardest part of todays lab - building
    a Kubernetes cluster. While we didn't cover each step in great detail, due

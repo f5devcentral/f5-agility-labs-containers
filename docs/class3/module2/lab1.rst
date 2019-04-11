@@ -35,7 +35,6 @@ URL: https://10.1.1.245
       - Click Finished
 
    .. image:: images/f5-container-connector-bigip-partition-setup.png
-      :align: center
 
    With the new partition created, we can go back to Marathon to setup the
    F5 Container connector.
@@ -54,12 +53,10 @@ the Marathon REST API.  For this class we will be using the Marathon UI.
    click "Create Application".
 
    .. image:: images/f5-container-connector-create-application-button.png
-      :align: center
 
 #. Click on "JSON mode" in the top-right corner
 
    .. image:: images/f5-container-connector-json-mode.png
-        :align: center
 
 #. **REPLACE** the 8 lines of default JSON code shown with the following JSON
    code and click Create Application
@@ -75,13 +72,11 @@ the Marathon REST API.  For this class we will be using the Marathon UI.
    this picture.
 
    .. image:: images/f5-container-connector-clickF5folder.png
-      :align: center
 
 #. Click on the “f5” folder and you should have "Running", the BIG-IP
    North/South Controller labeled marathon-bigip-ctrl.
 
    .. image:: images/f5-container-connector-f5-folder-shown.png
-      :align: center
 
    .. note:: If you're running the lab outside of Agility, you need may need
       to update the field *image* with the appropriate path to your image:
@@ -108,14 +103,12 @@ check the logs of your container, Marathon UI or Docker command.
    You should see something like this:
 
    .. image:: images/f5-container-connector-logs.png
-      :align: center
 
 #. Using docker log command: You need to identify where the Controller is
    running. From the previous step we can see it's running on 10.2.10.22
    (which is **mesos-agent1**).
 
    .. image:: images/f5-container-connector-locate-bigip-controller.png
-      :align: center
 
    Connect via SSH to **mesos-agent1** and run the following commands:
 
@@ -127,7 +120,6 @@ check the logs of your container, Marathon UI or Docker command.
    4fdee0a49dcb. We need this ID for the next command.
 
    .. image:: images/f5-container-connector-get-bigip-ctlr-container-id.png
-      :align: center
 
    To check the logs of our Controller:
 
@@ -136,7 +128,6 @@ check the logs of your container, Marathon UI or Docker command.
       sudo docker logs 4fdee0a49dcb
 
    .. image:: images/f5-container-connector-check-logs-bigip-ctlr.png
-      :align: center
 
 #. You can connect to your container with docker as well:
 

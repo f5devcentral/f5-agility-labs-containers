@@ -87,7 +87,6 @@ Start Services
    successfully. You should see both agent1 and agent2 on the agent page.
 
    .. image:: images/setup-slave-check-agent-registration.png
-      :align: center
 
 Test Your Setup
 ---------------
@@ -97,7 +96,6 @@ Connect to Marathon through one of the master (8080) and launch an application.
 #. Click on *create application*
 
    .. image:: images/setup-slave-test-create-application-button.png
-      :align: center
 
 #. Make the following settings and click "Create Application"
 
@@ -107,26 +105,22 @@ Connect to Marathon through one of the master (8080) and launch an application.
    - Command: echo TEST; sleep 5
    
    .. image:: images/setup-slave-test-create-application-command-def.png
-      :align: center
 
 #. Once it starts, connect to the mesos framework.  Here you should see more
    and more completed tasks. Name of the task should be "test" (our ID).
 
    .. image:: images/setup-slave-test-create-application-command-exec1.png
-      :align: center
 
 #. If you let it run for a while, you'll see more and more "Completed Tasks".
    You can see that the Host being selected to run those tasks is not always
    the same.
 
    .. image:: images/setup-slave-test-create-application-command-exec2.png
-      :align: center
 
 #. Go Back to Marathon, click on our application *test* and click on the
    setting button and select *destroy* to remove it.
 
    .. image:: images/setup-slave-test-create-application-command-delete.png
-      :align: center
 
 Launch A Container
 ------------------
@@ -159,12 +153,10 @@ To test our containers from marathon. We will start a simple apache container.
       }
 
    .. image:: images/setup-slave-test-create-container-def.png
-      :align: center
 
 #. It may take some time to switch from ``Deploying`` to ``Running``.
 
    .. image:: images/setup-slave-test-create-container-run.png
-      :align: center
 
 #. Once it's in a ``Running`` state, find the port used by the container and
    try to access it at agent IP:port. Click on your application "my-website".
@@ -172,9 +164,7 @@ To test our containers from marathon. We will start a simple apache container.
    ``31870`` and on ``agent1 - 10.2.10.22``
 
    .. image:: images/setup-slave-test-create-container-check-port.png
-      :align: center
 
 #. Use your browser to connect to the application:
 
    .. image:: images/setup-slave-test-create-container-access.png
-      :align: center

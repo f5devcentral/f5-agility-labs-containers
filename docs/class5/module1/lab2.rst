@@ -60,7 +60,6 @@ IP address for the active device in this subnet as shown in the diagram above.
       oc get hostsubnet
 
    .. image:: images/oc-get-hostsubnet.png
-      :align: center
 
 Configure VXLAN on BIG-IP
 -------------------------
@@ -97,8 +96,14 @@ Configure VXLAN on BIG-IP
 
 #. Creating vxlan tunnel ocp-tunnel
 
+   .. note:: the delete commands are there to cleanup entries from the previous
+      class.
+
    .. code-block:: bash
 
+      ssh root@10.1.1.245 tmsh delete net self ose-vxlan-selfip
+      ssh root@10.1.1.245 tmsh delete net fdb tunnel ose-tunnel all-records
+      ssh root@10.1.1.245 tmsh delete net tunnels tunnel ose-tunnel
       ssh root@10.1.1.245 tmsh create net tunnels tunnel ocp-tunnel key 0 profile ocp-profile local-address 10.3.10.59 secondary-address 10.3.10.60 traffic-group traffic-group-1
       ssh root@10.1.1.246 tmsh create net tunnels tunnel ocp-tunnel key 0 profile ocp-profile local-address 10.3.10.59 secondary-address 10.3.10.61 traffic-group traffic-group-1
 
@@ -129,28 +134,24 @@ tunnel configuration
 #. Validate that the OCP bigip partition was created
 
    .. image:: images/partition.png
-      :align: center
 
-#. Validate bigip1 self IP configuration
+#. Validate **bigip1** self IP configuration
 
    .. note:: On the active device, there is floating IP address in the subnet
       assigned by the OpenShift SDN.
 
    .. image:: images/self-ip-bigip01-ha.png
-      :align: center
 
-#. Validate bigip2 self IP configuration
+#. Validate **bigip2** self IP configuration
 
    .. image:: images/self-ip-bigip02-ha.png
-      :align: center
 
 #. Check the ocp-tunnel configuration (:menuselection:`Network --> Tunnels -->
    Tunnel List`).
    
    .. note:: The local-address 10.3.10.59 and secondary-address are 10.3.10.60
-      for bigip1 and 10.3.10.61 for bigip2. The secondary-address will be used
-      to send monitor traffic and the local address will be used by the active
-      device to send client traffic.
+      for **bigip1** and 10.3.10.61 for **bigip2**. The secondary-address will
+      be used to send monitor traffic and the local address will be used by the
+      active device to send client traffic.
 
    .. image:: images/bigip01-tunnel-ip.png
-      :align: center

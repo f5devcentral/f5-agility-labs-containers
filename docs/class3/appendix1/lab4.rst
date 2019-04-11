@@ -81,7 +81,6 @@ Download & Configure Mesos-DNS
 #. This will start your mesos-dns app and you can test it.
 
    .. image:: images/setup-mesos-dns-test.png
-      :align: center
 
 #. You can now test your dns setup. Open a new command prompt from the windows
    jumpbox and start `nslookup`
@@ -182,10 +181,8 @@ automatically gets a DNS name.
    app-test-dns.marathon.mesos. It should work and return the agent IP.
 
    .. image:: images/setup-mesos-dns-test-create-app.png
-      :align: center
 
 #. If you don't try to ping from mesos-agent1 or mesos-agent2, make sure your
    client can reach mesos-dns server first (10.2.10.22)
 
    .. image:: images/setup-mesos-dns-test-ping-app.png
-      :align: center

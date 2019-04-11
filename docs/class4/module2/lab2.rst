@@ -64,7 +64,6 @@ On the **ose-master** we will create all the required files:
       oc create -f f5-hello-world-service.yaml
 
    .. image:: images/f5-container-connector-launch-app.png
-      :align: center
 
 #. To check the status of our deployment, you can run the following commands:
 
@@ -73,14 +72,12 @@ On the **ose-master** we will create all the required files:
       oc get pods -o wide
 
    .. image:: images/f5-hello-world-pods.png
-      :align: center
 
    .. code-block:: bash
 
       oc describe svc f5-hello-world
         
    .. image:: images/f5-container-connector-check-app-definition.png
-      :align: center
 
 #. To test the app you need to pay attention to: 
 
@@ -97,14 +94,12 @@ On the **ose-master** we will create all the required files:
    listening on 10.3.10.81 in partition "ose".
 
    .. image:: images/f5-container-connector-check-app-bigipconfig.png
-      :align: center
 
    Check the Pools to see a new pool and the associated pool members:
    Local Traffic --> Pools --> "cfgmap_default_f5-hello-world_f5-hello-world"
    --> Members
 
    .. image:: images/f5-container-connector-check-app-bigipconfig2.png
-      :align: center
 
    .. note:: You can see that the pool members IP addresses are assigned from
       the overlay network (**ClusterIP mode**)
@@ -112,7 +107,6 @@ On the **ose-master** we will create all the required files:
 #. Now access your application via the BIG-IP VIP: 10.3.10.81
 
    .. image:: images/f5-container-connector-access-app.png
-      :align: center
 
 #. Hit Refresh many times and go back to your **BIG-IP** UI, go to Local
    Traffic --> Pools --> Pool list -->
@@ -120,7 +114,6 @@ On the **ose-master** we will create all the required files:
    Statistics to see that traffic is distributed as expected.
 
    .. image:: images/f5-container-connector-check-app-bigip-stats.png
-      :align: center
 
 #. Scale the f5-hello-world app
 
@@ -135,11 +128,24 @@ On the **ose-master** we will create all the required files:
       oc get pods
 
    .. image:: images/f5-hello-world-pods-scale10.png
-      :align: center
 
 #. Check the pool was updated on big-ip
 
    .. image:: images/f5-hello-world-pool-scale10.png
-        :align: center
 
    .. attention:: Which network(s) are the IPs allocated from?
+
+#. Cleanup deployment
+
+   .. important:: This needs to be done before attempting Class 5
+
+   .. code-block:: bash
+
+      oc delete -f f5-hello-world-service.yaml
+      oc delete -f f5-hello-world-configmap.yaml
+      oc delete -f f5-hello-world-deployment.yaml
+      oc delete -f f5-cluster-deployment.yaml
+      oc delete -f f5-bigip-hostsubnet.yaml
+      oc delete clusterrolebinding k8s-bigip-ctlr-clusteradmin
+      oc delete serviceaccount k8s-bigip-ctlr -n kube-system
+      oc delete secret bigip-login -n kube-system

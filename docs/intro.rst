@@ -15,7 +15,7 @@ Getting Started
 
 .. attention::
    * The lab is based on Ravello blueprint
-     ``Agility 2018-Containers (Exp Nov 9th, 2018)-vtog-2.2.2``
+     ``Agility 2018-Containers (Exp 05/27/19)-vtog-2.3.0``
 
    * To access the lab environment follow this link
      http://training.f5agility.com

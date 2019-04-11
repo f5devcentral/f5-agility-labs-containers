@@ -13,7 +13,6 @@ Lab 1.1 Install Docker
    - kube-node2
 
    .. image:: images/MremoteNG.png
-      :align: center
 
 #. Once connected via CLI(SSH) to **ALL** three nodes as user `ubuntu` (it's
    the user already setup in the MremoteNG settings), let's elevate to root:
@@ -27,7 +26,6 @@ Lab 1.1 Install Docker
    Your prompt should change to root@ at the start of the line :
 
    .. image:: images/rootuser.png
-      :align: center
 
 #. Then, to ensure the OS is up to date, run the following command
 
@@ -61,7 +59,6 @@ Lab 1.1 Install Docker
    If everything is working properly you should see the following message
 
    .. image:: images/docker-hello-world-yes.png
-      :align: center
 
 .. hint:: If you are not a linux/unix person - don't worry.  What happened
    above is how linux installs and updates software. This is  ALL the ugly

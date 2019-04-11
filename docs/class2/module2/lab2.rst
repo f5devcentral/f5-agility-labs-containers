@@ -34,7 +34,6 @@ communicates with). All of these components run in pods started by kubelet
         successfully!".
 
    .. image:: images/cluster-setup-guide-kubeadm-init-master.png
-      :align: center
 
    .. important:: 
       - Be sure to save the highlighted output from this command to notepad.
@@ -72,7 +71,6 @@ communicates with). All of these components run in pods started by kubelet
    "Running"  It should look like the following:
 
    .. image:: images/cluster-setup-guide-kubeadmin-init-check.png
-      :align: center
 
    .. note:: corends won't start until the network pod is up and running.
 
@@ -98,7 +96,6 @@ communicates with). All of these components run in pods started by kubelet
    The output should show all services as running.
 
    .. image:: images/cluster-setup-guide-kubeadmin-init-check-cluster-get-pods.png
-      :align: center
 
    .. important:: Before moving to the next lab, "Setup the Nodes" wait for
       all system pods to show status “Running”.
@@ -110,14 +107,12 @@ communicates with). All of these components run in pods started by kubelet
       kubectl get cs
 
    .. image:: images/cluster-setup-guide-kubeadmin-init-check-cluster.png
-      :align: center
 
    .. code-block:: bash
 
       kubectl cluster-info
       
    .. image:: images/cluster-setup-guide-kubeadmin-init-check-cluster-info.png
-      :align: center
 
 .. hint:: If you made a mistake and need to re-initialize the cluster run
    the following commands:
