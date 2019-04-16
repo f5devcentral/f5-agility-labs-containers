@@ -1,4 +1,4 @@
-Lab 2.2 - F5 Container Connector Usage
+Lab 1.4 - F5 Container Connector Usage
 ======================================
 
 Now that our container connector is up and running, let's deploy an

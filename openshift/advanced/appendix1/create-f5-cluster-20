@@ -1,0 +1,11 @@
+oc create secret generic bigip-login -n kube-system --from-literal=username=admin --from-literal=password=admin
+oc create serviceaccount bigip-ctlr -n kube-system
+oc create clusterrolebinding bigip-ctlr-clusteradmin --clusterrole=cluster-admin --serviceaccount=kube-system:bigip-ctlr
+
+oc create -f hs-bigip1-20.yaml
+oc create -f hs-bigip2-20.yaml
+oc create -f hs-bigip-float-20.yaml
+
+oc create -f cc-bigip1-20.yaml
+oc create -f cc-bigip2-20.yaml
+
