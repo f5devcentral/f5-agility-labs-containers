@@ -25,7 +25,7 @@ VXLAN Config
       :emphasize-lines: 4,8,9
 
    Create the HostSubnet files to the OpenShift API server. Run the following
-   commands from the **master**
+   commands from **master1**
 
    .. code-block:: bash
 
@@ -54,7 +54,7 @@ VXLAN Config
       :emphasize-lines: 4,8,9
 
    Create the HostSubnet files to the OpenShift API server. Run the following
-   commands from the **master**
+   commands from **master2**
 
    .. code-block:: bash
 

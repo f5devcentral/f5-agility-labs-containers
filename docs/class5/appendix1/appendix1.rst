@@ -2,8 +2,8 @@ Appendix 1: BIG-IP / OpenShift Multi-Pod Deployment
 ===================================================
 
 In this appendix we will configuring an HA pair of BIG-IP's to work with two
-OpenShift pods. These pods will use the same internal IP space. To handle this
-use case BIG-IP will require route-domains.
+OpenShift pods. These pods will use the same internal IP space (10.128.0.0/14).
+To handle this use case BIG-IP will utilize route-domains.
 
 .. attention:: This use case and following lab config is not part of the
    current Ravello Agility blueprint.

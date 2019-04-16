@@ -1,14 +1,15 @@
 Lab 1.4 - F5 Container Connector Usage
 ======================================
 
-Now that our container connector is up and running, let's deploy an
-application to test both route domans / partitions.
+Now that our container connector is up and running, let's deploy an application
+to test both route domans / partitions.
 
 For this lab we'll use a simple pre-configured docker image called
 "f5-hello-world". It can be found on docker hub at
 `f5devcentral/f5-hello-world <https://hub.docker.com/r/f5devcentral/f5-hello-world/>`_
 
-On both **ose-master1** and **ose-master2** create the following files:
+To deploy "f5-hello-world" on **ose-master1** and **ose-master2** create the
+following files:
 
 #. Create a file called ``f5-hello-world-deployment.yaml``
 
@@ -24,7 +25,7 @@ On both **ose-master1** and **ose-master2** create the following files:
       :linenos:
       :emphasize-lines: 2,12
 
-Now we need to creat the configmap of the application for each partition.
+Now we need to creat the f5 configmap of the application for each partition.
 
 #. Create a file called ``f5-hello-world-configmap-10.yaml`` on **ose-master1**
 
@@ -63,37 +64,8 @@ Now we need to creat the configmap of the application for each partition.
    .. code-block:: bash
 
       oc get pods -o wide
-
-   .. code-block:: bash
-
       oc describe svc f5-hello-world
 
-#. To test the app you need to pay attention to: 
-
-   **The Endpoints**, that's our 2 instances (defined as replicas in our
-   deployment file) and the port assigned to the service: port 8080.
-
-   Now that we have deployed our application sucessfully, we can check our
-   BIG-IP configuration.  From the browser open https://10.1.1.245
-
-   .. warning:: Don't forget to select the "ose" partition or you'll see
-      nothing.
-
-#. Now access your application via the BIG-IP VIP: 10.3.10.81
-
-#. Hit Refresh many times and go back to your **BIG-IP** UI, go to Local
-   Traffic --> Pools --> Pool list -->
-   cfgmap_default_f5-hello-world_f5-hello-world -->
-   Statistics to see that traffic is distributed as expected.
-
-#. Scale the f5-hello-world app
-
-   .. code-block:: bash
-
-      oc scale --replicas=10 deployment/f5-hello-world
-
-#. Check the pods were created
-
-   .. code-block:: bash
-
-      oc get pods
+#. To test the app you need to pay attention to connect to the jumphost, open
+   browser and got http://10.1.10.80 and http://10.1.10.81
+   

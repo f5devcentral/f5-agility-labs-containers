@@ -9,7 +9,8 @@ Set up RBAC
 
 The F5 BIG-IP Controller requires permission to monitor the status of the
 OpenSfhift cluster. The following will create a bigip login secret, Service
-Account, and Cluster Role:
+Account, and Cluster Role. Run the following commands on both **master1** and
+**master2**:
 
 .. code-block:: bash
 
@@ -48,9 +49,6 @@ Create & Verify CC Deployment
    .. code-block:: bash
 
       oc get deployment -n kube-system
-
-   .. code-block:: bash
-
       oc get pods -n kube-system
 
 #. Create an OpenShift Deployment for **POD2** (one per BIG-IP device). You
@@ -81,4 +79,3 @@ Create & Verify CC Deployment
 
       oc get deployment -n kube-system
       oc get pods -n kube-system
-      oc logs 
