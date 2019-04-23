@@ -1,0 +1,11 @@
+oc delete -f cc-bigip1-10.yaml
+oc delete -f cc-bigip2-10.yaml
+
+oc delete -f hs-bigip1-10.yaml
+oc delete -f hs-bigip2-10.yaml
+oc delete -f hs-bigip-float-10.yaml
+
+oc delete clusterrolebinding bigip-ctlr-clusteradmin
+oc delete serviceaccount bigip-ctlr -n kube-system
+oc delete secret bigip-login -n kube-system
+

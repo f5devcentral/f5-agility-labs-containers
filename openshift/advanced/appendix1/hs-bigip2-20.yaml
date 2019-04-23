@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: HostSubnet
+metadata:
+  name: openshift-f5-bigip2-20
+  annotations:
+    pod.network.openshift.io/fixed-vnid-host: "1"
+host: openshift-f5-bigip2-20
+hostIP: 10.1.10.5
+subnet: "10.131.2.0/23"
