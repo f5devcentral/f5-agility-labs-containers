@@ -1,0 +1,6 @@
+#!/bin/bash
+
+#delete container f5-hello-world
+oc delete service f5-hello-world
+oc delete configmap f5-hello-world
+oc delete deployment f5-hello-world
