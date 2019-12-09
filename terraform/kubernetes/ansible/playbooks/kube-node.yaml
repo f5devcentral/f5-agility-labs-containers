@@ -1,0 +1,9 @@
+---
+
+- name: Reset kubernetes node
+  shell: "kubeadm reset --force"
+  register: reset_cluster
+
+- name: Initialize nodes
+  when: reset_cluster is successful
+  shell: "{{ hostvars['kube-master1']['kubeadm_join'] }}"

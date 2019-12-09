@@ -1,0 +1,30 @@
+---
+
+- name: Install various support packages
+  yum:
+    name: "{{ packages }}"
+    update_cache: yes
+    state: present
+  vars:
+    packages:
+    - vim
+    - ntp
+    - make
+    - python
+    - git
+    - curl
+    - tcpdump
+    - NetworkManager
+    - docker
+
+- name: Start and Enable NetworkManager
+  systemd:
+    name: NetworkManager
+    state: started
+    enabled: yes
+
+- name: Start and Enable Docker
+  systemd:
+    name: docker
+    state: started
+    enabled: yes
