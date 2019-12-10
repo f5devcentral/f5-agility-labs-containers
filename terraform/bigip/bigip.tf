@@ -58,8 +58,8 @@ resource "aws_security_group" "bigip_mgmt_sg" {
   }
 }
 
-resource "aws_security_group" "bigip_external_sg" {
-  name   = "bigip_external_sg"
+resource "aws_security_group" "bigip_kubernetes_sg" {
+  name   = "bigip_kubernetes_sg"
   vpc_id = var.vpc_id
 
   ingress {
@@ -91,13 +91,13 @@ resource "aws_security_group" "bigip_external_sg" {
   }
 
   tags = {
-    Name = "bigip_external_sg"
+    Name = "bigip_kubernetes_sg"
     Lab  = "Containers"
   }
 }
 
-resource "aws_security_group" "bigip_internal_sg" {
-  name   = "bigip_internal_sg"
+resource "aws_security_group" "bigip_openshift_sg" {
+  name   = "bigip_openshift_sg"
   vpc_id = var.vpc_id
 
   ingress {
@@ -115,7 +115,7 @@ resource "aws_security_group" "bigip_internal_sg" {
   }
 
   tags = {
-    Name = "bigip_internal_sg"
+    Name = "bigip_openshift_sg"
     Lab  = "Containers"
   }
 }
@@ -131,26 +131,26 @@ resource "aws_network_interface" "mgmt" {
   }
 }
 
-resource "aws_network_interface" "external" {
+resource "aws_network_interface" "kubernetes" {
   count             = var.bigip_count
   subnet_id         = var.vpc_subnet[1]
-  security_groups   = [aws_security_group.bigip_external_sg.id]
+  security_groups   = [aws_security_group.bigip_kubernetes_sg.id]
   private_ips_count = 1
 
   tags = {
-    Name = "bigip${count.index + 1}_external"
+    Name = "bigip${count.index + 1}_kubernetes"
     Lab  = "Containers"
   }
 }
 
-resource "aws_network_interface" "internal" {
+resource "aws_network_interface" "openshift" {
   count             = var.bigip_count
   subnet_id         = var.vpc_subnet[2]
-  security_groups   = [aws_security_group.bigip_internal_sg.id]
+  security_groups   = [aws_security_group.bigip_openshift_sg.id]
   private_ips_count = 1
 
   tags = {
-    Name = "bigip${count.index + 1}_internal"
+    Name = "bigip${count.index + 1}_openshift"
     Lab  = "Containers"
   }
 }
@@ -170,17 +170,32 @@ resource "aws_eip" "mgmt" {
   }
 }
 
-resource "aws_eip" "external" {
+resource "aws_eip" "kubernetes" {
   vpc = true
   depends_on = [
-    aws_network_interface.external,
+    aws_network_interface.kubernetes,
     aws_instance.bigip,
   ]
   count             = var.bigip_count
-  network_interface = element(aws_network_interface.external.*.id, count.index)
+  network_interface = element(aws_network_interface.kubernetes.*.id, count.index)
 
   tags = {
-    Name = "bigip${count.index + 1}_external_eip"
+    Name = "bigip${count.index + 1}_kubernetes_eip"
+    Lab  = "Containers"
+  }
+}
+
+resource "aws_eip" "openshift" {
+  vpc = true
+  depends_on = [
+    aws_network_interface.openshift,
+    aws_instance.bigip,
+  ]
+  count             = var.bigip_count
+  network_interface = element(aws_network_interface.openshift.*.id, count.index)
+
+  tags = {
+    Name = "bigip${count.index + 1}_openshift_eip"
     Lab  = "Containers"
   }
 }
@@ -207,8 +222,8 @@ resource "aws_instance" "bigip" {
   key_name      = var.key_name
   depends_on = [
     aws_network_interface.mgmt,
-    aws_network_interface.external,
-    aws_network_interface.internal,
+    aws_network_interface.kubernetes,
+    aws_network_interface.openshift,
   ]
 
   network_interface {
@@ -217,12 +232,12 @@ resource "aws_instance" "bigip" {
   }
 
   network_interface {
-    network_interface_id = element(aws_network_interface.external.*.id, count.index)
+    network_interface_id = element(aws_network_interface.kubernetes.*.id, count.index)
     device_index         = 1
   }
 
   network_interface {
-    network_interface_id = element(aws_network_interface.internal.*.id, count.index)
+    network_interface_id = element(aws_network_interface.openshift.*.id, count.index)
     device_index         = 2
   }
 
@@ -275,8 +290,8 @@ data "template_file" "do_data" {
     password = random_string.password.result
     aws_dns = cidrhost(var.vpc_cidr, 2)
     mgmt_ip = element(aws_network_interface.mgmt.*.private_ip, count.index)
-    external_ip = element(aws_network_interface.external.*.private_ip, count.index)
-    internal_ip = element(aws_network_interface.internal.*.private_ip, count.index)
+    kubernetes_ip = element(aws_network_interface.kubernetes.*.private_ip, count.index)
+    openshift_ip = element(aws_network_interface.openshift.*.private_ip, count.index)
   }
 }
 

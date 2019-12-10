@@ -28,7 +28,7 @@
                     "class": "Provision",
                     "ltm": "nominal"
                 },
-                "external": {
+                "kubernetes": {
                     "class": "VLAN",
                     "interfaces": [
                         {
@@ -36,14 +36,14 @@
                         }
                     ]
                 },
-                "external-self": {
+                "kubernetes-self": {
                     "class": "SelfIp",
-                    "address": "${external_ip}/24",
-                    "vlan": "external",
+                    "address": "${kubernetes_ip}/24",
+                    "vlan": "kubernetes",
                     "allowService": "none",
                     "trafficGroup": "traffic-group-local-only"
                 },
-                "internal": {
+                "openshift": {
                     "class": "VLAN",
                     "interfaces": [
                         {
@@ -51,20 +51,20 @@
                         }
                     ]
                 },
-                "internal-self": {
+                "openshift-self": {
                     "class": "SelfIp",
-                    "address": "${internal_ip}/24",
-                    "vlan": "internal",
+                    "address": "${openshift_ip}/24",
+                    "vlan": "openshift",
                     "allowService": "all",
                     "trafficGroup": "traffic-group-local-only"
                 },
                 "configsync": {
                     "class": "ConfigSync",
-                    "configsyncIp": "/Common/internal-self/address"
+                    "configsyncIp": "/Common/openshift-self/address"
                 },
                 "failoverAddress": {
                     "class": "FailoverUnicast",
-                    "address": "/Common/internal-self/address"
+                    "address": "/Common/openshift-self/address"
                 },
                 "device-group-1": {
                     "class": "DeviceGroup",

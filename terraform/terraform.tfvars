@@ -1,11 +1,11 @@
-aws_profile = "vtog"
+aws_profile = "default"
 aws_region  = "us-west-2"
 vpc_cidr    = "10.1.0.0/16"
 
 cidrs = {
-  mgmt1     = "10.1.1.0/24"
-  external1 = "10.1.2.0/24"
-  internal1 = "10.1.3.0/24"
+  mgmt1      = "10.1.1.0/24"
+  kubernetes = "10.1.10.0/24"
+  openshift  = "10.1.20.0/24"
 }
 
 key_name            = "container-lab-key"
@@ -15,7 +15,7 @@ kube_count          = 3
 okd_instance_type   = "t3.medium"
 okd_count           = 3
 bigip_instance_type = "m5.large"
-bigip_count         = 2
+bigip_count         = 1
 
 # BYOL
 #bigip_ami_prod_code  = "6h6xg9ndbxsrp5iyuotryhl0q"

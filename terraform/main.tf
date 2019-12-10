@@ -66,26 +66,26 @@ resource "aws_subnet" "mgmt1_subnet" {
   }
 }
 
-resource "aws_subnet" "external1_subnet" {
+resource "aws_subnet" "kubernetes_subnet" {
   vpc_id                  = aws_vpc.lab_vpc.id
-  cidr_block              = var.cidrs["external1"]
+  cidr_block              = var.cidrs["kubernetes"]
   map_public_ip_on_launch = true
   availability_zone       = data.aws_availability_zones.available.names[0]
 
   tags = {
-    Name = "lab_external1"
+    Name = "lab_kubernetes"
     Lab  = "Containers"
   }
 }
 
-resource "aws_subnet" "internal1_subnet" {
+resource "aws_subnet" "openshift_subnet" {
   vpc_id                  = aws_vpc.lab_vpc.id
-  cidr_block              = var.cidrs["internal1"]
+  cidr_block              = var.cidrs["openshift"]
   map_public_ip_on_launch = false
   availability_zone       = data.aws_availability_zones.available.names[0]
 
   tags = {
-    Name = "lab_internal1"
+    Name = "lab_openshift"
     Lab  = "Containers"
   }
 }
@@ -95,13 +95,13 @@ resource "aws_route_table_association" "lab_mgmt1_assoc" {
   route_table_id = aws_route_table.lab_public_rt.id
 }
 
-resource "aws_route_table_association" "lab_external1_assoc" {
-  subnet_id      = aws_subnet.external1_subnet.id
+resource "aws_route_table_association" "lab_kubernetes_assoc" {
+  subnet_id      = aws_subnet.kubernetes_subnet.id
   route_table_id = aws_route_table.lab_public_rt.id
 }
 
-resource "aws_route_table_association" "lab_internal1_assoc" {
-  subnet_id      = aws_subnet.internal1_subnet.id
+resource "aws_route_table_association" "lab_openshift_assoc" {
+  subnet_id      = aws_subnet.openshift_subnet.id
   route_table_id = aws_default_route_table.lab_private_rt.id
 }
 
@@ -127,7 +127,7 @@ module "bigip" {
   as3_rpm             = var.as3_rpm
   vpc_id              = aws_vpc.lab_vpc.id
   vpc_cidr            = var.vpc_cidr
-  vpc_subnet          = [aws_subnet.mgmt1_subnet.id, aws_subnet.external1_subnet.id, aws_subnet.internal1_subnet.id]
+  vpc_subnet          = [aws_subnet.mgmt1_subnet.id, aws_subnet.kubernetes_subnet.id, aws_subnet.openshift_subnet.id]
 }
 
 #----- Deploy Kubernetes -----
@@ -141,7 +141,7 @@ module "kube" {
   kube_count    = var.kube_count
   vpc_id        = aws_vpc.lab_vpc.id
   vpc_cidr      = var.vpc_cidr
-  vpc_subnet    = [aws_subnet.external1_subnet.id]
+  vpc_subnet    = [aws_subnet.kubernetes_subnet.id]
 }
 
 #----- Deploy OpenShift -----
@@ -155,6 +155,6 @@ module "okd" {
   okd_count     = var.okd_count
   vpc_id        = aws_vpc.lab_vpc.id
   vpc_cidr      = var.vpc_cidr
-  vpc_subnet    = [aws_subnet.external1_subnet.id]
+  vpc_subnet    = [aws_subnet.openshift_subnet.id]
 }
 
