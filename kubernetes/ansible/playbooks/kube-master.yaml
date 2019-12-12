@@ -9,7 +9,7 @@
 
 - name: Initialize master
   when: reset_cluster is successful
-  shell: "kubeadm init --apiserver-advertise-address=10.1.10.21 --pod-network-cidr=10.244.0.0/16"
+  shell: "kubeadm init --apiserver-advertise-address=10.1.10.10 --pod-network-cidr=10.244.0.0/16"
   register: init_cluster
 
 - name: Create kube admin dir (root)
@@ -50,4 +50,4 @@
   register: kubeadm_join
 - set_fact:
    kubeadm_join: "{{ kubeadm_join.stdout }}"
-#- debug: msg={{ hostvars['kube-master1']['kubeadm_join'] }}
+#- debug: msg={{ hostvars['kube_master1']['kubeadm_join'] }}

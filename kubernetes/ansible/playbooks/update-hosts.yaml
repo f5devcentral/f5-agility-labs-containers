@@ -6,4 +6,21 @@
     insertafter: EOF
     line: '{{ hostvars[item].ansible_host }} {{ item }}'
     state: present
-  with_items: '{{ groups["kube-all"] }}'
+  with_items: '{{ groups["kube_all"] }}'
+
+- name: Configure name servers
+  blockinfile:
+    path: /etc/resolvconf/resolv.conf.d/head
+    insertafter: EOF
+    state: present
+    block: |
+      nameserver 8.8.8.8
+      nameserver 8.8.4.4
+
+- name: Restart resolvconf
+  #sudo service resolvconf restart
+  systemd:
+    state: restarted
+    daemon_reload: yes
+    name: resolvconf
+
