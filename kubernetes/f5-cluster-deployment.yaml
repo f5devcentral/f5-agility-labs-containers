@@ -5,6 +5,9 @@ metadata:
   namespace: kube-system
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      app: k8s-bigip-ctlr
   template:
     metadata:
       name: k8s-bigip-ctlr
@@ -31,7 +34,7 @@ spec:
           args: [
             "--bigip-username=$(BIGIP_USERNAME)",
             "--bigip-password=$(BIGIP_PASSWORD)",
-            "--bigip-url=10.1.10.60",
+            "--bigip-url=10.1.10.4",
             "--bigip-partition=kubernetes",
             "--namespace=default",
             "--pool-member-type=cluster",
