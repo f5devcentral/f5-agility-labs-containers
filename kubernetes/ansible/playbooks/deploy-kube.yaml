@@ -1,7 +1,7 @@
 ---
 
 - name: Prep Ubuntu
-  hosts: kube-all
+  hosts: kube_all
   become: yes
   tasks:
   - import_tasks: update-ubuntu.yaml
@@ -10,14 +10,14 @@
   - import_tasks: prep-kube.yaml
 
 - name: Initialize Master
-  hosts: kube-masters
+  hosts: kube_masters
   become: yes
   gather_facts: no
   tasks:
   - import_tasks: kube-master.yaml
 
 - name: Initialize Nodes
-  hosts: kube-nodes
+  hosts: kube_nodes
   become: yes
   gather_facts: no
   tasks:
