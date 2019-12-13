@@ -1,0 +1,16 @@
+[all]
+okd-master1 ansible_host=10.1.20.13
+okd-node1 ansible_host=10.1.20.14
+okd-node2 ansible_host=10.1.20.15
+
+[masters]
+okd-master1 ansible_host=10.1.20.13
+
+[nodes]
+okd-node1 ansible_host=10.1.20.14
+okd-node2 ansible_host=10.1.20.15
+
+[all:vars]
+ansible_user=centos
+ansible_playbook_python=/usr/bin/python3
+
