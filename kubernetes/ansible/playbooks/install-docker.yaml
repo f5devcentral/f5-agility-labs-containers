@@ -17,10 +17,3 @@
     update_cache: yes
     state: present
 
-- name: Update cgroupdriver
-  copy:
-    dest: /etc/docker/daemon.json
-    content: |
-      {
-      "exec-opts": ["native.cgroupdriver=cgroupfs"]
-      }
