@@ -1,9 +1,13 @@
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: f5-hello-world
+  namespace: default
 spec:
   replicas: 2
+  selector:
+    matchLabels:
+      run: f5-hello-world
   template:
     metadata:
       labels:
