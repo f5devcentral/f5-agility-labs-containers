@@ -5,7 +5,7 @@
   git:
     repo: https://github.com/f5devcentral/f5-agility-labs-containers.git
     dest: ~/agilitydocs
-    version: master
+    version: develop
 
 - name: Copy private SSH key to user "ubuntu"
   become: no

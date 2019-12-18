@@ -13,8 +13,7 @@
                         "8.8.4.4"
                     ],
                     "search": [
-                        "f5demos.com",
-                        "tognaci.com"
+                        "f5demos.com"
                     ]
                 },
                 "myNtp": {
@@ -28,7 +27,7 @@
                     "class": "Provision",
                     "ltm": "nominal"
                 },
-                "kubernetes": {
+                "external-kube": {
                     "class": "VLAN",
                     "interfaces": [
                         {
@@ -36,14 +35,14 @@
                         }
                     ]
                 },
-                "kubernetes-self": {
+                "kube-self": {
                     "class": "SelfIp",
                     "address": "${kubernetes_ip}/24",
-                    "vlan": "kubernetes",
-                    "allowService": "none",
+                    "vlan": "external-kube",
+                    "allowService": "all",
                     "trafficGroup": "traffic-group-local-only"
                 },
-                "openshift": {
+                "external-okd": {
                     "class": "VLAN",
                     "interfaces": [
                         {
@@ -51,20 +50,20 @@
                         }
                     ]
                 },
-                "openshift-self": {
+                "okd-self": {
                     "class": "SelfIp",
                     "address": "${openshift_ip}/24",
-                    "vlan": "openshift",
+                    "vlan": "external-okd",
                     "allowService": "all",
                     "trafficGroup": "traffic-group-local-only"
                 },
                 "configsync": {
                     "class": "ConfigSync",
-                    "configsyncIp": "/Common/openshift-self/address"
+                    "configsyncIp": "/Common/okd-self/address"
                 },
                 "failoverAddress": {
                     "class": "FailoverUnicast",
-                    "address": "/Common/openshift-self/address"
+                    "address": "/Common/okd-self/address"
                 },
                 "device-group-1": {
                     "class": "DeviceGroup",

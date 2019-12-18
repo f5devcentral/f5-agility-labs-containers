@@ -43,15 +43,6 @@ resource "aws_route_table" "lab_public_rt" {
   }
 }
 
-resource "aws_default_route_table" "lab_private_rt" {
-  default_route_table_id = aws_vpc.lab_vpc.default_route_table_id
-
-  tags = {
-    Name = "lab_private"
-    Lab  = "Containers"
-  }
-}
-
 # Subnets
 
 resource "aws_subnet" "mgmt1_subnet" {
@@ -81,7 +72,7 @@ resource "aws_subnet" "kubernetes_subnet" {
 resource "aws_subnet" "openshift_subnet" {
   vpc_id                  = aws_vpc.lab_vpc.id
   cidr_block              = var.cidrs["openshift"]
-  map_public_ip_on_launch = false
+  map_public_ip_on_launch = true
   availability_zone       = data.aws_availability_zones.available.names[0]
 
   tags = {
@@ -102,7 +93,7 @@ resource "aws_route_table_association" "lab_kubernetes_assoc" {
 
 resource "aws_route_table_association" "lab_openshift_assoc" {
   subnet_id      = aws_subnet.openshift_subnet.id
-  route_table_id = aws_default_route_table.lab_private_rt.id
+  route_table_id = aws_route_table.lab_public_rt.id
 }
 
 #----- Set default SSH key pair -----

@@ -101,6 +101,20 @@ resource "aws_security_group" "bigip_openshift_sg" {
   vpc_id = var.vpc_id
 
   ingress {
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = [var.myIP]
+  }
+
+  ingress {
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
+    cidr_blocks = [var.myIP]
+  }
+
+  ingress {
     from_port   = 0
     to_port     = 0
     protocol    = "-1"
@@ -295,6 +309,13 @@ data "template_file" "do_data" {
   }
 }
 
+resource "local_file" "save_do_data" {
+  depends_on = [data.template_file.do_data]
+  count = var.bigip_count
+  content = data.template_file.do_data[count.index].rendered
+  filename = "${path.module}/bigip${count.index + 1}.tpl"
+}
+
 resource "null_resource" "onboard" {
   depends_on = [null_resource.tmsh]
   count = var.bigip_count
@@ -308,8 +329,7 @@ resource "null_resource" "onboard" {
             --retry-delay 30 \
             -H "Content-Type: application/json" \
             -u ${var.bigip_admin}:${random_string.password.result} \
-            -d '${data.template_file.do_data[count.index].rendered} '
-    
+            -d @${path.module}/bigip${count.index + 1}.tpl
     EOF
   }
 }
