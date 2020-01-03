@@ -1,14 +1,14 @@
 [all]
-okd-master1 ansible_host=10.1.20.13
-okd-node1 ansible_host=10.1.20.14
-okd-node2 ansible_host=10.1.20.15
+okd-master1 ansible_host=10.1.1.10
+okd-node1 ansible_host=10.1.1.11
+okd-node2 ansible_host=10.1.1.12
 
 [masters]
-okd-master1 ansible_host=10.1.20.13
+okd-master1 ansible_host=10.1.1.10
 
 [nodes]
-okd-node1 ansible_host=10.1.20.14
-okd-node2 ansible_host=10.1.20.15
+okd-node1 ansible_host=10.1.1.11
+okd-node2 ansible_host=10.1.1.12
 
 [all:vars]
 ansible_user=centos
