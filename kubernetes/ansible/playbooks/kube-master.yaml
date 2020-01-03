@@ -9,7 +9,7 @@
 
 - name: Initialize master
   when: reset_cluster is successful
-  shell: "kubeadm init --apiserver-advertise-address=10.1.10.10 --pod-network-cidr=10.244.0.0/16"
+  shell: "kubeadm init --apiserver-advertise-address=10.1.1.7 --pod-network-cidr=10.244.0.0/16"
   register: init_cluster
 
 - name: Create kube admin dir (root)

@@ -1,14 +1,14 @@
 [kube_all]
-kube-master1 ansible_host=10.1.10.10
-kube-node1 ansible_host=10.1.10.11
-kube-node2 ansible_host=10.1.10.12
+kube-master1 ansible_host=10.1.1.7
+kube-node1 ansible_host=10.1.1.8
+kube-node2 ansible_host=10.1.1.9
 
 [kube_masters]
-kube-master1 ansible_host=10.1.10.10
+kube-master1 ansible_host=10.1.1.7
 
 [kube_nodes]
-kube-node1 ansible_host=10.1.10.11
-kube-node2 ansible_host=10.1.10.12
+kube-node1 ansible_host=10.1.1.8
+kube-node2 ansible_host=10.1.1.9
 
 [all:vars]
 ansible_user=ubuntu
