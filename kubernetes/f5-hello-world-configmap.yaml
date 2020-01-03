@@ -15,7 +15,7 @@ data:
           "mode": "http",
           "partition": "kubernetes",
           "virtualAddress": {
-            "bindAddr": "10.1.10.81",
+            "bindAddr": "10.1.1.60",
             "port": 80
           }
         },
