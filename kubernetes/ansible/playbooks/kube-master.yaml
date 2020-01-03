@@ -51,3 +51,10 @@
 - set_fact:
    kubeadm_join: "{{ kubeadm_join.stdout }}"
 #- debug: msg={{ hostvars['kube_master1']['kubeadm_join'] }}
+
+- name: git Agility Container Lab repo
+  become: no
+  git:
+    repo: https://github.com/f5devcentral/f5-agility-labs-containers.git
+    dest: ~/agilitydocs
+    version: develop
