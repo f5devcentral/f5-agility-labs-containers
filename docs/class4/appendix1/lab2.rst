@@ -58,7 +58,7 @@ Lab 1.2 - Install Openshift
    Here's the "inventory" (refrenced by our ansible playbook) used for the
    deployment.
 
-   .. literalinclude:: ../../../openshift/ansible/inventory.ini
+   .. literalinclude:: ../../../openshift/ansible/inventory/hosts
       :language: bash
 
 #. Enable oc bash completion
