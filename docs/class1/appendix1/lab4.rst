@@ -70,6 +70,6 @@ Lab 2.4 - Setup the Kubernetes UI
       assigned a different port.
 
    We can now access the dashboard by connecting to the following uri
-   http://10.1.10.21:30156
+   http://10.1.1.7:30156
 
    .. image:: images/cluster-setup-guide-access-ui.png

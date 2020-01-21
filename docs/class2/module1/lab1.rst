@@ -71,9 +71,9 @@ Access The JumpBox
 
       #cut and paste the following lines to /etc/hosts
 
-      10.3.10.21    okd-master1
-      10.3.10.22    okd-node1
-      10.3.10.23    okd-node2
+      10.1.1.10    okd-master1
+      10.1.1.11    okd-node1
+      10.1.1.12    okd-node2
 
 Accessing OpenShift
 -------------------

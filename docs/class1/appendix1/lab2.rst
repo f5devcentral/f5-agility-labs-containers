@@ -18,10 +18,10 @@ communicates with). All of these components run in pods started by kubelet
 
    .. code-block:: bash
 
-      kubeadm init --apiserver-advertise-address=10.1.10.21 --pod-network-cidr=10.244.0.0/16
+      kubeadm init --apiserver-advertise-address=10.1.1.7 --pod-network-cidr=10.244.0.0/16
 
    .. note::
-      - The IP address used to advertise the master. 10.1.10.0/24 is the
+      - The IP address used to advertise the master. 10.1.1.0/24 is the
         network for our control plane. if you don't specify the
         --apiserver-advertise-address argument, kubeadm will pick the first
         interface with a default gateway (because it needs internet access).

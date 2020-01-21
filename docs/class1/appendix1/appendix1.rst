@@ -13,13 +13,13 @@ As a reminder, in this module, our cluster setup is:
      - **IP-ADDR**
      - **Role**
    * - kube-master1
-     - 10.1.10.21
+     - 10.1.1.7
      - Master
    * - kube-node1
-     - 10.1.10.22
+     - 10.1.1.8
      - Node
    * - kube-node2
-     - 10.1.10.23
+     - 10.1.1.9
      - Node
 
 .. toctree::

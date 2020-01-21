@@ -13,7 +13,7 @@ BIG-IP Setup
 To use F5 Container connector, you'll need a BIG-IP up and running first.
 
 Through the Jumpbox, you should have a BIG-IP available at the following
-URL: https://10.1.1.245
+URL: https://10.1.1.4
 
 .. warning:: 
    - Connect to your BIG-IP and check it is active and licensed. Its
@@ -63,12 +63,12 @@ URL: https://10.1.1.245
    .. code-block:: bash
 
       # From the CLI:
-      tmsh create net tunnel tunnel okd-tunnel {key 0 local-address 10.3.10.60 profile okd-vxlan}
+      tmsh create net tunnel tunnel okd-tunnel {key 0 local-address 10.1.1.4 profile okd-vxlan}
 
       # From the UI:
       GoTo Network --> Tunnels --> Tunnel List
       - Create a new tunnel called "okd-tunnel"
-      - Set the Local Address to 10.3.10.60
+      - Set the Local Address to 10.1.1.4
       - Set the Profile to the one previously created called "okd-vxlan"
       - Click Finished
 
@@ -225,7 +225,7 @@ to hide our bigip credentials.
                pod.network.openshift.io/fixed-vnid-host: "0"
                pod.network.openshift.io/assign-subnet: "true"
          host: openshift-f5-node
-         hostIP: 10.3.10.60
+         hostIP: 10.1.1.4
 
 #. Create the vxlan tunnel self-ip
 

@@ -13,7 +13,7 @@ BIG-IP Setup
 To use F5 Container connector, you'll need a BIG-IP up and running first.
 
 Through the Jumpbox, you should have a BIG-IP available at the following
-URL: https://10.1.1.245
+URL: https://10.1.1.4
 
 .. warning:: Connect to your BIG-IP and check it is active and licensed. Its
    login and password are: **admin/admin**

@@ -85,13 +85,13 @@ On the **okd-master** we will create all the required files:
    deployment file) and the port assigned to the service: port 8080.
 
    Now that we have deployed our application sucessfully, we can check our
-   BIG-IP configuration.  From the browser open https://10.1.1.245
+   BIG-IP configuration.  From the browser open https://10.1.1.4
 
    .. warning:: Don't forget to select the "okd" partition or you'll see
       nothing.
 
    Here you can see a new Virtual Server, "default_f5-hello-world" was created,
-   listening on 10.3.10.81 in partition "okd".
+   listening on 10.1.1.4:81 in partition "okd".
 
    .. image:: images/f5-container-connector-check-app-bigipconfig.png
 
@@ -104,7 +104,7 @@ On the **okd-master** we will create all the required files:
    .. note:: You can see that the pool members IP addresses are assigned from
       the overlay network (**ClusterIP mode**)
 
-#. Now access your application via the BIG-IP VIP: 10.3.10.81
+#. Now access your application via the BIG-IP VIP: 10.1.1.4:81
 
    .. image:: images/f5-container-connector-access-app.png
 

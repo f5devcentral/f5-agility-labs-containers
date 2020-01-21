@@ -98,13 +98,13 @@ On **kube-master1** we will create all the required files:
    deployment file) and the port assigned to the service: port 8080.
 
    Now that we have deployed our application sucessfully, we can check our
-   BIG-IP configuration.  From the browser open https://10.1.1.245
+   BIG-IP configuration.  From the browser open https://10.1.1.4
 
    .. warning:: Don't forget to select the "kubernetes" partition or you'll
       see nothing.
 
    Here you can see a new Virtual Server, "default_f5-hello-world" was created,
-   listening on 10.1.10.81.
+   listening on 10.1.1.4:81.
 
    .. image:: images/f5-container-connector-check-app-bigipconfig.png
 
@@ -117,7 +117,7 @@ On **kube-master1** we will create all the required files:
    .. note:: You can see that the pool members listed are all the kubernetes
       nodes. (**NodePort mode**)
 
-#. Now you can try to access your application via your BIG-IP VIP: 10.1.10.81
+#. Now you can try to access your application via your BIG-IP VIP: 10.1.1.4:81
 
    .. image:: images/f5-container-connector-access-app.png
 

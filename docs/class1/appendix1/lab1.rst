@@ -50,9 +50,9 @@ Lab 2.1 - Prep Ubuntu
 
       #cut and paste the following lines to /etc/hosts
 
-      10.1.10.21    kube-master1
-      10.1.10.22    kube-node1
-      10.1.10.23    kube-node2
+      10.1.1.7    kube-master1
+      10.1.1.8    kube-node1
+      10.1.1.9    kube-node2
 
 #. The linux swap file needs to be disabled, this is not the case by default.
    Again for your convenience we disabled swap. Verify the setting

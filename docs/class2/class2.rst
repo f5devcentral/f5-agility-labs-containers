@@ -23,29 +23,23 @@ We will leverage the following setup to configure the OpenShift environment.
    * - **Hostname**
      - **IP-ADDR**
      - **Credentials**
-   * - jumpbox
-     - 10.1.1.250
-     - user/Student!Agility!
    * - bigip1
-     - 10.1.1.245
-
-       10.3.10.60
-
+     - 10.1.1.4
      - admin/admin
 
        root/default
    * - okd-master1
-     - 10.3.10.21
+     - 10.1.1.10
      - centos/centos
 
        root/default
    * - okd-node1
-     - 10.3.10.22
+     - 10.1.1.11
      - centos/centos
 
        root/default
    * - okd-node2
-     - 10.3.10.23
+     - 10.1.1.12
      - centos/centos
 
        root/default

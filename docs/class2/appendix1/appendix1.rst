@@ -16,13 +16,13 @@ As a reminder, in this module, our cluster setup is:
      - **IP-ADDR**
      - **Role**
    * - okd-master1
-     - 10.3.10.21
+     - 10.1.1.10
      - Master
    * - okd-node1
-     - 10.3.10.22
+     - 10.1.1.11
      - Node
    * - okd-node2
-     - 10.3.10.23
+     - 10.1.1.12
      - Node
 
 .. toctree::
