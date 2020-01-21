@@ -1,163 +1,209 @@
-Lab 2.3 - F5 CIS Usage & ClusterIP Mode
-=======================================
+Lab 2.3 - CIS Install & Configuration (ClusterIP)
+=================================================
 
-Now that our container connector is up and running, let's deploy an application
-and leverage our F5 CC.
+The BIG-IP Controller for Kubernetes installs as a
+`Deployment object <https://kubernetes.io/docs/concepts/workloads/controllers/deployment/>`_
 
-For this lab we'll use a simple pre-configured docker image called 
-"f5-hello-world". It can be found on docker hub at
-`f5devcentral/f5-hello-world <https://hub.docker.com/r/f5devcentral/f5-hello-world/>`_
+.. seealso:: The official CIS documentation is here:
+   `Install the BIG-IP Controller: Kubernetes <https://clouddocs.f5.com/containers/v2/kubernetes/kctlr-app-install.html>`_
 
-To deploy our application, we will need to do the following:
+BIG-IP Setup
+------------
 
-#. Define a Deployment: this will launch our application running in a
-   container.
+To use F5 Container Ingress Service, you'll need a BIG-IP up and running first.
 
-#. Define a ConfigMap: this can be used to store fine-grained information like
-   individual properties or coarse-grained information like entire config files
-   or JSON blobs. It will contain the BIG-IP configuration we need to push.
+Through the Jumpbox, you should have a BIG-IP available at the following
+URL: https://10.1.1.4
 
-#. Define a Service: this is an abstraction which defines a logical set of
-   *pods* and a policy by which to access them. Expose the *service* on a port
-   on each node of the cluster (the same port on each *node*). You’ll be able
-   to contact the service on any <NodeIP>:NodePort address. If you set the type
-   field to "NodePort", the Kubernetes master will allocate a port from a
-   flag-configured range **(default: 30000-32767)**, and each Node will proxy
-   that port (the same port number on every Node) into your *Service*.
+.. warning:: Connect to your BIG-IP and check it is active and licensed. Its
+   login and password are: **admin/admin**
 
-App Deployment
+   If your BIG-IP has no license or its license expired, renew the license. You
+   just need a LTM VE license for this lab. No specific add-ons are required
+   (ask a lab instructor for eval licenses if your license has expired)
+
+#. You need to setup a partition that will be used by F5 Container Ingress
+   Service.
+
+   .. code-block:: bash
+
+      # From the CLI:
+      tmsh create auth partition kubernetes
+
+      # From the UI:
+      GoTo System --> Users --> Partition List
+      - Create a new partition called "kubernetes" (use default settings)
+      - Click Finished
+
+   .. image:: images/f5-container-connector-bigip-partition-setup.png
+
+   With the new partition created, we can go back to Kubernetes to setup the
+   F5 Container Ingress Service.
+
+CIS Deployment
 --------------
 
-On **kube-master1** we will create all the required files:
+.. seealso:: For a more thorough explanation of all the settings and options see
+   `F5 Container Ingress Service - Kubernetes <https://clouddocs.f5.com/containers/v2/kubernetes/>`_
 
-#. Create a file called ``f5-hello-world-deployment.yaml``
+Now that BIG-IP is licensed and prepped with the "kubernetes" partition, we
+need to define a `Kubernetes deployment <https://kubernetes.io/docs/user-guide/deployments/>`_
+and create a `Kubernetes secret <https://kubernetes.io/docs/user-guide/secrets/>`_
+to hide our bigip credentials.
 
-   .. tip:: Use the file in /home/ubuntu/agilitydocs/kubernetes
+#. From the jumpbox open **mRemoteNG** and start a session with Kube-master.
 
-   .. literalinclude:: ../../../kubernetes/f5-hello-world-deployment.yaml
+   .. tip:: 
+      - These sessions should be running from the previous lab.
+      - As a reminder we're utilizing a wrapper called **MRemoteNG** for
+        Putty and other services. MRNG hold credentials and allows for multiple
+        protocols(i.e. SSH, RDP, etc.), makes jumping in and out of SSH
+        connections easier.
+
+   On your desktop select **MRemoteNG**, once launched you'll see a few tabs
+   similar to the example below.  Open up the Kubernetes / Kubernetes-Cluster
+   folder and double click kube-master1.
+
+   .. image:: images/MRemoteNG-kubernetes.png
+
+#. "git" the demo files
+
+   .. note:: These files should be here by default, if **NOT** run the
+      following commands.
+
+   .. code-block:: bash
+
+      git clone https://github.com/f5devcentral/f5-agility-labs-containers.git ~/agilitydocs
+
+      cd ~/agilitydocs/kubernetes
+
+#. Create bigip login secret
+
+   .. code-block:: bash
+
+      kubectl create secret generic bigip-login -n kube-system --from-literal=username=admin --from-literal=password=admin
+
+   You should see something similar to this:
+
+   .. image:: images/f5-container-connector-bigip-secret.png
+
+#. Create kubernetes service account for bigip controller
+
+   .. code-block:: bash
+
+      kubectl create serviceaccount k8s-bigip-ctlr -n kube-system
+
+   You should see something similar to this:
+
+   .. image:: images/f5-container-connector-bigip-serviceaccount.png
+
+#. Create cluster role for bigip service account (admin rights, but can be
+   modified for your environment)
+
+   .. code-block:: bash
+
+      kubectl create clusterrolebinding k8s-bigip-ctlr-clusteradmin --clusterrole=cluster-admin --serviceaccount=kube-system:k8s-bigip-ctlr
+
+   You should see something similar to this:
+
+   .. image:: images/f5-container-connector-bigip-clusterrolebinding.png
+
+#. At this point we have two deployment mode options, Nodeport or Cluster.
+   For more information see
+   `BIG-IP Controller Modes <http://clouddocs.f5.com/containers/v2/kubernetes/kctlr-modes.html>`_
+
+   .. important:: This lab will focus on **Nodeport**. In Class 4 Openshift
+      we'll use **ClusterIP**.
+
+#. **Nodeport mode** ``f5-nodeport-deployment.yaml``
+
+   .. note:: 
+      - For your convenience the file can be found in
+        /home/ubuntu/agilitydocs/kubernetes (downloaded earlier in the clone
+        git repo step).
+      - Or you can cut and paste the file below and create your own file.
+      - If you have issues with your yaml and syntax (**indentation MATTERS**),
+        you can try to use an online parser to help you :
+        `Yaml parser <http://codebeautify.org/yaml-validator>`_
+
+   .. literalinclude:: ../../../kubernetes/f5-nodeport-deployment.yaml
       :language: yaml
       :linenos:
-      :emphasize-lines: 2,14
+      :emphasize-lines: 2,17,34,35,37
 
-#. Create a file called ``f5-hello-world-configmap.yaml``
-
-   .. tip:: Use the file in /home/ubuntu/agilitydocs/kubernetes
-
-   .. attention:: The schema version below (for example 1.7) comes from the releases
-      of big-ip-controller.  For more information, head over to the following
-      link for a quick review:
-      https://clouddocs.f5.com/containers/v2/releases_and_versioning.html#schema-table
-
-
-   .. literalinclude:: ../../../kubernetes/f5-hello-world-configmap.yaml
-      :language: yaml
-      :linenos:
-      :emphasize-lines: 2,5,7,9,16,18
-
-#. Create a file called ``f5-hello-world-service.yaml``
-
-   .. tip:: Use the file in /home/ubuntu/agilitydocs/kubernetes
-
-   .. literalinclude:: ../../../kubernetes/f5-hello-world-service.yaml
-      :language: yaml
-      :linenos:
-      :emphasize-lines: 2,12
-
-#. We can now launch our application:
+#. Once you have your yaml file setup, you can try to launch your deployment.
+   It will start our f5-k8s-controller container on one of our nodes (may take
+   around 30sec to be in a running state):
 
    .. code-block:: bash
 
-      kubectl create -f f5-hello-world-deployment.yaml
-      kubectl create -f f5-hello-world-configmap.yaml
-      kubectl create -f f5-hello-world-service.yaml
+      kubectl create -f f5-nodeport-deployment.yaml
 
-   .. image:: images/f5-container-connector-launch-app.png
-
-#. To check the status of our deployment, you can run the following commands:
+#. Verify the deployment "deployed"
 
    .. code-block:: bash
 
-      kubectl get pods -o wide
+      kubectl get deployment k8s-bigip-ctlr-deployment --namespace kube-system
 
-      # This can take a few seconds to a minute to create these hello-world containers to running state.
+   .. image:: images/f5-container-connector-launch-deployment-controller.png
 
-   .. image:: images/f5-hello-world-pods.png
-
-   .. code-block:: bash
-
-      kubectl describe svc f5-hello-world
-
-   .. image:: images/f5-container-connector-check-app-definition.png
-
-#. To test the app you need to pay attention to:
-
-   **The NodePort value**, that's the port used by Kubernetes to give you
-   access to the app from the outside. Here it's "30507", highlighted above.
-
-   **The Endpoints**, that's our 2 instances (defined as replicas in our
-   deployment file) and the port assigned to the service: port 8080.
-
-   Now that we have deployed our application sucessfully, we can check our
-   BIG-IP configuration.  From the browser open https://10.1.1.4
-
-   .. warning:: Don't forget to select the "kubernetes" partition or you'll
-      see nothing.
-
-   Here you can see a new Virtual Server, "default_f5-hello-world" was created,
-   listening on 10.1.1.4:81.
-
-   .. image:: images/f5-container-connector-check-app-bigipconfig.png
-
-   Check the Pools to see a new pool and the associated pool members:
-   Local Traffic --> Pools --> "cfgmap_default_f5-hello-world_f5-hello-world"
-   --> Members
-
-   .. image:: images/f5-container-connector-check-app-bigipconfig2.png
-
-   .. note:: You can see that the pool members listed are all the kubernetes
-      nodes. (**NodePort mode**)
-
-#. Now you can try to access your application via your BIG-IP VIP: 10.1.1.4:81
-
-   .. image:: images/f5-container-connector-access-app.png
-
-#. Hit Refresh many times and go back to your **BIG-IP** UI, go to Local
-   Traffic --> Pools --> Pool list -->
-   cfgmap_default_f5-hello-world_f5-hello-world --> Statistics to see that
-   traffic is distributed as expected.
-
-   .. image:: images/f5-container-connector-check-app-bigip-stats.png
-
-#. How is traffic forwarded in Kubernetes from the <node IP>:30507 to the
-   <container IP>:8080? This is done via iptables that is managed via the
-   kube-proxy instances. On either of the nodes, SSH in and run the following
-   command:
+#. To locate on which node CIS is running, you can use the following command:
 
    .. code-block:: bash
 
-      sudo iptables-save | grep f5-hello-world
+      kubectl get pods -o wide -n kube-system
 
-   This will list the different iptables rules that were created regarding our
-   service.
+   We can see that our container is running on kube-node2 below.
 
-   .. image:: images/f5-container-connector-list-frontend-iptables.png
+   .. image:: images/f5-container-connector-locate-controller-container.png
 
-#. Scale the f5-hello-world app
+Troubleshooting
+---------------
+
+If you need to troubleshoot your container, you have two different ways to
+check the logs of your container, kubectl command or docker command.
+
+#. Using kubectl command: you need to use the full name of your pod as
+   showed in the previous image
 
    .. code-block:: bash
 
-      kubectl scale --replicas=10 deployment/f5-hello-world -n default
+      # For example:
+      kubectl logs k8s-bigip-ctlr-deployment-5b74dd769-x55vx -n kube-system
 
-#. Check that the pods were created
+   .. image:: images/f5-container-connector-check-logs-kubectl.png
+
+#. Using docker logs command: From the previous check we know the container
+   is running on kube-node1.  Via mRemoteNG open a session to kube-node1 and
+   run the following commands:
 
    .. code-block:: bash
 
-      kubectl get pods
+      sudo docker ps
 
-   .. image:: images/f5-hello-world-pods-scale10.png
+   Here we can see our container ID is "01a7517b50c5"
 
-#. Check the pool was updated on big-ip
+   .. image:: images/f5-container-connector-find-dockerID--controller-container.png
 
-   .. image:: images/f5-hello-world-pool-scale10.png
+   Now we can check our container logs:
 
-   .. attention:: Why are there only 2 pool members?
+   .. code-block:: bash
+
+      sudo docker logs 01a7517b50c5
+
+   .. image:: images/f5-container-connector-check-logs-controller-container.png
+
+   .. note:: The log messages here are identical to the log messages displayed
+      in the previous kubectl logs command. 
+
+#. You can connect to your container with kubectl as well:
+
+   .. code-block:: bash
+
+      kubectl exec -it k8s-bigip-ctlr-deployment-79fcf97bcc-48qs7 -n kube-system  -- /bin/sh
+
+      cd /app
+
+      ls -la
+
+      exit

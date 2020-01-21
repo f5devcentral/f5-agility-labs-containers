@@ -1,5 +1,5 @@
-Lab 2.2 - CIS Usage with NodePort Mode
-======================================
+Lab 2.4 - CIS Usage with ClusterIP Mode
+=======================================
 
 Now that CIS is up and running, let's deploy an application and leverage our
 new service.

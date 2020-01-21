@@ -1,8 +1,8 @@
-Lab 2.2 - F5 CIS Usage & NodePort Mode
+Lab 2.2 - CIS Usage with NodePort Mode
 ======================================
 
-Now that our container connector is up and running, let's deploy an
-application and leverage our F5 CC.
+Now that CIS is up and running, let's deploy an application and leverage the
+new service.
 
 For this lab we'll use a simple pre-configured docker image called
 "f5-hello-world". It can be found on docker hub at

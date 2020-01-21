@@ -4,22 +4,22 @@ Module 2: F5 Container Ingress Service and Kubernetes
 Overview
 --------
 
-The Container Connector makes L4-L7 services available to users deploying
-microservices-based applications in a containerized infrastructure. The
-CC - Kubernetes allows you to expose a Kubernetes Service outside the cluster
-as a virtual server on a BIG-IP® device entirely through the Kubernetes API.
+The CIS makes L4-L7 services available to users deploying microservices-based
+applications in a containerized infrastructure. CIS - Kubernetes allows you
+to expose a Kubernetes Service outside the cluster as a virtual server on a
+BIG-IP device entirely through the Kubernetes API.
 
 .. seealso:: The official F5 documentation is here:
-   `F5 Container Connector - Kubernetes <http://clouddocs.f5.com/containers/v2/kubernetes/>`_
+   `F5 Container Ingress Services - Kubernetes <http://clouddocs.f5.com/containers/v2/kubernetes/>`_
 
 Architecture
 ------------
 
-The Container Connector for Kubernetes comprises the *f5-k8s-controller* and
-user-defined “F5 resources”. The *f5-k8s-controller* is a Docker container that
-can run in a *Kubernetes Pod*. The “F5 resources” are *Kubernetes ConfigMap*
-resources that pass encoded data to the f5-k8s-controller. These resources tell
-the f5-k8s-controller:
+CIS for Kubernetes comprises the *f5-k8s-controller* and user-defined
+“F5 resources”. The *f5-k8s-controller* is a Docker container that can run in a
+*Kubernetes Pod*. The “F5 resources” are *Kubernetes ConfigMap* resources that
+pass encoded data to the f5-k8s-controller. These resources tell the
+f5-k8s-controller:
 
 - What objects to configure on your BIG-IP.
 
@@ -28,7 +28,7 @@ the f5-k8s-controller:
 
 The f5-k8s-controller watches for the creation and modification of F5 resources
 in Kubernetes. When it discovers changes, it modifies the BIG-IP accordingly.
-For example, for an F5 virtualServer resource, the CC - Kubernetes does the
+For example, for an F5 virtualServer resource, CIS - Kubernetes does the
 following:
 
 - Creates objects to represent the virtual server on the BIG-IP in the
@@ -45,13 +45,12 @@ following:
 Prerequisites
 -------------
 
-Before being able to use the F5 Container Connector, you need to confirm the
-following:
+Before being able to use F5 CIS, you need to confirm the following:
 
-- You must have a fully active/licensed BIG-IP
-- A BIG-IP partition needs to be setup for the Container Connector.
+- You must have a fully active/licensed BIG-IP (SDN must be licensed)
+- A BIG-IP partition needs to be setup for exclusive use by CIS
 - You need a user with administrative access to this partition
-- Your kubernetes environment must be up and running already
+- Your kubernetes environment must be up and running
 
 .. toctree::
    :maxdepth: 1

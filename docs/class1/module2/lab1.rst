@@ -1,16 +1,16 @@
-Lab 2.1 - F5 Container Ingress Service Setup
-============================================
+Lab 2.1 - CIS Install & Configuration (NodePort)
+================================================
 
 The BIG-IP Controller for Kubernetes installs as a
 `Deployment object <https://kubernetes.io/docs/concepts/workloads/controllers/deployment/>`_
 
-.. seealso:: The official CC documentation is here: 
+.. seealso:: The official CIS documentation is here:
    `Install the BIG-IP Controller: Kubernetes <https://clouddocs.f5.com/containers/v2/kubernetes/kctlr-app-install.html>`_
 
 BIG-IP Setup
 ------------
 
-To use F5 Container connector, you'll need a BIG-IP up and running first.
+To use F5 Container Ingress Service, you'll need a BIG-IP up and running first.
 
 Through the Jumpbox, you should have a BIG-IP available at the following
 URL: https://10.1.1.4
@@ -22,7 +22,8 @@ URL: https://10.1.1.4
    just need a LTM VE license for this lab. No specific add-ons are required
    (ask a lab instructor for eval licenses if your license has expired)
 
-#. You need to setup a partition that will be used by F5 Container Connector.
+#. You need to setup a partition that will be used by F5 Container Ingress
+   Service.
 
    .. code-block:: bash
 
@@ -37,13 +38,13 @@ URL: https://10.1.1.4
    .. image:: images/f5-container-connector-bigip-partition-setup.png
 
    With the new partition created, we can go back to Kubernetes to setup the
-   F5 Container connector.
+   F5 Container Ingress Service.
 
-Container Connector Deployment
-------------------------------
+CIS Deployment
+--------------
 
 .. seealso:: For a more thorough explanation of all the settings and options see
-   `F5 Container Connector - Kubernetes <https://clouddocs.f5.com/containers/v2/kubernetes/>`_
+   `F5 Container Ingress Service - Kubernetes <https://clouddocs.f5.com/containers/v2/kubernetes/>`_
 
 Now that BIG-IP is licensed and prepped with the "kubernetes" partition, we
 need to define a `Kubernetes deployment <https://kubernetes.io/docs/user-guide/deployments/>`_
@@ -146,7 +147,7 @@ to hide our bigip credentials.
 
    .. image:: images/f5-container-connector-launch-deployment-controller.png
 
-#. To locate on which node the container connector is running, you can use the
+#. To locate on which node the CIS service is running, you can use the
    following command:
 
    .. code-block:: bash

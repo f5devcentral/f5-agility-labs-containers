@@ -1,16 +1,16 @@
-Lab 2.1 - F5 Container Ingress Service Setup
-============================================
+Lab 2.1 - CIS Install & Configuration (NodePort)
+================================================
 
 The BIG-IP Controller for OpenShift installs as a
 `Deployment object <https://kubernetes.io/docs/concepts/workloads/controllers/deployment/>`_
 
-.. seealso:: The official CC documentation is here:
+.. seealso:: The official CIS documentation is here:
    `Install the BIG-IP Controller: Openshift <https://clouddocs.f5.com/containers/v2/openshift/kctlr-openshift-app-install.html>`_
 
 BIG-IP Setup
 ------------
 
-To use F5 Container connector, you'll need a BIG-IP up and running first.
+To use F5 Container Ingress Service, you'll need a BIG-IP up and running first.
 
 Through the Jumpbox, you should have a BIG-IP available at the following
 URL: https://10.1.1.4
@@ -29,7 +29,7 @@ URL: https://10.1.1.4
 
      .. image:: images/f5-check-partition.png
 
-#. You need to setup a partition that will be used by F5 Container Connector.
+#. You need to setup a partition that will be used by F5 Container Ingress Service.
 
    .. code-block:: bash
 
@@ -74,11 +74,11 @@ URL: https://10.1.1.4
 
    .. image:: images/create-okd-vxlan-tunnel.png
 
-Container Connector Deployment
-------------------------------
+CIS Deployment
+--------------
 
 .. seealso:: For a more thorough explanation of all the settings and options see
-   `F5 Container Connector - Openshift <https://clouddocs.f5.com/containers/v2/openshift/>`_
+   `F5 Container Ingress Service - Openshift <https://clouddocs.f5.com/containers/v2/openshift/>`_
 
 Now that BIG-IP is licensed and prepped with the "okd" partition, we need to
 define a `Kubernetes deployment <https://kubernetes.io/docs/user-guide/deployments/>`_
@@ -254,8 +254,8 @@ to hide our bigip credentials.
 
    .. image:: images/create-okd-vxlan-selfip.png
 
-#. Now we'll create an Openshift F5 Container Connector to do the API calls
-   to/from the F5 device. First we need the "deployment" file.
+#. Now we'll create an Openshift F5 Container Ingress Service to do the API
+   calls to/from the F5 device. First we need the "deployment" file.
 
    .. code-block:: bash
 
@@ -270,7 +270,7 @@ to hide our bigip credentials.
       :linenos:
       :emphasize-lines: 2,5,17,34-38
 
-#. Create the container connector deployment with the following command
+#. Create the CIS deployment with the following command
 
    .. code-block:: bash
 
