@@ -15,13 +15,13 @@ As a reminder, in this module, our cluster setup is:
    * - **Hostname**
      - **IP-ADDR**
      - **Role**
-   * - ose-master1
+   * - okd-master1
      - 10.3.10.21
      - Master
-   * - ose-node1
+   * - okd-node1
      - 10.3.10.22
      - Node
-   * - ose-node2
+   * - okd-node2
      - 10.3.10.23
      - Node
 

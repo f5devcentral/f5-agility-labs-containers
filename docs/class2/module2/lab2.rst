@@ -26,7 +26,7 @@ To deploy our application, we will need to do the following:
 App Deployment
 --------------
 
-On the **ose-master** we will create all the required files:
+On the **okd-master** we will create all the required files:
 
 #. Create a file called ``f5-hello-world-deployment.yaml``
 
@@ -87,11 +87,11 @@ On the **ose-master** we will create all the required files:
    Now that we have deployed our application sucessfully, we can check our
    BIG-IP configuration.  From the browser open https://10.1.1.245
 
-   .. warning:: Don't forget to select the "ose" partition or you'll see
+   .. warning:: Don't forget to select the "okd" partition or you'll see
       nothing.
 
    Here you can see a new Virtual Server, "default_f5-hello-world" was created,
-   listening on 10.3.10.81 in partition "ose".
+   listening on 10.3.10.81 in partition "okd".
 
    .. image:: images/f5-container-connector-check-app-bigipconfig.png
 

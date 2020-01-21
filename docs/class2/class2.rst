@@ -34,17 +34,17 @@ We will leverage the following setup to configure the OpenShift environment.
      - admin/admin
 
        root/default
-   * - ose-master1
+   * - okd-master1
      - 10.3.10.21
      - centos/centos
 
        root/default
-   * - ose-node1
+   * - okd-node1
      - 10.3.10.22
      - centos/centos
 
        root/default
-   * - ose-node2
+   * - okd-node2
      - 10.3.10.23
      - centos/centos
 

@@ -34,11 +34,11 @@ URL: https://10.1.1.245
    .. code-block:: bash
 
       # From the CLI:
-      tmsh create auth partition ose
+      tmsh create auth partition okd
 
       # From the UI:
       GoTo System --> Users --> Partition List
-      - Create a new partition called "ose" (use default settings)
+      - Create a new partition called "okd" (use default settings)
       - Click Finished
 
    .. image:: images/f5-container-connector-bigip-partition-setup.png
@@ -48,31 +48,31 @@ URL: https://10.1.1.245
    .. code-block:: bash
 
       # From the CLI:
-      tmsh create net tunnel vxlan ose-vxlan {app-service none flooding-type multipoint}
+      tmsh create net tunnel vxlan okd-vxlan {app-service none flooding-type multipoint}
 
       # From the UI:
       GoTo Network --> Tunnels --> Profiles --> VXLAN
-      - Create a new profile called "ose-vxlan"
+      - Create a new profile called "okd-vxlan"
       - Set the Flooding Type = Multipoint
       - Click Finished
 
-   .. image:: images/create-ose-vxlan-profile.png
+   .. image:: images/create-okd-vxlan-profile.png
 
 #. Create a vxlan tunnel
 
    .. code-block:: bash
 
       # From the CLI:
-      tmsh create net tunnel tunnel ose-tunnel {key 0 local-address 10.3.10.60 profile ose-vxlan}
+      tmsh create net tunnel tunnel okd-tunnel {key 0 local-address 10.3.10.60 profile okd-vxlan}
 
       # From the UI:
       GoTo Network --> Tunnels --> Tunnel List
-      - Create a new tunnel called "ose-tunnel"
+      - Create a new tunnel called "okd-tunnel"
       - Set the Local Address to 10.3.10.60
-      - Set the Profile to the one previously created called "ose-vxlan"
+      - Set the Profile to the one previously created called "okd-vxlan"
       - Click Finished
 
-   .. image:: images/create-ose-vxlan-tunnel.png
+   .. image:: images/create-okd-vxlan-tunnel.png
 
 Container Connector Deployment
 ------------------------------
@@ -80,12 +80,12 @@ Container Connector Deployment
 .. seealso:: For a more thorough explanation of all the settings and options see
    `F5 Container Connector - Openshift <https://clouddocs.f5.com/containers/v2/openshift/>`_
 
-Now that BIG-IP is licensed and prepped with the "ose" partition, we need to
+Now that BIG-IP is licensed and prepped with the "okd" partition, we need to
 define a `Kubernetes deployment <https://kubernetes.io/docs/user-guide/deployments/>`_
 and create a `Kubernetes secret <https://kubernetes.io/docs/user-guide/secrets/>`_
 to hide our bigip credentials.
 
-#. From the jumpbox open **mRemoteNG** and start a session with ose-master.
+#. From the jumpbox open **mRemoteNG** and start a session with okd-master.
 
    .. note:: As a reminder we're utilizing a wrapper called **MRemoteNG** for
       Putty and other services. MRNG hold credentials and allows for multiple
@@ -94,9 +94,9 @@ to hide our bigip credentials.
 
    On your desktop select **MRemoteNG**, once launched you'll see a few tabs
    similar to the example below.  Open up the OpenShift Enterprise /
-   OSE-Cluster folder and double click ose-master.
+   okd-Cluster folder and double click okd-master.
 
-   .. image:: images/MRemoteNG-ose.png
+   .. image:: images/MRemoteNG-okd.png
 
 #. "git" the demo files
 
@@ -236,23 +236,23 @@ to hide our bigip credentials.
       to communicate to one subnet on the openshift-f5-node. When trying to
       ping across to services on other /23 subnets from the BIG-IP for instance,
       communication will fail as your self-ip doesn't have the proper subnet
-      mask to know those other subnets are local.
+      mask to know thokd other subnets are local.
       
    .. code-block:: bash
       
       # From the CLI:
-      tmsh create net self ose-vxlan-selfip address 10.131.0.1/14 vlan ose-tunnel
+      tmsh create net self okd-vxlan-selfip address 10.131.0.1/14 vlan okd-tunnel
 
       # From the UI:
       GoTo Network --> Self IP List
-      - Create a new Self-IP called "ose-vxlan-selfip"
+      - Create a new Self-IP called "okd-vxlan-selfip"
       - Set the IP Address to "10.131.0.1". (An IP from the subnet assigned in the previous step.)
       - Set the Netmask to "255.252.0.0"
-      - Set the VLAN / Tunnel to "ose-tunnel" (Created earlier)
+      - Set the VLAN / Tunnel to "okd-tunnel" (Created earlier)
       - Set Port Lockdown to "Allow All"
       - Click Finished
 
-   .. image:: images/create-ose-vxlan-selfip.png
+   .. image:: images/create-okd-vxlan-selfip.png
 
 #. Now we'll create an Openshift F5 Container Connector to do the API calls
    to/from the F5 device. First we need the "deployment" file.
@@ -293,11 +293,11 @@ to hide our bigip credentials.
          
    .. code-block:: bash
 
-      # ping ose-master
+      # ping okd-master
       ping -c 4 10.128.0.1
 
-      # ping ose-node1
+      # ping okd-node1
       ping -c 4 10.129.0.1
 
-      # ping ose-node2
+      # ping okd-node2
       ping -c 4 10.130.0.1

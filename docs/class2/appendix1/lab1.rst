@@ -15,9 +15,9 @@ Lab 1.1 - Prep CentOS
    following servers. The sessions are pre-configured to connect with the
    default user “centos”.
 
-   - ose-master1
-   - ose-node1
-   - ose-node2
+   - okd-master1
+   - okd-node1
+   - okd-node2
 
    .. image:: images/MremoteNG.png
 
@@ -72,9 +72,9 @@ Lab 1.1 - Prep CentOS
 
       #cut and paste the following lines to /etc/hosts
 
-      10.3.10.21    ose-master1
-      10.3.10.22    ose-node1
-      10.3.10.23    ose-node2
+      10.3.10.21    okd-master1
+      10.3.10.22    okd-node1
+      10.3.10.23    okd-node2
 
 #. The lab VM's have updated host names and should match the "hosts" file.
    Verify the hostname:
@@ -88,9 +88,9 @@ Lab 1.1 - Prep CentOS
 
    .. code-block:: bash
 
-      sudo hostnamectl set-hostname ose-master1
-      sudo hostnamectl set-hostname ose-node1
-      sudo hostnamectl set-hostname ose-node2
+      sudo hostnamectl set-hostname okd-master1
+      sudo hostnamectl set-hostname okd-node1
+      sudo hostnamectl set-hostname okd-node2
 
 #. Create, share, and test the SSH key. **Master only**
 
@@ -109,17 +109,17 @@ Lab 1.1 - Prep CentOS
 
    .. code-block:: bash
 
-      ssh-copy-id -i ~/.ssh/id_rsa.pub centos@ose-master1
-      ssh-copy-id -i ~/.ssh/id_rsa.pub centos@ose-node1
-      ssh-copy-id -i ~/.ssh/id_rsa.pub centos@ose-node2
+      ssh-copy-id -i ~/.ssh/id_rsa.pub centos@okd-master1
+      ssh-copy-id -i ~/.ssh/id_rsa.pub centos@okd-node1
+      ssh-copy-id -i ~/.ssh/id_rsa.pub centos@okd-node2
 
    Test SSH connectivity from master to nodes:
 
    .. code-block:: bash
 
-      ssh ose-master1
-      ssh ose-node1
-      ssh ose-node2
+      ssh okd-master1
+      ssh okd-node1
+      ssh okd-node2
 
 #. Install NetworkManager (openshift required)
 

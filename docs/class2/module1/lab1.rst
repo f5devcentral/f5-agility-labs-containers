@@ -45,9 +45,9 @@ Access The JumpBox
    following servers. The sessions are pre-configured to connect with the
    default user “centos”.
 
-   - ose-master1
-   - ose-node1
-   - ose-node2
+   - okd-master1
+   - okd-node1
+   - okd-node2
 
    .. image:: images/MremoteNG.png
 
@@ -71,9 +71,9 @@ Access The JumpBox
 
       #cut and paste the following lines to /etc/hosts
 
-      10.3.10.21    ose-master1
-      10.3.10.22    ose-node1
-      10.3.10.23    ose-node2
+      10.3.10.21    okd-master1
+      10.3.10.22    okd-node1
+      10.3.10.23    okd-node2
 
 Accessing OpenShift
 -------------------
@@ -85,7 +85,7 @@ of the platform.
 
 #. Login to OpenShift master
 
-   From the previous step go back to the open terminal on **ose-master1** and
+   From the previous step go back to the open terminal on **okd-master1** and
    login to openshift using the following command:
 
    .. code-block:: bash
@@ -134,7 +134,7 @@ of the platform.
 
    .. code-block:: bash
 
-      oc describe node ose-master1
+      oc describe node okd-master1
 
    .. image:: images/oc-describe-node.png
 
@@ -158,7 +158,7 @@ of the platform.
      
 #. Access OpenShift web console
 
-   From the jumpbox open a browser and navigate to https://ose-master1:8443 and
+   From the jumpbox open a browser and navigate to https://okd-master1:8443 and
    login with the user/password provided.
 
    Use the following username and password
@@ -183,7 +183,7 @@ sosreport that includes docker and OpenShift related information. The process
 to collect a sosreport is the same as with any other Red Hat Enterprise Linux
 (RHEL) based system:
 
-.. note:: The following is provided for informational purposes. You do not
+.. note:: The following is provided for informational purpokds. You do not
    need to run these commands for the lab.
 
 .. code-block:: bash
