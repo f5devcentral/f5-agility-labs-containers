@@ -36,3 +36,4 @@ The purpose of these labs is to give you better understanding of...
 
    intro
    class*/class*
+   appendix/appendix*

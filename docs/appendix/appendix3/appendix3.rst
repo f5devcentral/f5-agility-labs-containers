@@ -1,7 +1,7 @@
-Class 1: Introduction to RedHat OpenShift
-=========================================
+Appendix 3: Advanced Red Hat OpenShift
+======================================
 
-This introductory class covers the following topics:
+The purpose of this lab is to give you more visibility on
 
 .. toctree::
    :maxdepth: 1
@@ -10,12 +10,13 @@ This introductory class covers the following topics:
    module*/module*
    appendix*/appendix*
 
-Expected time to complete: **1 hour**
+Expected time to complete: **3 hours**
 
 Lab Setup
 ---------
 
-We will leverage the following setup to configure the OpenShift environment.
+In the environment, there is a three-node OpenShift cluster with one master
+and two nodes. There is a pair of BIG-IPs setup in an HA configuration:
 
 .. list-table::
    :header-rows: 1
@@ -30,6 +31,14 @@ We will leverage the following setup to configure the OpenShift environment.
      - 10.1.1.245
 
        10.3.10.60
+
+     - admin/admin
+
+       root/default
+   * - bigip2
+     - 10.1.1.246
+
+       10.3.10.61
 
      - admin/admin
 

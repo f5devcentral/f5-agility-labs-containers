@@ -1,63 +1,83 @@
-Lab 1.2 Run a Container on Docker
-=================================
+Kubernetes Networking Overview
+==============================
 
-.. seealso:: This is only a very basic introduction to docker. For everything
-   else see `Docker Documentation <https://docs.docker.com/>`_
+This is an extract from `Networking in Kubernetes <http://http://kubernetes.io/docs/admin/networking/>`_
 
-#. Continuing from where we left off on the jumpbox go back to the
-   **kube-master1** session.
+Summary
+-------
 
-#. Now that docker is up and running and confirmed to be working lets deploy
-   the latest `Apache web server <https://hub.docker.com/_/httpd/>`_.
+Kubernetes assumes that pods can communicate with other pods, regardless of
+which host they land on. We give every pod its own IP address so you do not
+need to explicitly create links between pods and you almost never need to deal
+with mapping container ports to host ports. This creates a clean,
+backwards-compatible model where pods can be treated much like VMs or physical
+hosts from the perspectives of port allocation, naming, service discovery,
+load balancing, application configuration, and migration
 
-   .. note:: The ``docker run`` command will first look for a local cache of
-      the container **httpd**, and upon comparing that copy to the latest
-      instance, decide to either download an update or use the local copy.
-      Since there is no local copy, docker will download the container
-      **httpd** to your local cache.  This can take a few seconds (or longer),
-      depending on container size and your bandwidth. Docker will chunk this
-      into parts called a pull.
+Docker Model
+------------
 
-      ``--rm`` "tells docker to remove the container after stopping"
+Before discussing the Kubernetes approach to networking, it is worthwhile to
+review the “normal” way that networking works with Docker.
 
-      ``--name`` "give the container a memorable name"
+By default, Docker uses host-private networking. It creates a virtual bridge,
+called docker0 by default, and allocates a subnet from one of the private
+address blocks defined in `RFC1918 <https://tools.ietf.org/html/rfc1918>`_ for
+that bridge. For each container that Docker creates, it allocates a virtual
+ethernet device (called veth) which is attached to the bridge. The veth is
+mapped to appear as eth0 in the container, using Linux namespaces. The
+in-container eth0 interface is given an IP address from the bridge’s address
+range. The result is that Docker containers can talk to other containers only
+if they are on the same machine (and thus the same virtual bridge). Containers
+on different machines can not reach each other - in fact they may end up with
+the exact same network ranges and IP addresses. In order for Docker containers
+to communicate across nodes, they must be allocated ports on the machine’s own
+IP address, which are then forwarded or proxied to the containers. This
+obviously means that containers must either coordinate which ports they use
+very carefully or else be allocated ports dynamically.
 
-      ``-d`` "tells docker to run detached. Without this the container would
-      run in foreground and stop upon exit"
+Kubernetes Model
+----------------
 
-      ``-it`` "this allows for interactive process, like shell, used together
-      in order to allocate a tty for the container process"
+Coordinating ports across multiple containers is very difficult to do at scale
+and exposes users to cluster-level issues outside of their control. Dynamic
+port allocation brings a lot of complications to the system - every
+application has to take ports as flags, the API servers have to know how
+to insert dynamic port numbers into configuration blocks, services have to
+know how to find each other, etc. Rather than deal with this, Kubernetes takes
+a different approach.
 
-      ``-P`` "tells docker to auto assign any required ephemeral port and map
-      it to the container"
+Kubernetes imposes the following fundamental requirements on any networking
+implementation (barring any intentional network segmentation policies):
 
-   .. code-block:: bash
+- All containers can communicate with all other containers without NAT
+- All nodes can communicate with all containers (and vice-versa) without NAT
+- The IP that a container sees itself as is the same IP that others see it as
+- What this means in practice is that you can not just take two computers
+  running Docker and expect Kubernetes to work. You must ensure that the
+  fundamental requirements are met.
 
-      docker run --rm --name "myapache" -d -it -P httpd:latest
+Kubernetes applies IP addresses at the *Pod* scope - containers within a Pod
+share their network namespaces - including their IP address. This means that
+containers within a Pod can all reach each other’s ports on **localhost**.
+This does imply that containers within a Pod must coordinate port usage, but
+this is no different than processes in a VM. We call this the *IP-per-pod*
+model. This is implemented in Docker as a *pod container* which holds the
+network namespace open while “app containers” (the things the user specified)
+join that namespace with Docker’s **--net=container:<id>** function
 
-#. If everything is working properly you should see your container running.
+How to achieve this
+-------------------
 
-   .. note:: ``-f`` "lets us filter on key:pair"
+There are a number of ways that this network model can be implemented. Here is
+a list of possible options:
 
-   .. code-block:: bash
+- `Contiv Netplugin <https://github.com/contiv/netplugin>`_
+- `Flannel <https://github.com/coreos/flannel#flannel>`_
+- `Open vSwitch <https://www.openvswitch.org/>`_
+- `Calico <http://docs.projectcalico.org/>`_
+- `Romana <http://romana.io/>`_
+- `Weave Net <https://www.weave.works/products/weave-net/>`_
+- `L2 networks and linux bridging <http://blog.oddbit.com/2014/08/11/four-ways-to-connect-a-docker/>`_
 
-      docker ps -f name=myapache
-
-   .. image:: images/docker-ps-myapache.png
-
-   .. note:: The "PORTS" section shows the container mapping.  In this case the
-      nodes local IP and port 32768 are mapped to the container.  We can use
-      this info to connect to the container in the next step.
-
-#. The httpd container "myapache, is running on kube-master1 (10.1.10.21) and
-   port 32768. To test, connect to the webserver via chrome.
-
-   .. code-block:: bash
-
-      http://ip:port
-
-   .. image:: images/myapache.png
-
-.. attention:: That's it, you installed docker, downloaded a container, ran the
-   Hello World container, ran a web server container, and accessed your web
-   server container via the browser.
+.. important:: For this lab, we will use **Flannel**.

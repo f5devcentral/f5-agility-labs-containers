@@ -1,5 +1,5 @@
-Class 1: Introduction to Kubernetes
-===================================
+Appendix 1: Introduction to Docker
+==================================
 
 This introductory class covers the following topics:
 
@@ -9,12 +9,12 @@ This introductory class covers the following topics:
 
    module*/module*
 
-Expected time to complete: **1 hour**
+Expected time to complete: **15 minutes**
 
 Lab Setup
 ---------
 
-We will leverage the following setup to configure the Kubernetes environment.
+We will leverage the kubernetes VM's to configure the Docker environment.
 
 .. list-table::
    :header-rows: 1

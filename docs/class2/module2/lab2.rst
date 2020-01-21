@@ -1,130 +1,151 @@
-Lab 2.2 - Setup the Master
-==========================
+Lab 2.2 - F5 Container Connector Usage
+======================================
 
-The master is the system where the "control plane" components run, including
-etcd (the cluster database) and the API server (which the kubectl CLI
-communicates with). All of these components run in pods started by kubelet
-(which is why we had to setup docker first even on the master node)
+Now that our container connector is up and running, let's deploy an
+application and leverage our F5 CC.
 
-.. important:: The following commands need to be run on the **master** only
-   unless otherwise specified.
+For this lab we'll use a simple pre-configured docker image called
+"f5-hello-world". It can be found on docker hub at
+`f5devcentral/f5-hello-world <https://hub.docker.com/r/f5devcentral/f5-hello-world/>`_
 
-#. Switch back to the ssh session connected to kube-master1
+To deploy our application, we will need to do the following:
 
-   .. tip:: This session should be running from the previous if lab.
-      If not simply open **mRemoteNG** and connect via the saved session.
+#. Define a Deployment: this will launch our application running in a
+   container.
+#. Define a ConfigMap: this can be used to store fine-grained information like
+   individual properties or coarse-grained information like entire config files
+   or JSON blobs. It will contain the BIG-IP configuration we need to push.
+#. Define a Service: this is an abstraction which defines a logical set of
+   *pods* and a policy by which to access them. Expose the *service* on a port
+   on each node of the cluster (the same port on each *node*). You’ll be able
+   to contact the service on any <NodeIP>:NodePort address. If you set the type
+   field to "NodePort", the Kubernetes master will allocate a port from a
+   flag-configured range **(default: 30000-32767)**, and each Node will proxy
+   that port (the same port number on every Node) into your *Service*.
 
-#. Initialize kubernetes
+App Deployment
+--------------
 
-   .. code-block:: bash
+On the **ose-master** we will create all the required files:
 
-      kubeadm init --apiserver-advertise-address=10.1.10.21 --pod-network-cidr=10.244.0.0/16
+#. Create a file called ``f5-hello-world-deployment.yaml``
 
-   .. note::
-      - The IP address used to advertise the master. 10.1.10.0/24 is the
-        network for our control plane. if you don't specify the
-        --apiserver-advertise-address argument, kubeadm will pick the first
-        interface with a default gateway (because it needs internet access).
+   .. tip:: Use the file in /root/f5-agility-labs-containers/openshift
 
-      - 10.244.0.0/16 is the default network used by flannel. We'll setup
-        flannel in a later step.
+   .. literalinclude:: ../../../openshift/f5-hello-world-deployment.yaml
+      :language: yaml
+      :linenos:
+      :emphasize-lines: 2,6,14
 
-      - Be patient this step takes a few minutes. The initialization is
-        successful if you see "Your Kubernetes master has initialized
-        successfully!".
+#. Create a file called ``f5-hello-world-configmap.yaml``
 
-   .. image:: images/cluster-setup-guide-kubeadm-init-master.png
+   .. tip:: Use the file in /root/f5-agility-labs-containers/openshift
 
-   .. important:: 
-      - Be sure to save the highlighted output from this command to notepad.
-        You'll need this information to add your worker nodes and configure
-        user administration.
+   .. literalinclude:: ../../../openshift/f5-hello-world-configmap.yaml
+      :language: yaml
+      :linenos:
+      :emphasize-lines: 2,5,7,9,16,18
 
-      - The "kubeadm join" command is run on the nodes to register themselves
-        with the master. Keep the secret safe since anyone with this token can
-        add an authenticated node to your cluster. This is used for mutual auth
-        between the master and the nodes.
+#. Create a file called ``f5-hello-world-service-cluster.yaml``
 
-#. Configure kubernetes administration. At this point you should be logged in
-   as root. The following will update both root and ubuntu user accounts for
-   kubernetes administration.
+   .. tip:: Use the file in /root/f5-agility-labs-containers/openshift
 
-   .. code-block:: bash
+   .. literalinclude:: ../../../openshift/f5-hello-world-service-cluster.yaml
+      :language: yaml
+      :linenos:
+      :emphasize-lines: 2,12
 
-      mkdir -p $HOME/.kube
-      sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
-      sudo chown $(id -u):$(id -g) $HOME/.kube/config
-      exit
-      mkdir -p $HOME/.kube
-      sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
-      sudo chown $(id -u):$(id -g) $HOME/.kube/config
-      cd $HOME
-
-#. Verify kubernetes is up and running. You can monitor the services are
-   running by using the following command.
+#. We can now launch our application:
 
    .. code-block:: bash
 
-      kubectl get pods --all-namespaces
+      oc create -f f5-hello-world-deployment.yaml
+      oc create -f f5-hello-world-configmap.yaml
+      oc create -f f5-hello-world-service-cluster.yaml
 
-   You'll need to run this several times until you see several containers
-   "Running"  It should look like the following:
+   .. image:: images/f5-container-connector-launch-app.png
 
-   .. image:: images/cluster-setup-guide-kubeadmin-init-check.png
-
-   .. note:: corends won't start until the network pod is up and running.
-
-#. Install flannel
+#. To check the status of our deployment, you can run the following commands:
 
    .. code-block:: bash
 
-      kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
+      oc get pods -o wide
 
-   .. note:: You must install a *pod* network add-on so that your *pods* can
-      communicate with each other. **It is necessary to do this before you try
-      to deploy any applications to your cluster**, and before "coredns" will
-      start up.
-
-#. If everything installs and starts as expected you should have "coredns" and
-   all services status "Running". To check the status of core services, you
-   can run the following command:
+   .. image:: images/f5-hello-world-pods.png
 
    .. code-block:: bash
 
-      kubectl get pods --all-namespaces
+      oc describe svc f5-hello-world
+        
+   .. image:: images/f5-container-connector-check-app-definition.png
 
-   The output should show all services as running.
+#. To test the app you need to pay attention to: 
 
-   .. image:: images/cluster-setup-guide-kubeadmin-init-check-cluster-get-pods.png
+   **The Endpoints**, that's our 2 instances (defined as replicas in our
+   deployment file) and the port assigned to the service: port 8080.
 
-   .. important:: Before moving to the next lab, "Setup the Nodes" wait for
-      all system pods to show status “Running”.
+   Now that we have deployed our application sucessfully, we can check our
+   BIG-IP configuration.  From the browser open https://10.1.1.245
 
-#. Additional kubernetes status checks.
+   .. warning:: Don't forget to select the "ose" partition or you'll see
+      nothing.
+
+   Here you can see a new Virtual Server, "default_f5-hello-world" was created,
+   listening on 10.3.10.81 in partition "ose".
+
+   .. image:: images/f5-container-connector-check-app-bigipconfig.png
+
+   Check the Pools to see a new pool and the associated pool members:
+   Local Traffic --> Pools --> "cfgmap_default_f5-hello-world_f5-hello-world"
+   --> Members
+
+   .. image:: images/f5-container-connector-check-app-bigipconfig2.png
+
+   .. note:: You can see that the pool members IP addresses are assigned from
+      the overlay network (**ClusterIP mode**)
+
+#. Now access your application via the BIG-IP VIP: 10.3.10.81
+
+   .. image:: images/f5-container-connector-access-app.png
+
+#. Hit Refresh many times and go back to your **BIG-IP** UI, go to Local
+   Traffic --> Pools --> Pool list -->
+   cfgmap_default_f5-hello-world_f5-hello-world -->
+   Statistics to see that traffic is distributed as expected.
+
+   .. image:: images/f5-container-connector-check-app-bigip-stats.png
+
+#. Scale the f5-hello-world app
 
    .. code-block:: bash
 
-      kubectl get cs
+      oc scale --replicas=10 deployment/f5-hello-world
 
-   .. image:: images/cluster-setup-guide-kubeadmin-init-check-cluster.png
-
-   .. code-block:: bash
-
-      kubectl cluster-info
-      
-   .. image:: images/cluster-setup-guide-kubeadmin-init-check-cluster-info.png
-
-.. hint:: If you made a mistake and need to re-initialize the cluster run
-   the following commands:
+#. Check the pods were created
 
    .. code-block:: bash
 
-      # If you followed the instructions you should be currently connected as user **ubuntu**
-      # When prompted for password enter "default" without the quotes
-      su -
+      oc get pods
 
-      # This resets the master to default settings
-      kubeadm reset --force
-      
-      # This removes the admin references to the broken cluster
-      rm -rf /home/ubuntu/.kube /root/.kube
+   .. image:: images/f5-hello-world-pods-scale10.png
+
+#. Check the pool was updated on big-ip
+
+   .. image:: images/f5-hello-world-pool-scale10.png
+
+   .. attention:: Which network(s) are the IPs allocated from?
+
+#. Cleanup deployment
+
+   .. important:: This needs to be done before attempting Class 5
+
+   .. code-block:: bash
+
+      oc delete -f f5-hello-world-service-cluster.yaml
+      oc delete -f f5-hello-world-configmap.yaml
+      oc delete -f f5-hello-world-deployment.yaml
+      oc delete -f f5-cluster-deployment.yaml
+      oc delete -f f5-bigip-hostsubnet.yaml
+      oc delete clusterrolebinding k8s-bigip-ctlr-clusteradmin
+      oc delete serviceaccount k8s-bigip-ctlr -n kube-system
+      oc delete secret bigip-login -n kube-system

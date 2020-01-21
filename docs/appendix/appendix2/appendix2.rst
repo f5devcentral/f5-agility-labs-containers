@@ -1,5 +1,5 @@
-Class 1: Introduction to Kubernetes
-===================================
+Appendix 2: Introduction to Mesos / Marathon
+============================================
 
 This introductory class covers the following topics:
 
@@ -8,13 +8,15 @@ This introductory class covers the following topics:
    :glob:
 
    module*/module*
+   appendix*/appendix*
 
-Expected time to complete: **1 hour**
+Expected time to complete: **30 minutes**
 
 Lab Setup
 ---------
 
-We will leverage the following setup to configure the Kubernetes environment.
+We will leverage the following setup to configure the Mesos / Marathon
+environment.
 
 .. list-table::
    :header-rows: 1
@@ -28,23 +30,23 @@ We will leverage the following setup to configure the Kubernetes environment.
    * - bigip1
      - 10.1.1.245
 
-       10.1.10.60
+       10.2.10.60
 
      - admin/admin
 
        root/default
-   * - kube-master1
-     - 10.1.10.21
+   * - mesos-master1
+     - 10.2.10.21
      - ubuntu/ubuntu
-
+    
        root/default
-   * - kube-node1
-     - 10.1.10.22
+   * - mesos-agent1
+     - 10.2.10.22
      - ubuntu/ubuntu
-
+      
        root/default
-   * - kube-node2
-     - 10.1.10.23
+   * - mesos-agent2
+     - 10.2.10.23
      - ubuntu/ubuntu
-
+    
        root/default
