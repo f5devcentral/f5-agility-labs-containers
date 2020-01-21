@@ -1,5 +1,5 @@
-Appendix 3: Advanced Red Hat OpenShift
-======================================
+Appendix 3: Advanced OpenShift Topics
+=====================================
 
 The purpose of this lab is to give you more visibility on
 

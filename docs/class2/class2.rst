@@ -1,5 +1,5 @@
-Class 1: Introduction to RedHat OpenShift
-=========================================
+Class 2: Introduction to CIS & OpenShift
+========================================
 
 This introductory class covers the following topics:
 

@@ -1,144 +1,209 @@
-Lab 2.1 - Prep Ubuntu
-=====================
+Lab 2.1 - F5 Container Ingress Service Setup
+============================================
 
-.. note::  This installation will utilize Ubuntu v18.04 (Bionic)
+The BIG-IP Controller for Kubernetes installs as a
+`Deployment object <https://kubernetes.io/docs/concepts/workloads/controllers/deployment/>`_
 
-.. important:: The following commands need to be run on all three nodes
-   unless otherwise specified.
+.. seealso:: The official CC documentation is here: 
+   `Install the BIG-IP Controller: Kubernetes <https://clouddocs.f5.com/containers/v2/kubernetes/kctlr-app-install.html>`_
 
-#. From the jumpbox open **mRemoteNG** and start a session to each of the
-   following servers. The sessions are pre-configured to connect with the
-   default user “ubuntu”.
+BIG-IP Setup
+------------
 
-   - kube-master1
-   - kube-node1
-   - kube-node2
+To use F5 Container connector, you'll need a BIG-IP up and running first.
 
-   .. tip:: These sessions should be running from the previous Docker lab.
+Through the Jumpbox, you should have a BIG-IP available at the following
+URL: https://10.1.1.245
 
-   .. image:: images/MremoteNG.png
+.. warning:: Connect to your BIG-IP and check it is active and licensed. Its
+   login and password are: **admin/admin**
 
-#. If not already done from the previous Docker lab elevate to "root"
+   If your BIG-IP has no license or its license expired, renew the license. You
+   just need a LTM VE license for this lab. No specific add-ons are required
+   (ask a lab instructor for eval licenses if your license has expired)
 
-   .. code-block:: bash
-
-      su - 
-      
-      #When prompted for password enter "default" without the quotes
-      
-   Your prompt should change to root@ at the start of the line :
-
-   .. image:: images/rootuser.png
-
-#. For your convenience we've already added the host IP & names to /etc/hosts.
-   Verify the file
+#. You need to setup a partition that will be used by F5 Container Connector.
 
    .. code-block:: bash
 
-      cat /etc/hosts
+      # From the CLI:
+      tmsh create auth partition kubernetes
 
-   The file should look like this:
+      # From the UI:
+      GoTo System --> Users --> Partition List
+      - Create a new partition called "kubernetes" (use default settings)
+      - Click Finished
 
-   .. image:: images/ubuntu-hosts-file.png
+   .. image:: images/f5-container-connector-bigip-partition-setup.png
 
-   If entries are not there add them to the bottom of the file be editing
-   "/etc/hosts" with 'vim'
+   With the new partition created, we can go back to Kubernetes to setup the
+   F5 Container connector.
 
-   .. code-block:: bash
+Container Connector Deployment
+------------------------------
 
-      vim /etc/hosts
+.. seealso:: For a more thorough explanation of all the settings and options see
+   `F5 Container Connector - Kubernetes <https://clouddocs.f5.com/containers/v2/kubernetes/>`_
 
-      #cut and paste the following lines to /etc/hosts
+Now that BIG-IP is licensed and prepped with the "kubernetes" partition, we
+need to define a `Kubernetes deployment <https://kubernetes.io/docs/user-guide/deployments/>`_
+and create a `Kubernetes secret <https://kubernetes.io/docs/user-guide/secrets/>`_
+to hide our bigip credentials.
 
-      10.1.10.21    kube-master1
-      10.1.10.22    kube-node1
-      10.1.10.23    kube-node2
+#. From the jumpbox open **mRemoteNG** and start a session with Kube-master.
 
-#. The linux swap file needs to be disabled, this is not the case by default.
-   Again for your convenience we disabled swap. Verify the setting
+   .. tip:: 
+      - These sessions should be running from the previous lab.
+      - As a reminder we're utilizing a wrapper called **MRemoteNG** for
+        Putty and other services. MRNG hold credentials and allows for multiple
+        protocols(i.e. SSH, RDP, etc.), makes jumping in and out of SSH
+        connections easier.
 
-   .. important:: Running a swap file is incompatible with Kubernetes.  Lets
-      use the linux top command, which allows users to monitor processes and
-      system resource usage
+   On your desktop select **MRemoteNG**, once launched you'll see a few tabs
+   similar to the example below.  Open up the Kubernetes / Kubernetes-Cluster
+   folder and double click kube-master1.
 
-   .. code-block:: bash
+   .. image:: images/MRemoteNG-kubernetes.png
 
-      top
+#. "git" the demo files
 
-   .. image:: images/top.png
-
-   If you see a number other than "0" you need to run the following commands
-   (press 'q' to quit top)
-
-   .. code-block:: bash
-
-      swapoff -a
-
-      vim /etc/fstab
-
-      #rem out the highlighted line below by adding "#" to the beginning of the line, write and save the file by typing ":wq"
-
-   .. image:: images/disable-swap.png
-
-#. Ensure the OS is up to date, run the following command
-
-   .. tip:: You can skip this step if it was done in the previous Docker lab.
+   .. note:: These files should be here by default, if **NOT** run the
+      following commands.
 
    .. code-block:: bash
 
-      apt update && apt upgrade -y
+      git clone https://github.com/f5devcentral/f5-agility-labs-containers.git ~/agilitydocs
 
-      #This can take a few seconds to several minute depending on demand to download the latest updates for the OS.
+      cd ~/agilitydocs/kubernetes
 
-#. Install docker-ce
-
-   .. attention:: This was done earlier in 
-      `Class 1 / Module1 / Lab 1.1: Install Docker <../../class1/module1/lab1.html>`_
-      . If skipped go back and install Docker by clicking the link.
-
-#. Configure docker to use the correct cgroupdriver
-
-   .. important:: The cgroupdrive for docker and kubernetes have to match. In
-      this lab "cgroupfs" is the correct driver.
-
-   .. note:: This next part can be a bit tricky - just copy/paste the 5 lines
-      below exactly as they are and paste via buffer to the CLI (and press
-      return when done)
+#. Create bigip login secret
 
    .. code-block:: bash
 
-      cat << EOF > /etc/docker/daemon.json
-      {
-      "exec-opts": ["native.cgroupdriver=cgroupfs"]
-      }
-      EOF
+      kubectl create secret generic bigip-login -n kube-system --from-literal=username=admin --from-literal=password=admin
 
-   It should look something like this image below:
+   You should see something similar to this:
 
-   .. image:: images/goodEOL.png
+   .. image:: images/f5-container-connector-bigip-secret.png
 
-#. Add the kubernetes repo
+#. Create kubernetes service account for bigip controller
 
    .. code-block:: bash
 
-      curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
+      kubectl create serviceaccount k8s-bigip-ctlr -n kube-system
 
-      cat <<EOF > /etc/apt/sources.list.d/kubernetes.list
-      deb http://apt.kubernetes.io/ kubernetes-xenial main
-      EOF
+   You should see something similar to this:
 
-#. Install the kubernetes packages
+   .. image:: images/f5-container-connector-bigip-serviceaccount.png
+
+#. Create cluster role for bigip service account (admin rights, but can be
+   modified for your environment)
 
    .. code-block:: bash
 
-      apt update && apt install kubelet kubeadm kubectl -y
+      kubectl create clusterrolebinding k8s-bigip-ctlr-clusteradmin --clusterrole=cluster-admin --serviceaccount=kube-system:k8s-bigip-ctlr
 
-Limitations
------------
+   You should see something similar to this:
 
-.. seealso:: For a full list of the limitations go here:
-   `kubeadm limitations <http://kubernetes.io/docs/getting-started-guides/kubeadm/#limitations>`_
+   .. image:: images/f5-container-connector-bigip-clusterrolebinding.png
 
-.. important:: The cluster created has a single master, with a single etcd
-   database running on it. This means that if the master fails, your cluster
-   loses its configuration data and will need to be recreated from scratch.
+#. At this point we have two deployment mode options, Nodeport or Cluster.
+   For more information see
+   `BIG-IP Controller Modes <http://clouddocs.f5.com/containers/v2/kubernetes/kctlr-modes.html>`_
+
+   .. important:: This lab will focus on **Nodeport**. In Class 4 Openshift
+      we'll use **ClusterIP**.
+
+#. **Nodeport mode** ``f5-nodeport-deployment.yaml``
+
+   .. note:: 
+      - For your convenience the file can be found in
+        /home/ubuntu/agilitydocs/kubernetes (downloaded earlier in the clone
+        git repo step).
+      - Or you can cut and paste the file below and create your own file.
+      - If you have issues with your yaml and syntax (**indentation MATTERS**),
+        you can try to use an online parser to help you :
+        `Yaml parser <http://codebeautify.org/yaml-validator>`_
+
+   .. literalinclude:: ../../../kubernetes/f5-nodeport-deployment.yaml
+      :language: yaml
+      :linenos:
+      :emphasize-lines: 2,17,34,35,37
+
+#. Once you have your yaml file setup, you can try to launch your deployment.
+   It will start our f5-k8s-controller container on one of our nodes (may take
+   around 30sec to be in a running state):
+
+   .. code-block:: bash
+
+      kubectl create -f f5-nodeport-deployment.yaml
+
+#. Verify the deployment "deployed"
+
+   .. code-block:: bash
+
+      kubectl get deployment k8s-bigip-ctlr-deployment --namespace kube-system
+
+   .. image:: images/f5-container-connector-launch-deployment-controller.png
+
+#. To locate on which node the container connector is running, you can use the
+   following command:
+
+   .. code-block:: bash
+
+      kubectl get pods -o wide -n kube-system
+
+   We can see that our container is running on kube-node2 below.
+
+   .. image:: images/f5-container-connector-locate-controller-container.png
+
+Troubleshooting
+---------------
+
+If you need to troubleshoot your container, you have two different ways to
+check the logs of your container, kubectl command or docker command.
+
+#. Using kubectl command: you need to use the full name of your pod as
+   showed in the previous image
+
+   .. code-block:: bash
+
+      # For example:
+      kubectl logs k8s-bigip-ctlr-deployment-5b74dd769-x55vx -n kube-system
+
+   .. image:: images/f5-container-connector-check-logs-kubectl.png
+
+#. Using docker logs command: From the previous check we know the container
+   is running on kube-node1.  Via mRemoteNG open a session to kube-node1 and
+   run the following commands:
+
+   .. code-block:: bash
+
+      sudo docker ps
+
+   Here we can see our container ID is "01a7517b50c5"
+
+   .. image:: images/f5-container-connector-find-dockerID--controller-container.png
+
+   Now we can check our container logs:
+
+   .. code-block:: bash
+
+      sudo docker logs 01a7517b50c5
+
+   .. image:: images/f5-container-connector-check-logs-controller-container.png
+
+   .. note:: The log messages here are identical to the log messages displayed
+      in the previous kubectl logs command. 
+
+#. You can connect to your container with kubectl as well:
+
+   .. code-block:: bash
+
+      kubectl exec -it k8s-bigip-ctlr-deployment-79fcf97bcc-48qs7 -n kube-system  -- /bin/sh
+
+      cd /app
+
+      ls -la
+
+      exit

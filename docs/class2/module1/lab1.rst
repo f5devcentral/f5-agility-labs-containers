@@ -1,5 +1,5 @@
-Lab 1.1 - Redhat OpenShift Overview
-===================================
+OpenShift Overview
+==================
 
 Red Hat’s OpenShift Origin is a containerized application platform with a
 native Kubernetes integration. The BIG-IP Controller for Kubernetes enables

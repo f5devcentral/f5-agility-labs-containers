@@ -1,5 +1,5 @@
-Module 2: F5 Container Connector with RedHat OpenShift
-======================================================
+Module 2: F5 Container Ingress Service and OpenShift
+====================================================
 
 The F5 Integration for Kubernetes overview describes how the BIG-IP Controller
 works with Kubernetes. Because OpenShift has a native Kubernetes integration,

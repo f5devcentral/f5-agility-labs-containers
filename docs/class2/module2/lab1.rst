@@ -1,5 +1,5 @@
-Lab 2.1 - F5 Container Connector Setup
-======================================
+Lab 2.1 - F5 Container Ingress Service Setup
+============================================
 
 The BIG-IP Controller for OpenShift installs as a
 `Deployment object <https://kubernetes.io/docs/concepts/workloads/controllers/deployment/>`_

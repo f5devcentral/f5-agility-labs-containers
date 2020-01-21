@@ -1,5 +1,5 @@
-Class 1: Introduction to Kubernetes
-===================================
+Class 1: Introduction to CIS & Kubernetes
+=========================================
 
 This introductory class covers the following topics:
 
@@ -8,6 +8,7 @@ This introductory class covers the following topics:
    :glob:
 
    module*/module*
+   appendix*/appendix*
 
 Expected time to complete: **1 hour**
 

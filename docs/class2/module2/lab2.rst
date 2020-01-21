@@ -1,4 +1,4 @@
-Lab 2.2 - F5 Container Connector Usage
+Lab 2.2 - F5 CIS Usage & NodePort Mode
 ======================================
 
 Now that our container connector is up and running, let's deploy an
