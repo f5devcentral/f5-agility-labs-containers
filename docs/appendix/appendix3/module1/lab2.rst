@@ -28,19 +28,19 @@ IP address for the active device in this subnet as shown in the diagram above.
 
    hs-bigip1.yaml
 
-   .. literalinclude:: ../../../../openshift/advanced/ocp/hs-bigip1.yaml
+   .. literalinclude:: ../openshift/advanced/ocp/hs-bigip1.yaml
       :language: yaml
       :emphasize-lines: 3,4,9
 
    hs-bigip2.yaml
 
-   .. literalinclude:: ../../../../openshift/advanced/ocp/hs-bigip2.yaml
+   .. literalinclude:: ../openshift/advanced/ocp/hs-bigip2.yaml
       :language: yaml
       :emphasize-lines: 3,4,9
 
    hs-bigip-float.yaml
 
-   .. literalinclude:: ../../../../openshift/advanced/ocp/hs-bigip-float.yaml
+   .. literalinclude:: ../openshift/advanced/ocp/hs-bigip-float.yaml
       :language: yaml
       :emphasize-lines: 3,4,9
 

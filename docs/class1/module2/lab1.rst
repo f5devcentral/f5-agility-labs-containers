@@ -126,7 +126,7 @@ to hide our bigip credentials.
         you can try to use an online parser to help you :
         `Yaml parser <http://codebeautify.org/yaml-validator>`_
 
-   .. literalinclude:: ../../../kubernetes/f5-nodeport-deployment.yaml
+   .. literalinclude:: ../kubernetes/f5-nodeport-deployment.yaml
       :language: yaml
       :linenos:
       :emphasize-lines: 2,17,34,35,37

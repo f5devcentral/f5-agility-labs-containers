@@ -31,7 +31,7 @@ handles the connection routing based on the assigned weights.
    From ose-master1, review the following deployment:
    f5-demo-app-bg-deployment.yaml
 
-   .. literalinclude:: ../../../../openshift/advanced/apps/module2/f5-demo-app-bg-deployment.yaml
+   .. literalinclude:: ../openshift/advanced/apps/module2/f5-demo-app-bg-deployment.yaml
       :language: yaml
       :linenos:
       :emphasize-lines: 2,4,36,38,59,61,93,95
@@ -52,7 +52,7 @@ handles the connection routing based on the assigned weights.
 
    From ose-master1, review the following Route: f5-demo-app-bg-route.yaml
 
-   .. literalinclude:: ../../../../openshift/advanced/apps/module2/f5-demo-app-bg-route.yaml
+   .. literalinclude:: ../openshift/advanced/apps/module2/f5-demo-app-bg-route.yaml
       :language: yaml
       :linenos:
       :emphasize-lines: 2,21,26,28,30

@@ -26,7 +26,7 @@ Lab 1.4 - F5 Container Connector Usage
    .. tip:: This file can be found at
       /home/centos/agilitydocs/openshift/advanced/apps/f5demo
 
-   .. literalinclude:: ../../../../openshift/advanced/apps/f5demo/f5demo.yaml
+   .. literalinclude:: ../openshift/advanced/apps/f5demo/f5demo.yaml
       :language: yaml
       :linenos:
       :emphasize-lines: 2,6,15
@@ -40,7 +40,7 @@ Lab 1.4 - F5 Container Connector Usage
    .. tip:: This file can be found at
       /home/centos/agilitydocs/openshift/advanced/apps/f5demo
 
-   .. literalinclude:: ../../../../openshift/advanced/apps/f5demo/f5service.yaml
+   .. literalinclude:: ../openshift/advanced/apps/f5demo/f5service.yaml
       :language: yaml
       :linenos:
       :emphasize-lines: 2
@@ -55,7 +55,7 @@ Lab 1.4 - F5 Container Connector Usage
    .. tip:: This file can be found at
       /home/centos/agilitydocs/openshift/advanced/ocp/
 
-   .. literalinclude:: ../../../../openshift/advanced/ocp/pool-only.yaml
+   .. literalinclude:: ../openshift/advanced/ocp/pool-only.yaml
       :language: yaml
       :linenos:
       :emphasize-lines: 1,11,14,34

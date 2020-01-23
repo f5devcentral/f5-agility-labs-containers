@@ -166,7 +166,7 @@ to hide our bigip credentials.
 
    You'll see a config file similar to this:
 
-   .. literalinclude:: ../../../openshift/f5-bigip-hostsubnet.yaml
+   .. literalinclude:: ../openshift/f5-bigip-hostsubnet.yaml
       :language: yaml
       :linenos:
       :emphasize-lines: 2,9
@@ -265,7 +265,7 @@ to hide our bigip credentials.
 
    You'll see a config file similar to this:
 
-   .. literalinclude:: ../../../openshift/f5-cluster-deployment.yaml
+   .. literalinclude:: ../openshift/f5-cluster-deployment.yaml
       :language: yaml
       :linenos:
       :emphasize-lines: 2,5,17,34-38

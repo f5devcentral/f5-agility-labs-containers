@@ -8,19 +8,19 @@ VXLAN Config
 
    hs-bigip1-10.yaml
 
-   .. literalinclude:: ../../../../openshift/advanced/appendix1/hs-bigip1-10.yaml
+   .. literalinclude:: ../openshift/advanced/appendix1/hs-bigip1-10.yaml
       :language: yaml
       :emphasize-lines: 4,8,9
 
    hs-bigip2-10.yaml
 
-   .. literalinclude:: ../../../../openshift/advanced/appendix1/hs-bigip2-10.yaml
+   .. literalinclude:: ../openshift/advanced/appendix1/hs-bigip2-10.yaml
       :language: yaml
       :emphasize-lines: 4,8,9
 
    hs-bigip-float-10.yaml
 
-   .. literalinclude:: ../../../../openshift/advanced/appendix1/hs-bigip-float-10.yaml
+   .. literalinclude:: ../openshift/advanced/appendix1/hs-bigip-float-10.yaml
       :language: yaml
       :emphasize-lines: 4,8,9
 
@@ -37,19 +37,19 @@ VXLAN Config
 
    hs-bigip1-20.yaml
 
-   .. literalinclude:: ../../../../openshift/advanced/appendix1/hs-bigip1-20.yaml
+   .. literalinclude:: ../openshift/advanced/appendix1/hs-bigip1-20.yaml
       :language: yaml
       :emphasize-lines: 4,8,9
 
    hs-bigip2-20.yaml
 
-   .. literalinclude:: ../../../../openshift/advanced/appendix1/hs-bigip2-20.yaml
+   .. literalinclude:: ../openshift/advanced/appendix1/hs-bigip2-20.yaml
       :language: yaml
       :emphasize-lines: 4,8,9
 
    hs-bigip-float-20.yaml
 
-   .. literalinclude:: ../../../../openshift/advanced/appendix1/hs-bigip-float-20.yaml
+   .. literalinclude:: ../openshift/advanced/appendix1/hs-bigip-float-20.yaml
       :language: yaml
       :emphasize-lines: 4,8,9
 

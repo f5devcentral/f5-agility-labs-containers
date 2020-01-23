@@ -35,7 +35,7 @@ Cluster Role Binding.
       **f5-kctlr-openshift-clusterrole.yaml** which is located in
       **/home/centos/agilitydocs/openshift/advanced/ocp** on **ose-master1**
 
-   .. literalinclude:: ../../../../openshift/advanced/ocp/f5-kctlr-openshift-clusterrole.yaml
+   .. literalinclude:: ../openshift/advanced/ocp/f5-kctlr-openshift-clusterrole.yaml
       :language: yaml
       :linenos:
       :emphasize-lines: 3,23
@@ -57,14 +57,14 @@ Create & Verify CC Deployment
 
    bigip1-cc.yaml
 
-   .. literalinclude:: ../../../../openshift/advanced/ocp/bigip1-cc.yaml
+   .. literalinclude:: ../openshift/advanced/ocp/bigip1-cc.yaml
       :language: yaml
       :linenos:
       :emphasize-lines: 2,4,17,21-23
 
    bigip2-cc.yaml
 
-   .. literalinclude:: ../../../../openshift/advanced/ocp/bigip2-cc.yaml
+   .. literalinclude:: ../openshift/advanced/ocp/bigip2-cc.yaml
       :language: yaml
       :linenos:
       :emphasize-lines: 2,4,17,21-23

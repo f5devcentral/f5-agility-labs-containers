@@ -22,7 +22,7 @@ Container Connector should configure on the BIG-IP.
    From the **ose-master1**, review the following Deployment configuration:
    **f5-demo-app-deployment.yaml**
 
-   .. literalinclude:: ../../../../openshift/advanced/apps/module2/f5-demo-app-deployment.yaml
+   .. literalinclude:: ../openshift/advanced/apps/module2/f5-demo-app-deployment.yaml
       :language: yaml
       :linenos:
       :emphasize-lines: 2,4,7
@@ -50,7 +50,7 @@ Container Connector should configure on the BIG-IP.
 
    From **ose-master1**, review the following Service: f5-demo-app-service.yaml
 
-   .. literalinclude:: ../../../../openshift/advanced/apps/module2/f5-demo-app-service.yaml
+   .. literalinclude:: ../openshift/advanced/apps/module2/f5-demo-app-service.yaml
       :language: yaml
       :linenos:
       :emphasize-lines: 2,4,9
@@ -85,7 +85,7 @@ Container Connector should configure on the BIG-IP.
 
    From ose-master1, review the ConfigMap resource f5-demo-app-configmap.yaml
 
-   .. literalinclude:: ../../../../openshift/advanced/apps/module2/f5-demo-app-configmap.yaml
+   .. literalinclude:: ../openshift/advanced/apps/module2/f5-demo-app-configmap.yaml
       :language: yaml
       :linenos:
       :emphasize-lines: 1,5,14,34,36

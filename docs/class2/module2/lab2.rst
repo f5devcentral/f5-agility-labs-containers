@@ -32,7 +32,7 @@ On the **okd-master** we will create all the required files:
 
    .. tip:: Use the file in /root/f5-agility-labs-containers/openshift
 
-   .. literalinclude:: ../../../openshift/f5-hello-world-deployment.yaml
+   .. literalinclude:: ../openshift/f5-hello-world-deployment.yaml
       :language: yaml
       :linenos:
       :emphasize-lines: 2,6,14
@@ -41,7 +41,7 @@ On the **okd-master** we will create all the required files:
 
    .. tip:: Use the file in /root/f5-agility-labs-containers/openshift
 
-   .. literalinclude:: ../../../openshift/f5-hello-world-configmap.yaml
+   .. literalinclude:: ../openshift/f5-hello-world-configmap.yaml
       :language: yaml
       :linenos:
       :emphasize-lines: 2,5,7,9,16,18
@@ -50,7 +50,7 @@ On the **okd-master** we will create all the required files:
 
    .. tip:: Use the file in /root/f5-agility-labs-containers/openshift
 
-   .. literalinclude:: ../../../openshift/f5-hello-world-service-cluster.yaml
+   .. literalinclude:: ../openshift/f5-hello-world-service-cluster.yaml
       :language: yaml
       :linenos:
       :emphasize-lines: 2,12

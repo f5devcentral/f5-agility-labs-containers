@@ -34,7 +34,7 @@ On **kube-master1** we will create all the required files:
 
    .. tip:: Use the file in /home/ubuntu/agilitydocs/kubernetes
 
-   .. literalinclude:: ../../../kubernetes/f5-hello-world-deployment.yaml
+   .. literalinclude:: ../kubernetes/f5-hello-world-deployment.yaml
       :language: yaml
       :linenos:
       :emphasize-lines: 2,14
@@ -49,7 +49,7 @@ On **kube-master1** we will create all the required files:
       https://clouddocs.f5.com/containers/v2/releases_and_versioning.html#schema-table
 
 
-   .. literalinclude:: ../../../kubernetes/f5-hello-world-configmap.yaml
+   .. literalinclude:: ../kubernetes/f5-hello-world-configmap.yaml
       :language: yaml
       :linenos:
       :emphasize-lines: 2,5,7,9,16,18
@@ -58,7 +58,7 @@ On **kube-master1** we will create all the required files:
 
    .. tip:: Use the file in /home/ubuntu/agilitydocs/kubernetes
 
-   .. literalinclude:: ../../../kubernetes/f5-hello-world-service.yaml
+   .. literalinclude:: ../kubernetes/f5-hello-world-service.yaml
       :language: yaml
       :linenos:
       :emphasize-lines: 2,12

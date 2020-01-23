@@ -45,7 +45,7 @@ the application is running.
    From ose-master1, review the following deployment:
    f5-demo-app-route-deployment.yaml
 
-   .. literalinclude:: ../../../../openshift/advanced/apps/module2/f5-demo-app-route-deployment.yaml
+   .. literalinclude:: ../openshift/advanced/apps/module2/f5-demo-app-route-deployment.yaml
       :language: yaml
       :linenos:
       :emphasize-lines: 2,20
@@ -62,7 +62,7 @@ the application is running.
    From ose-master1 server, review the following Route:
    f5-demo-app-route-route.yaml
 
-   .. literalinclude:: ../../../../openshift/advanced/apps/module2/f5-demo-app-route-route.yaml
+   .. literalinclude:: ../openshift/advanced/apps/module2/f5-demo-app-route-route.yaml
       :language: yaml
       :linenos:
       :emphasize-lines: 2
