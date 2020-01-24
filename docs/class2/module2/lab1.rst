@@ -29,7 +29,8 @@ URL: https://10.1.1.4
 
      .. image:: images/f5-check-partition.png
 
-#. You need to setup a partition that will be used by F5 Container Ingress Service.
+#. You need to setup a partition that will be used by F5 Container Ingress
+   Service.
 
    .. code-block:: bash
 
@@ -105,7 +106,7 @@ to hide our bigip credentials.
 
    .. code-block:: bash
 
-      git clone https://github.com/f5devcentral/f5-agility-labs-containers.git ~/agilitydocs
+      git clone -b develop https://github.com/f5devcentral/f5-agility-labs-containers.git ~/agilitydocs
 
       cd ~/agilitydocs/openshift
 

@@ -13,10 +13,6 @@ To deploy our application, we will need to do the following:
 #. Define a Deployment: this will launch our application running in a
    container.
 
-#. Define a ConfigMap: this can be used to store fine-grained information like
-   individual properties or coarse-grained information like entire config files
-   or JSON blobs. It will contain the BIG-IP configuration we need to push.
-
 #. Define a Service: this is an abstraction which defines a logical set of
    *pods* and a policy by which to access them. Expose the *service* on a port
    on each node of the cluster (the same port on each *node*). You’ll be able
@@ -25,6 +21,10 @@ To deploy our application, we will need to do the following:
    flag-configured range **(default: 30000-32767)**, and each Node will proxy
    that port (the same port number on every Node) into your *Service*.
 
+#. Define a ConfigMap: this can be used to store fine-grained information like
+   individual properties or coarse-grained information like entire config files
+   or JSON blobs. It will contain the BIG-IP configuration we need to push.
+
 App Deployment
 --------------
 
@@ -32,16 +32,25 @@ On **kube-master1** we will create all the required files:
 
 #. Create a file called ``f5-hello-world-deployment.yaml``
 
-   .. tip:: Use the file in /home/ubuntu/agilitydocs/kubernetes
+   .. tip:: Use the file in /home/ubuntu/agilitydocs/docs/class1/kubernetes
 
    .. literalinclude:: ../kubernetes/f5-hello-world-deployment.yaml
       :language: yaml
       :linenos:
       :emphasize-lines: 2,14
 
+#. Create a file called ``f5-hello-world-service.yaml``
+
+   .. tip:: Use the file in /home/ubuntu/agilitydocs/docs/class1/kubernetes
+
+   .. literalinclude:: ../kubernetes/f5-hello-world-service.yaml
+      :language: yaml
+      :linenos:
+      :emphasize-lines: 2,12
+
 #. Create a file called ``f5-hello-world-configmap.yaml``
 
-   .. tip:: Use the file in /home/ubuntu/agilitydocs/kubernetes
+   .. tip:: Use the file in /home/ubuntu/agilitydocs/docs/class1/kubernetes
 
    .. attention:: The schema version below (for example 1.7) comes from the releases
       of big-ip-controller.  For more information, head over to the following
@@ -54,22 +63,13 @@ On **kube-master1** we will create all the required files:
       :linenos:
       :emphasize-lines: 2,5,7,9,16,18
 
-#. Create a file called ``f5-hello-world-service.yaml``
-
-   .. tip:: Use the file in /home/ubuntu/agilitydocs/kubernetes
-
-   .. literalinclude:: ../kubernetes/f5-hello-world-service.yaml
-      :language: yaml
-      :linenos:
-      :emphasize-lines: 2,12
-
 #. We can now launch our application:
 
    .. code-block:: bash
 
       kubectl create -f f5-hello-world-deployment.yaml
-      kubectl create -f f5-hello-world-configmap.yaml
       kubectl create -f f5-hello-world-service.yaml
+      kubectl create -f f5-hello-world-configmap.yaml
 
    .. image:: images/f5-container-connector-launch-app.png
 
@@ -161,3 +161,15 @@ On **kube-master1** we will create all the required files:
    .. image:: images/f5-hello-world-pool-scale10.png
 
    .. attention:: Why are there only 2 pool members?
+
+#. Delete Hello-World and Remove CIS
+
+   .. code-block:: bash
+
+      kubectl delete -f f5-hello-world-deployment.yaml
+      kubectl delete -f f5-hello-world-service.yaml
+      kubectl delete -f f5-hello-world-configmap.yaml
+      kubectl delete -f f5-nodeport-deployment.yaml
+
+   .. important:: Do not skip this step. The next class will be deploying many
+      of the same objects.

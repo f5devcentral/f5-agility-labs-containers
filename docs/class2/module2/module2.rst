@@ -10,7 +10,7 @@ the BIG-IP Controller works essentially the same in both environments. It does
 have a few OpenShift-specific prerequisites.
 
 .. seealso:: The official F5 documentation is here:
-   `F5 Container Ingress Service - OpenShift <https://clouddocs.f5.com/containers/v2/openshift/>`_
+   `F5 Container Connector - OpenShift <https://clouddocs.f5.com/containers/v2/openshift/>`_
 
 Architecture
 ------------
@@ -50,7 +50,7 @@ Before being able to use F5 CIS, you need to confirm the following:
 - You must have a fully active/licensed BIG-IP (SDN must be licensed)
 - A BIG-IP partition needs to be setup for exclusive use by CIS
 - You need a user with administrative access to this partition
-- Your kubernetes environment must be up and running
+- Your openshift environment must be up and running
 
 .. toctree::
    :maxdepth: 1

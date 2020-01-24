@@ -1,7 +1,8 @@
 Appendix
 ========
 
-The appendix includes several old but valid classes from Agility 2018
+This appendix includes several old but valid information/documentation from
+Agility 2018.
 
 .. toctree::
    :maxdepth: 1

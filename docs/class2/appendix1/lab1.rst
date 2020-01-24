@@ -28,7 +28,7 @@ Lab 1.1 - Prep CentOS
 
    .. code-block:: bash
 
-      git clone https://github.com/f5devcentral/f5-agility-labs-containers.git ~/agilitydocs
+      git clone -b develop https://github.com/f5devcentral/f5-agility-labs-containers.git ~/agilitydocs
 
       cd ~/agilitydocs/openshift
 

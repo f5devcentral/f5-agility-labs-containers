@@ -44,27 +44,17 @@ CIS Deployment
 --------------
 
 .. seealso:: For a more thorough explanation of all the settings and options see
-   `F5 Container Ingress Service - Kubernetes <https://clouddocs.f5.com/containers/v2/kubernetes/>`_
+   `F5 Container Ingress Services - Kubernetes <https://clouddocs.f5.com/containers/v2/kubernetes/>`_
 
 Now that BIG-IP is licensed and prepped with the "kubernetes" partition, we
 need to define a `Kubernetes deployment <https://kubernetes.io/docs/user-guide/deployments/>`_
 and create a `Kubernetes secret <https://kubernetes.io/docs/user-guide/secrets/>`_
 to hide our bigip credentials.
 
-#. From the jumpbox open **mRemoteNG** and start a session with Kube-master.
+#. From the jumpbox start an SSH session with Kube-master.
 
    .. tip:: 
-      - These sessions should be running from the previous lab.
-      - As a reminder we're utilizing a wrapper called **MRemoteNG** for
-        Putty and other services. MRNG hold credentials and allows for multiple
-        protocols(i.e. SSH, RDP, etc.), makes jumping in and out of SSH
-        connections easier.
-
-   On your desktop select **MRemoteNG**, once launched you'll see a few tabs
-   similar to the example below.  Open up the Kubernetes / Kubernetes-Cluster
-   folder and double click kube-master1.
-
-   .. image:: images/MRemoteNG-kubernetes.png
+      - This session should be running from the previous lab.
 
 #. "git" the demo files
 
@@ -73,7 +63,7 @@ to hide our bigip credentials.
 
    .. code-block:: bash
 
-      git clone https://github.com/f5devcentral/f5-agility-labs-containers.git ~/agilitydocs
+      git clone -b develop https://github.com/f5devcentral/f5-agility-labs-containers.git ~/agilitydocs
 
       cd ~/agilitydocs/kubernetes
 
@@ -108,19 +98,16 @@ to hide our bigip credentials.
 
    .. image:: images/f5-container-connector-bigip-clusterrolebinding.png
 
-#. At this point we have two deployment mode options, Nodeport or Cluster.
-   For more information see
+#. At this point we have two deployment mode options, Nodeport or ClusterIP.
+   This class will feature both modes. For more information see
    `BIG-IP Controller Modes <http://clouddocs.f5.com/containers/v2/kubernetes/kctlr-modes.html>`_
 
-   .. important:: This lab will focus on **Nodeport**. In Class 4 Openshift
-      we'll use **ClusterIP**.
-
-#. **Nodeport mode** ``f5-nodeport-deployment.yaml``
+   **Nodeport mode** ``f5-nodeport-deployment.yaml``
 
    .. note:: 
       - For your convenience the file can be found in
-        /home/ubuntu/agilitydocs/kubernetes (downloaded earlier in the clone
-        git repo step).
+        /home/ubuntu/agilitydocs/docs/class1/kubernetes (downloaded earlier in
+        the clone git repo step).
       - Or you can cut and paste the file below and create your own file.
       - If you have issues with your yaml and syntax (**indentation MATTERS**),
         you can try to use an online parser to help you :
@@ -129,7 +116,7 @@ to hide our bigip credentials.
    .. literalinclude:: ../kubernetes/f5-nodeport-deployment.yaml
       :language: yaml
       :linenos:
-      :emphasize-lines: 2,17,34,35,37
+      :emphasize-lines: 2,7,17,20,37,38,40
 
 #. Once you have your yaml file setup, you can try to launch your deployment.
    It will start our f5-k8s-controller container on one of our nodes (may take
