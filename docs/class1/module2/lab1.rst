@@ -65,7 +65,7 @@ to hide our bigip credentials.
 
       git clone -b develop https://github.com/f5devcentral/f5-agility-labs-containers.git ~/agilitydocs
 
-      cd ~/agilitydocs/kubernetes
+      cd ~/agilitydocs/docs/class1/kubernetes
 
 #. Create bigip login secret
 

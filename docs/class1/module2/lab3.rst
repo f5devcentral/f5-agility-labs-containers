@@ -102,7 +102,7 @@ CIS Deployment
 
    .. code-block:: bash
       
-      tmsh show net tunnels tunnel fl-vxlan all-properties
+      tmsh show net tunnels tunnel k8s-tunnel all-properties
 
    .. image:: images/get-k8s-tunnel-mac-addr.png
 
