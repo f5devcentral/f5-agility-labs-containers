@@ -29,7 +29,8 @@ URL: https://10.1.1.4
 
      .. image:: images/f5-check-partition.png
 
-#. You need to setup a partition that will be used by F5 Container Ingress Service.
+#. You need to setup a partition that will be used by F5 Container Ingress
+   Service.
 
    .. code-block:: bash
 
@@ -48,7 +49,7 @@ URL: https://10.1.1.4
    .. code-block:: bash
 
       # From the CLI:
-      tmsh create net tunnel vxlan okd-vxlan {app-service none flooding-type multipoint}
+      tmsh create net tunnel vxlan okd-vxlan { app-service none flooding-type multipoint }
 
       # From the UI:
       GoTo Network --> Tunnels --> Profiles --> VXLAN
@@ -63,7 +64,7 @@ URL: https://10.1.1.4
    .. code-block:: bash
 
       # From the CLI:
-      tmsh create net tunnel tunnel okd-tunnel {key 0 local-address 10.1.1.4 profile okd-vxlan}
+      tmsh create net tunnel tunnel okd-tunnel { app-service none key 0 local-address 10.1.1.4 profile okd-vxlan }
 
       # From the UI:
       GoTo Network --> Tunnels --> Tunnel List
@@ -73,6 +74,33 @@ URL: https://10.1.1.4
       - Click Finished
 
    .. image:: images/create-okd-vxlan-tunnel.png
+
+#. Create the vxlan tunnel self-ip
+
+   .. tip:: For your SELF-IP subnet, remember it is a /14 and not a /23 -
+      Why? The Self-IP has to be able to understand those other /23 subnets are
+      local in the namespace in the example above for Master, Node1, Node2,
+      etc. Many students accidently use /23, but then the self-ip will be only
+      to communicate to one subnet on the openshift-f5-node. When trying to
+      ping across to services on other /23 subnets from the BIG-IP for instance,
+      communication will fail as your self-ip doesn't have the proper subnet
+      mask to know thokd other subnets are local.
+      
+   .. code-block:: bash
+      
+      # From the CLI:
+      tmsh create net self okd-vxlan-selfip { app-service none address 10.131.0.1/14 vlan okd-tunnel allow-service all }
+
+      # From the UI:
+      GoTo Network --> Self IP List
+      - Create a new Self-IP called "okd-vxlan-selfip"
+      - Set the IP Address to "10.131.0.1".
+      - Set the Netmask to "255.252.0.0"
+      - Set the VLAN / Tunnel to "okd-tunnel" (Created earlier)
+      - Set Port Lockdown to "Allow All"
+      - Click Finished
+
+   .. image:: images/create-okd-vxlan-selfip.png
 
 CIS Deployment
 --------------
@@ -96,8 +124,6 @@ to hide our bigip credentials.
    similar to the example below.  Open up the OpenShift Enterprise /
    okd-Cluster folder and double click okd-master.
 
-   .. image:: images/MRemoteNG-okd.png
-
 #. "git" the demo files
 
    .. note:: These files should be here by default, if **NOT** run the
@@ -107,7 +133,7 @@ to hide our bigip credentials.
 
       git clone -b develop https://github.com/f5devcentral/f5-agility-labs-containers.git ~/agilitydocs
 
-      cd ~/agilitydocs/openshift
+      cd ~/agilitydocs/docs/class2/openshift
 
 #. Log in with an Openshift Client.
 
@@ -160,7 +186,7 @@ to hide our bigip credentials.
 
    .. code-block:: bash
 
-      cd /root/agilitydocs/openshift
+      cd ~/agilitydocs/docs/class2/openshift
 
       cat f5-bigip-hostsubnet.yaml
 
@@ -227,39 +253,12 @@ to hide our bigip credentials.
          host: openshift-f5-node
          hostIP: 10.1.1.4
 
-#. Create the vxlan tunnel self-ip
-
-   .. tip:: For your SELF-IP subnet, remember it is a /14 and not a /23 -
-      Why? The Self-IP has to be able to understand those other /23 subnets are
-      local in the namespace in the example above for Master, Node1, Node2,
-      etc. Many students accidently use /23, but then the self-ip will be only
-      to communicate to one subnet on the openshift-f5-node. When trying to
-      ping across to services on other /23 subnets from the BIG-IP for instance,
-      communication will fail as your self-ip doesn't have the proper subnet
-      mask to know thokd other subnets are local.
-      
-   .. code-block:: bash
-      
-      # From the CLI:
-      tmsh create net self okd-vxlan-selfip address 10.131.0.1/14 vlan okd-tunnel
-
-      # From the UI:
-      GoTo Network --> Self IP List
-      - Create a new Self-IP called "okd-vxlan-selfip"
-      - Set the IP Address to "10.131.0.1". (An IP from the subnet assigned in the previous step.)
-      - Set the Netmask to "255.252.0.0"
-      - Set the VLAN / Tunnel to "okd-tunnel" (Created earlier)
-      - Set Port Lockdown to "Allow All"
-      - Click Finished
-
-   .. image:: images/create-okd-vxlan-selfip.png
-
 #. Now we'll create an Openshift F5 Container Ingress Service to do the API
    calls to/from the F5 device. First we need the "deployment" file.
 
    .. code-block:: bash
 
-      cd /root/agilitydocs/openshift
+      cd ~/agilitydocs/docs/class2/openshift
 
       cat f5-cluster-deployment.yaml
 
@@ -287,10 +286,6 @@ to hide our bigip credentials.
 #. If the tunnel is up and running big-ip should be able to ping the cluster
    nodes. SSH to big-ip and run one or all of the following ping tests.
 
-   .. hint:: To SSH to big-ip use mRemoteNG and the bigip1 shortcut
-
-      .. image:: images/MRemoteNG-bigip.png
-         
    .. code-block:: bash
 
       # ping okd-master

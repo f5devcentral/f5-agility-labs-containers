@@ -97,8 +97,6 @@ to hide our bigip credentials.
    similar to the example below.  Open up the OpenShift Enterprise /
    okd-Cluster folder and double click okd-master.
 
-   .. image:: images/MRemoteNG-okd.png
-
 #. "git" the demo files
 
    .. note:: These files should be here by default, if **NOT** run the
@@ -288,10 +286,6 @@ to hide our bigip credentials.
 #. If the tunnel is up and running big-ip should be able to ping the cluster
    nodes. SSH to big-ip and run one or all of the following ping tests.
 
-   .. hint:: To SSH to big-ip use mRemoteNG and the bigip1 shortcut
-
-      .. image:: images/MRemoteNG-bigip.png
-         
    .. code-block:: bash
 
       # ping okd-master

@@ -12,9 +12,6 @@ To deploy our application, we will need to do the following:
 
 #. Define a Deployment: this will launch our application running in a
    container.
-#. Define a ConfigMap: this can be used to store fine-grained information like
-   individual properties or coarse-grained information like entire config files
-   or JSON blobs. It will contain the BIG-IP configuration we need to push.
 #. Define a Service: this is an abstraction which defines a logical set of
    *pods* and a policy by which to access them. Expose the *service* on a port
    on each node of the cluster (the same port on each *node*). You’ll be able
@@ -22,6 +19,9 @@ To deploy our application, we will need to do the following:
    field to "NodePort", the Kubernetes master will allocate a port from a
    flag-configured range **(default: 30000-32767)**, and each Node will proxy
    that port (the same port number on every Node) into your *Service*.
+#. Define a ConfigMap: this can be used to store fine-grained information like
+   individual properties or coarse-grained information like entire config files
+   or JSON blobs. It will contain the BIG-IP configuration we need to push.
 
 App Deployment
 --------------
@@ -30,38 +30,38 @@ On the **okd-master** we will create all the required files:
 
 #. Create a file called ``f5-hello-world-deployment.yaml``
 
-   .. tip:: Use the file in /root/f5-agility-labs-containers/openshift
+   .. tip:: Use the file in ~/agilitydocs/docs/class2/openshift
 
    .. literalinclude:: ../openshift/f5-hello-world-deployment.yaml
       :language: yaml
       :linenos:
       :emphasize-lines: 2,6,14
 
-#. Create a file called ``f5-hello-world-configmap.yaml``
-
-   .. tip:: Use the file in /root/f5-agility-labs-containers/openshift
-
-   .. literalinclude:: ../openshift/f5-hello-world-configmap.yaml
-      :language: yaml
-      :linenos:
-      :emphasize-lines: 2,5,7,9,16,18
-
 #. Create a file called ``f5-hello-world-service-cluster.yaml``
 
-   .. tip:: Use the file in /root/f5-agility-labs-containers/openshift
+   .. tip:: Use the file in ~/agilitydocs/docs/class2/openshift
 
    .. literalinclude:: ../openshift/f5-hello-world-service-cluster.yaml
       :language: yaml
       :linenos:
       :emphasize-lines: 2,12
 
+#. Create a file called ``f5-hello-world-configmap.yaml``
+
+   .. tip:: Use the file in ~/agilitydocs/docs/class2/openshift
+
+   .. literalinclude:: ../openshift/f5-hello-world-configmap.yaml
+      :language: yaml
+      :linenos:
+      :emphasize-lines: 2,5,7,9,16,18
+
 #. We can now launch our application:
 
    .. code-block:: bash
 
       oc create -f f5-hello-world-deployment.yaml
-      oc create -f f5-hello-world-configmap.yaml
       oc create -f f5-hello-world-service-cluster.yaml
+      oc create -f f5-hello-world-configmap.yaml
 
    .. image:: images/f5-container-connector-launch-app.png
 
