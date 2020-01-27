@@ -53,9 +53,6 @@ to hide our bigip credentials.
 
 #. From the jumpbox start an SSH session with Kube-master.
 
-   .. tip:: 
-      - This session should be running from the previous lab.
-
 #. "git" the demo files
 
    .. note:: These files should be here by default, if **NOT** run the
@@ -102,7 +99,7 @@ to hide our bigip credentials.
    This class will feature both modes. For more information see
    `BIG-IP Controller Modes <http://clouddocs.f5.com/containers/v2/kubernetes/kctlr-modes.html>`_
 
-   **Nodeport mode** ``f5-nodeport-deployment.yaml``
+   Lets start with **Nodeport mode** ``f5-nodeport-deployment.yaml``
 
    .. note:: 
       - For your convenience the file can be found in
