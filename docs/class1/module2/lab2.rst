@@ -172,4 +172,4 @@ On **kube-master1** we will create all the required files:
       kubectl delete -f f5-nodeport-deployment.yaml
 
    .. important:: Do not skip this step. The next lab will be deploying many
-      of the same objects.
+      of the same objects. Instead of reusing them we will redeploy.
