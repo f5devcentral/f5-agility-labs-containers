@@ -1,16 +1,31 @@
 Lab 2.3 - CIS Install & Configuration (ClusterIP)
 =================================================
 
-.. attention:: This lab relies on many of the objects created in lab1.
-
 BIG-IP Setup
 ------------
 
-.. important:: Be sure to switch to the "Common" partition before making the
-   following changes.
-
 With ClusterIP we're utilizing vxlan to communicate with the application pods.
 To do so we'll need to configure bigip.
+
+#. You need to setup a partition that will be used by F5 Container Ingress
+   Service.
+
+   .. note:: This step was performed in the previous lab.
+
+   .. code-block:: bash
+
+      # From the CLI:
+      tmsh create auth partition kubernetes
+
+      # From the UI:
+      GoTo System --> Users --> Partition List
+      - Create a new partition called "kubernetes" (use default settings)
+      - Click Finished
+
+   .. image:: images/f5-container-connector-bigip-partition-setup.png
+
+.. attention:: Be sure to switch to the "Common" partition before making the
+   following changes.
 
 #. Create a vxlan tunnel profile
 
@@ -38,8 +53,9 @@ To do so we'll need to configure bigip.
       # From the UI:
       GoTo Network --> Tunnels --> Tunnel List
       - Create a new tunnel called "k8s-tunnel"
-      - Set the Local Address to 10.1.1.4
       - Set the Profile to the one previously created called "k8s-vxlan"
+      - set the Key = 1
+      - Set the Local Address to 10.1.1.4
       - Click Finished
 
    .. image:: images/create-k8s-vxlan-tunnel.png
@@ -78,7 +94,7 @@ CIS Deployment
    ClusterIP. For more information see
    `BIG-IP Controller Modes <http://clouddocs.f5.com/containers/v2/kubernetes/kctlr-modes.html>`_
 
-   **ClusterIP mode** ``f5-cluster-deployment.yaml``
+   Here we'll configure **ClusterIP mode** ``f5-cluster-deployment.yaml``
 
    .. note:: 
       - For your convenience the file can be found in
@@ -107,6 +123,8 @@ CIS Deployment
    .. image:: images/get-k8s-tunnel-mac-addr.png
 
 #. On the kube-master node edit f5-bigip-node.yaml
+
+   .. note:: If your unfamiliar with VI ask for help.
 
    .. code-block:: bash
 
@@ -166,17 +184,3 @@ check the logs of your container, kubectl command or docker command.
       kubectl logs k8s-bigip-ctlr-deployment-5b74dd769-x55vx -n kube-system
 
    .. image:: images/f5-container-connector-check-logs-kubectl.png
-
-#. If the tunnel is up and running big-ip should be able to ping the cluster
-   nodes. SSH to big-ip and run one or all of the following ping tests.
-
-   .. code-block:: bash
-
-      # ping kube-master1
-      ping -c 4 10.244.0.1
-
-      # ping kube-node1
-      ping -c 4 10.244.1.1
-
-      # ping kube-node2
-      ping -c 4 10.244.2.1

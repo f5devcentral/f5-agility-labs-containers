@@ -39,11 +39,11 @@ On **kube-master1** we will create all the required files:
       :linenos:
       :emphasize-lines: 2,14
 
-#. Create a file called ``f5-hello-world-service.yaml``
+#. Create a file called ``f5-hello-world-service-nodeport.yaml``
 
    .. tip:: Use the file in /home/ubuntu/agilitydocs/docs/class1/kubernetes
 
-   .. literalinclude:: ../kubernetes/f5-hello-world-service.yaml
+   .. literalinclude:: ../kubernetes/f5-hello-world-service-nodeport.yaml
       :language: yaml
       :linenos:
       :emphasize-lines: 2,12
@@ -68,7 +68,7 @@ On **kube-master1** we will create all the required files:
    .. code-block:: bash
 
       kubectl create -f f5-hello-world-deployment.yaml
-      kubectl create -f f5-hello-world-service.yaml
+      kubectl create -f f5-hello-world-service-nodeport.yaml
       kubectl create -f f5-hello-world-configmap.yaml
 
    .. image:: images/f5-container-connector-launch-app.png
@@ -166,9 +166,9 @@ On **kube-master1** we will create all the required files:
 
    .. code-block:: bash
 
-      kubectl delete -f f5-hello-world-deployment.yaml
-      kubectl delete -f f5-hello-world-service.yaml
       kubectl delete -f f5-hello-world-configmap.yaml
+      kubectl delete -f f5-hello-world-service-nodeport.yaml
+      kubectl delete -f f5-hello-world-deployment.yaml
       kubectl delete -f f5-nodeport-deployment.yaml
 
    .. important:: Do not skip this step. The next lab will be deploying many
