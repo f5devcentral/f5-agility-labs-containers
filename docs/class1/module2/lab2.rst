@@ -32,16 +32,16 @@ On **kube-master1** we will create all the required files:
 
 #. Create a file called ``f5-hello-world-deployment.yaml``
 
-   .. tip:: Use the file in /home/ubuntu/agilitydocs/docs/class1/kubernetes
+   .. tip:: Use the file in ~/agilitydocs/docs/class1/kubernetes
 
    .. literalinclude:: ../kubernetes/f5-hello-world-deployment.yaml
       :language: yaml
       :linenos:
-      :emphasize-lines: 2,14
+      :emphasize-lines: 2,7,18
 
 #. Create a file called ``f5-hello-world-service-nodeport.yaml``
 
-   .. tip:: Use the file in /home/ubuntu/agilitydocs/docs/class1/kubernetes
+   .. tip:: Use the file in ~/agilitydocs/docs/class1/kubernetes
 
    .. literalinclude:: ../kubernetes/f5-hello-world-service-nodeport.yaml
       :language: yaml
@@ -50,13 +50,12 @@ On **kube-master1** we will create all the required files:
 
 #. Create a file called ``f5-hello-world-configmap.yaml``
 
-   .. tip:: Use the file in /home/ubuntu/agilitydocs/docs/class1/kubernetes
+   .. tip:: Use the file in ~/agilitydocs/docs/class1/kubernetes
 
    .. attention:: The schema version below (for example 1.7) comes from the releases
       of big-ip-controller.  For more information, head over to the following
       link for a quick review:
       https://clouddocs.f5.com/containers/v2/releases_and_versioning.html#schema-table
-
 
    .. literalinclude:: ../kubernetes/f5-hello-world-configmap.yaml
       :language: yaml
@@ -104,7 +103,7 @@ On **kube-master1** we will create all the required files:
       see nothing.
 
    Here you can see a new Virtual Server, "default_f5-hello-world" was created,
-   listening on 10.1.1.4:81.
+   listening on 10.1.1.4:81 in partition "kubernetes".
 
    .. image:: images/f5-container-connector-check-app-bigipconfig.png
 
@@ -171,5 +170,6 @@ On **kube-master1** we will create all the required files:
       kubectl delete -f f5-hello-world-deployment.yaml
       kubectl delete -f f5-nodeport-deployment.yaml
 
-   .. important:: Do not skip this step. The next lab will be deploying many
-      of the same objects. Instead of reusing them we will redeploy.
+   .. important:: Do not skip this step. Instead of reusing them, the next lab
+      will re-deploy many of the same objects so to avoid conflict errors it's
+      best to remove them.

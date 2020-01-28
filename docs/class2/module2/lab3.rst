@@ -1,36 +1,16 @@
 Lab 2.3 - CIS Install & Configuration (ClusterIP)
 =================================================
 
-The BIG-IP Controller for OpenShift installs as a
-`Deployment object <https://kubernetes.io/docs/concepts/workloads/controllers/deployment/>`_
-
-.. seealso:: The official CIS documentation is here:
-   `Install the BIG-IP Controller: Openshift <https://clouddocs.f5.com/containers/v2/openshift/kctlr-openshift-app-install.html>`_
-
 BIG-IP Setup
 ------------
 
-To use F5 Container Ingress Service, you'll need a BIG-IP up and running first.
-
-Through the Jumpbox, you should have a BIG-IP available at the following
-URL: https://10.1.1.4
-
-.. warning:: 
-   - Connect to your BIG-IP and check it is active and licensed. Its
-     login and password are: **admin/admin**
-
-   - If your BIG-IP has no license or its license expired, renew the license.
-     You just need a LTM VE license for this lab. No specific add-ons are
-     required (ask a lab instructor for eval licenses if your license has
-     expired)
-
-   - Be sure to be in the ``Common`` partition before creating the following
-     objects.
-
-     .. image:: images/f5-check-partition.png
+With ClusterIP we're utilizing vxlan to communicate with the application pods.
+To do so we'll need to configure bigip first.
 
 #. You need to setup a partition that will be used by F5 Container Ingress
    Service.
+
+   .. note:: This step was performed in the previous lab.
 
    .. code-block:: bash
 
@@ -43,6 +23,9 @@ URL: https://10.1.1.4
       - Click Finished
 
    .. image:: images/f5-container-connector-bigip-partition-setup.png
+
+.. attention:: Be sure to switch to the "Common" partition before making the
+   following changes.
 
 #. Create a vxlan tunnel profile
 
@@ -69,8 +52,9 @@ URL: https://10.1.1.4
       # From the UI:
       GoTo Network --> Tunnels --> Tunnel List
       - Create a new tunnel called "okd-tunnel"
-      - Set the Local Address to 10.1.1.4
       - Set the Profile to the one previously created called "okd-vxlan"
+      - set the key = 0
+      - Set the Local Address to 10.1.1.4
       - Click Finished
 
    .. image:: images/create-okd-vxlan-tunnel.png
@@ -105,39 +89,28 @@ URL: https://10.1.1.4
 CIS Deployment
 --------------
 
-.. seealso:: For a more thorough explanation of all the settings and options see
-   `F5 Container Ingress Service - Openshift <https://clouddocs.f5.com/containers/v2/openshift/>`_
+As stated in lab1, we have two deployment mode options, Nodeport or ClusterIP.
+For more information see `BIG-IP Controller Modes <http://clouddocs.f5.com/containers/v2/kubernetes/kctlr-modes.html>`_
 
-Now that BIG-IP is licensed and prepped with the "okd" partition, we need to
-define a `Kubernetes deployment <https://kubernetes.io/docs/user-guide/deployments/>`_
-and create a `Kubernetes secret <https://kubernetes.io/docs/user-guide/secrets/>`_
-to hide our bigip credentials.
+Here we'll configure **ClusterIP mode** ``f5-cluster-deployment.yaml``
 
-#. From the jumpbox open **mRemoteNG** and start a session with okd-master.
+.. note::
+   - For your convenience the file can be found in 
+      /home/ubuntu/agilitydocs/docs/class2/openshift (downloaded earlier in
+      the clone git repo step).
 
-   .. note:: As a reminder we're utilizing a wrapper called **MRemoteNG** for
-      Putty and other services. MRNG hold credentials and allows for multiple
-      protocols(i.e. SSH, RDP, etc.), makes jumping in and out of SSH
-      connections easier.
+   - Or you can cut and paste the file below and create your own file.
 
-   On your desktop select **MRemoteNG**, once launched you'll see a few tabs
-   similar to the example below.  Open up the OpenShift Enterprise /
-   okd-Cluster folder and double click okd-master.
+   - If you have issues with your yaml and syntax (**indentation MATTERS**),
+      you can try to use an online parser to help you :
+      `Yaml parser <http://codebeautify.org/yaml-validator>`_
 
-#. "git" the demo files
+.. literalinclude:: ../openshift/f5-cluster-deployment.yaml
+   :language: yaml
+   :linenos:
+   :emphasize-lines: 2,7,17,20,37,38,40,41
 
-   .. note:: These files should be here by default, if **NOT** run the
-      following commands.
-
-   .. code-block:: bash
-
-      git clone -b develop https://github.com/f5devcentral/f5-agility-labs-containers.git ~/agilitydocs
-
-      cd ~/agilitydocs/docs/class2/openshift
-
-#. Log in with an Openshift Client.
-
-   .. attention:: You can skip this step if done in the previous module.
+#. On okd-master1, log in with an Openshift Client.
 
    .. note:: Here we're using a user "centos", added when we built the cluster.
       When prompted for password, enter "centos".
@@ -150,37 +123,6 @@ to hide our bigip credentials.
 
    .. important:: Upon logging in you'll notice access to several projects. In
       our lab well be working from the default "default".
-
-#. Create bigip login secret
-
-   .. code-block:: bash
-
-      oc create secret generic bigip-login -n kube-system --from-literal=username=admin --from-literal=password=admin
-
-   You should see something similar to this:
-
-   .. image:: images/f5-container-connector-bigip-secret.png
-
-#. Create kubernetes service account for bigip controller
-
-   .. code-block:: bash
-
-      oc create serviceaccount k8s-bigip-ctlr -n kube-system
-
-   You should see something similar to this:
-
-   .. image:: images/f5-container-connector-bigip-serviceaccount.png
-
-#. Create cluster role for bigip service account (admin rights, but can be
-   modified for your environment)
-
-   .. code-block:: bash
-
-      oc create clusterrolebinding k8s-bigip-ctlr-clusteradmin --clusterrole=cluster-admin --serviceaccount=kube-system:k8s-bigip-ctlr
-
-   You should see something similar to this:
-
-   .. image:: images/f5-container-connector-bigip-clusterrolebinding.png
 
 #. Next let's explore the f5-hostsubnet.yaml file
 
@@ -253,8 +195,9 @@ to hide our bigip credentials.
          host: openshift-f5-node
          hostIP: 10.1.1.4
 
-#. Now we'll create an Openshift F5 Container Ingress Service to do the API
-   calls to/from the F5 device. First we need the "deployment" file.
+#. Now that we have the new bigip node added you can try to launch your
+   deployment. It will start our f5-k8s-controller container on one of our
+   nodes (may take around 30sec to be in a running state):
 
    .. code-block:: bash
 
@@ -267,7 +210,7 @@ to hide our bigip credentials.
    .. literalinclude:: ../openshift/f5-cluster-deployment.yaml
       :language: yaml
       :linenos:
-      :emphasize-lines: 2,5,17,34-38
+      :emphasize-lines: 2,5,17,20,37-41
 
 #. Create the CIS deployment with the following command
 
@@ -275,24 +218,34 @@ to hide our bigip credentials.
 
       oc create -f f5-cluster-deployment.yaml
 
-#. Check for successful creation:
+#. Verify the deployment "deployed"
 
    .. code-block:: bash
 
-      oc get pods -n kube-system -o wide
+      kubectl get deployment k8s-bigip-ctlr-deployment --namespace kube-system
+
+   .. image:: images/f5-container-connector-launch-deployment-controller.png
+
+#. To locate on which node CIS is running, you can use the following command:
+
+   .. code-block:: bash
+
+      oc get pods -n -o wide kube-system
 
    .. image:: images/F5-CTRL-RUNNING.png
 
-#. If the tunnel is up and running big-ip should be able to ping the cluster
-   nodes. SSH to big-ip and run one or all of the following ping tests.
+Troubleshooting
+---------------
+
+If you need to troubleshoot your container, you have two different ways to
+check the logs of your container, kubectl command or docker command.
+
+#. Using kubectl command: you need to use the full name of your pod as
+   showed in the previous image
 
    .. code-block:: bash
 
-      # ping okd-master
-      ping -c 4 10.128.0.1
+      # For example:
+      kubectl logs k8s-bigip-ctlr-deployment-5b74dd769-x55vx -n kube-system
 
-      # ping okd-node1
-      ping -c 4 10.129.0.1
-
-      # ping okd-node2
-      ping -c 4 10.130.0.1
+   .. image:: images/f5-container-connector-check-logs-kubectl.png

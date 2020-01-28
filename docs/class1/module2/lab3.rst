@@ -5,7 +5,7 @@ BIG-IP Setup
 ------------
 
 With ClusterIP we're utilizing vxlan to communicate with the application pods.
-To do so we'll need to configure bigip.
+To do so we'll need to configure bigip first
 
 #. You need to setup a partition that will be used by F5 Container Ingress
    Service.
@@ -90,25 +90,26 @@ To do so we'll need to configure bigip.
 CIS Deployment
 --------------
 
-#. As stated in lab1, we have two deployment mode options, Nodeport or
-   ClusterIP. For more information see
-   `BIG-IP Controller Modes <http://clouddocs.f5.com/containers/v2/kubernetes/kctlr-modes.html>`_
+As stated in lab1, we have two deployment mode options, Nodeport or ClusterIP.
+For more information see `BIG-IP Controller Modes <http://clouddocs.f5.com/containers/v2/kubernetes/kctlr-modes.html>`_
 
-   Here we'll configure **ClusterIP mode** ``f5-cluster-deployment.yaml``
+Here we'll configure **ClusterIP mode** ``f5-cluster-deployment.yaml``
 
-   .. note:: 
-      - For your convenience the file can be found in
-        /home/ubuntu/agilitydocs/docs/class1/kubernetes (downloaded earlier in
-        the clone git repo step).
-      - Or you can cut and paste the file below and create your own file.
-      - If you have issues with your yaml and syntax (**indentation MATTERS**),
-        you can try to use an online parser to help you :
-        `Yaml parser <http://codebeautify.org/yaml-validator>`_
+.. note::
+   - For your convenience the file can be found in 
+      /home/ubuntu/agilitydocs/docs/class1/kubernetes (downloaded earlier in
+      the clone git repo step).
 
-   .. literalinclude:: ../kubernetes/f5-cluster-deployment.yaml
-      :language: yaml
-      :linenos:
-      :emphasize-lines: 2,7,17,20,37,38,40,41
+   - Or you can cut and paste the file below and create your own file.
+
+   - If you have issues with your yaml and syntax (**indentation MATTERS**),
+      you can try to use an online parser to help you :
+      `Yaml parser <http://codebeautify.org/yaml-validator>`_
+
+.. literalinclude:: ../kubernetes/f5-cluster-deployment.yaml
+   :language: yaml
+   :linenos:
+   :emphasize-lines: 2,7,17,20,37,38,40,41
 
 #. Before deploying CIS in Cluster mode we need to configure Big-IP as a node
    in the kubernetes cluster. To do so you'll need to modify
@@ -146,6 +147,21 @@ CIS Deployment
 #. Now that we have the new bigip node added you can try to launch your
    deployment. It will start our f5-k8s-controller container on one of our
    nodes (may take around 30sec to be in a running state):
+
+   .. code-block:: bash
+
+      cd ~/agilitydocs/docs/class2/openshift
+
+      cat f5-cluster-deployment.yaml
+
+   You'll see a config file similar to this:
+
+   .. literalinclude:: ../kubernetes/f5-cluster-deployment.yaml
+      :language: yaml
+      :linenos:
+      :emphasize-lines: 2,5,17,20,37-41
+
+#. Create the CIS deployment with the following command
 
    .. code-block:: bash
 

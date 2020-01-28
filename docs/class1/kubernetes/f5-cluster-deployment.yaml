@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: k8s-bigip-ctlr-deployment
+  name: k8s-bigip-ctlr
   namespace: kube-system
 spec:
   replicas: 1
@@ -38,5 +38,5 @@ spec:
             "--bigip-partition=kubernetes",
             "--namespace=default",
             "--pool-member-type=cluster",
-            "--flannel-name=k8s-tunnel"
+            "--flannel-name=/Common/k8s-tunnel"
           ]

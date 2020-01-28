@@ -115,144 +115,100 @@ to hide our bigip credentials.
 
    .. image:: images/f5-container-connector-bigip-clusterrolebinding.png
 
-#. Next let's explore the f5-hostsubnet.yaml file
+#. At this point we have two deployment mode options, Nodeport or ClusterIP.
+   This class will feature both modes. For more information see
+   `BIG-IP Controller Modes <http://clouddocs.f5.com/containers/v2/kubernetes/kctlr-modes.html>`_
 
-   .. code-block:: bash
+   Lets start with **Nodeport mode** ``f5-nodeport-deployment.yaml``
 
-      cd /root/agilitydocs/openshift
+   .. note:: 
+      - For your convenience the file can be found in
+        /home/ubuntu/agilitydocs/docs/class2/openshift (downloaded earlier in
+        the clone git repo step).
+      - Or you can cut and paste the file below and create your own file.
+      - If you have issues with your yaml and syntax (**indentation MATTERS**),
+        you can try to use an online parser to help you :
+        `Yaml parser <http://codebeautify.org/yaml-validator>`_
 
-      cat f5-bigip-hostsubnet.yaml
-
-   You'll see a config file similar to this:
-
-   .. literalinclude:: ../openshift/f5-bigip-hostsubnet.yaml
+   .. literalinclude:: ../openshift/f5-nodeport-deployment.yaml
       :language: yaml
       :linenos:
-      :emphasize-lines: 2,9
+      :emphasize-lines: 2,7,17,20,37,38,40
 
-   .. attention:: This YAML file creates an OpenShift Node and the Host is the
-      BIG-IP with an assigned /23 subnet of IP 10.131.0.0 (3 images down).
-
-#. Next let's look at the current cluster,  you should see 3 members
-   (1 master, 2 nodes)
+#. Once you have your yaml file setup, you can try to launch your deployment.
+   It will start our f5-k8s-controller container on one of our nodes (may take
+   around 30sec to be in a running state):
 
    .. code-block:: bash
 
-      oc get hostsubnet
+      oc create -f f5-nodeport-deployment.yaml
 
-   .. image:: images/F5-OC-HOSTSUBNET1.png
-
-#. Now create the connector to the BIG-IP device, then look before and after
-   at the attached devices
+#. Verify the deployment "deployed"
 
    .. code-block:: bash
 
-      oc create -f f5-bigip-hostsubnet.yaml
+      oc get deployment k8s-bigip-ctlr-deployment --namespace kube-system
 
-   You should see a successful creation of a new OpenShift Node.
+   .. image:: images/f5-container-connector-launch-deployment-controller.png
 
-   .. image:: images/F5-OS-NODE.png
-
-#. At this point nothing has been done to the BIG-IP, this only was done in
-   the OpenShift environment.
+#. To locate on which node the CIS service is running, you can use the
+   following command:
 
    .. code-block:: bash
 
-      oc get hostsubnet
+      oc get pods -o wide -n kube-system
 
-   You should now see OpenShift configured to communicate with the BIG-IP
+   We can see that our container is running on okd-node2 below.
 
-   .. image:: images/F5-OC-HOSTSUBNET2.png
+   .. image:: images/f5-container-connector-locate-controller-container.png
 
-   .. important:: The Subnet assignment, in this case is 10.131.0.0/23, was
-      assigned by the **subnet: "10.131.0.0/23"** line in "HostSubnet" yaml
-      file.
+Troubleshooting
+---------------
 
-   .. note:: In this lab we're manually assigning a subnet. We have the option
-      to let openshift auto assign ths by removing **subnet: "10.131.0.0/23"**
-      line at the end of the "hostsubnet" yaml file and setting the
-      **assign-subnet: "true"**. It would look like this:
+If you need to troubleshoot your container, you have two different ways to
+check the logs of your container, oc command or docker command.
 
-      .. code-block:: yaml
-         :emphasize-lines: 7
-
-         apiVersion: v1
-         kind: HostSubnet
-         metadata:
-            name: openshift-f5-node
-            annotations:
-               pod.network.openshift.io/fixed-vnid-host: "0"
-               pod.network.openshift.io/assign-subnet: "true"
-         host: openshift-f5-node
-         hostIP: 10.1.1.4
-
-#. Create the vxlan tunnel self-ip
-
-   .. tip:: For your SELF-IP subnet, remember it is a /14 and not a /23 -
-      Why? The Self-IP has to be able to understand those other /23 subnets are
-      local in the namespace in the example above for Master, Node1, Node2,
-      etc. Many students accidently use /23, but then the self-ip will be only
-      to communicate to one subnet on the openshift-f5-node. When trying to
-      ping across to services on other /23 subnets from the BIG-IP for instance,
-      communication will fail as your self-ip doesn't have the proper subnet
-      mask to know thokd other subnets are local.
-      
-   .. code-block:: bash
-      
-      # From the CLI:
-      tmsh create net self okd-vxlan-selfip address 10.131.0.1/14 vlan okd-tunnel
-
-      # From the UI:
-      GoTo Network --> Self IP List
-      - Create a new Self-IP called "okd-vxlan-selfip"
-      - Set the IP Address to "10.131.0.1". (An IP from the subnet assigned in the previous step.)
-      - Set the Netmask to "255.252.0.0"
-      - Set the VLAN / Tunnel to "okd-tunnel" (Created earlier)
-      - Set Port Lockdown to "Allow All"
-      - Click Finished
-
-   .. image:: images/create-okd-vxlan-selfip.png
-
-#. Now we'll create an Openshift F5 Container Ingress Service to do the API
-   calls to/from the F5 device. First we need the "deployment" file.
+#. Using oc command: you need to use the full name of your pod as showed in the
+   previous image
 
    .. code-block:: bash
 
-      cd /root/agilitydocs/openshift
+      # For example:
+      oc logs k8s-bigip-ctlr-deployment-5b74dd769-x55vx -n kube-system
 
-      cat f5-cluster-deployment.yaml
+   .. image:: images/f5-container-connector-check-logs-kubectl.png
 
-   You'll see a config file similar to this:
-
-   .. literalinclude:: ../openshift/f5-cluster-deployment.yaml
-      :language: yaml
-      :linenos:
-      :emphasize-lines: 2,5,17,34-38
-
-#. Create the CIS deployment with the following command
+#. Using docker logs command: From the previous check we know the container
+   is running on okd-node1.  Via mRemoteNG open a session to okd-node1 and
+   run the following commands:
 
    .. code-block:: bash
 
-      oc create -f f5-cluster-deployment.yaml
+      sudo docker ps
 
-#. Check for successful creation:
+   Here we can see our container ID is "01a7517b50c5"
 
-   .. code-block:: bash
+   .. image:: images/f5-container-connector-find-dockerID--controller-container.png
 
-      oc get pods -n kube-system -o wide
-
-   .. image:: images/F5-CTRL-RUNNING.png
-
-#. If the tunnel is up and running big-ip should be able to ping the cluster
-   nodes. SSH to big-ip and run one or all of the following ping tests.
+   Now we can check our container logs:
 
    .. code-block:: bash
 
-      # ping okd-master
-      ping -c 4 10.128.0.1
+      sudo docker logs 01a7517b50c5
 
-      # ping okd-node1
-      ping -c 4 10.129.0.1
+   .. image:: images/f5-container-connector-check-logs-controller-container.png
 
-      # ping okd-node2
-      ping -c 4 10.130.0.1
+   .. note:: The log messages here are identical to the log messages displayed
+      in the previous oc logs command. 
+
+#. You can connect to your container with oc as well:
+
+   .. code-block:: bash
+
+      oc exec -it k8s-bigip-ctlr-deployment-79fcf97bcc-48qs7 -n kube-system  -- /bin/sh
+
+      cd /app
+
+      ls -la
+
+      exit

@@ -8,21 +8,6 @@ For this lab we'll use a simple pre-configured docker image called
 "f5-hello-world". It can be found on docker hub at
 `f5devcentral/f5-hello-world <https://hub.docker.com/r/f5devcentral/f5-hello-world/>`_
 
-To deploy our application, we will need to do the following:
-
-#. Define a Deployment: this will launch our application running in a
-   container.
-#. Define a Service: this is an abstraction which defines a logical set of
-   *pods* and a policy by which to access them. Expose the *service* on a port
-   on each node of the cluster (the same port on each *node*). You’ll be able
-   to contact the service on any <NodeIP>:NodePort address. If you set the type
-   field to "NodePort", the Kubernetes master will allocate a port from a
-   flag-configured range **(default: 30000-32767)**, and each Node will proxy
-   that port (the same port number on every Node) into your *Service*.
-#. Define a ConfigMap: this can be used to store fine-grained information like
-   individual properties or coarse-grained information like entire config files
-   or JSON blobs. It will contain the BIG-IP configuration we need to push.
-
 App Deployment
 --------------
 
@@ -35,7 +20,7 @@ On the **okd-master** we will create all the required files:
    .. literalinclude:: ../openshift/f5-hello-world-deployment.yaml
       :language: yaml
       :linenos:
-      :emphasize-lines: 2,6,14
+      :emphasize-lines: 2,14
 
 #. Create a file called ``f5-hello-world-service-cluster.yaml``
 
@@ -49,6 +34,11 @@ On the **okd-master** we will create all the required files:
 #. Create a file called ``f5-hello-world-configmap.yaml``
 
    .. tip:: Use the file in ~/agilitydocs/docs/class2/openshift
+
+   .. attention:: The schema version below (for example 1.7) comes from the releases
+      of big-ip-controller.  For more information, head over to the following
+      link for a quick review:
+      https://clouddocs.f5.com/containers/v2/releases_and_versioning.html#schema-table
 
    .. literalinclude:: ../openshift/f5-hello-world-configmap.yaml
       :language: yaml
@@ -70,6 +60,8 @@ On the **okd-master** we will create all the required files:
    .. code-block:: bash
 
       oc get pods -o wide
+
+      # This can take a few seconds to a minute to create these hello-world containers to running state.      
 
    .. image:: images/f5-hello-world-pods.png
 
@@ -104,7 +96,7 @@ On the **okd-master** we will create all the required files:
    .. note:: You can see that the pool members IP addresses are assigned from
       the overlay network (**ClusterIP mode**)
 
-#. Now access your application via the BIG-IP VIP: 10.1.1.4:81
+#. Now you can try to access your application via your BIG-IP VIP: 10.1.1.4:81
 
    .. image:: images/f5-container-connector-access-app.png
 
@@ -119,7 +111,7 @@ On the **okd-master** we will create all the required files:
 
    .. code-block:: bash
 
-      oc scale --replicas=10 deployment/f5-hello-world
+      oc scale --replicas=10 deployment/f5-hello-world -n default
 
 #. Check the pods were created
 
@@ -133,19 +125,8 @@ On the **okd-master** we will create all the required files:
 
    .. image:: images/f5-hello-world-pool-scale10.png
 
-   .. attention:: Which network(s) are the IPs allocated from?
+   .. attention:: Now we show 10 pool members vs. 2 in the previous lab, why?
 
-#. Cleanup deployment
-
-   .. important:: This needs to be done before attempting Class 5
-
-   .. code-block:: bash
-
-      oc delete -f f5-hello-world-service-cluster.yaml
-      oc delete -f f5-hello-world-configmap.yaml
-      oc delete -f f5-hello-world-deployment.yaml
-      oc delete -f f5-cluster-deployment.yaml
-      oc delete -f f5-bigip-hostsubnet.yaml
-      oc delete clusterrolebinding k8s-bigip-ctlr-clusteradmin
-      oc delete serviceaccount k8s-bigip-ctlr -n kube-system
-      oc delete secret bigip-login -n kube-system
+.. attention:: This concludes the OpenShift portion of the class. Feel free to
+   experiment with any of the settings. The lab will be destroyed at the end of
+   the class/day.

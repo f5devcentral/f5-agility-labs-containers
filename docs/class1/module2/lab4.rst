@@ -15,7 +15,7 @@ On **kube-master1** we will create all the required files:
 
 #. Create a file called ``f5-hello-world-deployment.yaml``
 
-   .. tip:: Use the file in /home/ubuntu/agilitydocs/docs/class1/kubernetes
+   .. tip:: Use the file in ~/agilitydocs/docs/class1/kubernetes
 
    .. literalinclude:: ../kubernetes/f5-hello-world-deployment.yaml
       :language: yaml
@@ -24,7 +24,7 @@ On **kube-master1** we will create all the required files:
 
 #. Create a file called ``f5-hello-world-service-clusterip.yaml``
 
-   .. tip:: Use the file in /home/ubuntu/agilitydocs/docs/class1/kubernetes
+   .. tip:: Use the file in ~/agilitydocs/docs/class1/kubernetes
 
    .. literalinclude:: ../kubernetes/f5-hello-world-service-clusterip.yaml
       :language: yaml
@@ -33,13 +33,12 @@ On **kube-master1** we will create all the required files:
 
 #. Create a file called ``f5-hello-world-configmap.yaml``
 
-   .. tip:: Use the file in /home/ubuntu/agilitydocs/docs/class1/kubernetes
+   .. tip:: Use the file in ~/agilitydocs/docs/class1/kubernetes
 
    .. attention:: The schema version below (for example 1.7) comes from the releases
       of big-ip-controller.  For more information, head over to the following
       link for a quick review:
       https://clouddocs.f5.com/containers/v2/releases_and_versioning.html#schema-table
-
 
    .. literalinclude:: ../kubernetes/f5-hello-world-configmap.yaml
       :language: yaml
@@ -94,8 +93,8 @@ On **kube-master1** we will create all the required files:
 
    .. image:: images/f5-container-connector-check-app-bigipconfig2.png
 
-   .. note:: You can see that the pool members listed are all the kubernetes
-      nodes. (**NodePort mode**)
+   .. note:: You can see that the pool members IP addresses are assigned from
+      the overlay network (**ClusterIP mode**)
 
 #. Now you can try to access your application via your BIG-IP VIP: 10.1.1.4:81
 
@@ -126,8 +125,8 @@ On **kube-master1** we will create all the required files:
 
    .. image:: images/f5-hello-world-pool-scale10.png
 
-   .. attention:: Now we show 10 pool members, why?
+   .. attention:: Now we show 10 pool members vs. 2 in the previous lab, why?
 
 .. attention:: This concludes the Kubernetes portion of the class. Feel free to
    experiment with any of the settings. The lab will be destroyed at the end of
-   the day.
+   the class/day.
