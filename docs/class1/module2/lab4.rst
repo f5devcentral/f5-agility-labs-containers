@@ -91,12 +91,12 @@ On **kube-master1** we will create all the required files:
    Local Traffic --> Pools --> "cfgmap_default_f5-hello-world_f5-hello-world"
    --> Members
 
-   .. image:: images/f5-container-connector-check-app-bigipconfig2.png
+   .. image:: images/f5-container-connector-check-app-bigipconfig3.png
 
    .. note:: You can see that the pool members IP addresses are assigned from
       the overlay network (**ClusterIP mode**)
 
-#. Now you can try to access your application via your BIG-IP VIP: 10.1.1.4:81
+#. Now you can try to access your application via the BIG-IP VS/VIP: UDF-URL
 
    .. image:: images/f5-container-connector-access-app.png
 
@@ -105,7 +105,7 @@ On **kube-master1** we will create all the required files:
    cfgmap_default_f5-hello-world_f5-hello-world --> Statistics to see that
    traffic is distributed as expected.
 
-   .. image:: images/f5-container-connector-check-app-bigip-stats.png
+   .. image:: images/f5-container-connector-check-app-bigip-stats-clusterip.png
 
 #. Scale the f5-hello-world app
 
@@ -123,9 +123,15 @@ On **kube-master1** we will create all the required files:
 
 #. Check the pool was updated on big-ip
 
-   .. image:: images/f5-hello-world-pool-scale10.png
+   .. image:: images/f5-hello-world-pool-scale10-clusterip.png
 
    .. attention:: Now we show 10 pool members vs. 2 in the previous lab, why?
+
+#. Delete f5-hello-world
+
+   .. code-block:: bash
+
+      kubectl delete -f f5-hello-world-configmap.yaml
 
 .. attention:: This concludes the Kubernetes portion of the class. Feel free to
    experiment with any of the settings. The lab will be destroyed at the end of

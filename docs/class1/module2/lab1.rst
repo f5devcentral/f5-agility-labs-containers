@@ -131,7 +131,7 @@ to hide our bigip credentials.
 
    .. code-block:: bash
 
-      kubectl get deployment k8s-bigip-ctlr-deployment --namespace kube-system
+      kubectl get deployment k8s-bigip-ctlr --namespace kube-system
 
    .. image:: images/f5-container-connector-launch-deployment-controller.png
 
@@ -142,7 +142,7 @@ to hide our bigip credentials.
 
       kubectl get pods -o wide -n kube-system
 
-   We can see that our container is running on kube-node2 below.
+   We can see that our container is running on kube-node1 below.
 
    .. image:: images/f5-container-connector-locate-controller-container.png
 
@@ -151,6 +151,9 @@ Troubleshooting
 
 If you need to troubleshoot your container, you have two different ways to
 check the logs of your container, kubectl command or docker command.
+
+.. attention:: Depending on your deployment CIS can be running on either
+   kube-node1 or kube-node2.
 
 #. Using kubectl command: you need to use the full name of your pod as
    showed in the previous image
@@ -163,10 +166,12 @@ check the logs of your container, kubectl command or docker command.
    .. image:: images/f5-container-connector-check-logs-kubectl.png
 
 #. Using docker logs command: From the previous check we know the container
-   is running on kube-node1.  Via mRemoteNG open a session to kube-node1 and
-   run the following commands:
+   is running on kube-node1. On your current session with kube-master1 SSH to
+   kube-node1 first and then run the docker command:
 
    .. code-block:: bash
+
+      ssh kube-node1
 
       sudo docker ps
 
@@ -185,7 +190,11 @@ check the logs of your container, kubectl command or docker command.
    .. note:: The log messages here are identical to the log messages displayed
       in the previous kubectl logs command. 
 
-#. You can connect to your container with kubectl as well:
+#. You can connect to your container with kubectl as well. This is something
+   not typically needed but support may direct you to do so.
+
+   .. note:: Exit from your current session with kube-node1 before attempting
+      this command.
 
    .. code-block:: bash
 

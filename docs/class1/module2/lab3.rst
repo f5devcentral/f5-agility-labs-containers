@@ -4,7 +4,7 @@ Lab 2.3 - CIS Install & Configuration (ClusterIP)
 BIG-IP Setup
 ------------
 
-With ClusterIP we're utilizing vxlan to communicate with the application pods.
+With ClusterIP we're utilizing VXLAN to communicate with the application pods.
 To do so we'll need to configure bigip first
 
 #. You need to setup a partition that will be used by F5 Container Ingress
@@ -24,8 +24,8 @@ To do so we'll need to configure bigip first
 
    .. image:: images/f5-container-connector-bigip-partition-setup.png
 
-.. attention:: Be sure to switch to the "Common" partition before making the
-   following changes.
+.. attention:: Be sure to switch back to the "Common" partition before making
+   the following changes.
 
 #. Create a vxlan tunnel profile
 
@@ -96,22 +96,20 @@ For more information see `BIG-IP Controller Modes <http://clouddocs.f5.com/conta
 Here we'll configure **ClusterIP mode** ``f5-cluster-deployment.yaml``
 
 .. note::
-   - For your convenience the file can be found in 
-      /home/ubuntu/agilitydocs/docs/class1/kubernetes (downloaded earlier in
-      the clone git repo step).
-
+   - For your convenience the file can be found in
+     /home/ubuntu/agilitydocs/docs/class1/kubernetes (downloaded earlier in the
+     clone git repo step).
    - Or you can cut and paste the file below and create your own file.
-
    - If you have issues with your yaml and syntax (**indentation MATTERS**),
-      you can try to use an online parser to help you :
-      `Yaml parser <http://codebeautify.org/yaml-validator>`_
+     you can try to use an online parser to help you :
+     `Yaml parser <http://codebeautify.org/yaml-validator>`_
 
 .. literalinclude:: ../kubernetes/f5-cluster-deployment.yaml
    :language: yaml
    :linenos:
    :emphasize-lines: 2,7,17,20,37,38,40,41
 
-#. Before deploying CIS in Cluster mode we need to configure Big-IP as a node
+#. Before deploying CIS in ClusterIP mode we need to configure Big-IP as a node
    in the kubernetes cluster. To do so you'll need to modify
    "f5-bigip-node.yaml" with the MAC address auto created from the previous
    steps. SSH to BIG-IP and run the following command. You'll want to copy the
@@ -129,7 +127,7 @@ Here we'll configure **ClusterIP mode** ``f5-cluster-deployment.yaml``
 
    .. code-block:: bash
 
-      vim /home/ubuntu/agilitydocs/docs/class1/kubernetes/f5-bigip-node.yaml
+      vim ~/agilitydocs/docs/class1/kubernetes/f5-bigip-node.yaml
 
       and edit the highlighted MAC addr line with your addr shown below:
 
@@ -144,9 +142,15 @@ Here we'll configure **ClusterIP mode** ``f5-cluster-deployment.yaml``
 
       kubectl create -f f5-bigip-node.yaml
 
-#. Now that we have the new bigip node added you can try to launch your
-   deployment. It will start our f5-k8s-controller container on one of our
-   nodes (may take around 30sec to be in a running state):
+#. Verify "bigip1" node is created:
+
+   .. code-block:: bash
+
+      kubectl get nodes
+
+#. Now that we have the new bigip node added we can launch the CIS deployment.
+   It will start our f5-k8s-controller container on one of our nodes (may take
+   around 30sec to be in a running state):
 
    .. code-block:: bash
 
@@ -171,7 +175,7 @@ Here we'll configure **ClusterIP mode** ``f5-cluster-deployment.yaml``
 
    .. code-block:: bash
 
-      kubectl get deployment k8s-bigip-ctlr-deployment --namespace kube-system
+      kubectl get deployment k8s-bigip-ctlr --namespace kube-system
 
    .. image:: images/f5-container-connector-launch-deployment-controller.png
 
@@ -181,18 +185,18 @@ Here we'll configure **ClusterIP mode** ``f5-cluster-deployment.yaml``
 
       kubectl get pods -o wide -n kube-system
 
-   We can see that our container is running on kube-node2 below.
+   We can see that our container, in this example, is running on kube-node1
+   below.
 
    .. image:: images/f5-container-connector-locate-controller-container.png
 
 Troubleshooting
 ---------------
 
-If you need to troubleshoot your container, you have two different ways to
-check the logs of your container, kubectl command or docker command.
+Check the container/pod logs via kubectl command.
 
-#. Using kubectl command: you need to use the full name of your pod as
-   showed in the previous image
+#. Using the full name of your pod as showed in the previous image run the
+   following command:
 
    .. code-block:: bash
 

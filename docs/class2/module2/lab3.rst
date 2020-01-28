@@ -95,15 +95,13 @@ For more information see `BIG-IP Controller Modes <http://clouddocs.f5.com/conta
 Here we'll configure **ClusterIP mode** ``f5-cluster-deployment.yaml``
 
 .. note::
-   - For your convenience the file can be found in 
-      /home/ubuntu/agilitydocs/docs/class2/openshift (downloaded earlier in
-      the clone git repo step).
-
+   - For your convenience the file can be found in
+     /home/ubuntu/agilitydocs/docs/class2/openshift (downloaded earlier in the
+     clone git repo step).
    - Or you can cut and paste the file below and create your own file.
-
    - If you have issues with your yaml and syntax (**indentation MATTERS**),
-      you can try to use an online parser to help you :
-      `Yaml parser <http://codebeautify.org/yaml-validator>`_
+     you can try to use an online parser to help you :
+     `Yaml parser <http://codebeautify.org/yaml-validator>`_
 
 .. literalinclude:: ../openshift/f5-cluster-deployment.yaml
    :language: yaml

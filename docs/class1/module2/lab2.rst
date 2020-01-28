@@ -88,10 +88,10 @@ On **kube-master1** we will create all the required files:
 
    .. image:: images/f5-container-connector-check-app-definition.png
 
-#. To test the app you need to pay attention to:
+#. To understand and test the new app you need to pay attention to:
 
    **The NodePort value**, that's the port used by Kubernetes to give you
-   access to the app from the outside. Here it's "30778", highlighted above.
+   access to the app from the outside. Here it's "32188", highlighted above.
 
    **The Endpoints**, that's our 2 instances (defined as replicas in our
    deployment file) and the port assigned to the service: port 8080.
@@ -114,9 +114,9 @@ On **kube-master1** we will create all the required files:
    .. image:: images/f5-container-connector-check-app-bigipconfig2.png
 
    .. note:: You can see that the pool members listed are all the kubernetes
-      nodes. (**NodePort mode**)
+      nodes on the node port 32188. (**NodePort mode**)
 
-#. Now you can try to access your application via your BIG-IP VIP: 10.1.1.4:81
+#. Now you can try to access your application via the BIG-IP VS/VIP: UDF-URL
 
    .. image:: images/f5-container-connector-access-app.png
 
@@ -127,7 +127,7 @@ On **kube-master1** we will create all the required files:
 
    .. image:: images/f5-container-connector-check-app-bigip-stats.png
 
-#. How is traffic forwarded in Kubernetes from the <node IP>:30507 to the
+#. How is traffic forwarded in Kubernetes from the <node IP>:32188 to the
    <container IP>:8080? This is done via iptables that is managed via the
    kube-proxy instances. On either of the nodes, SSH in and run the following
    command:
@@ -155,11 +155,11 @@ On **kube-master1** we will create all the required files:
 
    .. image:: images/f5-hello-world-pods-scale10.png
 
-#. Check the pool was updated on big-ip
+#. Check the pool was updated on BIG-IP
 
    .. image:: images/f5-hello-world-pool-scale10.png
 
-   .. attention:: Why are there only 2 pool members?
+   .. attention:: Why do we still only show 3 pool members?
 
 #. Delete Hello-World and Remove CIS
 
@@ -170,6 +170,6 @@ On **kube-master1** we will create all the required files:
       kubectl delete -f f5-hello-world-deployment.yaml
       kubectl delete -f f5-nodeport-deployment.yaml
 
-   .. important:: Do not skip this step. Instead of reusing them, the next lab
-      will re-deploy many of the same objects so to avoid conflict errors it's
-      best to remove them.
+   .. important:: Do not skip this step. Instead of reusing some of these
+      objects, the next lab we will re-deploy them to avoid conflicts and
+      errors.

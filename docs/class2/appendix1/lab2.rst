@@ -58,7 +58,7 @@ Lab 1.2 - Install Openshift
    Here's the "inventory" (refrenced by our ansible playbook) used for the
    deployment.
 
-   .. code-block:: yaml
+   .. code-block:: ini
 
       [OSEv3:children]
       masters
