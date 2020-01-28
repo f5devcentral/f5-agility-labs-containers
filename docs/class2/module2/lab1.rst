@@ -44,36 +44,8 @@ URL: https://10.1.1.4
 
    .. image:: images/f5-container-connector-bigip-partition-setup.png
 
-#. Create a vxlan tunnel profile
-
-   .. code-block:: bash
-
-      # From the CLI:
-      tmsh create net tunnel vxlan okd-vxlan {app-service none flooding-type multipoint}
-
-      # From the UI:
-      GoTo Network --> Tunnels --> Profiles --> VXLAN
-      - Create a new profile called "okd-vxlan"
-      - Set the Flooding Type = Multipoint
-      - Click Finished
-
-   .. image:: images/create-okd-vxlan-profile.png
-
-#. Create a vxlan tunnel
-
-   .. code-block:: bash
-
-      # From the CLI:
-      tmsh create net tunnel tunnel okd-tunnel {key 0 local-address 10.1.1.4 profile okd-vxlan}
-
-      # From the UI:
-      GoTo Network --> Tunnels --> Tunnel List
-      - Create a new tunnel called "okd-tunnel"
-      - Set the Local Address to 10.1.1.4
-      - Set the Profile to the one previously created called "okd-vxlan"
-      - Click Finished
-
-   .. image:: images/create-okd-vxlan-tunnel.png
+   With the new partition created, we now need to ssh to Kube-master1 to setup
+   the CIS.
 
 CIS Deployment
 --------------
@@ -86,27 +58,15 @@ define a `Kubernetes deployment <https://kubernetes.io/docs/user-guide/deploymen
 and create a `Kubernetes secret <https://kubernetes.io/docs/user-guide/secrets/>`_
 to hide our bigip credentials.
 
-#. From the jumpbox open **mRemoteNG** and start a session with okd-master.
-
-   .. note:: As a reminder we're utilizing a wrapper called **MRemoteNG** for
-      Putty and other services. MRNG hold credentials and allows for multiple
-      protocols(i.e. SSH, RDP, etc.), makes jumping in and out of SSH
-      connections easier.
-
-   On your desktop select **MRemoteNG**, once launched you'll see a few tabs
-   similar to the example below.  Open up the OpenShift Enterprise /
-   okd-Cluster folder and double click okd-master.
+#. From the jumpbox start an SSH session with okd-master1.
 
 #. "git" the demo files
-
-   .. note:: These files should be here by default, if **NOT** run the
-      following commands.
 
    .. code-block:: bash
 
       git clone -b develop https://github.com/f5devcentral/f5-agility-labs-containers.git ~/agilitydocs
 
-      cd ~/agilitydocs/openshift
+      cd ~/agilitydocs/docs/class2/openshift
 
 #. Log in with an Openshift Client.
 

@@ -6,3 +6,4 @@ oc create serviceaccount k8s-bigip-ctlr -n kube-system
 oc create clusterrolebinding k8s-bigip-ctlr-clusteradmin --clusterrole=cluster-admin --serviceaccount=kube-system:k8s-bigip-ctlr
 oc create -f f5-bigip-hostsubnet.yaml
 oc create -f f5-cluster-deployment.yaml
+

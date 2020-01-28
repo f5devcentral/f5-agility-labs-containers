@@ -15,12 +15,19 @@ To use F5 Container Ingress Service, you'll need a BIG-IP up and running first.
 Through the Jumpbox, you should have a BIG-IP available at the following
 URL: https://10.1.1.4
 
-.. warning:: Connect to your BIG-IP and check it is active and licensed. Its
-   login and password are: **admin/admin**
+.. warning:: 
+   - Connect to your BIG-IP and check it is active and licensed. Its
+     login and password are: **admin/admin**
 
-   If your BIG-IP has no license or its license expired, renew the license. You
-   just need a LTM VE license for this lab. No specific add-ons are required
-   (ask a lab instructor for eval licenses if your license has expired)
+   - If your BIG-IP has no license or its license expired, renew the license.
+     You just need a LTM VE license for this lab. No specific add-ons are
+     required (ask a lab instructor for eval licenses if your license has
+     expired)
+
+   - Be sure to be in the ``Common`` partition before creating the following
+     objects.
+
+     .. image:: images/f5-check-partition.png
 
 #. You need to setup a partition that will be used by F5 Container Ingress
    Service.
@@ -37,8 +44,8 @@ URL: https://10.1.1.4
 
    .. image:: images/f5-container-connector-bigip-partition-setup.png
 
-   With the new partition created, we can go back to Kubernetes to setup the
-   F5 Container Ingress Service.
+   With the new partition created, we now need to ssh to Kube-master1 to setup
+   the CIS.
 
 CIS Deployment
 --------------
@@ -51,12 +58,9 @@ need to define a `Kubernetes deployment <https://kubernetes.io/docs/user-guide/d
 and create a `Kubernetes secret <https://kubernetes.io/docs/user-guide/secrets/>`_
 to hide our bigip credentials.
 
-#. From the jumpbox start an SSH session with Kube-master.
+#. From the jumpbox start an SSH session with kube-master1.
 
 #. "git" the demo files
-
-   .. note:: These files should be here by default, if **NOT** run the
-      following commands.
 
    .. code-block:: bash
 

@@ -1,6 +1,9 @@
 Appendix 1: Build a Kubernetes Cluster
 ======================================
 
+.. attention:: **THE CLASS BLUEPRINT IS PRE-CONFIGURED WITH A WORKING CLUSTER.
+   THIS APPENDIX IS FOR DOCUMENTION PURPOSES ONLY.**
+
 In this module, we will build a 3 node cluster (1x master and 2x nodes) 
 utilizing Ubuntu server images.
 

@@ -2,5 +2,6 @@
 
 #create container f5-hello-wrold
 oc create -f f5-hello-world-deployment.yaml
+oc create -f f5-hello-world-service-nodeport.yaml
 oc create -f f5-hello-world-configmap.yaml
-oc create -f f5-hello-world-service-cluster.yaml
+

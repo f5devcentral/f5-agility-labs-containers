@@ -31,25 +31,14 @@ along the way, but these are the basics to get you started.
   operations, watches for problems, and orchestrates everything
 - Node - Where the compute happens, your software is run on nodes
 
-Access The JumpBox
-------------------
+Access the Master
+-----------------
 
-#. Access the Win7 Jumpbox, use the following username and password:
+#. From the jumpbox start an SSH session with okd-master1.
 
-   - username: **user**
-   - password: **Student!Agility!**
+   .. code-block:: bash
 
-   .. tip:: Use the Send Text to Client option to paste the password.
-
-#. From the jumpbox open **mRemoteNG** and start a session to each of the
-   following servers. The sessions are pre-configured to connect with the
-   default user “centos”.
-
-   - okd-master1
-   - okd-node1
-   - okd-node2
-
-   .. image:: images/MremoteNG.png
+      ssh or putty to IP
 
 #. For your convenience we've already added the host IP & names to /etc/hosts.
    Verify the file is correct on each node.
@@ -206,7 +195,7 @@ This parameter can be set in the OPTIONS for the relevant services environment
 file within /etc/sysconfig/
 
 For example to set OpenShift master's log level to debug, add or edit this
-line in /etc/sysconfig/atomic-openshift-master
+line in /etc/sysconfig/origin-node
 
 .. code-block:: bash
 
@@ -214,11 +203,13 @@ line in /etc/sysconfig/atomic-openshift-master
 
    and then restart the service with
   
-   systemctl restart atomic-openshift-master
+   sudo systemctl restart origin-node
 
 Key files / directories
 
 .. code-block:: console
+
+   .. attention:: Must be **root** to see/edit these files.
 
    /etc/origin/{node,master}/
    /etc/origin/{node,master}/{node.master}-config.yaml
