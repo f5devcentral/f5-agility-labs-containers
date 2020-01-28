@@ -161,7 +161,7 @@ check the logs of your container, kubectl command or docker command.
    .. code-block:: bash
 
       # For example:
-      kubectl logs k8s-bigip-ctlr-deployment-5b74dd769-x55vx -n kube-system
+      kubectl logs k8s-bigip-ctlr-5b74dd769-x55vx -n kube-system
 
    .. image:: images/f5-container-connector-check-logs-kubectl.png
 
@@ -198,7 +198,7 @@ check the logs of your container, kubectl command or docker command.
 
    .. code-block:: bash
 
-      kubectl exec -it k8s-bigip-ctlr-deployment-79fcf97bcc-48qs7 -n kube-system  -- /bin/sh
+      kubectl exec -it k8s-bigip-ctlr-79fcf97bcc-48qs7 -n kube-system  -- /bin/sh
 
       cd /app
 

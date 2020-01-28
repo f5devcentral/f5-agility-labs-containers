@@ -5,7 +5,7 @@ BIG-IP Setup
 ------------
 
 With ClusterIP we're utilizing VXLAN to communicate with the application pods.
-To do so we'll need to configure bigip first
+To do so we'll need to configure bigip first.
 
 #. You need to setup a partition that will be used by F5 Container Ingress
    Service.

@@ -4,7 +4,7 @@ Lab 2.3 - CIS Install & Configuration (ClusterIP)
 BIG-IP Setup
 ------------
 
-With ClusterIP we're utilizing vxlan to communicate with the application pods.
+With ClusterIP we're utilizing VXLAN to communicate with the application pods.
 To do so we'll need to configure bigip first.
 
 #. You need to setup a partition that will be used by F5 Container Ingress
@@ -140,7 +140,7 @@ Here we'll configure **ClusterIP mode** ``f5-cluster-deployment.yaml``
    .. attention:: This YAML file creates an OpenShift Node and the Host is the
       BIG-IP with an assigned /23 subnet of IP 10.131.0.0 (3 images down).
 
-#. Next let's look at the current cluster,  you should see 3 members
+#. Next let's look at the current cluster, you should see 3 members
    (1 master, 2 nodes)
 
    .. code-block:: bash
@@ -220,7 +220,7 @@ Here we'll configure **ClusterIP mode** ``f5-cluster-deployment.yaml``
 
    .. code-block:: bash
 
-      kubectl get deployment k8s-bigip-ctlr-deployment --namespace kube-system
+      kubectl get deployment k8s-bigip-ctlr --namespace kube-system
 
    .. image:: images/f5-container-connector-launch-deployment-controller.png
 
@@ -228,7 +228,7 @@ Here we'll configure **ClusterIP mode** ``f5-cluster-deployment.yaml``
 
    .. code-block:: bash
 
-      oc get pods -n -o wide kube-system
+      oc get pods -o wide -n kube-system
 
    .. image:: images/F5-CTRL-RUNNING.png
 
@@ -244,6 +244,6 @@ check the logs of your container, kubectl command or docker command.
    .. code-block:: bash
 
       # For example:
-      kubectl logs k8s-bigip-ctlr-deployment-5b74dd769-x55vx -n kube-system
+      kubectl logs k8s-bigip-ctlr-8c6cf8667-htcgw -n kube-system
 
    .. image:: images/f5-container-connector-check-logs-kubectl.png

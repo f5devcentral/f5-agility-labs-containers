@@ -67,7 +67,7 @@ On the **okd-master** we will create all the required files:
    .. code-block:: bash
 
       oc create -f f5-hello-world-deployment.yaml
-      oc create -f f5-hello-world-service-cluster.yaml
+      oc create -f f5-hello-world-service-nodeport.yaml
       oc create -f f5-hello-world-configmap.yaml
       
    .. image:: images/f5-container-connector-launch-app.png
@@ -86,12 +86,12 @@ On the **okd-master** we will create all the required files:
 
       oc describe svc f5-hello-world
         
-   .. image:: images/f5-container-connector-check-app-definition.png
+   .. image:: images/f5-container-connector-check-app-definition-node.png
 
 #. To test the app you need to pay attention to: 
 
    **The NodePort value**, that's the port used by Kubernetes to give you
-   access to the app from the outside. Here it's "30778", highlighted above.
+   access to the app from the outside. Here it's "31268", highlighted above.
 
    **The Endpoints**, that's our 2 instances (defined as replicas in our
    deployment file) and the port assigned to the service: port 8080.
@@ -113,10 +113,10 @@ On the **okd-master** we will create all the required files:
 
    .. image:: images/f5-container-connector-check-app-bigipconfig2.png
 
-   .. note:: You can see that the pool members IP addresses are assigned from
-      the overlay network (**NodePort mode**)
+   .. note:: You can see that the pool members listed are all from the
+      openshift nodes on the port 31268. (**NodePort mode**)
 
-#. Now access your application via the BIG-IP VIP: 10.1.1.4:81
+#. Now you can try to access your application via the BIG-IP VS/VIP: UDF-URL
 
    .. image:: images/f5-container-connector-access-app.png
 
@@ -126,20 +126,6 @@ On the **okd-master** we will create all the required files:
    Statistics to see that traffic is distributed as expected.
 
    .. image:: images/f5-container-connector-check-app-bigip-stats.png
-
-#. How is traffic forwarded in Kubernetes from the <node IP>:30507 to the
-   <container IP>:8080? This is done via iptables that is managed via the
-   kube-proxy instances. On either of the nodes, SSH in and run the following
-   command:
-
-   .. code-block:: bash
-
-      sudo iptables-save | grep f5-hello-world
-
-   This will list the different iptables rules that were created regarding our
-   service.
-
-   .. image:: images/f5-container-connector-list-frontend-iptables.png
 
 #. Scale the f5-hello-world app
 
@@ -157,9 +143,9 @@ On the **okd-master** we will create all the required files:
 
 #. Check the pool was updated on big-ip
 
-   .. image:: images/f5-hello-world-pool-scale10.png
+   .. image:: images/f5-hello-world-pool-scale10-node.png
 
-   .. attention:: Which network(s) are the IPs allocated from?
+   .. attention:: Why do we still only show 3 pool members?
 
 #. Delete Hello-World and Remove CIS
 
@@ -170,6 +156,6 @@ On the **okd-master** we will create all the required files:
       kubectl delete -f f5-hello-world-deployment.yaml
       kubectl delete -f f5-nodeport-deployment.yaml
 
-   .. important:: Do not skip this step. Instead of reusing them, the next lab
-      will re-deploy many of the same objects so to avoid conflict errors it's
-      best to remove them.
+   .. important:: Do not skip this step. Instead of reusing some of these
+      objects, the next lab we will re-deploy them to avoid conflicts and
+      errors.

@@ -149,7 +149,7 @@ to hide our bigip credentials.
 
       oc get deployment k8s-bigip-ctlr-deployment --namespace kube-system
 
-   .. image:: images/f5-container-connector-launch-deployment-controller.png
+   .. image:: images/f5-container-connector-launch-node-deployment-controller.png
 
 #. To locate on which node the CIS service is running, you can use the
    following command:
@@ -158,9 +158,9 @@ to hide our bigip credentials.
 
       oc get pods -o wide -n kube-system
 
-   We can see that our container is running on okd-node2 below.
+   We can see that our container is running on okd-node1 below.
 
-   .. image:: images/f5-container-connector-locate-controller-container.png
+   .. image:: images/f5-container-connector-locate-node-controller-container.png
 
 Troubleshooting
 ---------------
@@ -168,25 +168,30 @@ Troubleshooting
 If you need to troubleshoot your container, you have two different ways to
 check the logs of your container, oc command or docker command.
 
+.. attention:: Depending on your deployment CIS can be running on either
+   okd-node1 or okd-node2.
+
 #. Using oc command: you need to use the full name of your pod as showed in the
    previous image
 
    .. code-block:: bash
 
       # For example:
-      oc logs k8s-bigip-ctlr-deployment-5b74dd769-x55vx -n kube-system
+      oc logs k8s-bigip-ctlr-667cf78cc7-62wxf -n kube-system
 
    .. image:: images/f5-container-connector-check-logs-kubectl.png
 
 #. Using docker logs command: From the previous check we know the container
-   is running on okd-node1.  Via mRemoteNG open a session to okd-node1 and
-   run the following commands:
+   is running on okd-node1. On your current session with okd-master1 SSH to
+   okd-node1 first and then run the docker command:
 
    .. code-block:: bash
 
+      ssh okd-node1
+
       sudo docker ps
 
-   Here we can see our container ID is "01a7517b50c5"
+   Here we can see our container ID is "74a566f5778a"
 
    .. image:: images/f5-container-connector-find-dockerID--controller-container.png
 
@@ -194,18 +199,22 @@ check the logs of your container, oc command or docker command.
 
    .. code-block:: bash
 
-      sudo docker logs 01a7517b50c5
+      sudo docker logs 74a566f5778a
 
    .. image:: images/f5-container-connector-check-logs-controller-container.png
 
    .. note:: The log messages here are identical to the log messages displayed
       in the previous oc logs command. 
 
-#. You can connect to your container with oc as well:
+#. You can connect to your container with kubectl as well. This is something
+   not typically needed but support may direct you to do so.
+
+   .. note:: Exit from your current session with okd-node1 before attempting
+      this command.
 
    .. code-block:: bash
 
-      oc exec -it k8s-bigip-ctlr-deployment-79fcf97bcc-48qs7 -n kube-system  -- /bin/sh
+      oc exec -it k8s-bigip-ctlr-79fcf97bcc-48qs7 -n kube-system  -- /bin/sh
 
       cd /app
 
