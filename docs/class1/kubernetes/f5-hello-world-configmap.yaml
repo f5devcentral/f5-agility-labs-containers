@@ -5,29 +5,43 @@ metadata:
   namespace: default
   labels:
     f5type: virtual-server
+    as3: "true"
 data:
-  schema: "f5schemadb://bigip-virtual-server_v0.1.7.json"
-  data: |
+  template: |
     {
-      "virtualServer": {
-        "frontend": {
-          "balance": "round-robin",
-          "mode": "http",
-          "partition": "kubernetes",
-          "virtualAddress": {
-            "bindAddr": "10.1.1.4",
-            "port": 81
+      "class": "AS3",
+      "declaration": {
+          "class": "ADC",
+          "schemaVersion": "3.17.0",
+          "label": "f5-hello-world",
+          "remark": "Simple HTTP Hello World",
+          "AS3": {
+              "class": "Tenant",
+              "A1": {
+                  "class": "Application",
+                  "template": "generic",
+                  "iningress": {
+                      "class": "Service_HTTP",
+                      "virtualAddresses": [
+                          "10.1.1.4"
+                      ],
+                      "remark":"ingress: f5-hello-world",
+                      "virtualPort": 81,
+                      "pool": "hello-world_pool"
+                  },
+                  "hello-world_pool": {
+                      "class": "Pool",
+                      "monitors": [
+                          "http"
+                      ],
+                      "members": [
+                          {
+                              "servicePort": 8080,
+                              "serverAddresses": []
+                          }
+                      ]
+                  }
+              }
           }
-        },
-        "backend": {
-          "serviceName": "f5-hello-world",
-          "servicePort": 8080,
-          "healthMonitors": [{
-            "interval": 5,
-            "protocol": "http",
-            "send": "HEAD / HTTP/1.0\r\n\r\n",
-            "timeout": 16
-          }]
-        }
       }
-    }
+  }
