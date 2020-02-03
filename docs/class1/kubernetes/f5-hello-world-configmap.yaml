@@ -26,7 +26,8 @@ data:
                         "virtualAddresses": [
                             "10.1.1.4"
                         ],
-                        "pool": "web_pool"
+                        "pool": "web_pool",
+                        "virtualPort": 81
                     },
                     "web_pool": {
                         "class": "Pool",
