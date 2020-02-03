@@ -40,4 +40,4 @@ spec:
             "--namespace=default",
             "--pool-member-type=nodeport",
             "--agent=as3"
-            ]
+          ]
