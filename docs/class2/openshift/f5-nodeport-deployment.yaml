@@ -35,7 +35,9 @@ spec:
             "--bigip-username=$(BIGIP_USERNAME)",
             "--bigip-password=$(BIGIP_PASSWORD)",
             "--bigip-url=https://10.1.1.4:8443",
+            "--insecure=true",
             "--bigip-partition=okd",
             "--namespace=default",
-            "--pool-member-type=nodeport"
+            "--pool-member-type=nodeport",
+            "--agent=as3"
           ]
