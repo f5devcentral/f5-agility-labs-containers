@@ -17,10 +17,9 @@ spec:
       - env:
         - name: service_name
           value: f5-hello-world-web
-          image: f5devcentral/f5-hello-world:latest
+        image: f5devcentral/f5-hello-world:latest
         imagePullPolicy: Always
         name: f5-hello-world-web
         ports:
         - containerPort: 8080
           protocol: TCP
-          
