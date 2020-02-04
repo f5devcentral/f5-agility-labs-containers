@@ -39,6 +39,5 @@ spec:
             "--bigip-partition=kubernetes",
             "--namespace=default",
             "--pool-member-type=cluster",
-            "--flannel-name=k8s-tunnel",
-            "--agent=as3"
+            "--flannel-name=k8s-tunnel"
           ]

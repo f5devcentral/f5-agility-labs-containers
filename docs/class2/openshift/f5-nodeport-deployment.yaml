@@ -38,6 +38,5 @@ spec:
             "--insecure=true",
             "--bigip-partition=okd",
             "--namespace=default",
-            "--pool-member-type=nodeport",
-            "--agent=as3"
+            "--pool-member-type=nodeport"
           ]

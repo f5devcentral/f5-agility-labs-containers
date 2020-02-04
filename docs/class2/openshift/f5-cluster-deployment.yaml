@@ -39,6 +39,5 @@ spec:
             "--bigip-partition=okd",
             "--namespace=default",
             "--pool-member-type=cluster",
-            "--openshift-sdn-name=/Common/ose-tunnel",
-            "--agent=as3"
+            "--openshift-sdn-name=/Common/ose-tunnel"
           ]
