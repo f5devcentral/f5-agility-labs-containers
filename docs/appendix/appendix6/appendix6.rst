@@ -1,11 +1,11 @@
-Appendix 1: Build an Openshift Cluster
-======================================
+Appendix 6: Build a Mesos / Marathon Cluster
+============================================
 
 .. attention:: **THE CLASS BLUEPRINT IS PRE-CONFIGURED WITH A WORKING CLUSTER.
    THIS APPENDIX IS FOR DOCUMENTION PURPOSES ONLY.**
 
-In this module, we will build a 3 node cluster (1x master and 2x nodes) 
-utilizing CentOS server images.
+In this module, we will build a 3 node cluster (1x master and 2x nodes)
+utilizing Ubuntu server images.
 
 As a reminder, in this module, our cluster setup is:
 
@@ -15,15 +15,15 @@ As a reminder, in this module, our cluster setup is:
    * - **Hostname**
      - **IP-ADDR**
      - **Role**
-   * - okd-master1
-     - 10.1.1.10
+   * - mesos-master1
+     - 10.2.10.21
      - Master
-   * - okd-node1
-     - 10.1.1.11
-     - Node
-   * - okd-node2
-     - 10.1.1.12
-     - Node
+   * - mesos-agent1
+     - 10.2.10.22
+     - Agent
+   * - mesos-agent2
+     - 10.2.10.23
+     - Agent
 
 .. toctree::
    :maxdepth: 1

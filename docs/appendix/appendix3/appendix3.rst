@@ -1,60 +1,32 @@
-Appendix 3: Advanced OpenShift Topics
-=====================================
+Appendix 3: Build an Openshift Cluster
+======================================
 
-The purpose of this lab is to give you more visibility on
+.. attention:: **THE CLASS BLUEPRINT IS PRE-CONFIGURED WITH A WORKING CLUSTER.
+   THIS APPENDIX IS FOR DOCUMENTION PURPOSES ONLY.**
 
-.. toctree::
-   :maxdepth: 1
-   :glob:
+In this module, we will build a 3 node cluster (1x master and 2x nodes) 
+utilizing CentOS server images.
 
-   module*/module*
-   appendix*/appendix*
-
-Expected time to complete: **3 hours**
-
-Lab Setup
----------
-
-In the environment, there is a three-node OpenShift cluster with one master
-and two nodes. There is a pair of BIG-IPs setup in an HA configuration:
+As a reminder, in this module, our cluster setup is:
 
 .. list-table::
    :header-rows: 1
 
    * - **Hostname**
      - **IP-ADDR**
-     - **Credentials**
-   * - jumpbox
-     - 10.1.1.250
-     - user/Student!Agility!
-   * - bigip1
-     - 10.1.1.245
+     - **Role**
+   * - okd-master1
+     - 10.1.1.10
+     - Master
+   * - okd-node1
+     - 10.1.1.11
+     - Node
+   * - okd-node2
+     - 10.1.1.12
+     - Node
 
-       10.3.10.60
+.. toctree::
+   :maxdepth: 1
+   :glob:
 
-     - admin/admin
-
-       root/default
-   * - bigip2
-     - 10.1.1.246
-
-       10.3.10.61
-
-     - admin/admin
-
-       root/default
-   * - ose-master1
-     - 10.3.10.21
-     - centos/centos
-
-       root/default
-   * - ose-node1
-     - 10.3.10.22
-     - centos/centos
-
-       root/default
-   * - ose-node2
-     - 10.3.10.23
-     - centos/centos
-
-       root/default
+   lab*

@@ -46,7 +46,7 @@ Lab 2.4 - Setup the Kubernetes UI
 
    Create a file called kube-dashboard.yaml with the following content:
 
-   .. literalinclude:: ../kubernetes/kube-dashboard.yaml
+   .. literalinclude:: kubernetes/kube-dashboard.yaml
       :language: yaml
       :linenos:
       :emphasize-lines: 3,23,54,65

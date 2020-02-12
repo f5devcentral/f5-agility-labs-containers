@@ -1,4 +1,4 @@
-Appendix 1: BIG-IP / OpenShift Multi-Pod Deployment
+Appendix 5: BIG-IP / OpenShift Multi-Pod Deployment
 ===================================================
 
 In this appendix we will configuring an HA pair of BIG-IP's to work with two

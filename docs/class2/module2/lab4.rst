@@ -26,7 +26,7 @@ On **okd-master** we will create all the required files:
 
    .. tip:: Use the file in ~/agilitydocs/docs/class2/openshift
 
-   .. literalinclude:: ../openshift/f5-hello-world-service-cluster.yaml
+   .. literalinclude:: ../openshift/f5-hello-world-service-clusterip.yaml
       :language: yaml
       :linenos:
       :emphasize-lines: 2,12

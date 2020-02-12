@@ -1,52 +1,32 @@
-Appendix 2: Introduction to Mesos / Marathon
-============================================
+Appendix 2: Build a Kubernetes Cluster
+======================================
 
-This introductory class covers the following topics:
+.. attention:: **THE CLASS BLUEPRINT IS PRE-CONFIGURED WITH A WORKING CLUSTER.
+   THIS APPENDIX IS FOR DOCUMENTION PURPOSES ONLY.**
 
-.. toctree::
-   :maxdepth: 1
-   :glob:
+In this module, we will build a 3 node cluster (1x master and 2x nodes) 
+utilizing Ubuntu server images.
 
-   module*/module*
-   appendix*/appendix*
-
-Expected time to complete: **30 minutes**
-
-Lab Setup
----------
-
-We will leverage the following setup to configure the Mesos / Marathon
-environment.
+As a reminder, in this module, our cluster setup is:
 
 .. list-table::
    :header-rows: 1
 
    * - **Hostname**
      - **IP-ADDR**
-     - **Credentials**
-   * - jumpbox
-     - 10.1.1.250
-     - user/Student!Agility!
-   * - bigip1
-     - 10.1.1.245
+     - **Role**
+   * - kube-master1
+     - 10.1.1.7
+     - Master
+   * - kube-node1
+     - 10.1.1.8
+     - Node
+   * - kube-node2
+     - 10.1.1.9
+     - Node
 
-       10.2.10.60
+.. toctree::
+   :maxdepth: 1
+   :glob:
 
-     - admin/admin
-
-       root/default
-   * - mesos-master1
-     - 10.2.10.21
-     - ubuntu/ubuntu
-    
-       root/default
-   * - mesos-agent1
-     - 10.2.10.22
-     - ubuntu/ubuntu
-      
-       root/default
-   * - mesos-agent2
-     - 10.2.10.23
-     - ubuntu/ubuntu
-    
-       root/default
+   lab*

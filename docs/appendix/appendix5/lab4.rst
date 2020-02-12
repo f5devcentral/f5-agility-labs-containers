@@ -13,14 +13,14 @@ following files:
 
 #. Create a file called ``f5-hello-world-deployment.yaml``
 
-   .. literalinclude:: ../openshift/advanced/appendix1/f5-hello-world-deployment.yaml
+   .. literalinclude:: openshift/f5-hello-world-deployment.yaml
       :language: yaml
       :linenos:
       :emphasize-lines: 2,6,14
 
 #. Create a file called ``f5-hello-world-service.yaml``
 
-   .. literalinclude:: ../openshift/advanced/appendix1/f5-hello-world-service.yaml
+   .. literalinclude:: openshift/f5-hello-world-service.yaml
       :language: yaml
       :linenos:
       :emphasize-lines: 2,12
@@ -29,14 +29,14 @@ Now we need to creat the f5 configmap of the application for each partition.
 
 #. Create a file called ``f5-hello-world-configmap-10.yaml`` on **ose-master1**
 
-   .. literalinclude:: ../openshift/advanced/appendix1/f5-hello-world-configmap-10.yaml
+   .. literalinclude:: openshift/f5-hello-world-configmap-10.yaml
       :language: yaml
       :linenos:
       :emphasize-lines: 2,5,7,9,16,18
 
 #. Create a file called ``f5-hello-world-configmap-20.yaml`` on **ose-master2**
 
-   .. literalinclude:: ../openshift/advanced/appendix1/f5-hello-world-configmap-20.yaml
+   .. literalinclude:: openshift/f5-hello-world-configmap-20.yaml
       :language: yaml
       :linenos:
       :emphasize-lines: 2,5,7,9,16,18

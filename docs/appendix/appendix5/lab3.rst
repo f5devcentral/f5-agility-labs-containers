@@ -27,14 +27,14 @@ Create & Verify CC Deployment
 
    cc-bigip1-10.yaml
 
-   .. literalinclude:: ../openshift/advanced/appendix1/cc-bigip1-10.yaml
+   .. literalinclude:: openshift/cc-bigip1-10.yaml
       :language: yaml
       :linenos:
       :emphasize-lines: 2,4,17,34,35,38
 
    cc-bigip2-10.yaml
 
-   .. literalinclude:: ../openshift/advanced/appendix1/cc-bigip2-10.yaml
+   .. literalinclude:: openshift/cc-bigip2-10.yaml
       :language: yaml
       :linenos:
       :emphasize-lines: 2,4,17,34,35,38
@@ -56,14 +56,14 @@ Create & Verify CC Deployment
 
    cc-bigip1-20.yaml
 
-   .. literalinclude:: ../openshift/advanced/appendix1/cc-bigip1-20.yaml
+   .. literalinclude:: openshift/cc-bigip1-20.yaml
       :language: yaml
       :linenos:
       :emphasize-lines: 2,4,17,34,35,38
 
    cc-bigip2-20.yaml
 
-   .. literalinclude:: ../openshift/advanced/appendix1/cc-bigip2-20.yaml
+   .. literalinclude:: openshift/cc-bigip2-20.yaml
       :language: yaml
       :linenos:
       :emphasize-lines: 2,4,17,34,35,38
