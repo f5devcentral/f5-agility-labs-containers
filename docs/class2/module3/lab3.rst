@@ -1,5 +1,5 @@
-Lab 2.4 - CIS Usage with ClusterIP Mode
-=======================================
+Lab 3.3 - Deploy Hello-World (ConfigMap w/ AS3)
+===============================================
 
 Now that CIS is up and running, let's deploy an application and leverage our
 new service.
@@ -53,7 +53,7 @@ On **okd-master** we will create all the required files:
       oc create -f f5-hello-world-service-cluster.yaml
       oc create -f f5-hello-world-configmap.yaml
 
-   .. image:: images/f5-container-connector-launch-app.png
+   .. image:: ../images/f5-container-connector-launch-app.png
 
 #. To check the status of our deployment, you can run the following commands:
 
@@ -63,13 +63,13 @@ On **okd-master** we will create all the required files:
 
       # This can take a few seconds to a minute to create these hello-world containers to running state.      
 
-   .. image:: images/f5-hello-world-pods.png
+   .. image:: ../images/f5-hello-world-pods.png
 
    .. code-block:: bash
 
       oc describe svc f5-hello-world
         
-   .. image:: images/f5-container-connector-check-app-definition.png
+   .. image:: ../images/f5-container-connector-check-app-definition.png
 
 #. To test the app you need to pay attention to: 
 
@@ -85,27 +85,27 @@ On **okd-master** we will create all the required files:
    Here you can see a new Virtual Server, "default_f5-hello-world" was created,
    listening on 10.1.1.4:81 in partition "okd".
 
-   .. image:: images/f5-container-connector-check-app-bigipconfig.png
+   .. image:: ../images/f5-container-connector-check-app-bigipconfig.png
 
    Check the Pools to see a new pool and the associated pool members:
    Local Traffic --> Pools --> "cfgmap_default_f5-hello-world_f5-hello-world"
    --> Members
 
-   .. image:: images/f5-container-connector-check-app-bigipconfig3.png
+   .. image:: ../images/f5-container-connector-check-app-bigipconfig3.png
 
    .. note:: You can see that the pool members IP addresses are assigned from
       the overlay network (**ClusterIP mode**)
 
 #. Now you can try to access your application via your BIG-IP VIP: 10.1.1.4:81
 
-   .. image:: images/f5-container-connector-access-app.png
+   .. image:: ../images/f5-container-connector-access-app.png
 
 #. Hit Refresh many times and go back to your **BIG-IP** UI, go to Local
    Traffic --> Pools --> Pool list -->
    cfgmap_default_f5-hello-world_f5-hello-world -->
    Statistics to see that traffic is distributed as expected.
 
-   .. image:: images/f5-container-connector-check-app-bigip-stats-clusterip.png
+   .. image:: ../images/f5-container-connector-check-app-bigip-stats-clusterip.png
 
 #. Scale the f5-hello-world app
 
@@ -119,11 +119,11 @@ On **okd-master** we will create all the required files:
 
       oc get pods
 
-   .. image:: images/f5-hello-world-pods-scale10.png
+   .. image:: ../images/f5-hello-world-pods-scale10.png
 
 #. Check the pool was updated on big-ip
 
-   .. image:: images/f5-hello-world-pool-scale10-clusterip.png
+   .. image:: ../images/f5-hello-world-pool-scale10-clusterip.png
 
    .. attention:: Now we show 10 pool members vs. 2 in the previous lab, why?
 

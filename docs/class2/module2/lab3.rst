@@ -1,249 +1,161 @@
-Lab 2.3 - CIS Install & Configuration (ClusterIP)
-=================================================
+Lab 2.3 - Deploy Hello-World (ConfigMap w/ AS3)
+===============================================
 
-BIG-IP Setup
-------------
+Now that CIS is up and running, let's deploy an application and leverage the
+new service.
 
-With ClusterIP we're utilizing VXLAN to communicate with the application pods.
-To do so we'll need to configure bigip first.
+For this lab we'll use a simple pre-configured docker image called
+"f5-hello-world". It can be found on docker hub at
+`f5devcentral/f5-hello-world <https://hub.docker.com/r/f5devcentral/f5-hello-world/>`_
 
-#. You need to setup a partition that will be used by F5 Container Ingress
-   Service.
+To deploy our application, we will need to do the following:
 
-   .. note:: This step was performed in the previous lab.
+#. Define a Deployment: this will launch our application running in a
+   container.
 
-   .. code-block:: bash
+#. Define a Service: this is an abstraction which defines a logical set of
+   *pods* and a policy by which to access them. Expose the *service* on a port
+   on each node of the cluster (the same port on each *node*). You’ll be able
+   to contact the service on any <NodeIP>:NodePort address. If you set the type
+   field to "NodePort", the Kubernetes master will allocate a port from a
+   flag-configured range **(default: 30000-32767)**, and each Node will proxy
+   that port (the same port number on every Node) into your *Service*.
 
-      # From the CLI:
-      tmsh create auth partition okd
+#. Define a ConfigMap: this can be used to store fine-grained information like
+   individual properties or coarse-grained information like entire config files
+   or JSON blobs. It will contain the BIG-IP configuration we need to push.
 
-      # From the UI:
-      GoTo System --> Users --> Partition List
-      - Create a new partition called "okd" (use default settings)
-      - Click Finished
-
-   .. image:: images/f5-container-connector-bigip-partition-setup.png
-
-.. attention:: Be sure to switch to the "Common" partition before making the
-   following changes.
-
-#. Create a vxlan tunnel profile
-
-   .. code-block:: bash
-
-      # From the CLI:
-      tmsh create net tunnel vxlan okd-vxlan { app-service none flooding-type multipoint }
-
-      # From the UI:
-      GoTo Network --> Tunnels --> Profiles --> VXLAN
-      - Create a new profile called "okd-vxlan"
-      - Set the Flooding Type = Multipoint
-      - Click Finished
-
-   .. image:: images/create-okd-vxlan-profile.png
-
-#. Create a vxlan tunnel
-
-   .. code-block:: bash
-
-      # From the CLI:
-      tmsh create net tunnel tunnel okd-tunnel { app-service none key 0 local-address 10.1.1.4 profile okd-vxlan }
-
-      # From the UI:
-      GoTo Network --> Tunnels --> Tunnel List
-      - Create a new tunnel called "okd-tunnel"
-      - Set the Profile to the one previously created called "okd-vxlan"
-      - set the key = 0
-      - Set the Local Address to 10.1.1.4
-      - Click Finished
-
-   .. image:: images/create-okd-vxlan-tunnel.png
-
-#. Create the vxlan tunnel self-ip
-
-   .. tip:: For your SELF-IP subnet, remember it is a /14 and not a /23 -
-      Why? The Self-IP has to be able to understand those other /23 subnets are
-      local in the namespace in the example above for Master, Node1, Node2,
-      etc. Many students accidently use /23, but then the self-ip will be only
-      to communicate to one subnet on the openshift-f5-node. When trying to
-      ping across to services on other /23 subnets from the BIG-IP for instance,
-      communication will fail as your self-ip doesn't have the proper subnet
-      mask to know thokd other subnets are local.
-      
-   .. code-block:: bash
-      
-      # From the CLI:
-      tmsh create net self okd-vxlan-selfip { app-service none address 10.131.0.1/14 vlan okd-tunnel allow-service all }
-
-      # From the UI:
-      GoTo Network --> Self IP List
-      - Create a new Self-IP called "okd-vxlan-selfip"
-      - Set the IP Address to "10.131.0.1".
-      - Set the Netmask to "255.252.0.0"
-      - Set the VLAN / Tunnel to "okd-tunnel" (Created earlier)
-      - Set Port Lockdown to "Allow All"
-      - Click Finished
-
-   .. image:: images/create-okd-vxlan-selfip.png
-
-CIS Deployment
+App Deployment
 --------------
 
-As stated in lab1, we have two deployment mode options, Nodeport or ClusterIP.
-For more information see `BIG-IP Controller Modes <http://clouddocs.f5.com/containers/v2/kubernetes/kctlr-modes.html>`_
+On the **okd-master** we will create all the required files:
 
-Here we'll configure **ClusterIP mode** ``f5-cluster-deployment.yaml``
+#. Create a file called ``f5-hello-world-deployment.yaml``
 
-.. note::
-   - For your convenience the file can be found in
-     /home/ubuntu/agilitydocs/docs/class2/openshift (downloaded earlier in the
-     clone git repo step).
-   - Or you can cut and paste the file below and create your own file.
-   - If you have issues with your yaml and syntax (**indentation MATTERS**),
-     you can try to use an online parser to help you :
-     `Yaml parser <http://codebeautify.org/yaml-validator>`_
+   .. tip:: Use the file in ~/agilitydocs/docs/class2/openshift
 
-.. literalinclude:: ../openshift/f5-cluster-deployment.yaml
-   :language: yaml
-   :linenos:
-   :emphasize-lines: 2,7,17,20,37,38,40,41
-
-#. On okd-master1, log in with an Openshift Client.
-
-   .. note:: Here we're using a user "centos", added when we built the cluster.
-      When prompted for password, enter "centos".
-
-   .. code-block:: bash
-
-      oc login -u centos -n default
-
-   .. image:: images/OC-DEMOuser-Login.png
-
-   .. important:: Upon logging in you'll notice access to several projects. In
-      our lab well be working from the default "default".
-
-#. Next let's explore the f5-hostsubnet.yaml file
-
-   .. code-block:: bash
-
-      cd ~/agilitydocs/docs/class2/openshift
-
-      cat f5-bigip-hostsubnet.yaml
-
-   You'll see a config file similar to this:
-
-   .. literalinclude:: ../openshift/f5-bigip-hostsubnet.yaml
+   .. literalinclude:: ../openshift/f5-hello-world-deployment.yaml
       :language: yaml
       :linenos:
-      :emphasize-lines: 2,9
+      :emphasize-lines: 2,7,18
 
-   .. attention:: This YAML file creates an OpenShift Node and the Host is the
-      BIG-IP with an assigned /23 subnet of IP 10.131.0.0 (3 images down).
+#. Create a file called ``f5-hello-world-service-nodeport.yaml``
 
-#. Next let's look at the current cluster, you should see 3 members
-   (1 master, 2 nodes)
+   .. tip:: Use the file in ~/agilitydocs/docs/class2/openshift
 
-   .. code-block:: bash
-
-      oc get hostsubnet
-
-   .. image:: images/F5-OC-HOSTSUBNET1.png
-
-#. Now create the connector to the BIG-IP device, then look before and after
-   at the attached devices
-
-   .. code-block:: bash
-
-      oc create -f f5-bigip-hostsubnet.yaml
-
-   You should see a successful creation of a new OpenShift Node.
-
-   .. image:: images/F5-OS-NODE.png
-
-#. At this point nothing has been done to the BIG-IP, this only was done in
-   the OpenShift environment.
-
-   .. code-block:: bash
-
-      oc get hostsubnet
-
-   You should now see OpenShift configured to communicate with the BIG-IP
-
-   .. image:: images/F5-OC-HOSTSUBNET2.png
-
-   .. important:: The Subnet assignment, in this case is 10.131.0.0/23, was
-      assigned by the **subnet: "10.131.0.0/23"** line in "HostSubnet" yaml
-      file.
-
-   .. note:: In this lab we're manually assigning a subnet. We have the option
-      to let openshift auto assign ths by removing **subnet: "10.131.0.0/23"**
-      line at the end of the "hostsubnet" yaml file and setting the
-      **assign-subnet: "true"**. It would look like this:
-
-      .. code-block:: yaml
-         :emphasize-lines: 7
-
-         apiVersion: v1
-         kind: HostSubnet
-         metadata:
-            name: openshift-f5-node
-            annotations:
-               pod.network.openshift.io/fixed-vnid-host: "0"
-               pod.network.openshift.io/assign-subnet: "true"
-         host: openshift-f5-node
-         hostIP: 10.1.1.4
-
-#. Now that we have the new bigip node added you can try to launch your
-   deployment. It will start our f5-k8s-controller container on one of our
-   nodes (may take around 30sec to be in a running state):
-
-   .. code-block:: bash
-
-      cd ~/agilitydocs/docs/class2/openshift
-
-      cat f5-cluster-deployment.yaml
-
-   You'll see a config file similar to this:
-
-   .. literalinclude:: ../openshift/f5-cluster-deployment.yaml
+   .. literalinclude:: ../openshift/f5-hello-world-service-nodeport.yaml
       :language: yaml
       :linenos:
-      :emphasize-lines: 2,5,17,20,37-41
+      :emphasize-lines: 2,12
 
-#. Create the CIS deployment with the following command
+#. Create a file called ``f5-hello-world-configmap.yaml``
 
-   .. code-block:: bash
+   .. tip:: Use the file in ~/agilitydocs/docs/class2/openshift
 
-      oc create -f f5-cluster-deployment.yaml
+   .. attention:: The schema version below (for example 1.7) comes from the releases
+      of big-ip-controller.  For more information, head over to the following
+      link for a quick review:
+      https://clouddocs.f5.com/containers/v2/releases_and_versioning.html#schema-table
 
-#. Verify the deployment "deployed"
+   .. literalinclude:: ../openshift/f5-hello-world-configmap.yaml
+      :language: yaml
+      :linenos:
+      :emphasize-lines: 2,5,7,9,16,18
 
-   .. code-block:: bash
-
-      kubectl get deployment k8s-bigip-ctlr --namespace kube-system
-
-   .. image:: images/f5-container-connector-launch-deployment-controller.png
-
-#. To locate on which node CIS is running, you can use the following command:
-
-   .. code-block:: bash
-
-      oc get pods -o wide -n kube-system
-
-   .. image:: images/F5-CTRL-RUNNING.png
-
-Troubleshooting
----------------
-
-If you need to troubleshoot your container, you have two different ways to
-check the logs of your container, kubectl command or docker command.
-
-#. Using kubectl command: you need to use the full name of your pod as
-   showed in the previous image
+#. We can now launch our application:
 
    .. code-block:: bash
 
-      # For example:
-      kubectl logs k8s-bigip-ctlr-8c6cf8667-htcgw -n kube-system
+      oc create -f f5-hello-world-deployment.yaml
+      oc create -f f5-hello-world-service-nodeport.yaml
+      oc create -f f5-hello-world-configmap.yaml
+      
+   .. image:: ../images/f5-container-connector-launch-app.png
 
-   .. image:: images/f5-container-connector-check-logs-kubectl.png
+#. To check the status of our deployment, you can run the following commands:
+
+   .. code-block:: bash
+
+      oc get pods -o wide
+
+      # This can take a few seconds to a minute to create these hello-world containers to running state.
+
+   .. image:: ../images/f5-hello-world-pods.png
+
+   .. code-block:: bash
+
+      oc describe svc f5-hello-world
+        
+   .. image:: ../images/f5-container-connector-check-app-definition-node.png
+
+#. To test the app you need to pay attention to: 
+
+   **The NodePort value**, that's the port used by Kubernetes to give you
+   access to the app from the outside. Here it's "31268", highlighted above.
+
+   **The Endpoints**, that's our 2 instances (defined as replicas in our
+   deployment file) and the port assigned to the service: port 8080.
+
+   Now that we have deployed our application sucessfully, we can check our
+   BIG-IP configuration.  From the browser open https://10.1.1.4
+
+   .. warning:: Don't forget to select the "okd" partition or you'll see
+      nothing.
+
+   Here you can see a new Virtual Server, "default_f5-hello-world" was created,
+   listening on 10.1.1.4:81 in partition "okd".
+
+   .. image:: ../images/f5-container-connector-check-app-bigipconfig.png
+
+   Check the Pools to see a new pool and the associated pool members:
+   Local Traffic --> Pools --> "cfgmap_default_f5-hello-world_f5-hello-world"
+   --> Members
+
+   .. image:: ../images/f5-container-connector-check-app-bigipconfig2.png
+
+   .. note:: You can see that the pool members listed are all from the
+      openshift nodes on the port 31268. (**NodePort mode**)
+
+#. Now you can try to access your application via the BIG-IP VS/VIP: UDF-URL
+
+   .. image:: ../images/f5-container-connector-access-app.png
+
+#. Hit Refresh many times and go back to your **BIG-IP** UI, go to Local
+   Traffic --> Pools --> Pool list -->
+   cfgmap_default_f5-hello-world_f5-hello-world -->
+   Statistics to see that traffic is distributed as expected.
+
+   .. image:: ../images/f5-container-connector-check-app-bigip-stats.png
+
+#. Scale the f5-hello-world app
+
+   .. code-block:: bash
+
+      oc scale --replicas=10 deployment/f5-hello-world
+
+#. Check the pods were created
+
+   .. code-block:: bash
+
+      oc get pods
+
+   .. image:: ../images/f5-hello-world-pods-scale10.png
+
+#. Check the pool was updated on big-ip
+
+   .. image:: ../images/f5-hello-world-pool-scale10-node.png
+
+   .. attention:: Why do we still only show 3 pool members?
+
+#. Delete Hello-World and Remove CIS
+
+   .. code-block:: bash
+
+      kubectl delete -f f5-hello-world-configmap.yaml
+      kubectl delete -f f5-hello-world-service-nodeport.yaml
+      kubectl delete -f f5-hello-world-deployment.yaml
+      kubectl delete -f f5-nodeport-deployment.yaml
+
+   .. important:: Do not skip this step. Instead of reusing some of these
+      objects, the next lab we will re-deploy them to avoid conflicts and
+      errors.

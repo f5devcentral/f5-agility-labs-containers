@@ -1,5 +1,5 @@
-Kubernetes Overview
-===================
+Lab 1.1 - Overview
+==================
 
 Kubernetes has a lot of documentation available at this location:
 `Kubernetes docs <http://kubernetes.io/docs/>`_
@@ -32,7 +32,7 @@ A Kubernetes cluster consists of two types of resources:
 - The *Master* coordinates the cluster
 - *Nodes* are the workers that run applications
 
-.. image:: images/getting-started-cluster-diagram.png
+.. image:: ../images/getting-started-cluster-diagram.png
    :align: center
 
 **The Master is responsible for managing the cluster**. The master coordinates

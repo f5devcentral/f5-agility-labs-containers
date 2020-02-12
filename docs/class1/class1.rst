@@ -1,5 +1,5 @@
-Class 1: Introduction to CIS & Kubernetes
-=========================================
+Class 1: F5 Container Ingress Service & Kubernetes
+==================================================
 
 This introductory class covers the following topics:
 

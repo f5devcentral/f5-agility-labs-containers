@@ -1,206 +1,175 @@
-Lab 2.3 - CIS Install & Configuration (ClusterIP)
-=================================================
+Lab 2.3 - Deploy Hello-World (ConfigMap w/ AS3)
+===============================================
 
-BIG-IP Setup
-------------
+Now that CIS is up and running, let's deploy an application and leverage our
+new service.
 
-With ClusterIP we're utilizing VXLAN to communicate with the application pods.
-To do so we'll need to configure bigip first.
+For this lab we'll use a simple pre-configured docker image called 
+"f5-hello-world". It can be found on docker hub at
+`f5devcentral/f5-hello-world <https://hub.docker.com/r/f5devcentral/f5-hello-world/>`_
 
-#. You need to setup a partition that will be used by F5 Container Ingress
-   Service.
+To deploy our application, we will need to do the following:
 
-   .. note:: This step was performed in the previous lab.
+#. Define a Deployment: this will launch our application running in a
+   container.
 
-   .. code-block:: bash
+#. Define a Service: this is an abstraction which defines a logical set of
+   *pods* and a policy by which to access them. Expose the *service* on a port
+   on each node of the cluster (the same port on each *node*). You’ll be able
+   to contact the service on any <NodeIP>:NodePort address. If you set the type
+   field to "NodePort", the Kubernetes master will allocate a port from a
+   flag-configured range **(default: 30000-32767)**, and each Node will proxy
+   that port (the same port number on every Node) into your *Service*.
 
-      # From the CLI:
-      tmsh create auth partition kubernetes
+#. Define a ConfigMap: this can be used to store fine-grained information like
+   individual properties or coarse-grained information like entire config files
+   or JSON blobs. It will contain the BIG-IP configuration we need to push.
 
-      # From the UI:
-      GoTo System --> Users --> Partition List
-      - Create a new partition called "kubernetes" (use default settings)
-      - Click Finished
-
-   .. image:: images/f5-container-connector-bigip-partition-setup.png
-
-.. attention:: Be sure to switch back to the "Common" partition before making
-   the following changes.
-
-#. Create a vxlan tunnel profile
-
-   .. code-block:: bash
-
-      # From the CLI:
-      tmsh create net tunnels vxlan k8s-vxlan { app-service none port 8472 flooding-type none }
-
-      # From the UI:
-      GoTo Network --> Tunnels --> Profiles --> VXLAN
-      - Create a new profile called "k8s-vxlan"
-      - Set Port = 8472
-      - Set the Flooding Type = none
-      - Click Finished
-
-   .. image:: images/create-k8s-vxlan-profile.png
-
-#. Create a vxlan tunnel
-
-   .. code-block:: bash
-
-      # From the CLI:
-      tmsh create net tunnels tunnel k8s-tunnel { app-service none key 1 local-address 10.1.1.4 profile k8s-vxlan }
-
-      # From the UI:
-      GoTo Network --> Tunnels --> Tunnel List
-      - Create a new tunnel called "k8s-tunnel"
-      - Set the Profile to the one previously created called "k8s-vxlan"
-      - set the Key = 1
-      - Set the Local Address to 10.1.1.4
-      - Click Finished
-
-   .. image:: images/create-k8s-vxlan-tunnel.png
-
-#. Create the vxlan tunnel self-ip
-
-   .. tip:: For your SELF-IP subnet, remember it is a /16 and not a /24 -
-      Why? The Self-IP has to be able to understand those other /24 subnets are
-      local in the namespace in the example above for Master, Node1, Node2,
-      etc. Many students accidently use /24, but then the self-ip will be only
-      to communicate to one subnet on the openshift-f5-node. When trying to
-      ping across to services on other /24 subnets from the BIG-IP for instance,
-      communication will fail as your self-ip doesn't have the proper subnet
-      mask to know thokd other subnets are local.
-      
-   .. code-block:: bash
-      
-      # From the CLI:
-      tmsh create net self k8s-vxlan-selfip { address 10.244.20.1/16 vlan k8s-tunnel allow-service all }
-
-      # From the UI:
-      GoTo Network --> Self IP List
-      - Create a new Self-IP called "k8s-vxlan-selfip"
-      - Set the IP Address to "10.244.20.1"
-      - Set the Netmask to "255.255.0.0"
-      - Set the VLAN / Tunnel to "k8s-tunnel" (Created earlier)
-      - Set Port Lockdown to "Allow All"
-      - Click Finished
-
-   .. image:: images/create-k8s-vxlan-selfip.png
-
-CIS Deployment
+App Deployment
 --------------
 
-As stated in lab1, we have two deployment mode options, Nodeport or ClusterIP.
-For more information see `BIG-IP Controller Modes <http://clouddocs.f5.com/containers/v2/kubernetes/kctlr-modes.html>`_
+On **kube-master1** we will create all the required files:
 
-Here we'll configure **ClusterIP mode** ``f5-cluster-deployment.yaml``
+#. Create a file called ``f5-hello-world-deployment.yaml``
 
-.. note::
-   - For your convenience the file can be found in
-     /home/ubuntu/agilitydocs/docs/class1/kubernetes (downloaded earlier in the
-     clone git repo step).
-   - Or you can cut and paste the file below and create your own file.
-   - If you have issues with your yaml and syntax (**indentation MATTERS**),
-     you can try to use an online parser to help you :
-     `Yaml parser <http://codebeautify.org/yaml-validator>`_
+   .. tip:: Use the file in ~/agilitydocs/docs/class1/kubernetes
 
-.. literalinclude:: ../kubernetes/f5-cluster-deployment.yaml
-   :language: yaml
-   :linenos:
-   :emphasize-lines: 2,7,17,20,37,38,40,41
-
-#. Before deploying CIS in ClusterIP mode we need to configure Big-IP as a node
-   in the kubernetes cluster. To do so you'll need to modify
-   "f5-bigip-node.yaml" with the MAC address auto created from the previous
-   steps. SSH to BIG-IP and run the following command. You'll want to copy the
-   displayed "MAC Address".
-
-   .. code-block:: bash
-      
-      tmsh show net tunnels tunnel k8s-tunnel all-properties
-
-   .. image:: images/get-k8s-tunnel-mac-addr.png
-
-#. On the kube-master node edit f5-bigip-node.yaml
-
-   .. note:: If your unfamiliar with VI ask for help.
-
-   .. code-block:: bash
-
-      vim ~/agilitydocs/docs/class1/kubernetes/f5-bigip-node.yaml
-
-      and edit the highlighted MAC addr line with your addr shown below:
-
-   .. literalinclude:: ../kubernetes/f5-bigip-node.yaml
+   .. literalinclude:: ../kubernetes/f5-hello-world-deployment.yaml
       :language: yaml
       :linenos:
-      :emphasize-lines: 9
+      :emphasize-lines: 2,7,18
 
-#. Create the bigip node:
+#. Create a file called ``f5-hello-world-service-nodeport.yaml``
 
-   .. code-block:: bash
+   .. tip:: Use the file in ~/agilitydocs/docs/class1/kubernetes
 
-      kubectl create -f f5-bigip-node.yaml
-
-#. Verify "bigip1" node is created:
-
-   .. code-block:: bash
-
-      kubectl get nodes
-
-#. Now that we have the new bigip node added we can launch the CIS deployment.
-   It will start our f5-k8s-controller container on one of our nodes (may take
-   around 30sec to be in a running state):
-
-   .. code-block:: bash
-
-      cd ~/agilitydocs/docs/class2/openshift
-
-      cat f5-cluster-deployment.yaml
-
-   You'll see a config file similar to this:
-
-   .. literalinclude:: ../kubernetes/f5-cluster-deployment.yaml
+   .. literalinclude:: ../kubernetes/f5-hello-world-service-nodeport.yaml
       :language: yaml
       :linenos:
-      :emphasize-lines: 2,5,17,20,37-41
+      :emphasize-lines: 2,12
 
-#. Create the CIS deployment with the following command
+#. Create a file called ``f5-hello-world-configmap.yaml``
 
-   .. code-block:: bash
+   .. tip:: Use the file in ~/agilitydocs/docs/class1/kubernetes
 
-      kubectl create -f f5-cluster-deployment.yaml
+   .. attention:: The schema version below (for example 1.7) comes from the releases
+      of big-ip-controller.  For more information, head over to the following
+      link for a quick review:
+      https://clouddocs.f5.com/containers/v2/releases_and_versioning.html#schema-table
 
-#. Verify the deployment "deployed"
+   .. literalinclude:: ../kubernetes/f5-hello-world-configmap.yaml
+      :language: yaml
+      :linenos:
+      :emphasize-lines: 2,5,7,9,16,18
 
-   .. code-block:: bash
-
-      kubectl get deployment k8s-bigip-ctlr --namespace kube-system
-
-   .. image:: images/f5-container-connector-launch-deployment-controller.png
-
-#. To locate on which node CIS is running, you can use the following command:
-
-   .. code-block:: bash
-
-      kubectl get pods -o wide -n kube-system
-
-   We can see that our container, in this example, is running on kube-node1
-   below.
-
-   .. image:: images/f5-container-connector-locate-controller-container.png
-
-Troubleshooting
----------------
-
-Check the container/pod logs via kubectl command.
-
-#. Using the full name of your pod as showed in the previous image run the
-   following command:
+#. We can now launch our application:
 
    .. code-block:: bash
 
-      # For example:
-      kubectl logs k8s-bigip-ctlr-deployment-5b74dd769-x55vx -n kube-system
+      kubectl create -f f5-hello-world-deployment.yaml
+      kubectl create -f f5-hello-world-service-nodeport.yaml
+      kubectl create -f f5-hello-world-configmap.yaml
 
-   .. image:: images/f5-container-connector-check-logs-kubectl.png
+   .. image:: ../images/f5-container-connector-launch-app.png
+
+#. To check the status of our deployment, you can run the following commands:
+
+   .. code-block:: bash
+
+      kubectl get pods -o wide
+
+      # This can take a few seconds to a minute to create these hello-world containers to running state.
+
+   .. image:: ../images/f5-hello-world-pods.png
+
+   .. code-block:: bash
+
+      kubectl describe svc f5-hello-world
+
+   .. image:: ../images/f5-container-connector-check-app-definition.png
+
+#. To understand and test the new app you need to pay attention to:
+
+   **The NodePort value**, that's the port used by Kubernetes to give you
+   access to the app from the outside. Here it's "32188", highlighted above.
+
+   **The Endpoints**, that's our 2 instances (defined as replicas in our
+   deployment file) and the port assigned to the service: port 8080.
+
+   Now that we have deployed our application sucessfully, we can check our
+   BIG-IP configuration. From the browser open https://10.1.1.4
+
+   .. warning:: Don't forget to select the "kubernetes" partition or you'll
+      see nothing.
+
+   Here you can see a new Virtual Server, "default_f5-hello-world" was created,
+   listening on 10.1.1.4:81 in partition "kubernetes".
+
+   .. image:: ../images/f5-container-connector-check-app-bigipconfig.png
+
+   Check the Pools to see a new pool and the associated pool members:
+   Local Traffic --> Pools --> "cfgmap_default_f5-hello-world_f5-hello-world"
+   --> Members
+
+   .. image:: ../images/f5-container-connector-check-app-bigipconfig2.png
+
+   .. note:: You can see that the pool members listed are all the kubernetes
+      nodes on the node port 32188. (**NodePort mode**)
+
+#. Now you can try to access your application via the BIG-IP VS/VIP: UDF-URL
+
+   .. image:: ../images/f5-container-connector-access-app.png
+
+#. Hit Refresh many times and go back to your **BIG-IP** UI, go to Local
+   Traffic --> Pools --> Pool list -->
+   cfgmap_default_f5-hello-world_f5-hello-world --> Statistics to see that
+   traffic is distributed as expected.
+
+   .. image:: ../images/f5-container-connector-check-app-bigip-stats.png
+
+#. How is traffic forwarded in Kubernetes from the <node IP>:32188 to the
+   <container IP>:8080? This is done via iptables that is managed via the
+   kube-proxy instances. On either of the nodes, SSH in and run the following
+   command:
+
+   .. code-block:: bash
+
+      sudo iptables-save | grep f5-hello-world
+
+   This will list the different iptables rules that were created regarding our
+   service.
+
+   .. image:: ../images/f5-container-connector-list-frontend-iptables.png
+
+#. Scale the f5-hello-world app
+
+   .. code-block:: bash
+
+      kubectl scale --replicas=10 deployment/f5-hello-world -n default
+
+#. Check that the pods were created
+
+   .. code-block:: bash
+
+      kubectl get pods
+
+   .. image:: ../images/f5-hello-world-pods-scale10.png
+
+#. Check the pool was updated on BIG-IP
+
+   .. image:: ../images/f5-hello-world-pool-scale10.png
+
+   .. attention:: Why do we still only show 3 pool members?
+
+#. Delete Hello-World and Remove CIS
+
+   .. code-block:: bash
+
+      kubectl delete -f f5-hello-world-configmap.yaml
+      kubectl delete -f f5-hello-world-service-nodeport.yaml
+      kubectl delete -f f5-hello-world-deployment.yaml
+      kubectl delete -f f5-nodeport-deployment.yaml
+
+   .. important:: Do not skip this step. Instead of reusing some of these
+      objects, the next lab we will re-deploy them to avoid conflicts and
+      errors.

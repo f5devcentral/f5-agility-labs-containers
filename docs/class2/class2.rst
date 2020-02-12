@@ -1,5 +1,5 @@
-Class 2: Introduction to CIS & OpenShift
-========================================
+Class 2: F5 Container Ingress Service & OpenShift
+=================================================
 
 This introductory class covers the following topics:
 

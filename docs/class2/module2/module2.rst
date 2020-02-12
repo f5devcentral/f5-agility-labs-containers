@@ -1,5 +1,5 @@
-Module 2: F5 Container Ingress Service and OpenShift
-====================================================
+Module 2: CIS NodePort Mode
+===========================
 
 Overview
 --------

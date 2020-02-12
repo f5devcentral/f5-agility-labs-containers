@@ -1,5 +1,5 @@
-Lab 2.1 - CIS Install & Configuration (NodePort)
-================================================
+Lab 2.1 - Install & Configure CIS
+=================================
 
 The BIG-IP Controller for OpenShift installs as a
 `Deployment object <https://kubernetes.io/docs/concepts/workloads/controllers/deployment/>`_
@@ -27,7 +27,7 @@ URL: https://10.1.1.4
    - Be sure to be in the ``Common`` partition before creating the following
      objects.
 
-     .. image:: images/f5-check-partition.png
+     .. image:: ../images/f5-check-partition.png
 
 #. You need to setup a partition that will be used by F5 Container Ingress
    Service.
@@ -42,7 +42,7 @@ URL: https://10.1.1.4
       - Create a new partition called "okd" (use default settings)
       - Click Finished
 
-   .. image:: images/f5-container-connector-bigip-partition-setup.png
+   .. image:: ../images/f5-container-connector-bigip-partition-setup.png
 
    With the new partition created, we now need to ssh to Kube-master1 to setup
    the CIS.
@@ -79,7 +79,7 @@ to hide our bigip credentials.
 
       oc login -u centos -n default
 
-   .. image:: images/OC-DEMOuser-Login.png
+   .. image:: ../images/OC-DEMOuser-Login.png
 
    .. important:: Upon logging in you'll notice access to several projects. In
       our lab well be working from the default "default".
@@ -92,7 +92,7 @@ to hide our bigip credentials.
 
    You should see something similar to this:
 
-   .. image:: images/f5-container-connector-bigip-secret.png
+   .. image:: ../images/f5-container-connector-bigip-secret.png
 
 #. Create kubernetes service account for bigip controller
 
@@ -102,7 +102,7 @@ to hide our bigip credentials.
 
    You should see something similar to this:
 
-   .. image:: images/f5-container-connector-bigip-serviceaccount.png
+   .. image:: ../images/f5-container-connector-bigip-serviceaccount.png
 
 #. Create cluster role for bigip service account (admin rights, but can be
    modified for your environment)
@@ -113,7 +113,7 @@ to hide our bigip credentials.
 
    You should see something similar to this:
 
-   .. image:: images/f5-container-connector-bigip-clusterrolebinding.png
+   .. image:: ../images/f5-container-connector-bigip-clusterrolebinding.png
 
 #. At this point we have two deployment mode options, Nodeport or ClusterIP.
    This class will feature both modes. For more information see
@@ -149,7 +149,7 @@ to hide our bigip credentials.
 
       oc get deployment k8s-bigip-ctlr-deployment --namespace kube-system
 
-   .. image:: images/f5-container-connector-launch-node-deployment-controller.png
+   .. image:: ../images/f5-container-connector-launch-node-deployment-controller.png
 
 #. To locate on which node the CIS service is running, you can use the
    following command:
@@ -160,7 +160,7 @@ to hide our bigip credentials.
 
    We can see that our container is running on okd-node1 below.
 
-   .. image:: images/f5-container-connector-locate-node-controller-container.png
+   .. image:: ../images/f5-container-connector-locate-node-controller-container.png
 
 Troubleshooting
 ---------------
@@ -179,7 +179,7 @@ check the logs of your container, oc command or docker command.
       # For example:
       oc logs k8s-bigip-ctlr-667cf78cc7-62wxf -n kube-system
 
-   .. image:: images/f5-container-connector-check-logs-kubectl.png
+   .. image:: ../images/f5-container-connector-check-logs-kubectl.png
 
 #. Using docker logs command: From the previous check we know the container
    is running on okd-node1. On your current session with okd-master1 SSH to
@@ -193,7 +193,7 @@ check the logs of your container, oc command or docker command.
 
    Here we can see our container ID is "74a566f5778a"
 
-   .. image:: images/f5-container-connector-find-dockerID--controller-container.png
+   .. image:: ../images/f5-container-connector-find-dockerID--controller-container.png
 
    Now we can check our container logs:
 
@@ -201,7 +201,7 @@ check the logs of your container, oc command or docker command.
 
       sudo docker logs 74a566f5778a
 
-   .. image:: images/f5-container-connector-check-logs-controller-container.png
+   .. image:: ../images/f5-container-connector-check-logs-controller-container.png
 
    .. note:: The log messages here are identical to the log messages displayed
       in the previous oc logs command. 

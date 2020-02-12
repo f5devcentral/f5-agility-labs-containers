@@ -1,5 +1,5 @@
-Kubernetes Services Overview
-============================
+Lab 1.3 - Services Overview
+===========================
 
 Refer to `Kubernetes services <http://kubernetes.io/docs/user-guide/services/>`_
 for more information

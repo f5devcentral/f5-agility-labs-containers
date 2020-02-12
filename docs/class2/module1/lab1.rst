@@ -1,4 +1,4 @@
-OpenShift Overview
+Lab 1.1 - Overview
 ==================
 
 Red Hat’s OpenShift Origin is a containerized application platform with a
@@ -49,7 +49,7 @@ Access the Master
 
    The file should look like this:
 
-   .. image:: images/centos-hosts-file.png
+   .. image:: ../images/centos-hosts-file.png
 
    If entries are not there add them to the bottom of the file be editing
    "/etc/hosts" with 'vim'
@@ -83,7 +83,7 @@ of the platform.
       
    When prompted the password is **centos**
 
-   .. image:: images/oc-login.png
+   .. image:: ../images/oc-login.png
 
 #. Check the OpenShift status
 
@@ -95,7 +95,7 @@ of the platform.
 
       oc status
 
-   .. image:: images/oc-status.png
+   .. image:: ../images/oc-status.png
 
 #. Check the OpenShift nodes
 
@@ -109,7 +109,7 @@ of the platform.
 
       oc get nodes
 
-   .. image:: images/oc-get-nodes.png
+   .. image:: ../images/oc-get-nodes.png
 
    .. attention:: If the **node** status shows **NotReady** or
       **SchedulingDisabled** contact the lab proctor. The node is not passing
@@ -125,7 +125,7 @@ of the platform.
 
       oc describe node okd-master1
 
-   .. image:: images/oc-describe-node.png
+   .. image:: ../images/oc-describe-node.png
 
 #. Check to see what projects you have access to:
 
@@ -133,7 +133,7 @@ of the platform.
 
       oc get projects
 
-   .. image:: images/oc-get-projects.png
+   .. image:: ../images/oc-get-projects.png
 
    .. note:: You will be using these projects in the lab.
 
@@ -143,7 +143,7 @@ of the platform.
 
       oc get hostsubnets
 
-   .. image:: images/oc-get-hostsubnets.png
+   .. image:: ../images/oc-get-hostsubnets.png
      
 #. Access OpenShift web console
 
@@ -154,7 +154,7 @@ of the platform.
    username: **centos**
    password: **centos**
 
-   .. image:: images/webconsole.png
+   .. image:: ../images/webconsole.png
 
 Troubleshooting OpenShift!
 --------------------------

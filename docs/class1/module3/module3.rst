@@ -1,5 +1,5 @@
-Module 2: CIS NodePort Mode
-===========================
+Module 3: CIS ClusterIP Mode
+============================
 
 Overview
 --------
