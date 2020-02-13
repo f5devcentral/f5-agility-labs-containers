@@ -66,7 +66,7 @@ On **kube-master1** we will create all the required files:
 #. To understand and test the new app you need to pay attention to:
 
    **The Endpoints**, this shows our 2 instances (defined as replicas in our
-   deployment file) and the flannel IP assigned to the pod.
+   deployment file) and the overlay IP assigned to the pod.
 
    Now that we have deployed our application sucessfully, we can check our
    BIG-IP configuration.  From the browser open https://10.1.1.4

@@ -1,8 +1,7 @@
 Lab 3.3 - Deploy Hello-World (ConfigMap w/ AS3)
 ===============================================
 
-Now that CIS is up and running, let's deploy an application and leverage our
-new service.
+Now that CIS is up and running, let's deploy an application and leverage CIS.
 
 For this lab we'll use a simple pre-configured docker image called
 "f5-hello-world". It can be found on docker hub at
@@ -35,11 +34,6 @@ On **okd-master1** we will create all the required files:
 
    .. tip:: Use the file in ~/agilitydocs/docs/class2/openshift
 
-   .. attention:: The schema version below (for example 1.7) comes from the releases
-      of big-ip-controller.  For more information, head over to the following
-      link for a quick review:
-      https://clouddocs.f5.com/containers/v2/releases_and_versioning.html#schema-table
-
    .. literalinclude:: ../openshift/f5-hello-world-configmap.yaml
       :language: yaml
       :linenos:
@@ -61,8 +55,6 @@ On **okd-master1** we will create all the required files:
 
       oc get pods -o wide
 
-      # This can take a few seconds to a minute to create these hello-world containers to running state.      
-
    .. image:: ../images/f5-hello-world-pods.png
 
    .. code-block:: bash
@@ -73,8 +65,8 @@ On **okd-master1** we will create all the required files:
 
 #. To understand and test the new app you need to pay attention to:
 
-   **The Endpoints**, that's our 2 instances (defined as replicas in our
-   deployment file) and the port assigned to the service: port 8080.
+   **The Endpoints**, this shows our 2 instances (defined as replicas in our
+   deployment file) and the overlay IP assigned to the pod.
 
    Now that we have deployed our application sucessfully, we can check our
    BIG-IP configuration.  From the browser open https://10.1.1.4
@@ -133,6 +125,6 @@ On **okd-master1** we will create all the required files:
 
       oc delete -f f5-hello-world-configmap.yaml
 
-.. attention:: This concludes **Class2 - CIS and OpenShift**. Feel free to
+.. attention:: This concludes **Class 2 - CIS and OpenShift**. Feel free to
    experiment with any of the settings. The lab will be destroyed at the end of
    the class/day.

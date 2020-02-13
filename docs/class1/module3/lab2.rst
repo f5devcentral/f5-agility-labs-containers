@@ -1,5 +1,5 @@
 Lab 3.2 - Deploy Hello-World (Ingress)
-===============================================
+======================================
 
 Now that CIS is up and running, let's deploy an application and leverage CIS.
 

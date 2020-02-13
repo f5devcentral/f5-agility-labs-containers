@@ -7,7 +7,6 @@ about ClusterIP Mode.
 .. seealso::
    For more information see `BIG-IP Controller Modes <http://clouddocs.f5.com/containers/v2/kubernetes/kctlr-modes.html>`_
 
-
 BIG-IP Setup
 ------------
 

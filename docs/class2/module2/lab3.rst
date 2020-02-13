@@ -1,29 +1,30 @@
 Lab 2.3 - Deploy Hello-World (ConfigMap w/ AS3)
 ===============================================
 
-Now that CIS is up and running, let's deploy an application and leverage the
-new service.
+Just like the previous lab we'll deploy the f5-hello-world docker container.
+But instead of using the Ingress resource we'll use ConfigMap.
 
-For this lab we'll use a simple pre-configured docker image called
-"f5-hello-world". It can be found on docker hub at
-`f5devcentral/f5-hello-world <https://hub.docker.com/r/f5devcentral/f5-hello-world/>`_
+To deploy our application, we will need the following definitions:
 
-To deploy our application, we will need to do the following:
-
-#. Define a Deployment: this will launch our application running in a
+#. Define a **Deployment**: this will launch our application running in a
    container.
 
-#. Define a Service: this is an abstraction which defines a logical set of
-   *pods* and a policy by which to access them. Expose the *service* on a port
-   on each node of the cluster (the same port on each *node*). You’ll be able
-   to contact the service on any <NodeIP>:NodePort address. If you set the type
-   field to "NodePort", the Kubernetes master will allocate a port from a
-   flag-configured range **(default: 30000-32767)**, and each Node will proxy
-   that port (the same port number on every Node) into your *Service*.
+- Define a **Service**: this is an abstraction which defines a logical set of
+  pods and a policy by which to access them. Expose the service on a port
+  on each node of the cluster (the same port on each node). You’ll be able
+  to contact the service on any <NodeIP>:NodePort address. When you set the
+  type field to "NodePort", the Kubernetes master will allocate a port from a
+  flag-configured range (default: 30000-32767), and each Node will proxy
+  that port (the same port number on every Node) for your Service.
 
-#. Define a ConfigMap: this can be used to store fine-grained information like
-   individual properties or coarse-grained information like entire config files
-   or JSON blobs. It will contain the BIG-IP configuration we need to push.
+- Define a **ConfigMap**: this can be used to store fine-grained information
+  like individual properties or coarse-grained information like entire config
+  files  or JSON blobs. It will contain the BIG-IP configuration we need to
+  push.
+
+.. attention:: The steps are generally the same as the previous lab, the big
+   difference is the two resource types. Your **Deployment** and **Service**
+   definitions are the same file.
 
 App Deployment
 --------------
@@ -69,11 +70,12 @@ On the **okd-master1** we will create all the required files:
 
 #. To check the status of our deployment, you can run the following commands:
 
+   .. note:: This can take a few seconds to a minute to create these
+      hello-world containers to running state.
+
    .. code-block:: bash
 
       oc get pods -o wide
-
-      # This can take a few seconds to a minute to create these hello-world containers to running state.
 
    .. image:: ../images/f5-hello-world-pods.png
 
