@@ -28,7 +28,7 @@ To deploy our application, we will need to do the following:
 App Deployment
 --------------
 
-On the **okd-master** we will create all the required files:
+On the **okd-master1** we will create all the required files:
 
 #. Create a file called ``f5-hello-world-deployment.yaml``
 
@@ -37,7 +37,7 @@ On the **okd-master** we will create all the required files:
    .. literalinclude:: ../openshift/f5-hello-world-deployment.yaml
       :language: yaml
       :linenos:
-      :emphasize-lines: 2,7,18
+      :emphasize-lines: 2,7,20
 
 #. Create a file called ``f5-hello-world-service-nodeport.yaml``
 
@@ -46,21 +46,16 @@ On the **okd-master** we will create all the required files:
    .. literalinclude:: ../openshift/f5-hello-world-service-nodeport.yaml
       :language: yaml
       :linenos:
-      :emphasize-lines: 2,12
+      :emphasize-lines: 2,8-10,17
 
 #. Create a file called ``f5-hello-world-configmap.yaml``
 
    .. tip:: Use the file in ~/agilitydocs/docs/class2/openshift
 
-   .. attention:: The schema version below (for example 1.7) comes from the releases
-      of big-ip-controller.  For more information, head over to the following
-      link for a quick review:
-      https://clouddocs.f5.com/containers/v2/releases_and_versioning.html#schema-table
-
    .. literalinclude:: ../openshift/f5-hello-world-configmap.yaml
       :language: yaml
       :linenos:
-      :emphasize-lines: 2,5,7,9,16,18
+      :emphasize-lines: 2,5,7,8,27,30
 
 #. We can now launch our application:
 
@@ -88,7 +83,7 @@ On the **okd-master** we will create all the required files:
         
    .. image:: ../images/f5-container-connector-check-app-definition-node.png
 
-#. To test the app you need to pay attention to: 
+#. To understand and test the new app you need to pay attention to: 
 
    **The NodePort value**, that's the port used by Kubernetes to give you
    access to the app from the outside. Here it's "31268", highlighted above.
@@ -141,7 +136,7 @@ On the **okd-master** we will create all the required files:
 
    .. image:: ../images/f5-hello-world-pods-scale10.png
 
-#. Check the pool was updated on big-ip
+#. Check the pool was updated on BIG-IP:
 
    .. image:: ../images/f5-hello-world-pool-scale10-node.png
 
@@ -151,10 +146,10 @@ On the **okd-master** we will create all the required files:
 
    .. code-block:: bash
 
-      kubectl delete -f f5-hello-world-configmap.yaml
-      kubectl delete -f f5-hello-world-service-nodeport.yaml
-      kubectl delete -f f5-hello-world-deployment.yaml
-      kubectl delete -f f5-nodeport-deployment.yaml
+      oc delete -f f5-hello-world-configmap.yaml
+      oc delete -f f5-hello-world-service-nodeport.yaml
+      oc delete -f f5-hello-world-deployment.yaml
+      oc delete -f f5-nodeport-deployment.yaml
 
    .. important:: Do not skip this step. Instead of reusing some of these
       objects, the next lab we will re-deploy them to avoid conflicts and

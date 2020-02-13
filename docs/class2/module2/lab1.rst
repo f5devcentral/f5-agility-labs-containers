@@ -10,12 +10,10 @@ The BIG-IP Controller for OpenShift installs as a
 BIG-IP Setup
 ------------
 
-To use F5 Container Ingress Service, you'll need a BIG-IP up and running first.
-
 Through the Jumpbox, you should have a BIG-IP available at the following
 URL: https://10.1.1.4
 
-.. warning:: 
+.. attention:: 
    - Connect to your BIG-IP and check it is active and licensed. Its
      login and password are: **admin/admin**
 
@@ -133,7 +131,7 @@ to hide our bigip credentials.
    .. literalinclude:: ../openshift/f5-nodeport-deployment.yaml
       :language: yaml
       :linenos:
-      :emphasize-lines: 2,7,17,20,37,38,40
+      :emphasize-lines: 2,7,17,20,37,39-41
 
 #. Once you have your yaml file setup, you can try to launch your deployment.
    It will start our f5-k8s-controller container on one of our nodes (may take
@@ -171,8 +169,8 @@ check the logs of your container, oc command or docker command.
 .. attention:: Depending on your deployment CIS can be running on either
    okd-node1 or okd-node2.
 
-#. Using oc command: you need to use the full name of your pod as showed in the
-   previous image
+#. Using ``oc`` command: you need to use the full name of your pod as shown in
+   the previous image.
 
    .. code-block:: bash
 

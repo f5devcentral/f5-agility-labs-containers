@@ -37,7 +37,7 @@ On **kube-master1** we will create all the required files:
    .. literalinclude:: ../kubernetes/f5-hello-world-deployment.yaml
       :language: yaml
       :linenos:
-      :emphasize-lines: 2,7,18
+      :emphasize-lines: 2,7,20
 
 #. Create a file called ``f5-hello-world-service-nodeport.yaml``
 
@@ -46,21 +46,16 @@ On **kube-master1** we will create all the required files:
    .. literalinclude:: ../kubernetes/f5-hello-world-service-nodeport.yaml
       :language: yaml
       :linenos:
-      :emphasize-lines: 2,12
+      :emphasize-lines: 2,8-10,17
 
 #. Create a file called ``f5-hello-world-configmap.yaml``
 
    .. tip:: Use the file in ~/agilitydocs/docs/class1/kubernetes
 
-   .. attention:: The schema version below (for example 1.7) comes from the releases
-      of big-ip-controller.  For more information, head over to the following
-      link for a quick review:
-      https://clouddocs.f5.com/containers/v2/releases_and_versioning.html#schema-table
-
    .. literalinclude:: ../kubernetes/f5-hello-world-configmap.yaml
       :language: yaml
       :linenos:
-      :emphasize-lines: 2,5,7,9,16,18
+      :emphasize-lines: 2,5,7,8,27,30
 
 #. We can now launch our application:
 
@@ -127,20 +122,6 @@ On **kube-master1** we will create all the required files:
 
    .. image:: ../images/f5-container-connector-check-app-bigip-stats.png
 
-#. How is traffic forwarded in Kubernetes from the <node IP>:32188 to the
-   <container IP>:8080? This is done via iptables that is managed via the
-   kube-proxy instances. On either of the nodes, SSH in and run the following
-   command:
-
-   .. code-block:: bash
-
-      sudo iptables-save | grep f5-hello-world
-
-   This will list the different iptables rules that were created regarding our
-   service.
-
-   .. image:: ../images/f5-container-connector-list-frontend-iptables.png
-
 #. Scale the f5-hello-world app
 
    .. code-block:: bash
@@ -155,7 +136,7 @@ On **kube-master1** we will create all the required files:
 
    .. image:: ../images/f5-hello-world-pods-scale10.png
 
-#. Check the pool was updated on BIG-IP
+#. Check the pool was updated on BIG-IP:
 
    .. image:: ../images/f5-hello-world-pool-scale10.png
 

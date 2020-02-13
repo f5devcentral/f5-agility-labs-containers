@@ -1,16 +1,29 @@
 Lab 3.1 - Install & Configure CIS
 =================================
 
+In the previous moudule we learned about Nodeport Mode. Here we'll learn
+about ClusterIP Mode.
+
+.. seealso::
+   For more information see `BIG-IP Controller Modes <http://clouddocs.f5.com/containers/v2/kubernetes/kctlr-modes.html>`_
+
 BIG-IP Setup
 ------------
 
 With ClusterIP we're utilizing VXLAN to communicate with the application pods.
-To do so we'll need to configure bigip first.
+To do so we'll need to configure BIG-IP first.
+
+.. attention:: 
+   - Be sure to be in the ``Common`` partition before creating the following
+     objects.
+
+     .. image:: ../images/f5-check-partition.png
 
 #. You need to setup a partition that will be used by F5 Container Ingress
    Service.
 
-   .. note:: This step was performed in the previous lab.
+   .. note:: This step was performed in the previous module. Verify the
+      "kubernetes" partion exists with the instructions below.
 
    .. code-block:: bash
 
@@ -23,9 +36,6 @@ To do so we'll need to configure bigip first.
       - Click Finished
 
    .. image:: ../images/f5-container-connector-bigip-partition-setup.png
-
-.. attention:: Be sure to switch back to the "Common" partition before making
-   the following changes.
 
 #. Create a vxlan tunnel profile
 
@@ -90,11 +100,6 @@ To do so we'll need to configure bigip first.
 CIS Deployment
 --------------
 
-As stated in lab1, we have two deployment mode options, Nodeport or ClusterIP.
-For more information see `BIG-IP Controller Modes <http://clouddocs.f5.com/containers/v2/kubernetes/kctlr-modes.html>`_
-
-Here we'll configure **ClusterIP mode** ``f5-cluster-deployment.yaml``
-
 .. note::
    - For your convenience the file can be found in
      /home/ubuntu/agilitydocs/docs/class1/kubernetes (downloaded earlier in the
@@ -103,11 +108,6 @@ Here we'll configure **ClusterIP mode** ``f5-cluster-deployment.yaml``
    - If you have issues with your yaml and syntax (**indentation MATTERS**),
      you can try to use an online parser to help you :
      `Yaml parser <http://codebeautify.org/yaml-validator>`_
-
-.. literalinclude:: ../kubernetes/f5-cluster-deployment.yaml
-   :language: yaml
-   :linenos:
-   :emphasize-lines: 2,7,17,20,37,38,40,41
 
 #. Before deploying CIS in ClusterIP mode we need to configure Big-IP as a node
    in the kubernetes cluster. To do so you'll need to modify
@@ -148,9 +148,10 @@ Here we'll configure **ClusterIP mode** ``f5-cluster-deployment.yaml``
 
       kubectl get nodes
 
-#. Now that we have the new bigip node added we can launch the CIS deployment.
-   It will start our f5-k8s-controller container on one of our nodes (may take
-   around 30sec to be in a running state):
+#. Now that we have the new BIGIP Node added we can launch the CIS deployment.
+   It will start the f5-k8s-controller container on one of the worker nodes.
+
+   .. attention:: This may take around 30sec to get to a running state.
 
    .. code-block:: bash
 
@@ -163,7 +164,7 @@ Here we'll configure **ClusterIP mode** ``f5-cluster-deployment.yaml``
    .. literalinclude:: ../kubernetes/f5-cluster-deployment.yaml
       :language: yaml
       :linenos:
-      :emphasize-lines: 2,5,17,20,37-41
+      :emphasize-lines: 2,7,17,20,37,39-42
 
 #. Create the CIS deployment with the following command
 
@@ -193,7 +194,8 @@ Here we'll configure **ClusterIP mode** ``f5-cluster-deployment.yaml``
 Troubleshooting
 ---------------
 
-Check the container/pod logs via kubectl command.
+Check the container/pod logs via ``kubectl`` command. You also have the option
+of checking the Docker container as described in the previos module.
 
 #. Using the full name of your pod as showed in the previous image run the
    following command:

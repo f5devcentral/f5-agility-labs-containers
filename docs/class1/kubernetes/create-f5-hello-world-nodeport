@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#create container f5-hello-wrold
+#create container f5-hello-world
 kubectl create -f f5-hello-world-deployment.yaml
 kubectl create -f f5-hello-world-service-nodeport.yaml
 kubectl create -f f5-hello-world-configmap.yaml

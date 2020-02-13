@@ -20,7 +20,7 @@ On **kube-master1** we will create all the required files:
    .. literalinclude:: ../kubernetes/f5-hello-world-deployment.yaml
       :language: yaml
       :linenos:
-      :emphasize-lines: 2,14
+      :emphasize-lines: 2,7,20
 
 #. Create a file called ``f5-hello-world-service-clusterip.yaml``
 
@@ -29,7 +29,7 @@ On **kube-master1** we will create all the required files:
    .. literalinclude:: ../kubernetes/f5-hello-world-service-clusterip.yaml
       :language: yaml
       :linenos:
-      :emphasize-lines: 2,12
+      :emphasize-lines: 2,8-10,17
 
 #. Create a file called ``f5-hello-world-configmap.yaml``
 
@@ -43,7 +43,7 @@ On **kube-master1** we will create all the required files:
    .. literalinclude:: ../kubernetes/f5-hello-world-configmap.yaml
       :language: yaml
       :linenos:
-      :emphasize-lines: 2,5,7,9,16,18
+      :emphasize-lines: 2,5,7,8,27,30
 
 #. We can now launch our application:
 
@@ -71,7 +71,7 @@ On **kube-master1** we will create all the required files:
 
    .. image:: ../images/f5-cis-describe-clusterip-service.png
 
-#. To test the app you need to pay attention to:
+#. To understand and test the new app you need to pay attention to:
 
    **The Endpoints**, this shows our 2 instances (defined as replicas in our
    deployment file) and the flannel IP assigned to the pod.
@@ -121,7 +121,7 @@ On **kube-master1** we will create all the required files:
 
    .. image:: ../images/f5-hello-world-pods-scale10.png
 
-#. Check the pool was updated on big-ip
+#. Check the pool was updated on BIG-IP:
 
    .. image:: ../images/f5-hello-world-pool-scale10-clusterip.png
 

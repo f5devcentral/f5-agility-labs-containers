@@ -1,7 +1,6 @@
 #!/bin/bash
 
 #delete kubernetes dashboard, authentication and RBAC
-kubectl delete service kubernetes-dashboard -n kube-system
-kubectl delete deployment kubernetes-dashboard -n kube-system
+kubectl delete -f kube-dashboard.yaml
 kubectl delete clusterrolebinding kubernetes-dashboard -n kube-system
 kubectl delete serviceaccount kubernetes-dashboard -n kube-system

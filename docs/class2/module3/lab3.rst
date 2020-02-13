@@ -11,7 +11,7 @@ For this lab we'll use a simple pre-configured docker image called
 App Deployment
 --------------
 
-On **okd-master** we will create all the required files:
+On **okd-master1** we will create all the required files:
 
 #. Create a file called ``f5-hello-world-deployment.yaml``
 
@@ -20,7 +20,7 @@ On **okd-master** we will create all the required files:
    .. literalinclude:: ../openshift/f5-hello-world-deployment.yaml
       :language: yaml
       :linenos:
-      :emphasize-lines: 2,14
+      :emphasize-lines: 2,7,20
 
 #. Create a file called ``f5-hello-world-service-cluster.yaml``
 
@@ -29,7 +29,7 @@ On **okd-master** we will create all the required files:
    .. literalinclude:: ../openshift/f5-hello-world-service-clusterip.yaml
       :language: yaml
       :linenos:
-      :emphasize-lines: 2,12
+      :emphasize-lines: 2,8-10,17
 
 #. Create a file called ``f5-hello-world-configmap.yaml``
 
@@ -43,7 +43,7 @@ On **okd-master** we will create all the required files:
    .. literalinclude:: ../openshift/f5-hello-world-configmap.yaml
       :language: yaml
       :linenos:
-      :emphasize-lines: 2,5,7,9,16,18
+      :emphasize-lines: 2,5,7,8,27,30
 
 #. We can now launch our application:
 
@@ -71,7 +71,7 @@ On **okd-master** we will create all the required files:
         
    .. image:: ../images/f5-container-connector-check-app-definition.png
 
-#. To test the app you need to pay attention to: 
+#. To understand and test the new app you need to pay attention to:
 
    **The Endpoints**, that's our 2 instances (defined as replicas in our
    deployment file) and the port assigned to the service: port 8080.
@@ -96,7 +96,7 @@ On **okd-master** we will create all the required files:
    .. note:: You can see that the pool members IP addresses are assigned from
       the overlay network (**ClusterIP mode**)
 
-#. Now you can try to access your application via your BIG-IP VIP: 10.1.1.4:81
+#. Now you can try to access your application via the BIG-IP VS/VIP: UDF-URL
 
    .. image:: ../images/f5-container-connector-access-app.png
 
@@ -121,7 +121,7 @@ On **okd-master** we will create all the required files:
 
    .. image:: ../images/f5-hello-world-pods-scale10.png
 
-#. Check the pool was updated on big-ip
+#. Check the pool was updated on BIG-IP:
 
    .. image:: ../images/f5-hello-world-pool-scale10-clusterip.png
 
