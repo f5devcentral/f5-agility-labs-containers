@@ -1,5 +1,5 @@
-Lab 2.1 - Install & Configure CIS
-=================================
+Lab 2.1 - Install & Configure CIS (NodePort)
+============================================
 
 The BIG-IP Controller for Kubernetes installs as a
 `Deployment object <https://kubernetes.io/docs/concepts/workloads/controllers/deployment/>`_

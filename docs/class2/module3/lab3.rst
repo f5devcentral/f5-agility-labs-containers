@@ -133,6 +133,6 @@ On **okd-master1** we will create all the required files:
 
       oc delete -f f5-hello-world-configmap.yaml
 
-.. attention:: This concludes the OpenShift portion of the class. Feel free to
+.. attention:: This concludes **Class2 - CIS and OpenShift**. Feel free to
    experiment with any of the settings. The lab will be destroyed at the end of
    the class/day.

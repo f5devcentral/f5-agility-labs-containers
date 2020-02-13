@@ -1,5 +1,5 @@
-Lab 3.1 - Install & Configure CIS
-=================================
+Lab 3.1 - Install & Configure CIS (ClusterIP)
+=============================================
 
 In the previous moudule we learned about Nodeport Mode. Here we'll learn
 about ClusterIP Mode.
