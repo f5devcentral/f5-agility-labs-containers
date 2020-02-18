@@ -12,7 +12,7 @@ metadata:
     virtual-server.f5.com/health: |
       [
         {
-          "path":     "svc1.example.com/",
+          "path":     "f5.hello.world/",
           "send":     "HTTP GET /",
           "interval": 5,
           "timeout":  10

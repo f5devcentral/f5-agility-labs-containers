@@ -2,7 +2,7 @@ Lab 2.3 - Deploy Hello-World (ConfigMap w/ AS3)
 ===============================================
 
 Just like the previous lab we'll deploy the f5-hello-world docker container.
-But instead of using the Ingress resource we'll use ConfigMap.
+But instead of using the Route resource we'll use ConfigMap.
 
 To deploy our application, we will need the following definitions:
 
@@ -13,7 +13,7 @@ To deploy our application, we will need the following definitions:
   pods and a policy by which to access them. Expose the service on a port
   on each node of the cluster (the same port on each node). You’ll be able
   to contact the service on any <NodeIP>:NodePort address. When you set the
-  type field to "NodePort", the Kubernetes master will allocate a port from a
+  type field to "NodePort", the master will allocate a port from a
   flag-configured range (default: 30000-32767), and each Node will proxy
   that port (the same port number on every Node) for your Service.
 
@@ -87,8 +87,8 @@ On the **okd-master1** we will create all the required files:
 
 #. To understand and test the new app you need to pay attention to: 
 
-   **The NodePort value**, that's the port used by Kubernetes to give you
-   access to the app from the outside. Here it's "31268", highlighted above.
+   **The NodePort value**, that's the port used to give you access to the app
+   from the outside. Here it's "31268", highlighted above.
 
    **The Endpoints**, that's our 2 instances (defined as replicas in our
    deployment file) and the port assigned to the service: port 8080.
@@ -110,8 +110,8 @@ On the **okd-master1** we will create all the required files:
 
    .. image:: ../images/f5-container-connector-check-app-bigipconfig2.png
 
-   .. note:: You can see that the pool members listed are all from the
-      openshift nodes on the port 31268. (**NodePort mode**)
+   .. note:: You can see that the pool members listed are all the cluster
+      nodes on the port 31268. (**NodePort mode**)
 
 #. Now you can try to access your application via the BIG-IP VS/VIP: UDF-URL
 

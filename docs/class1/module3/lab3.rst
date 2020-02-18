@@ -124,6 +124,8 @@ On **kube-master1** we will create all the required files:
    .. code-block:: bash
 
       kubectl delete -f f5-hello-world-configmap.yaml
+      kubectl delete -f f5-hello-world-service-clusterip.yaml
+      kubectl delete -f f5-hello-world-deployment.yaml
 
 .. attention:: This concludes **Class 1 - CIS and Kubernetes**. Feel free to
    experiment with any of the settings. The lab will be destroyed at the end of
