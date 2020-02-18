@@ -1,7 +1,6 @@
 #!/bin/bash
 
-#delete container f5-hello-world
+#delete container f5-hello-world w/ configmap
 oc delete -f f5-hello-world-configmap.yaml
 oc delete -f f5-hello-world-service-nodeport.yaml
 oc delete -f f5-hello-world-deployment.yaml
-

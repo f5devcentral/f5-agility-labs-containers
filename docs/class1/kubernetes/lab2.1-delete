@@ -1,9 +1,7 @@
 #!/bin/bash
 
-#delete kubernetes bigip container connecter, authentication and RBAC 
-kubectl delete -f f5-cluster-deployment.yaml
-kubectl delete -f f5-bigip-node.yaml
+#delete kubernetes bigip container connecter w/ nodeport, authentication and RBAC 
+kubectl delete -f f5-nodeport-deployment.yaml
 kubectl delete clusterrolebinding k8s-bigip-ctlr-clusteradmin
 kubectl delete serviceaccount k8s-bigip-ctlr -n kube-system
 kubectl delete secret bigip-login -n kube-system
-

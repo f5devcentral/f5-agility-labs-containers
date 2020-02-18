@@ -2,6 +2,7 @@
   kind: Route
   metadata:
     labels:
+      f5type: hello-world
       name: f5-hello-world-web
     name: f5-hello-world-web
     namespace: default
