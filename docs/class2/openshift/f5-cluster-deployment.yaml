@@ -44,5 +44,5 @@ spec:
             "--route-https-vserver=okd_https_vs",
             "--route-label=hello-world",
             "--pool-member-type=cluster",
-            "--openshift-sdn-name=/Common/ose-tunnel"
+            "--openshift-sdn-name=/Common/okd-tunnel"
           ]
