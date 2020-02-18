@@ -38,5 +38,10 @@ spec:
             "--insecure=true",
             "--bigip-partition=okd",
             "--namespace=default",
+            "--manage-routes=true",
+            "--route-vserver-addr=10.1.1.4",
+            "--route-http-vserver=okd_http_vs",
+            "--route-https-vserver=okd_https_vs",
+            "--route-label=hello-world",
             "--pool-member-type=nodeport"
           ]

@@ -47,7 +47,7 @@ On **okd-master1** we will create all the required files:
    .. literalinclude:: ../openshift/f5-hello-world-service-nodeport.yaml
       :language: yaml
       :linenos:
-      :emphasize-lines: 2,8-10,17
+      :emphasize-lines: 2,17
 
 #. Create a file called ``f5-hello-world-route.yaml``
 
