@@ -27,7 +27,7 @@ data:
                             "10.1.1.4"
                         ],
                         "pool": "web_pool",
-                        "virtualPort": 81
+                        "virtualPort": 80
                     },
                     "web_pool": {
                         "class": "Pool",

@@ -100,7 +100,7 @@ On **kube-master1** we will create all the required files:
       see nothing.
 
    Here you can see a new Virtual Server, "default_f5-hello-world" was created,
-   listening on 10.1.1.4:81 in partition "kubernetes".
+   listening on 10.1.1.4:80 in partition "kubernetes".
 
    .. image:: ../images/f5-container-connector-check-app-bigipconfig.png
 

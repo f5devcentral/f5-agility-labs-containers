@@ -100,7 +100,7 @@ On **okd-master1** we will create all the required files:
       see nothing.
 
    Here you can see a new Virtual Server, "ingress_10.1.1.4_81" was created,
-   listening on 10.1.1.4:81 in partition "okd".
+   listening on 10.1.1.4:80 in partition "okd".
 
    .. image:: ../images/f5-container-connector-check-app-bigipconfig.png
 
