@@ -62,9 +62,9 @@ On **okd-master1** we will create all the required files:
 
    .. code-block:: bash
 
-      kubectl create -f f5-hello-world-deployment.yaml
-      kubectl create -f f5-hello-world-service-nodeport.yaml
-      kubectl create -f f5-hello-world-route.yaml
+      oc create -f f5-hello-world-deployment.yaml
+      oc create -f f5-hello-world-service-nodeport.yaml
+      oc create -f f5-hello-world-route.yaml
 
    .. image:: ../images/f5-container-connector-launch-app.png
 
@@ -75,13 +75,13 @@ On **okd-master1** we will create all the required files:
 
    .. code-block:: bash
 
-      kubectl get pods -o wide
+      oc get pods -o wide
 
    .. image:: ../images/f5-hello-world-pods.png
 
    .. code-block:: bash
 
-      kubectl describe svc f5-hello-world
+      oc describe svc f5-hello-world
 
    .. image:: ../images/f5-container-connector-check-app-definition.png
 
@@ -127,9 +127,9 @@ On **okd-master1** we will create all the required files:
 
    .. code-block:: bash
 
-      kubectl delete -f f5-hello-world-route.yaml
-      kubectl delete -f f5-hello-world-service-nodeport.yaml
-      kubectl delete -f f5-hello-world-deployment.yaml
+      oc delete -f f5-hello-world-route.yaml
+      oc delete -f f5-hello-world-service-nodeport.yaml
+      oc delete -f f5-hello-world-deployment.yaml
 
    .. important:: Do not skip this step. Instead of reusing some of these
       objects, the next lab we will re-deploy them to avoid conflicts and

@@ -144,15 +144,30 @@ On the **okd-master1** we will create all the required files:
 
    .. attention:: Why do we still only show 3 pool members?
 
-#. Delete Hello-World and Remove CIS
+#. Remove Hello-World from BIG-IP. When using AS3 an extra steps need to be
+   performed. In addion to deleteing the previously created configmap a "blank"
+   declaration needs to be sent to completly remove the application:
+   
+   .. literalinclude:: ../openshift/f5-hello-world-delete-configmap.yaml
+      :language: yaml
+      :linenos:
+      :emphasize-lines: 2,19
 
    .. code-block:: bash
 
       oc delete -f f5-hello-world-configmap.yaml
       oc delete -f f5-hello-world-service-nodeport.yaml
       oc delete -f f5-hello-world-deployment.yaml
+
+      oc create -f f5-hello-world-delete-configmap.yaml
+      oc delete -f f5-hello-world-delete-configmap.yaml
+
+#. Remove CIS:
+
+   .. code-block:: bash
+
       oc delete -f f5-nodeport-deployment.yaml
 
-   .. important:: Do not skip this step. Instead of reusing some of these
-      objects, the next lab we will re-deploy them to avoid conflicts and
-      errors.
+.. important:: Do not skip these clean-up steps. Instead of reusing some of
+   these objects, the next lab we will re-deploy them to avoid conflicts and
+   errors.

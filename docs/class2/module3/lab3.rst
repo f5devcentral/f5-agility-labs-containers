@@ -119,11 +119,23 @@ On **okd-master1** we will create all the required files:
 
    .. attention:: Now we show 10 pool members vs. 2 in the previous lab, why?
 
-#. Delete f5-hello-world
+#. Remove Hello-World from BIG-IP. When using AS3 an extra steps need to be
+   performed. In addion to deleteing the previously created configmap a "blank"
+   declaration needs to be sent to completly remove the application:
+   
+   .. literalinclude:: ../openshift/f5-hello-world-delete-configmap.yaml
+      :language: yaml
+      :linenos:
+      :emphasize-lines: 2,19
 
    .. code-block:: bash
 
       oc delete -f f5-hello-world-configmap.yaml
+      oc delete -f f5-hello-world-service-clusterip.yaml
+      oc delete -f f5-hello-world-deployment.yaml
+      
+      oc create -f f5-hello-world-delete-configmap.yaml
+      oc delete -f f5-hello-world-delete-configmap.yaml
 
 .. attention:: This concludes **Class 2 - CIS and OpenShift**. Feel free to
    experiment with any of the settings. The lab will be destroyed at the end of

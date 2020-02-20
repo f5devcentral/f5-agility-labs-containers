@@ -133,7 +133,7 @@ On **kube-master1** we will create all the required files:
       kubectl delete -f f5-hello-world-configmap.yaml
       kubectl delete -f f5-hello-world-service-clusterip.yaml
       kubectl delete -f f5-hello-world-deployment.yaml
-
+      
       kubectl create -f f5-hello-world-delete-configmap.yaml
       kubectl delete -f f5-hello-world-delete-configmap.yaml
 

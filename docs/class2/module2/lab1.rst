@@ -145,7 +145,7 @@ to hide our bigip credentials.
 
    .. code-block:: bash
 
-      oc get deployment k8s-bigip-ctlr-deployment --namespace kube-system
+      oc get deployment k8s-bigip-ctlr --namespace kube-system
 
    .. image:: ../images/f5-container-connector-launch-node-deployment-controller.png
 

@@ -1,8 +1,6 @@
-Lab 2.2 - Deploy Hello-World (Route)
+Lab 3.2 - Deploy Hello-World (Route)
 ====================================
 
-Lab 3.2 - Deploy Hello-World (Ingress)
-======================================
 
 Now that CIS is up and running, let's deploy an application and leverage CIS.
 
@@ -17,27 +15,27 @@ On **kube-master1** we will create all the required files:
 
 #. Create a file called ``f5-hello-world-deployment.yaml``
 
-   .. tip:: Use the file in ~/agilitydocs/docs/class1/kubernetes
+   .. tip:: Use the file in ~/agilitydocs/docs/class2/openshift
 
-   .. literalinclude:: ../kubernetes/f5-hello-world-deployment.yaml
+   .. literalinclude:: ../openshift/f5-hello-world-deployment.yaml
       :language: yaml
       :linenos:
       :emphasize-lines: 2,7,20
 
 #. Create a file called ``f5-hello-world-service-clusterip.yaml``
 
-   .. tip:: Use the file in ~/agilitydocs/docs/class1/kubernetes
+   .. tip:: Use the file in ~/agilitydocs/docs/class2/openshift
 
-   .. literalinclude:: ../kubernetes/f5-hello-world-service-clusterip.yaml
+   .. literalinclude:: ../openshift/f5-hello-world-service-clusterip.yaml
       :language: yaml
       :linenos:
       :emphasize-lines: 2,17
 
-#. Create a file called ``f5-hello-world-ingress.yaml``
+#. Create a file called ``f5-hello-world-route.yaml``
 
-   .. tip:: Use the file in ~/agilitydocs/docs/class1/kubernetes
+   .. tip:: Use the file in ~/agilitydocs/docs/class2/openshift
 
-   .. literalinclude:: ../kubernetes/f5-hello-world-ingress.yaml
+   .. literalinclude:: ../openshift/f5-hello-world-route.yaml
       :language: yaml
       :linenos:
       :emphasize-lines: 2,7-9,23,24
@@ -46,9 +44,9 @@ On **kube-master1** we will create all the required files:
 
    .. code-block:: bash
 
-      kubectl create -f f5-hello-world-deployment.yaml
-      kubectl create -f f5-hello-world-service-clusterip.yaml
-      kubectl create -f f5-hello-world-ingress.yaml
+      oc create -f f5-hello-world-deployment.yaml
+      oc create -f f5-hello-world-service-clusterip.yaml
+      oc create -f f5-hello-world-route.yaml
 
    .. image:: ../images/f5-container-connector-launch-app.png
 
@@ -56,13 +54,13 @@ On **kube-master1** we will create all the required files:
 
    .. code-block:: bash
 
-      kubectl get pods -o wide
+      oc get pods -o wide
 
    .. image:: ../images/f5-hello-world-pods.png
 
    .. code-block:: bash
 
-      kubectl describe svc f5-hello-world
+      oc describe svc f5-hello-world
 
    .. image:: ../images/f5-cis-describe-clusterip-service.png
 
@@ -74,11 +72,11 @@ On **kube-master1** we will create all the required files:
    Now that we have deployed our application sucessfully, we can check our
    BIG-IP configuration. From the browser open https://10.1.1.4
 
-   .. warning:: Don't forget to select the "kubernetes" partition or you'll
+   .. warning:: Don't forget to select the "okd" partition or you'll
       see nothing.
 
    Here you can see a new Virtual Server, "ingress_10.1.1.4_81" was created,
-   listening on 10.1.1.4:80 in partition "kubernetes".
+   listening on 10.1.1.4:80 in partition "okd".
 
    .. image:: ../images/f5-container-connector-check-app-bigipconfig.png
 
@@ -105,9 +103,9 @@ On **kube-master1** we will create all the required files:
 
    .. code-block:: bash
 
-      kubectl delete -f f5-hello-world-ingress.yaml
-      kubectl delete -f f5-hello-world-service-clusterip.yaml
-      kubectl delete -f f5-hello-world-deployment.yaml
+      oc delete -f f5-hello-world-route.yaml
+      oc delete -f f5-hello-world-service-clusterip.yaml
+      oc delete -f f5-hello-world-deployment.yaml
 
    .. important:: Do not skip this step. Instead of reusing some of these
       objects, the next lab we will re-deploy them to avoid conflicts and
