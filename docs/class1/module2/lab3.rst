@@ -156,17 +156,18 @@ On **kube-master1** we will create all the required files:
    .. code-block:: bash
 
       kubectl delete -f f5-hello-world-configmap.yaml
+      kubectl delete -f f5-hello-world-service-nodeport.yaml
+      kubectl delete -f f5-hello-world-deployment.yaml
+
       kubectl create -f f5-hello-world-delete-configmap.yaml
       kubectl delete -f f5-hello-world-delete-configmap.yaml
 
-#. Remove Hello-World (service & deployment) and CIS"
+#. Remove CIS:
 
    .. code-block:: bash
 
-      kubectl delete -f f5-hello-world-service-nodeport.yaml
-      kubectl delete -f f5-hello-world-deployment.yaml
       kubectl delete -f f5-nodeport-deployment.yaml
 
-.. important:: Do not skip this clean-up steps. Instead of reusing some of
+.. important:: Do not skip these clean-up steps. Instead of reusing some of
    these objects, the next lab we will re-deploy them to avoid conflicts and
    errors.
