@@ -103,7 +103,7 @@ On **kube-master1** we will create all the required files:
 
    .. code-block:: bash
 
-      kubectl scale --replicas=10 deployment/f5-hello-world -n default
+      kubectl scale --replicas=10 deployment/f5-hello-world-web -n default
 
 #. Check that the pods were created
 
@@ -119,11 +119,20 @@ On **kube-master1** we will create all the required files:
 
    .. attention:: Now we show 10 pool members vs. 2 in the previous lab, why?
 
-#. Delete Hello-World
+#. Remove Hello-World from BIG-IP. When using AS3 an extra steps need to be
+   performed. In addion to deleteing the previously created configmap a "blank"
+   declaration needs to be sent to completly remove the application:
+   
+   .. literalinclude:: ../kubernetes/f5-hello-world-delete-configmap.yaml
+      :language: yaml
+      :linenos:
+      :emphasize-lines: 2,19
 
    .. code-block:: bash
 
       kubectl delete -f f5-hello-world-configmap.yaml
+      kubectl create -f f5-hello-world-delete-configmap.yaml
+      kubectl delete -f f5-hello-world-delete-configmap.yaml
       kubectl delete -f f5-hello-world-service-clusterip.yaml
       kubectl delete -f f5-hello-world-deployment.yaml
 

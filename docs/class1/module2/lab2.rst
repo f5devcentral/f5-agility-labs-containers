@@ -9,19 +9,19 @@ For this lab we'll use a simple pre-configured docker image called
 
 To deploy our application, we will need the following definitions:
 
-- Define a **Deployment**: this will launch our application running in a
-  container.
+- Define the **Deployment** resource: this will launch our application running
+  in a container.
 
-- Define a **Service**: this is an abstraction which defines a logical set of
-  pods and a policy by which to access them. Expose the service on a port
-  on each node of the cluster (the same port on each node). You’ll be able
-  to contact the service on any <NodeIP>:NodePort address. When you set the
-  type field to "NodePort", the master will allocate a port from a
-  flag-configured range (default: 30000-32767), and each Node will proxy
-  that port (the same port number on every Node) for your Service.
+- Define the **Service** resource: this is an abstraction which defines a
+  logical set of pods and a policy by which to access them. Expose the service
+  on a port on each node of the cluster (the same port on each node). You’ll
+  be able to contact the service on any <NodeIP>:NodePort address. When you set
+  the type field to "NodePort", the master will allocate a port from a
+  flag-configured range (default: 30000-32767), and each Node will proxy that
+  port (the same port number on every Node) for your Service.
 
-- Define a **Ingress**: this is used to add the necesary annotations to define
-  the virtual server settings.
+- Define the **Ingress** resource: this is used to add the necesary annotations
+  to define the virtual server settings.
 
   .. seealso:: 
      `Supported Ingress Annotations <https://clouddocs.f5.com/products/connectors/k8s-bigip-ctlr/v1.11/#ingress-resources>`_

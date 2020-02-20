@@ -6,21 +6,21 @@ But instead of using the Route resource we'll use ConfigMap.
 
 To deploy our application, we will need the following definitions:
 
-#. Define a **Deployment**: this will launch our application running in a
-   container.
+- Define the **Deployment** resource: this will launch our application running
+  in a container.
 
-- Define a **Service**: this is an abstraction which defines a logical set of
-  pods and a policy by which to access them. Expose the service on a port
-  on each node of the cluster (the same port on each node). You’ll be able
-  to contact the service on any <NodeIP>:NodePort address. When you set the
-  type field to "NodePort", the master will allocate a port from a
-  flag-configured range (default: 30000-32767), and each Node will proxy
-  that port (the same port number on every Node) for your Service.
+- Define the **Service** resource: this is an abstraction which defines a
+  logical set of pods and a policy by which to access them. Expose the service
+  on a port on each node of the cluster (the same port on each node). You’ll
+  be able to contact the service on any <NodeIP>:NodePort address. When you set
+  the type field to "NodePort", the master will allocate a port from a
+  flag-configured range (default: 30000-32767), and each Node will proxy that
+  port (the same port number on every Node) for your Service.
 
-- Define a **ConfigMap**: this can be used to store fine-grained information
-  like individual properties or coarse-grained information like entire config
-  files  or JSON blobs. It will contain the BIG-IP configuration we need to
-  push.
+- Define the **ConfigMap** resource: this can be used to store fine-grained
+  information like individual properties or coarse-grained information like
+  entire config files  or JSON blobs. It will contain the BIG-IP configuration
+  we need to push.
 
 .. attention:: The steps are generally the same as the previous lab, the big
    difference is the two resource types. Your **Deployment** and **Service**

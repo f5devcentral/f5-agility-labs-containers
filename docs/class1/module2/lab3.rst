@@ -6,21 +6,21 @@ But instead of using the Ingress resource we'll use ConfigMap.
 
 To deploy our application, we will need the following definitions:
 
-- Define a **Deployment**: this will launch our application running in a
-  container.
+- Define the **Deployment** resource: this will launch our application running
+  in a container.
 
-- Define a **Service**: this is an abstraction which defines a logical set of
-  pods and a policy by which to access them. Expose the service on a port
-  on each node of the cluster (the same port on each node). You’ll be able
-  to contact the service on any <NodeIP>:NodePort address. When you set the
-  type field to "NodePort", the master will allocate a port from a
-  flag-configured range (default: 30000-32767), and each Node will proxy
-  that port (the same port number on every Node) for your Service.
+- Define the **Service** resource: this is an abstraction which defines a
+  logical set of pods and a policy by which to access them. Expose the service
+  on a port on each node of the cluster (the same port on each node). You’ll
+  be able to contact the service on any <NodeIP>:NodePort address. When you set
+  the type field to "NodePort", the master will allocate a port from a
+  flag-configured range (default: 30000-32767), and each Node will proxy that
+  port (the same port number on every Node) for your Service.
 
-- Define a **ConfigMap**: this can be used to store fine-grained information
-  like individual properties or coarse-grained information like entire config
-  files  or JSON blobs. It will contain the BIG-IP configuration we need to
-  push.
+- Define the **ConfigMap** resource: this can be used to store fine-grained
+  information like individual properties or coarse-grained information like
+  entire config files  or JSON blobs. It will contain the BIG-IP configuration
+  we need to push.
 
 .. attention:: The steps are generally the same as the previous lab, the big
    difference is the two resource types. Your **Deployment** and **Service**
@@ -56,7 +56,7 @@ On **kube-master1** we will create all the required files:
    .. literalinclude:: ../kubernetes/f5-hello-world-configmap.yaml
       :language: yaml
       :linenos:
-      :emphasize-lines: 2,5,7,8,27,30
+      :emphasize-lines: 2,5,7,8,19,21,27,30,32
 
 #. We can now launch our application:
 
@@ -128,7 +128,7 @@ On **kube-master1** we will create all the required files:
 
    .. code-block:: bash
 
-      kubectl scale --replicas=10 deployment/f5-hello-world -n default
+      kubectl scale --replicas=10 deployment/f5-hello-world-web -n default
 
 #. Check that the pods were created
 
@@ -144,15 +144,29 @@ On **kube-master1** we will create all the required files:
 
    .. attention:: Why do we still only show 3 pool members?
 
-#. Delete Hello-World and Remove CIS
+#. Remove Hello-World from BIG-IP. When using AS3 an extra steps need to be
+   performed. In addion to deleteing the previously created configmap a "blank"
+   declaration needs to be sent to completly remove the application:
+   
+   .. literalinclude:: ../kubernetes/f5-hello-world-delete-configmap.yaml
+      :language: yaml
+      :linenos:
+      :emphasize-lines: 2,19
 
    .. code-block:: bash
 
       kubectl delete -f f5-hello-world-configmap.yaml
+      kubectl create -f f5-hello-world-delete-configmap.yaml
+      kubectl delete -f f5-hello-world-delete-configmap.yaml
+
+#. Remove Hello-World (service & deployment) and CIS"
+
+   .. code-block:: bash
+
       kubectl delete -f f5-hello-world-service-nodeport.yaml
       kubectl delete -f f5-hello-world-deployment.yaml
       kubectl delete -f f5-nodeport-deployment.yaml
 
-   .. important:: Do not skip this step. Instead of reusing some of these
-      objects, the next lab we will re-deploy them to avoid conflicts and
-      errors.
+.. important:: Do not skip this clean-up steps. Instead of reusing some of
+   these objects, the next lab we will re-deploy them to avoid conflicts and
+   errors.

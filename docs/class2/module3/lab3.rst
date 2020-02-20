@@ -103,7 +103,7 @@ On **okd-master1** we will create all the required files:
 
    .. code-block:: bash
 
-      oc scale --replicas=10 deployment/f5-hello-world -n default
+      oc scale --replicas=10 deployment/f5-hello-world-web -n default
 
 #. Check the pods were created
 
