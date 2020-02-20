@@ -1,27 +1,19 @@
-Lab 2.1 - Install & Configure CIS (NodePort)
-============================================
+Lab 2.1 - Install & Configure CIS (ClusterIP)
+=============================================
 
-The BIG-IP Controller for Kubernetes installs as a
-`Deployment object <https://kubernetes.io/docs/concepts/workloads/controllers/deployment/>`_
+In the previous moudule we learned about Nodeport Mode. Here we'll learn
+about ClusterIP Mode.
 
-.. seealso:: The official CIS documentation is here:
-   `Install the BIG-IP Controller: Kubernetes <https://clouddocs.f5.com/containers/v2/kubernetes/kctlr-app-install.html>`_
+.. seealso::
+   For more information see `BIG-IP Controller Modes <http://clouddocs.f5.com/containers/v2/kubernetes/kctlr-modes.html>`_
 
 BIG-IP Setup
 ------------
 
-Through the Jumpbox, you should have a BIG-IP available at the following
-URL: https://10.1.1.4
+With ClusterIP we're utilizing VXLAN to communicate with the application pods.
+To do so we'll need to configure BIG-IP first.
 
 .. attention:: 
-   - Connect to your BIG-IP and check it is active and licensed. Its
-     login and password are: **admin/admin**
-
-   - If your BIG-IP has no license or its license expired, renew the license.
-     You just need a LTM VE license for this lab. No specific add-ons are
-     required (ask a lab instructor for eval licenses if your license has
-     expired)
-
    - Be sure to be in the ``Common`` partition before creating the following
      objects.
 
@@ -29,6 +21,9 @@ URL: https://10.1.1.4
 
 #. You need to setup a partition that will be used by F5 Container Ingress
    Service.
+
+   .. note:: This step was performed in the previous module. Verify the
+      "kubernetes" partion exists with the instructions below.
 
    .. code-block:: bash
 
@@ -42,103 +37,143 @@ URL: https://10.1.1.4
 
    .. image:: ../images/f5-container-connector-bigip-partition-setup.png
 
-#. Install AS3
-
-   .. attention:: This has been done to save time but is documented for
-      reference.
-
-   Click here: `Download latest AS3 <https://github.com/F5Networks/f5-appsvcs-extension/releases>`_
+#. Create a vxlan tunnel profile
 
    .. code-block:: bash
 
-      # From the UI:
-      GoTo  iApps --> Package Management LX
-      - Click Import
-      - Browse and select downloaded AS3 RPM
-      - Click Upload
+      # From the CLI:
+      tmsh create net tunnels vxlan k8s-vxlan { app-service none port 8472 flooding-type none }
 
-   .. seealso:: For more info click here:
-      `Application Services 3 Extension Documentation <https://clouddocs.f5.com/products/extensions/f5-appsvcs-extension/latest/>`_
+      # From the UI:
+      GoTo Network --> Tunnels --> Profiles --> VXLAN
+      - Create a new profile called "k8s-vxlan"
+      - Set Port = 8472
+      - Set the Flooding Type = none
+      - Click Finished
+
+   .. image:: ../images/create-k8s-vxlan-profile.png
+
+#. Create a vxlan tunnel
+
+   .. code-block:: bash
+
+      # From the CLI:
+      tmsh create net tunnels tunnel k8s-tunnel { app-service none key 1 local-address 10.1.1.4 profile k8s-vxlan }
+
+      # From the UI:
+      GoTo Network --> Tunnels --> Tunnel List
+      - Create a new tunnel called "k8s-tunnel"
+      - Set the Profile to the one previously created called "k8s-vxlan"
+      - set the Key = 1
+      - Set the Local Address to 10.1.1.4
+      - Click Finished
+
+   .. image:: ../images/create-k8s-vxlan-tunnel.png
+
+#. Create the vxlan tunnel self-ip
+
+   .. tip:: For your SELF-IP subnet, remember it is a /16 and not a /24.
+      
+      Why? The Self-IP has to know all other /24 subnets are local to this
+      namespace, which includes Master1, Node1, Node2, etc. Each of which have
+      their own /24.
+      
+      Many students accidently use /24, doing so would limit the self-ip to
+      only communicate with that subnet. When trying to ping services on other
+      /24 subnets from the BIG-IP for instance, communication will fail as your
+      self-ip doesn't have the proper subnet mask to know the other subnets are
+      local.
+      
+   .. code-block:: bash
+      
+      # From the CLI:
+      tmsh create net self k8s-vxlan-selfip { address 10.244.20.1/16 vlan k8s-tunnel allow-service all }
+
+      # From the UI:
+      GoTo Network --> Self IP List
+      - Create a new Self-IP called "k8s-vxlan-selfip"
+      - Set the IP Address to "10.244.20.1"
+      - Set the Netmask to "255.255.0.0"
+      - Set the VLAN / Tunnel to "k8s-tunnel" (Created earlier)
+      - Set Port Lockdown to "Allow All"
+      - Click Finished
+
+   .. image:: ../images/create-k8s-vxlan-selfip.png
 
 CIS Deployment
 --------------
 
-.. seealso:: For a more thorough explanation of all the settings and options see
-   `F5 Container Ingress Services - Kubernetes <https://clouddocs.f5.com/containers/v2/kubernetes/>`_
+.. note::
+   - For your convenience the file can be found in
+     /home/ubuntu/agilitydocs/docs/class1/kubernetes (downloaded earlier in the
+     clone git repo step).
+   - Or you can cut and paste the file below and create your own file.
+   - If you have issues with your yaml and syntax (**indentation MATTERS**),
+     you can try to use an online parser to help you :
+     `Yaml parser <http://codebeautify.org/yaml-validator>`_
 
-Now that BIG-IP is licensed and prepped with the "kubernetes" partition, we
-need to define a `Kubernetes deployment <https://kubernetes.io/docs/user-guide/deployments/>`_
-and create a `Kubernetes secret <https://kubernetes.io/docs/user-guide/secrets/>`_
-to hide our bigip credentials.
+#. Before deploying CIS in ClusterIP mode we need to configure Big-IP as a node
+   in the kubernetes cluster. To do so you'll need to modify
+   "f5-bigip-node.yaml" with the MAC address auto created from the previous
+   steps. SSH to BIG-IP and run the following command. You'll want to copy the
+   displayed "MAC Address".
 
-#. From the jumpbox start an SSH session with kube-master1.
+   .. code-block:: bash
+      
+      tmsh show net tunnels tunnel k8s-tunnel all-properties
 
-#. "git" the demo files
+   .. image:: ../images/get-k8s-tunnel-mac-addr.png
+
+#. On the kube-master node edit f5-bigip-node.yaml
+
+   .. note:: If your unfamiliar with VI ask for help.
 
    .. code-block:: bash
 
-      git clone -b develop https://github.com/f5devcentral/f5-agility-labs-containers.git ~/agilitydocs
+      vim ~/agilitydocs/docs/class1/kubernetes/f5-bigip-node.yaml
+
+      and edit the highlighted MAC addr line with your addr shown below:
+
+   .. literalinclude:: ../kubernetes/f5-bigip-node.yaml
+      :language: yaml
+      :linenos:
+      :emphasize-lines: 9
+
+#. Create the bigip node:
+
+   .. code-block:: bash
+
+      kubectl create -f f5-bigip-node.yaml
+
+#. Verify "bigip1" node is created:
+
+   .. code-block:: bash
+
+      kubectl get nodes
+
+#. Now that we have the new BIGIP Node added we can launch the CIS deployment.
+   It will start the f5-k8s-controller container on one of the worker nodes.
+
+   .. attention:: This may take around 30sec to get to a running state.
+
+   .. code-block:: bash
 
       cd ~/agilitydocs/docs/class1/kubernetes
 
-#. Create bigip login secret
+      cat f5-cluster-deployment.yaml
 
-   .. code-block:: bash
+   You'll see a config file similar to this:
 
-      kubectl create secret generic bigip-login -n kube-system --from-literal=username=admin --from-literal=password=admin
-
-   You should see something similar to this:
-
-   .. image:: ../images/f5-container-connector-bigip-secret.png
-
-#. Create kubernetes service account for bigip controller
-
-   .. code-block:: bash
-
-      kubectl create serviceaccount k8s-bigip-ctlr -n kube-system
-
-   You should see something similar to this:
-
-   .. image:: ../images/f5-container-connector-bigip-serviceaccount.png
-
-#. Create cluster role for bigip service account (admin rights, but can be
-   modified for your environment)
-
-   .. code-block:: bash
-
-      kubectl create clusterrolebinding k8s-bigip-ctlr-clusteradmin --clusterrole=cluster-admin --serviceaccount=kube-system:k8s-bigip-ctlr
-
-   You should see something similar to this:
-
-   .. image:: ../images/f5-container-connector-bigip-clusterrolebinding.png
-
-#. At this point we have two deployment mode options, Nodeport or ClusterIP.
-   This class will feature both modes. For more information see
-   `BIG-IP Controller Modes <http://clouddocs.f5.com/containers/v2/kubernetes/kctlr-modes.html>`_
-
-   Lets start with **Nodeport mode** ``f5-nodeport-deployment.yaml``
-
-   .. note:: 
-      - For your convenience the file can be found in
-        /home/ubuntu/agilitydocs/docs/class1/kubernetes (downloaded earlier in
-        the clone git repo step).
-      - Or you can cut and paste the file below and create your own file.
-      - If you have issues with your yaml and syntax (**indentation MATTERS**),
-        you can try to use an online parser to help you :
-        `Yaml parser <http://codebeautify.org/yaml-validator>`_
-
-   .. literalinclude:: ../kubernetes/f5-nodeport-deployment.yaml
+   .. literalinclude:: ../kubernetes/f5-cluster-deployment.yaml
       :language: yaml
       :linenos:
-      :emphasize-lines: 2,7,17,20,37,39-41
+      :emphasize-lines: 2,7,17,20,37-42
 
-#. Once you have your yaml file setup, you can try to launch your deployment.
-   It will start our f5-k8s-controller container on one of our nodes (may take
-   around 30sec to be in a running state):
+#. Create the CIS deployment with the following command
 
    .. code-block:: bash
 
-      kubectl create -f f5-nodeport-deployment.yaml
+      kubectl create -f f5-cluster-deployment.yaml
 
 #. Verify the deployment "deployed"
 
@@ -148,73 +183,29 @@ to hide our bigip credentials.
 
    .. image:: ../images/f5-container-connector-launch-deployment-controller.png
 
-#. To locate on which node the CIS service is running, you can use the
-   following command:
+#. To locate on which node CIS is running, you can use the following command:
 
    .. code-block:: bash
 
       kubectl get pods -o wide -n kube-system
 
-   We can see that our container is running on kube-node1 below.
+   We can see that our container, in this example, is running on kube-node1
+   below.
 
    .. image:: ../images/f5-container-connector-locate-controller-container.png
 
 Troubleshooting
 ---------------
 
-If you need to troubleshoot your container, you have two different ways to
-check the logs of your container, kubectl command or docker command.
+Check the container/pod logs via ``kubectl`` command. You also have the option
+of checking the Docker container as described in the previos module.
 
-.. attention:: Depending on your deployment CIS can be running on either
-   kube-node1 or kube-node2.
-
-#. Using ``kubectl`` command: you need to use the full name of your pod as
-   shown in the previous image.
+#. Using the full name of your pod as showed in the previous image run the
+   following command:
 
    .. code-block:: bash
 
       # For example:
-      kubectl logs k8s-bigip-ctlr-5b74dd769-x55vx -n kube-system
+      kubectl logs k8s-bigip-ctlr-deployment-5b74dd769-x55vx -n kube-system
 
    .. image:: ../images/f5-container-connector-check-logs-kubectl.png
-
-#. Using docker logs command: From the previous check we know the container
-   is running on kube-node1. On your current session with kube-master1 SSH to
-   kube-node1 first and then run the docker command:
-
-   .. code-block:: bash
-
-      ssh kube-node1
-
-      sudo docker ps
-
-   Here we can see our container ID is "01a7517b50c5"
-
-   .. image:: ../images/f5-container-connector-find-dockerID--controller-container.png
-
-   Now we can check our container logs:
-
-   .. code-block:: bash
-
-      sudo docker logs 01a7517b50c5
-
-   .. image:: ../images/f5-container-connector-check-logs-controller-container.png
-
-   .. note:: The log messages here are identical to the log messages displayed
-      in the previous kubectl logs command. 
-
-#. You can connect to your container with kubectl as well. This is something
-   not typically needed but support may direct you to do so.
-
-   .. note:: Exit from your current session with kube-node1 before attempting
-      this command.
-
-   .. code-block:: bash
-
-      kubectl exec -it k8s-bigip-ctlr-79fcf97bcc-48qs7 -n kube-system  -- /bin/sh
-
-      cd /app
-
-      ls -la
-
-      exit

@@ -1,35 +1,17 @@
 Lab 2.2 - Deploy Hello-World (Route)
 ====================================
 
+
 Now that CIS is up and running, let's deploy an application and leverage CIS.
 
 For this lab we'll use a simple pre-configured docker image called 
 "f5-hello-world". It can be found on docker hub at
 `f5devcentral/f5-hello-world <https://hub.docker.com/r/f5devcentral/f5-hello-world/>`_
 
-To deploy our application, we will need the following definitions:
-
-- Define the **Deployment** resource: this will launch our application running
-  in a container.
-
-- Define the **Service** resource: this is an abstraction which defines a
-  logical set of pods and a policy by which to access them. Expose the service
-  on a port on each node of the cluster (the same port on each node). You’ll
-  be able to contact the service on any <NodeIP>:NodePort address. When you set
-  the type field to "NodePort", the master will allocate a port from a
-  flag-configured range (default: 30000-32767), and each Node will proxy that
-  port (the same port number on every Node) for your Service.
-
-- Define the **Route** resource: this is used to add the necesary annotations
-  to define the virtual server settings.
-
-  .. seealso:: 
-     `Supported Route Annotations <https://clouddocs.f5.com/products/connectors/k8s-bigip-ctlr/v1.11/#supported-route-annotations>`_
-  
 App Deployment
 --------------
 
-On **okd-master1** we will create all the required files:
+On **kube-master1** we will create all the required files:
 
 #. Create a file called ``f5-hello-world-deployment.yaml``
 
@@ -40,11 +22,11 @@ On **okd-master1** we will create all the required files:
       :linenos:
       :emphasize-lines: 2,7,20
 
-#. Create a file called ``f5-hello-world-service-nodeport.yaml``
+#. Create a file called ``f5-hello-world-service-clusterip.yaml``
 
    .. tip:: Use the file in ~/agilitydocs/docs/class2/openshift
 
-   .. literalinclude:: ../openshift/f5-hello-world-service-nodeport.yaml
+   .. literalinclude:: ../openshift/f5-hello-world-service-clusterip.yaml
       :language: yaml
       :linenos:
       :emphasize-lines: 2,17
@@ -63,15 +45,12 @@ On **okd-master1** we will create all the required files:
    .. code-block:: bash
 
       oc create -f f5-hello-world-deployment.yaml
-      oc create -f f5-hello-world-service-nodeport.yaml
+      oc create -f f5-hello-world-service-clusterip.yaml
       oc create -f f5-hello-world-route.yaml
 
    .. image:: ../images/f5-container-connector-launch-app.png
 
 #. To check the status of our deployment, you can run the following commands:
-
-   .. note:: This can take a few seconds to a minute to create these
-      hello-world containers to running state.
 
    .. code-block:: bash
 
@@ -83,15 +62,12 @@ On **okd-master1** we will create all the required files:
 
       oc describe svc f5-hello-world
 
-   .. image:: ../images/f5-container-connector-check-app-definition.png
+   .. image:: ../images/f5-cis-describe-clusterip-service.png
 
 #. To understand and test the new app you need to pay attention to:
 
-   **The NodePort value**, that's the port used to give you access to the app
-   from the outside. Here it's "32188", highlighted above.
-
-   **The Endpoints**, that's our 2 instances (defined as replicas in our
-   deployment file) and the port assigned to the service: port 8080.
+   **The Endpoints**, this shows our 2 instances (defined as replicas in our
+   deployment file) and the flannel IP assigned to the pod.
 
    Now that we have deployed our application sucessfully, we can check our
    BIG-IP configuration. From the browser open https://10.1.1.4
@@ -108,10 +84,10 @@ On **okd-master1** we will create all the required files:
    Local Traffic --> Pools --> "ingress_default_f5-hello-world-web"
    --> Members
 
-   .. image:: ../images/f5-container-connector-check-app-bigipconfig2.png
+   .. image:: ../images/f5-container-connector-check-app-bigipconfig3.png
 
-   .. note:: You can see that the pool members listed are all the cluster
-      nodes on the node port 32188. (**NodePort mode**)
+   .. note:: You can see that the pool members IP addresses are assigned from
+      the overlay network (**ClusterIP mode**)
 
 #. Now you can try to access your application via the BIG-IP VS/VIP: UDF-URL
 
@@ -121,14 +97,14 @@ On **okd-master1** we will create all the required files:
    Traffic --> Pools --> Pool list --> ingress_default_f5-hello-world-web -->
    Statistics to see that traffic is distributed as expected.
 
-   .. image:: ../images/f5-container-connector-check-app-bigip-stats.png
+   .. image:: ../images/f5-container-connector-check-app-bigip-stats-clusterip.png
 
 #. Delete Hello-World
 
    .. code-block:: bash
 
       oc delete -f f5-hello-world-route.yaml
-      oc delete -f f5-hello-world-service-nodeport.yaml
+      oc delete -f f5-hello-world-service-clusterip.yaml
       oc delete -f f5-hello-world-deployment.yaml
 
    .. important:: Do not skip this step. Instead of reusing some of these

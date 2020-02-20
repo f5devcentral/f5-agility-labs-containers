@@ -1,5 +1,5 @@
-Module 2: CIS NodePort Mode
-===========================
+Module 2: CIS ClusterIP Mode
+============================
 
 Overview
 --------
@@ -9,7 +9,7 @@ works with Kubernetes. Because OpenShift has a native Kubernetes integration,
 the BIG-IP Controller works essentially the same in both environments. It does
 have a few OpenShift-specific prerequisites.
 
-.. Attention:: In this module we'll use **NodePort Mode** to communicate
+.. Attention:: In this module we'll use **ClusterIP Mode** to communicate
    with CIS.
 
 .. seealso:: The official F5 documentation is here:

@@ -1,89 +1,98 @@
-Lab 1.1 - Overview
-==================
+Lab 1.1 - Install & Configure CIS (NodePort)
+============================================
 
-Red Hat’s OpenShift Origin is a containerized application platform with a
-native Kubernetes integration. The BIG-IP Controller for Kubernetes enables
-use of a BIG-IP device as an edge load balancer, proxying traffic from outside
-networks to pods inside an OpenShift cluster. OpenShift Origin uses a pod
-network defined by the OpenShift SDN.
+The BIG-IP Controller for OpenShift installs as a
+`Deployment object <https://kubernetes.io/docs/concepts/workloads/controllers/deployment/>`_
 
-We will be using the following terms throughout this class so here are some
-basic definitions you should be familiar with. And you'll learn more terms
-along the way, but these are the basics to get you started.
+.. seealso:: The official CIS documentation is here:
+   `Install the BIG-IP Controller: Openshift <https://clouddocs.f5.com/containers/v2/openshift/kctlr-openshift-app-install.html>`_
 
-- Container - Your software wrapped in a complete filesystem containing
-  everything it needs to run
-- Image - We are talking about Docker images; read-only and used to create
-  containers
-- Pod - One or more docker containers that run together
-- Service - Provides a common DNS name to access a pod (or replicated set of
-  pods)
-- Project - A project is a group of services that are related logically (for
-  this workshop we have setup your account to have access to just a single
-  project)
-- Deployment - an update to your application triggered by a image change or
-  config change
-- Build - The process of turning your source code into a runnable image
-- BuildConfig - configuration data that determines how to manage your build
-- Route - a labeled and DNS mapped network path to a service from outside
-  OpenShift
-- Master - The foreman of the OpenShift architecture, the master schedules
-  operations, watches for problems, and orchestrates everything
-- Node - Where the compute happens, your software is run on nodes
+In this lab we'll use NodePort mode to deploy an application to the BIG-IP.
 
-Access the Master
------------------
+.. seealso::
+   For more information see `BIG-IP Controller Modes <http://clouddocs.f5.com/containers/v2/kubernetes/kctlr-modes.html>`_
+
+BIG-IP Setup
+------------
+
+Through the Jumpbox, you should have a BIG-IP available at the following
+URL: https://10.1.1.4
+
+.. attention:: 
+   - Connect to your BIG-IP and check it is active and licensed. Its
+     login and password are: **admin/admin**
+
+   - If your BIG-IP has no license or its license expired, renew the license.
+     You just need a LTM VE license for this lab. No specific add-ons are
+     required (ask a lab instructor for eval licenses if your license has
+     expired)
+
+   - Be sure to be in the ``Common`` partition before creating the following
+     objects.
+
+     .. image:: ../images/f5-check-partition.png
+
+#. You need to setup a partition that will be used by F5 Container Ingress
+   Service.
+
+   .. code-block:: bash
+
+      # From the CLI:
+      tmsh create auth partition okd
+
+      # From the UI:
+      GoTo System --> Users --> Partition List
+      - Create a new partition called "okd" (use default settings)
+      - Click Finished
+
+   .. image:: ../images/f5-container-connector-bigip-partition-setup.png
+
+#. Install AS3
+
+   .. attention:: This has been done to save time but is documented for
+      reference.
+
+   Click here: `Download latest AS3 <https://github.com/F5Networks/f5-appsvcs-extension/releases>`_
+
+   .. code-block:: bash
+
+      # From the UI:
+      GoTo  iApps --> Package Management LX
+      - Click Import
+      - Browse and select downloaded AS3 RPM
+      - Click Upload
+
+   .. seealso:: For more info click here:
+      `Application Services 3 Extension Documentation <https://clouddocs.f5.com/products/extensions/f5-appsvcs-extension/latest/>`_
+
+Explore the OpenShift Cluster
+-----------------------------
 
 #. From the jumpbox start an SSH session with okd-master1.
 
-   .. code-block:: bash
-
-      ssh or putty to IP
-
-#. For your convenience we've already added the host IP & names to /etc/hosts.
-   Verify the file is correct on each node.
+#. "git" the demo files
 
    .. code-block:: bash
 
-      cat /etc/hosts
+      git clone -b develop https://github.com/f5devcentral/f5-agility-labs-containers.git ~/agilitydocs
 
-   The file should look like this:
+      cd ~/agilitydocs/docs/class2/openshift
 
-   .. image:: ../images/centos-hosts-file.png
+#. Log in with an Openshift Client.
 
-   If entries are not there add them to the bottom of the file be editing
-   "/etc/hosts" with 'vim'
+   .. attention:: You can skip this step if done in the previous module.
 
-   .. code-block:: bash
-
-      sudo vim /etc/hosts
-
-      #cut and paste the following lines to /etc/hosts
-
-      10.1.1.10    okd-master1
-      10.1.1.11    okd-node1
-      10.1.1.12    okd-node2
-
-Accessing OpenShift
--------------------
-
-OpenShift provides a web console that allow you to perform various tasks via a
-web browser. Additionally, you can utilize a command line tool to perform
-tasks. Let's get started by logging into both of these and checking the status
-of the platform.
-
-#. Login to OpenShift master
-
-   From the previous step go back to the open terminal on **okd-master1** and
-   login to openshift using the following command:
+   .. note:: Here we're using a user "centos", added when we built the cluster.
+      When prompted for password, enter "centos".
 
    .. code-block:: bash
 
-      oc login -u centos
-      
-   When prompted the password is **centos**
+      oc login -u centos -n default
 
-   .. image:: ../images/oc-login.png
+   .. image:: ../images/OC-DEMOuser-Login.png
+
+   .. important:: Upon logging in you'll notice access to several projects. In
+      our lab well be working from the default "default".
 
 #. Check the OpenShift status
 
@@ -137,79 +146,151 @@ of the platform.
 
    .. note:: You will be using these projects in the lab.
 
-#. Check to see what host subnests are created on OpenShift:
+CIS Deployment
+--------------
+
+.. seealso:: For a more thorough explanation of all the settings and options see
+   `F5 Container Ingress Service - Openshift <https://clouddocs.f5.com/containers/v2/openshift/>`_
+
+Now that BIG-IP is licensed and prepped with the "okd" partition, we need to
+define a `Kubernetes deployment <https://kubernetes.io/docs/user-guide/deployments/>`_
+and create a `Kubernetes secret <https://kubernetes.io/docs/user-guide/secrets/>`_
+to hide our bigip credentials.
+
+#. Create bigip login secret
 
    .. code-block:: bash
 
-      oc get hostsubnets
+      oc create secret generic bigip-login -n kube-system --from-literal=username=admin --from-literal=password=admin
 
-   .. image:: ../images/oc-get-hostsubnets.png
-     
-#. Access OpenShift web console
+   You should see something similar to this:
 
-   From the jumpbox open a browser and navigate to https://okd-master1:8443 and
-   login with the user/password provided.
+   .. image:: ../images/f5-container-connector-bigip-secret.png
 
-   Use the following username and password
-   username: **centos**
-   password: **centos**
+#. Create kubernetes service account for bigip controller
 
-   .. image:: ../images/webconsole.png
+   .. code-block:: bash
 
-Troubleshooting OpenShift!
---------------------------
+      oc create serviceaccount k8s-bigip-ctlr -n kube-system
 
-If you have a problem in your OpenShift environment, how do you investigate:
+   You should see something similar to this:
 
-- How can I troubleshoot it?
-- What logs can I inspect?
-- How can I modify the log level / detail that openshift generates?
-- I need to provide supporting data to technical support for analysis. What
-  information is needed?
+   .. image:: ../images/f5-container-connector-bigip-serviceaccount.png
 
-A starting point for data collection from an OpenShift master or node is a
-sosreport that includes docker and OpenShift related information. The process
-to collect a sosreport is the same as with any other Red Hat Enterprise Linux
-(RHEL) based system:
+#. Create cluster role for bigip service account (admin rights, but can be
+   modified for your environment)
 
-.. note:: The following is provided for informational purpokds. You do not
-   need to run these commands for the lab.
+   .. code-block:: bash
 
-.. code-block:: bash
+      oc create clusterrolebinding k8s-bigip-ctlr-clusteradmin --clusterrole=cluster-admin --serviceaccount=kube-system:k8s-bigip-ctlr
 
-   yum update sos
-   sosreport
+   You should see something similar to this:
 
-Openshift has five log message severities. Messages with FATAL, ERROR, WARNING
-and some INFO severities appear in the logs regardless of the log configuration.
+   .. image:: ../images/f5-container-connector-bigip-clusterrolebinding.png
 
-.. code-block:: bash
+#. At this point we have two deployment mode options, Nodeport or ClusterIP.
+   This class will feature both modes. For more information see
+   `BIG-IP Controller Modes <http://clouddocs.f5.com/containers/v2/kubernetes/kctlr-modes.html>`_
 
-   0 - Errors and warnings only
-   2 - Normal information
-   4 - Debugging-level information
-   6 - API-level debugging information (request / response)
-   8 - Body-level API debugging information 
+   Lets start with **Nodeport mode** ``f5-nodeport-deployment.yaml``
 
-This parameter can be set in the OPTIONS for the relevant services environment
-file within /etc/sysconfig/
+   .. note:: 
+      - For your convenience the file can be found in
+        /home/ubuntu/agilitydocs/docs/class2/openshift (downloaded earlier in
+        the clone git repo step).
+      - Or you can cut and paste the file below and create your own file.
+      - If you have issues with your yaml and syntax (**indentation MATTERS**),
+        you can try to use an online parser to help you :
+        `Yaml parser <http://codebeautify.org/yaml-validator>`_
 
-For example to set OpenShift master's log level to debug, add or edit this
-line in /etc/sysconfig/origin-node
+   .. literalinclude:: ../openshift/f5-nodeport-deployment.yaml
+      :language: yaml
+      :linenos:
+      :emphasize-lines: 2,7,17,20,37,39-41
 
-.. code-block:: bash
+#. Once you have your yaml file setup, you can try to launch your deployment.
+   It will start our f5-k8s-controller container on one of our nodes (may take
+   around 30sec to be in a running state):
 
-   OPTIONS='--loglevel=4'
+   .. code-block:: bash
 
-   and then restart the service with
-  
-   sudo systemctl restart origin-node
+      oc create -f f5-nodeport-deployment.yaml
 
-Key files / directories
+#. Verify the deployment "deployed"
 
-.. code-block:: console
+   .. code-block:: bash
 
-   .. attention:: Must be **root** to see/edit these files.
+      oc get deployment k8s-bigip-ctlr --namespace kube-system
 
-   /etc/origin/{node,master}/
-   /etc/origin/{node,master}/{node.master}-config.yaml
+   .. image:: ../images/f5-container-connector-launch-node-deployment-controller.png
+
+#. To locate on which node the CIS service is running, you can use the
+   following command:
+
+   .. code-block:: bash
+
+      oc get pods -o wide -n kube-system
+
+   We can see that our container is running on okd-node1 below.
+
+   .. image:: ../images/f5-container-connector-locate-node-controller-container.png
+
+Troubleshooting
+---------------
+
+If you need to troubleshoot your container, you have two different ways to
+check the logs of your container, oc command or docker command.
+
+.. attention:: Depending on your deployment CIS can be running on either
+   okd-node1 or okd-node2.
+
+#. Using ``oc`` command: you need to use the full name of your pod as shown in
+   the previous image.
+
+   .. code-block:: bash
+
+      # For example:
+      oc logs k8s-bigip-ctlr-667cf78cc7-62wxf -n kube-system
+
+   .. image:: ../images/f5-container-connector-check-logs-kubectl.png
+
+#. Using docker logs command: From the previous check we know the container
+   is running on okd-node1. On your current session with okd-master1 SSH to
+   okd-node1 first and then run the docker command:
+
+   .. code-block:: bash
+
+      ssh okd-node1
+
+      sudo docker ps
+
+   Here we can see our container ID is "74a566f5778a"
+
+   .. image:: ../images/f5-container-connector-find-dockerID--controller-container.png
+
+   Now we can check our container logs:
+
+   .. code-block:: bash
+
+      sudo docker logs 74a566f5778a
+
+   .. image:: ../images/f5-container-connector-check-logs-controller-container.png
+
+   .. note:: The log messages here are identical to the log messages displayed
+      in the previous oc logs command. 
+
+#. You can connect to your container with kubectl as well. This is something
+   not typically needed but support may direct you to do so.
+
+   .. note:: Exit from your current session with okd-node1 before attempting
+      this command.
+
+   .. code-block:: bash
+
+      oc exec -it k8s-bigip-ctlr-79fcf97bcc-48qs7 -n kube-system  -- /bin/sh
+
+      cd /app
+
+      ls -la
+
+      exit
