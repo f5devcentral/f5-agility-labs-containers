@@ -45,6 +45,24 @@ URL: https://10.1.1.4
    With the new partition created, we now need to ssh to Kube-master1 to setup
    the CIS.
 
+ #. Install AS3
+
+   .. attention:: This has been done to save time but is documented here to
+      reference later if needed.
+
+   `Download latest AS3 <https://github.com/F5Networks/f5-appsvcs-extension/releases>`_
+
+   .. code-block:: bash
+
+      # From the UI:
+      GoTo  iApps --> Package Management LX
+      - Click Import
+      - Browse and select downloaded AS3 RPM
+      - Click Upload
+
+   .. seealso:: For more info go here:
+      `Application Services 3 Extension Documentation <https://clouddocs.f5.com/products/extensions/f5-appsvcs-extension/latest/>`_
+
 CIS Deployment
 --------------
 
