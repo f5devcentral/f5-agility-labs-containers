@@ -1,0 +1,13 @@
+---
+
+- name: Update VM hostname
+  hostname:
+    name: "{{ inventory_hostname }}"
+
+- name: Add all kubernete nodes to /etc/hosts
+  lineinfile:
+    dest: /etc/hosts
+    insertafter: EOF
+    line: '{{ hostvars[item].private_ip }} {{ item }}'
+    state: present
+  with_items: '{{ groups["all"] }}'

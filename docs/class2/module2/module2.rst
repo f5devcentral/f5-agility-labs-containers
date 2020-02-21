@@ -1,29 +1,32 @@
-Module 2: Build a Kubernetes Cluster
-====================================
+Module 2: CIS ClusterIP Mode
+============================
 
-In this module, we will build a 3 node cluster (1x master and 2x nodes) 
-utilizing Ubuntu server images.
+Overview
+--------
 
-As a reminder, in this module, our cluster setup is:
+The F5 Integration for Kubernetes overview describes how the BIG-IP Controller
+works with Kubernetes. Because OpenShift has a native Kubernetes integration,
+the BIG-IP Controller works essentially the same in both environments. It does
+have a few OpenShift-specific prerequisites.
 
-.. list-table::
-   :header-rows: 1
+.. Attention:: In this module we'll use **ClusterIP Mode** to communicate
+   with CIS.
 
-   * - **Hostname**
-     - **IP-ADDR**
-     - **Role**
-   * - kube-master1
-     - 10.1.10.21
-     - Master
-   * - kube-node1
-     - 10.1.10.22
-     - Node
-   * - kube-node2
-     - 10.1.10.23
-     - Node
+.. seealso:: The official F5 documentation is here:
+   `F5 Container Connector - OpenShift <https://clouddocs.f5.com/containers/v2/openshift/>`_
+
+Prerequisites
+-------------
+
+Before being able to use F5 CIS, you need to confirm the following:
+
+- You must have a fully active/licensed BIG-IP (SDN must be licensed)
+- A BIG-IP partition needs to be setup for exclusive use by CIS
+- You need a user with administrative access to this partition
+- Your openshift environment must be up and running
 
 .. toctree::
    :maxdepth: 1
    :glob:
-
+   
    lab*

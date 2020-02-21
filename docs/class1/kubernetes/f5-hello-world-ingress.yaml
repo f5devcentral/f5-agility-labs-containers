@@ -1,0 +1,25 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: f5-hello-world-web
+  namespace: default
+  annotations:
+    virtual-server.f5.com/partition: "kubernetes"
+    virtual-server.f5.com/ip: 10.1.1.4
+    virtual-server.f5.com/http-port: "80"
+    virtual-server.f5.com/ssl-redirect: "false"
+    virtual-server.f5.com/balance: "round-robin"
+    virtual-server.f5.com/health: |
+      [
+        {
+          "path":     "f5.hello.world/",
+          "send":     "HTTP GET /",
+          "interval": 5,
+          "timeout":  10
+        }
+      ]
+spec:
+  backend:
+    serviceName: f5-hello-world-web
+    servicePort: 8080
+

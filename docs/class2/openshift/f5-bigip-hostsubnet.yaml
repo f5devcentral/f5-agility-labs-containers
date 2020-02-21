@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: HostSubnet
+metadata:
+  name: openshift-f5-node
+  annotations:
+    pod.network.openshift.io/fixed-vnid-host: "0"
+host: openshift-f5-node
+hostIP: 10.1.1.4
+subnet: "10.131.0.0/23"

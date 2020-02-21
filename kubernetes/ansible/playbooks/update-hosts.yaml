@@ -1,9 +1,0 @@
----
-
-- name: Add all kubernete nodes to /etc/hosts
-  lineinfile:
-    dest: /etc/hosts
-    insertafter: EOF
-    line: '{{ hostvars[item].ansible_host }} {{ item }}'
-    state: present
-  with_items: '{{ groups["kube-all"] }}'

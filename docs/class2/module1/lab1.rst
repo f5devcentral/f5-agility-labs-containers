@@ -1,151 +1,294 @@
-Kubernetes Overview
-===================
+Lab 1.1 - Install & Configure CIS (NodePort)
+============================================
 
-Kubernetes has a lot of documentation available at this location:
-`Kubernetes docs <http://kubernetes.io/docs/>`_
+The BIG-IP Controller for OpenShift installs as a
+`Deployment object <https://kubernetes.io/docs/concepts/workloads/controllers/deployment/>`_
 
-On this page, we will try to provide all the relevant information to deploy
-successfully a cluster (Master + nodes)
+.. seealso:: The official CIS documentation is here:
+   `Install the BIG-IP Controller: Openshift <https://clouddocs.f5.com/containers/v2/openshift/kctlr-openshift-app-install.html>`_
 
-Overview
---------
+In this lab we'll use NodePort mode to deploy an application to the BIG-IP.
 
-Extract from: `Kubernetes Cluster Intro
-<http://kubernetes.io/docs/tutorials/kubernetes-basics/cluster-intro/>`_
+.. seealso::
+   For more information see `BIG-IP Controller Modes <http://clouddocs.f5.com/containers/v2/kubernetes/kctlr-modes.html>`_
 
-Kubernetes coordinates a highly available cluster of computers that are
-connected to work as a single unit. The abstractions in Kubernetes allow you to
-deploy containerized applications to a cluster without tying them specifically
-to individual machines. To make use of this new model of deployment,
-applications need to be packaged in a way that decouples them from individual
-hosts: they need to be containerized.
+BIG-IP Setup
+------------
 
-Containerized applications are more flexible and available than in past
-deployment models, where applications were installed directly onto specific
-machines as packages deeply integrated into the host. Kubernetes automates the
-distribution and scheduling of application containers across a cluster in a
-more efficient way. Kubernetes is an open-source platform and is
-production-ready.
+Through the Jumpbox, you should have a BIG-IP available at the following
+URL: https://10.1.1.4
 
-A Kubernetes cluster consists of two types of resources:
+.. attention:: 
+   - Connect to your BIG-IP and check it is active and licensed. Its
+     login and password are: **admin/admin**
 
-- The *Master* coordinates the cluster
-- *Nodes* are the workers that run applications
+   - If your BIG-IP has no license or its license expired, renew the license.
+     You just need a LTM VE license for this lab. No specific add-ons are
+     required (ask a lab instructor for eval licenses if your license has
+     expired)
 
-.. image:: images/getting-started-cluster-diagram.png
-   :align: center
+   - Be sure to be in the ``Common`` partition before creating the following
+     objects.
 
-**The Master is responsible for managing the cluster**. The master coordinates
-all activity in your cluster, such as scheduling applications, maintaining
-applications' desired state, scaling applications, and rolling out new updates.
+     .. image:: ../images/f5-check-partition.png
 
-**A node is a VM or a physical computer that serves as a worker machine in a
-Kubernetes cluster**. Each *node* has a *Kubelet*, which is an agent for
-managing the node and communicating with the Kubernetes master. The node should
-also have tools for handling container operations, such as Docker or rkt. A 
-kubernetes cluster that handles production traffic should have a minimum of
-three nodes.
+#. You need to setup a partition that will be used by F5 Container Ingress
+   Service.
 
-*Masters* manage the cluster and the *nodes* are used to host the running
-applications.
+   .. code-block:: bash
 
-When you deploy applications on Kubernetes, you tell the *master* to start the
-application containers. The *master* schedules the containers to run on the
-cluster's nodes. **The nodes communicate with the master using the Kubernetes
-API**, which the *master* exposes. End users can also use the Kubernetes API
-directly to interact with the cluster.
+      # From the CLI:
+      tmsh create auth partition okd
 
-Kubernetes concepts
--------------------
+      # From the UI:
+      GoTo System --> Users --> Partition List
+      - Create a new partition called "okd" (use default settings)
+      - Click Finished
 
-Extract from `Kubernetes concepts <http://kubernetes.io/docs/user-guide/>`_
+   .. image:: ../images/f5-container-connector-bigip-partition-setup.png
 
-**Cluster**: `Kubernetes Cluster <https://kubernetes.io/docs/admin/>`_
-A cluster is a set of physical or virtual machines and other infrastructure
-resources used by Kubernetes to run your applications.
+#. Install AS3
 
-**Namespace**: `Kubernetes Namespace <https://kubernetes.io/docs/user-guide/namespaces/>`_
-Kubernetes supports multiple virtual clusters backed by the same physical
-cluster. These virtual clusters are called namespaces. Namespaces are intended
-for use in environments with many users spread across multiple teams, or
-projects. For clusters with a few to tens of users, you should not need to
-create or think about namespaces at all. Start using namespaces when you need
-the features they provide. Namespaces provide a scope for names. Names of
-resources need to be unique within a namespace, but not across namespaces.
-Namespaces are a way to divide cluster resources between multiple uses
+   .. attention:: This has been done to save time but is documented for
+      reference.
 
-**Node**: `Kubernetes Node <https://kubernetes.io/docs/admin/node/>`_
-A node is a physical or virtual machine running Kubernetes, onto which *pods*
-can be scheduled. It was previously known as *Minion*
+   Click here: `Download latest AS3 <https://github.com/F5Networks/f5-appsvcs-extension/releases>`_
 
-**Pod**: `Kubernetes Pods <https://kubernetes.io/docs/user-guide/pods/>`_
-A pod is a co-located group of containers and volumes. The applications in a
-*pod* all use the same network namespace (same IP and port space), and can thus
-*find* each other and communicate using **localhost**. Because of this,
-applications in a pod must coordinate their usage of ports. Each *pod* has an
-IP address in a flat shared networking space that has full communication with
-other physical computers and pods across the network. In addition to defining
-the application containers that run in the *pod*, the *pod* specifies a set of
-shared storage volumes. Volumes enable data to survive container restarts and
-to be shared among the applications within the pod.
+   .. code-block:: bash
 
-**Label**: `Kubernetes Label and Selector <https://kubernetes.io/docs/user-guide/labels/>`_
-A label is a key/value pair that is attached to a resource, such as a *pod*,
-to convey a user-defined identifying attribute. Labels can be used to organize
-and to select subsets of resources.
+      # From the UI:
+      GoTo  iApps --> Package Management LX
+      - Click Import
+      - Browse and select downloaded AS3 RPM
+      - Click Upload
 
-**Selector**: `Kubernetes Label and Selector <https://kubernetes.io/docs/user-guide/labels/>`_
-A selector is an expression that matches labels in order to identify related
-resources, such as which *pods* are targeted by a load-balanced service.
+   .. seealso:: For more info click here:
+      `Application Services 3 Extension Documentation <https://clouddocs.f5.com/products/extensions/f5-appsvcs-extension/latest/>`_
 
-**deployments**:  `Kubernetes deployments <https://kubernetes.io/docs/user-guide/deployments/>`_
-A Deployment provides declarative updates for Pods and Replica Sets (the
-next-generation Replication Controller). You only need to describe the desired
-state in a Deployment object, and the Deployment controller will change the
-actual state to the desired state at a controlled rate for you. You can define
-Deployments to create new resources, or replace existing ones by new ones.
-A typical use case is:
+Explore the OpenShift Cluster
+-----------------------------
 
-- Create a Deployment to bring up a Replica Set and Pods.
-- Check the status of a Deployment to see if it succeeds or not.
-- Later, update that Deployment to recreate the Pods (for example, to use a new
-  image).
-- Rollback to an earlier Deployment revision if the current Deployment isn’t
-  stable.
-- Pause and resume a Deployment
+#. From the jumpbox start an SSH session with okd-master1.
 
-**ConfigMap**: `Kubernetes ConfigMap <https://kubernetes.io/docs/user-guide/configmap/>`_
-Any applications require configuration via some combination of config files,
-command line arguments, and environment variables. These configuration
-artifacts should be decoupled from image content in order to keep containerized
-applications portable. The ConfigMap API resource provides mechanisms to inject
-containers with configuration data while keeping containers agnostic of
-Kubernetes. ConfigMap can be used to store fine-grained information like
-individual properties or coarse-grained information like entire config files or
-JSON blobs
+#. "git" the demo files
 
-**Replication Controller**: `Kubernetes replication controller <https://kubernetes.io/docs/user-guide/replication-controller/>`_
-A replication controller ensures that a specified number of *pod* replicas are
-running at any one time. It both allows for easy scaling of replicated systems
-and handles re-creation of a *pod* when the machine it is on reboots or
-otherwise fails.
+   .. code-block:: bash
 
-**Service**: `Kubernetes Services <https://kubernetes.io/docs/user-guide/services/>`_
-A service defines a set of *pods* and a means by which to access them, such as
-single stable IP address and corresponding DNS name. Kubernetes *pods* are
-mortal. They are born and they die, and they are **not resurrected**.
-Replication Controllers in particular create and destroy *pods* dynamically
-(e.g. when scaling up or down or when doing rolling updates). While each *pod*
-gets its own IP address, even those IP addresses cannot be relied upon to be
-stable over time. This leads to a problem: if some set of *pods* (let’s call
-them backends) provides functionality to other *pods* (let’s call them
-frontends) inside the Kubernetes cluster, how do those frontends find out and
-keep track of which backends are in that set? Enter Services. A Kubernetes
-*service* is an abstraction which defines a logical set of *pods* and a policy
-by which to access them - sometimes called a micro-service. The set of *pods*
-targeted by a *service* is (usually) determined by a *label selector*
+      git clone -b develop https://github.com/f5devcentral/f5-agility-labs-containers.git ~/agilitydocs
 
-**Volume**: `Kuebernetes volume <https://kubernetes.io/docs/user-guide/volumes/>`_
-A volume is a directory, possibly with some data in it, which is accessible to
-a Container as part of its filesystem. Kubernetes volumes build upon Docker
-Volumes, adding provisioning of the volume directory and/or device.
+      cd ~/agilitydocs/docs/class2/openshift
+
+#. Log in with an Openshift Client.
+
+   .. note:: Here we're using a user "centos", added when we built the cluster.
+      When prompted for password, enter "centos".
+
+   .. code-block:: bash
+
+      oc login -u centos -n default
+
+   .. image:: ../images/OC-DEMOuser-Login.png
+
+   .. important:: Upon logging in you'll notice access to several projects. In
+      our lab well be working from the default "default".
+
+#. Check the OpenShift status
+
+   The **oc status** command shows a high level overview of the project
+   currently in use, with its components and their relationships, as shown in
+   the following example:
+
+   .. code-block:: bash
+
+      oc status
+
+   .. image:: ../images/oc-status.png
+
+#. Check the OpenShift nodes
+
+   You can manage nodes in your instance using the CLI. The CLI interacts with
+   node objects that are representations of actual node hosts. The master uses
+   the information from node objects to validate nodes with health checks.
+
+   To list all nodes that are known to the master:
+
+   .. code-block:: bash
+
+      oc get nodes
+
+   .. image:: ../images/oc-get-nodes.png
+
+   .. attention::
+      If the node STATUS shows **NotReady** or **SchedulingDisabled** contact
+      the lab proctor. The node is not passing the health checks performed from
+      the master, therefor pods cannot be scheduled for placement on the node.
+
+#. To get more detailed information about a specific node, including the reason
+   for the current condition use the oc describe node command. This does
+   provide alot of very useful information and can assist with throubleshooting
+   issues.
+
+   .. code-block:: bash
+
+      oc describe node okd-master1
+
+   .. image:: ../images/oc-describe-node.png
+
+#. Check to see what projects you have access to:
+
+   .. code-block:: bash
+
+      oc get projects
+
+   .. image:: ../images/oc-get-projects.png
+
+   .. note:: You will be using the "default" project in this class.
+
+CIS Deployment
+--------------
+
+.. seealso:: For a more thorough explanation of all the settings and options see
+   `F5 Container Ingress Service - Openshift <https://clouddocs.f5.com/containers/v2/openshift/>`_
+
+Now that BIG-IP is licensed and prepped with the "okd" partition, we need to
+define a `Kubernetes deployment <https://kubernetes.io/docs/user-guide/deployments/>`_
+and create a `Kubernetes secret <https://kubernetes.io/docs/user-guide/secrets/>`_
+to hide our bigip credentials.
+
+#. Create bigip login secret
+
+   .. code-block:: bash
+
+      oc create secret generic bigip-login -n kube-system --from-literal=username=admin --from-literal=password=admin
+
+   You should see something similar to this:
+
+   .. image:: ../images/f5-container-connector-bigip-secret.png
+
+#. Create kubernetes service account for bigip controller
+
+   .. code-block:: bash
+
+      oc create serviceaccount k8s-bigip-ctlr -n kube-system
+
+   You should see something similar to this:
+
+   .. image:: ../images/f5-container-connector-bigip-serviceaccount.png
+
+#. Create cluster role for bigip service account (admin rights, but can be
+   modified for your environment)
+
+   .. code-block:: bash
+
+      oc create clusterrolebinding k8s-bigip-ctlr-clusteradmin --clusterrole=cluster-admin --serviceaccount=kube-system:k8s-bigip-ctlr
+
+   You should see something similar to this:
+
+   .. image:: ../images/f5-container-connector-bigip-clusterrolebinding.png
+
+#. At this point we have two deployment mode options, Nodeport or ClusterIP.
+   This class will feature both modes. For more information see
+   `BIG-IP Controller Modes <http://clouddocs.f5.com/containers/v2/kubernetes/kctlr-modes.html>`_
+
+   Lets start with **Nodeport mode** ``f5-nodeport-deployment.yaml``
+
+   .. note:: 
+      - For your convenience the file can be found in
+        /home/ubuntu/agilitydocs/docs/class2/openshift (downloaded earlier in
+        the clone git repo step).
+      - Or you can cut and paste the file below and create your own file.
+      - If you have issues with your yaml and syntax (**indentation MATTERS**),
+        you can try to use an online parser to help you :
+        `Yaml parser <http://codebeautify.org/yaml-validator>`_
+
+   .. literalinclude:: ../openshift/f5-nodeport-deployment.yaml
+      :language: yaml
+      :linenos:
+      :emphasize-lines: 2,7,17,20,37,39-41
+
+#. Once you have your yaml file setup, you can try to launch your deployment.
+   It will start our f5-k8s-controller container on one of our nodes (may take
+   around 30sec to be in a running state):
+
+   .. code-block:: bash
+
+      oc create -f f5-nodeport-deployment.yaml
+
+#. Verify the deployment "deployed"
+
+   .. code-block:: bash
+
+      oc get deployment k8s-bigip-ctlr --namespace kube-system
+
+   .. image:: ../images/f5-container-connector-launch-node-deployment-controller.png
+
+#. To locate on which node the CIS service is running, you can use the
+   following command:
+
+   .. code-block:: bash
+
+      oc get pods -o wide -n kube-system
+
+   We can see that our container is running on okd-node1 below.
+
+   .. image:: ../images/f5-container-connector-locate-node-controller-container.png
+
+Troubleshooting
+---------------
+
+If you need to troubleshoot your container, you have two different ways to
+check the logs of your container, oc command or docker command.
+
+.. attention:: Depending on your deployment CIS can be running on either
+   okd-node1 or okd-node2.
+
+#. Using ``oc`` command: you need to use the full name of your pod as shown in
+   the previous image.
+
+   .. code-block:: bash
+
+      # For example:
+      oc logs k8s-bigip-ctlr-667cf78cc7-62wxf -n kube-system
+
+   .. image:: ../images/f5-container-connector-check-logs-kubectl.png
+
+#. Using docker logs command: From the previous check we know the container
+   is running on okd-node1. On your current session with okd-master1 SSH to
+   okd-node1 first and then run the docker command:
+
+   .. code-block:: bash
+
+      ssh okd-node1
+
+      sudo docker ps
+
+   Here we can see our container ID is "74a566f5778a"
+
+   .. image:: ../images/f5-container-connector-find-dockerID--controller-container.png
+
+   Now we can check our container logs:
+
+   .. code-block:: bash
+
+      sudo docker logs 74a566f5778a
+
+   .. image:: ../images/f5-container-connector-check-logs-controller-container.png
+
+   .. note:: The log messages here are identical to the log messages displayed
+      in the previous oc logs command. 
+
+#. You can connect to your container with kubectl as well. This is something
+   not typically needed but support may direct you to do so.
+
+   .. note:: Exit from your current session with okd-node1 before attempting
+      this command.
+
+   .. code-block:: bash
+
+      oc exec -it k8s-bigip-ctlr-79fcf97bcc-48qs7 -n kube-system  -- /bin/sh
+
+      cd /app
+
+      ls -la
+
+      exit

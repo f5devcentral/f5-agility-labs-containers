@@ -4,3 +4,7 @@ media/
 pdf/*
 .vscode
 *.sublime-*
+.terraform*
+terraform.tfstate*
+*.rpm
+*.swp

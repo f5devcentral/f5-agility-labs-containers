@@ -1,83 +1,134 @@
-Kubernetes Networking Overview
-==============================
+Lab 1.2 - Deploy Hello-World (Route)
+====================================
 
-This is an extract from `Networking in Kubernetes <http://http://kubernetes.io/docs/admin/networking/>`_
+Now that CIS is up and running, let's deploy an application and leverage CIS.
 
-Summary
--------
+For this lab we'll use a simple pre-configured docker image called 
+"f5-hello-world". It can be found on docker hub at
+`f5devcentral/f5-hello-world <https://hub.docker.com/r/f5devcentral/f5-hello-world/>`_
 
-Kubernetes assumes that pods can communicate with other pods, regardless of
-which host they land on. We give every pod its own IP address so you do not
-need to explicitly create links between pods and you almost never need to deal
-with mapping container ports to host ports. This creates a clean,
-backwards-compatible model where pods can be treated much like VMs or physical
-hosts from the perspectives of port allocation, naming, service discovery,
-load balancing, application configuration, and migration
+To deploy our application, we will need the following definitions:
 
-Docker Model
-------------
+- Define the **Deployment** resource: this will launch our application running
+  in a container.
 
-Before discussing the Kubernetes approach to networking, it is worthwhile to
-review the “normal” way that networking works with Docker.
+- Define the **Service** resource: this is an abstraction which defines a
+  logical set of pods and a policy by which to access them. Expose the service
+  on a port on each node of the cluster (the same port on each node). You’ll
+  be able to contact the service on any <NodeIP>:NodePort address. When you set
+  the type field to "NodePort", the master will allocate a port from a
+  flag-configured range (default: 30000-32767), and each Node will proxy that
+  port (the same port number on every Node) for your Service.
 
-By default, Docker uses host-private networking. It creates a virtual bridge,
-called docker0 by default, and allocates a subnet from one of the private
-address blocks defined in `RFC1918 <https://tools.ietf.org/html/rfc1918>`_ for
-that bridge. For each container that Docker creates, it allocates a virtual
-ethernet device (called veth) which is attached to the bridge. The veth is
-mapped to appear as eth0 in the container, using Linux namespaces. The
-in-container eth0 interface is given an IP address from the bridge’s address
-range. The result is that Docker containers can talk to other containers only
-if they are on the same machine (and thus the same virtual bridge). Containers
-on different machines can not reach each other - in fact they may end up with
-the exact same network ranges and IP addresses. In order for Docker containers
-to communicate across nodes, they must be allocated ports on the machine’s own
-IP address, which are then forwarded or proxied to the containers. This
-obviously means that containers must either coordinate which ports they use
-very carefully or else be allocated ports dynamically.
+- Define the **Route** resource: this is used to add the necesary annotations
+  to define the virtual server settings.
 
-Kubernetes Model
-----------------
+  .. seealso:: 
+     `Supported Route Annotations <https://clouddocs.f5.com/products/connectors/k8s-bigip-ctlr/v1.11/#supported-route-annotations>`_
+  
+App Deployment
+--------------
 
-Coordinating ports across multiple containers is very difficult to do at scale
-and exposes users to cluster-level issues outside of their control. Dynamic
-port allocation brings a lot of complications to the system - every
-application has to take ports as flags, the API servers have to know how
-to insert dynamic port numbers into configuration blocks, services have to
-know how to find each other, etc. Rather than deal with this, Kubernetes takes
-a different approach.
+On **okd-master1** we will create all the required files:
 
-Kubernetes imposes the following fundamental requirements on any networking
-implementation (barring any intentional network segmentation policies):
+#. Create a file called ``f5-hello-world-deployment.yaml``
 
-- All containers can communicate with all other containers without NAT
-- All nodes can communicate with all containers (and vice-versa) without NAT
-- The IP that a container sees itself as is the same IP that others see it as
-- What this means in practice is that you can not just take two computers
-  running Docker and expect Kubernetes to work. You must ensure that the
-  fundamental requirements are met.
+   .. tip:: Use the file in ~/agilitydocs/docs/class2/openshift
 
-Kubernetes applies IP addresses at the *Pod* scope - containers within a Pod
-share their network namespaces - including their IP address. This means that
-containers within a Pod can all reach each other’s ports on **localhost**.
-This does imply that containers within a Pod must coordinate port usage, but
-this is no different than processes in a VM. We call this the *IP-per-pod*
-model. This is implemented in Docker as a *pod container* which holds the
-network namespace open while “app containers” (the things the user specified)
-join that namespace with Docker’s **--net=container:<id>** function
+   .. literalinclude:: ../openshift/f5-hello-world-deployment.yaml
+      :language: yaml
+      :linenos:
+      :emphasize-lines: 2,7,20
 
-How to achieve this
--------------------
+#. Create a file called ``f5-hello-world-service-nodeport.yaml``
 
-There are a number of ways that this network model can be implemented. Here is
-a list of possible options:
+   .. tip:: Use the file in ~/agilitydocs/docs/class2/openshift
 
-- `Contiv Netplugin <https://github.com/contiv/netplugin>`_
-- `Flannel <https://github.com/coreos/flannel#flannel>`_
-- `Open vSwitch <https://www.openvswitch.org/>`_
-- `Calico <http://docs.projectcalico.org/>`_
-- `Romana <http://romana.io/>`_
-- `Weave Net <https://www.weave.works/products/weave-net/>`_
-- `L2 networks and linux bridging <http://blog.oddbit.com/2014/08/11/four-ways-to-connect-a-docker/>`_
+   .. literalinclude:: ../openshift/f5-hello-world-service-nodeport.yaml
+      :language: yaml
+      :linenos:
+      :emphasize-lines: 2,17
 
-.. important:: For this lab, we will use **Flannel**.
+#. Create a file called ``f5-hello-world-route.yaml``
+
+   .. tip:: Use the file in ~/agilitydocs/docs/class2/openshift
+
+   .. literalinclude:: ../openshift/f5-hello-world-route.yaml
+      :language: yaml
+      :linenos:
+      :emphasize-lines: 2,7-9,23,24
+
+#. We can now launch our application:
+
+   .. code-block:: bash
+
+      oc create -f f5-hello-world-deployment.yaml
+      oc create -f f5-hello-world-service-nodeport.yaml
+      oc create -f f5-hello-world-route.yaml
+
+   .. image:: ../images/f5-container-connector-launch-app-route.png
+
+#. To check the status of our deployment, you can run the following commands:
+
+   .. note:: This can take a few seconds to a minute to create these
+      hello-world containers to running state.
+
+   .. code-block:: bash
+
+      oc get pods -o wide
+
+   .. image:: ../images/f5-hello-world-pods-route.png
+
+   .. code-block:: bash
+
+      oc describe svc f5-hello-world
+
+   .. image:: ../images/f5-container-connector-check-app-definition-route.png
+
+#. To understand and test the new app pay attention to the **NodePort value**,
+   that's the port used to give you access to the app from the outside. Here
+   it's "30444", highlighted above.
+
+   Now that we have deployed our application sucessfully, we can check our
+   BIG-IP configuration. From the browser open https://10.1.1.4
+
+   .. warning:: Don't forget to select the "okd" partition or you'll
+      see nothing.
+
+   With "Route" you'll seee two virtual servers defined. "okd_http_vs" and
+   "okd_https_vs", listening on port 80 and 443.
+
+   .. image:: ../images/f5-container-connector-check-app-route-bigipconfig.png
+
+   These Virtual use an LTM Policy to direct traffic based on the host header.
+   You can view this from the BIG-IP GUI at Local Traffic -->
+   Virtual Servers --> Policies and click the Published Policy,
+   "openshift_insecure_routes".
+
+   .. image:: ../images/f5-check-ltm-policy-route.png
+
+   Check the Pools to see a new pool and the associated pool members:
+   Local Traffic --> Pools --> "openshift_default_f5-hello-world-web"
+   --> Members
+
+   .. image:: ../images/f5-container-connector-check-app-route-pool.png
+
+   .. note:: You can see that the pool members listed are all the cluster
+      nodes on the node port 30444. (**NodePort mode**)
+
+#. To view the application from a browser you'll need to update your host file
+   to point the assigned public IP at "mysite.f5demo.com".
+
+   .. note:: This step can be skipped.
+
+#. Delete Hello-World
+
+   .. code-block:: bash
+
+      oc delete -f f5-hello-world-route.yaml
+      oc delete -f f5-hello-world-service-nodeport.yaml
+      oc delete -f f5-hello-world-deployment.yaml
+
+   .. important:: Do not skip this step. Instead of reusing some of these
+      objects, the next lab we will re-deploy them to avoid conflicts and
+      errors.

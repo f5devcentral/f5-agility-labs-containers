@@ -1,5 +1,5 @@
-Class 2: Introduction to Kubernetes
-===================================
+Class 2: F5 Container Ingress Service & OpenShift
+=================================================
 
 This introductory class covers the following topics:
 
@@ -9,12 +9,12 @@ This introductory class covers the following topics:
 
    module*/module*
 
-Expected time to complete: **1.5 hours**
+Expected time to complete: **1 hour**
 
 Lab Setup
 ---------
 
-We will leverage the following setup to configure the Kubernetes environment.
+We will leverage the following setup to configure the OpenShift environment.
 
 .. list-table::
    :header-rows: 1
@@ -22,29 +22,23 @@ We will leverage the following setup to configure the Kubernetes environment.
    * - **Hostname**
      - **IP-ADDR**
      - **Credentials**
-   * - jumpbox
-     - 10.1.1.250
-     - user/Student!Agility!
    * - bigip1
-     - 10.1.1.245
-
-       10.1.10.60
-
+     - 10.1.1.4
      - admin/admin
 
        root/default
-   * - kube-master1
-     - 10.1.10.21
-     - ubuntu/ubuntu
+   * - okd-master1
+     - 10.1.1.10
+     - centos/centos
 
        root/default
-   * - kube-node1
-     - 10.1.10.22
-     - ubuntu/ubuntu
+   * - okd-node1
+     - 10.1.1.11
+     - centos/centos
 
        root/default
-   * - kube-node2
-     - 10.1.10.23
-     - ubuntu/ubuntu
+   * - okd-node2
+     - 10.1.1.12
+     - centos/centos
 
        root/default

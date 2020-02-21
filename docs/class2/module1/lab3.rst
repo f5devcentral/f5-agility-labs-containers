@@ -1,259 +1,169 @@
-Kubernetes Services Overview
-============================
+Lab 1.3 - Deploy Hello-World (ConfigMap w/ AS3)
+===============================================
 
-Refer to `Kubernetes services <http://kubernetes.io/docs/user-guide/services/>`_
-for more information
+Just like the previous lab we'll deploy the f5-hello-world docker container.
+But instead of using the Route resource we'll use ConfigMap.
 
-A Kubernetes *service* is an abstraction which defines a logical set of *pods*
-and a policy by which to access them. The set of *pods* targeted by a *service*
-is (usually) determined by a *label selector*.
+To deploy our application, we will need the following definitions:
 
-As an example, consider an image-processing backend which is running with 3
-replicas. Those replicas are fungible - frontends do not care which backend
-they use. While the actual *pods* that compose the backend set may change, the
-frontend clients should not need to be aware of that or keep track of the list
-of backends themselves. The *service* abstraction enables this decoupling.
+- Define the **Deployment** resource: this will launch our application running
+  in a container.
 
-For Kubernetes-native applications, Kubernetes offers a simple *Endpoints API*
-that is updated whenever the set of *pods* in a *service* changes. For
-non-native applications, Kubernetes offers a virtual-IP-based bridge to
-services* which redirects to the backend *pods*.
+- Define the **Service** resource: this is an abstraction which defines a
+  logical set of pods and a policy by which to access them. Expose the service
+  on a port on each node of the cluster (the same port on each node). You’ll
+  be able to contact the service on any <NodeIP>:NodePort address. When you set
+  the type field to "NodePort", the master will allocate a port from a
+  flag-configured range (default: 30000-32767), and each Node will proxy that
+  port (the same port number on every Node) for your Service.
 
-Defining a service
-------------------
+- Define the **ConfigMap** resource: this can be used to store fine-grained
+  information like individual properties or coarse-grained information like
+  entire config files  or JSON blobs. It will contain the BIG-IP configuration
+  we need to push.
 
-A *service* in Kubernetes is a REST object, similar to a *pod*. Like all of the
-REST objects, a *service* definition can be *POSTed* to the *apiserver* to
-create a new instance. For example, suppose you have a set of *pods* that each
-expose port 9376 and carry a *label* "app=MyApp".
+.. attention:: The steps are generally the same as the previous lab, the big
+   difference is the two resource types. Your **Deployment** and **Service**
+   definitions are the same file.
 
-.. code-block:: json
-   :linenos:
-   :emphasize-lines: 2,9,15
+App Deployment
+--------------
 
-   {
-      "kind": "Service",
-      "apiVersion": "v1",
-      "metadata": {
-         "name": "my-service"
-      },
-      "spec": {
-         "selector": {
-            "app": "MyApp"
-         },
-         "ports": [
-            {
-               "protocol": "TCP",
-               "port": 80,
-               "targetPort": 9376
-            }
-         ]
-      }
-   }
+On the **okd-master1** we will create all the required files:
 
-This specification will create a new *service* object named "my-service" which
-targets TCP port 9376 on any *pod* with the "app=MyApp" *label*.
+#. Create a file called ``f5-hello-world-deployment.yaml``
 
-This *service* will also be assigned an IP address (sometimes called the
-*cluster IP*), which is used by the *service proxies* . The *service’s
-selector* will be evaluated continuously and the results will be POSTed to an
-*Endpoints* object also named “my-service”.
+   .. tip:: Use the file in ~/agilitydocs/docs/class2/openshift
 
-If the service is not a native kubernetes app, then you can do a service
-definition without the *selector* field. In such a case you'll have to specify
-yourself the *endpoints*
+   .. literalinclude:: ../openshift/f5-hello-world-deployment.yaml
+      :language: yaml
+      :linenos:
+      :emphasize-lines: 2,7,20
 
-.. code-block:: json
-   :linenos:
-   :emphasize-lines: 2,12,19,27,30
+#. Create a file called ``f5-hello-world-service-nodeport.yaml``
 
-   {
-      "kind": "Service",
-      "apiVersion": "v1",
-      "metadata": {
-         "name": "my-service"
-      },
-      "spec": {
-         "ports": [
-            {
-               "protocol": "TCP",
-               "port": 80,
-               "targetPort": 9376
-            }
-         ]
-      }
-   }
+   .. tip:: Use the file in ~/agilitydocs/docs/class2/openshift
 
-   {
-      "kind": "Endpoints",
-      "apiVersion": "v1",
-      "metadata": {
-         "name": "my-service"
-      },
-      "subsets": [
-         {
-            "addresses": [
-               { "ip": "1.2.3.4" }
-            ],
-            "ports": [
-               { "port": 9376 }
-            ]
-         }
-      ]
-   }
+   .. literalinclude:: ../openshift/f5-hello-world-service-nodeport.yaml
+      :language: yaml
+      :linenos:
+      :emphasize-lines: 2,8-10,17
 
-.. note:: A *service* can map an incoming port to any *targetPort*. By default
-   the *targetPort* will be set to the same value as the *port* field. In the
-   example above, the port for the service is 80 (HTTP) and will redirect
-   traffic to port 9376 on the Pods
+#. Create a file called ``f5-hello-world-configmap.yaml``
 
-You can specify multiple ports if needed (like HTTP/HTTPS for an app)
+   .. tip:: Use the file in ~/agilitydocs/docs/class2/openshift
 
-Kubernetes *service* supports TCP (default) and UDP.
+   .. literalinclude:: ../openshift/f5-hello-world-configmap.yaml
+      :language: yaml
+      :linenos:
+      :emphasize-lines: 2,5,7,8,19,21,27,30,32
 
-Publishing services - service types
------------------------------------
+#. We can now launch our application:
 
-For some parts of your application (e.g. frontends) you may want to expose a
-*Service* onto an external (outside of your cluster, maybe public internet) IP
-address, other services should be visible only from inside of the cluster.
+   .. code-block:: bash
 
-Kubernetes ServiceTypes allow you to specify what kind of *service* you want.
-**The default and base type is *ClusterIP*, which exposes a *service* to
-connection from inside the cluster**. NodePort and LoadBalancer are two types
-that expose services to external traffic.
+      oc create -f f5-hello-world-deployment.yaml
+      oc create -f f5-hello-world-service-nodeport.yaml
+      oc create -f f5-hello-world-configmap.yaml
+      
+   .. image:: ../images/f5-okd-launch-configmap-app.png
 
-Valid values for the ServiceType field are:
+#. To check the status of our deployment, you can run the following commands:
 
-- **ExternalName**: map the *service* to the contents of the externalName field
-  (e.g. foo.bar.example.com), by returning a CNAME record with its value. No
-  proxying of any kind is set up. This requires version 1.7 or higher of
-  kube-dns.
+   .. note:: This can take a few seconds to a minute to create these
+      hello-world containers to running state.
 
-- **ClusterIP**: use a cluster-internal IP only - this is the default and is
-  discussed above. Choosing this value means that you want this *service* to be
-  reachable only from inside of the *cluster*.
+   .. code-block:: bash
 
-- **NodePort**: on top of having a cluster-internal IP, expose the *service* on
-  a port on each node of the cluster (the same port on each *node*). You’ll be
-  able to contact the service on any <NodeIP>:NodePort address. If you set the
-  type field to "NodePort", the Kubernetes master will allocate a port from a
-  flag-configured range **(default: 30000-32767)**, and each Node will proxy
-  that port (the same port number on every Node) into your *Service*. That port
-  will be reported in your Service’s spec.ports[*].nodePort field. If you want
-  a specific port number, you can specify a value in the nodePort field, and
-  the system will allocate you that port or else the API transaction will fail
-  (i.e. you need to take care about possible port collisions yourself).
-  **The value you specify must be in the configured range for node ports**.
+      oc get pods -o wide
 
-- **LoadBalancer**: on top of having a cluster-internal IP and exposing service
-  on a NodePort also, ask the cloud provider for a load balancer which forwards
-  to the Service exposed as a <NodeIP>:NodePort for each Node
+   .. image:: ../images/f5-hello-world-pods-configmap.png
 
-Service type: LoadBalancer
---------------------------
+   .. code-block:: bash
 
-On cloud providers which support external load balancers, setting the type
-field to "LoadBalancer" will provision a load balancer for your *Service*. The
-actual creation of the load balancer happens asynchronously, and information
-about the provisioned balancer will be published in the Service’s
-status.loadBalancer field. For example:
+      oc describe svc f5-hello-world
+        
+   .. image:: ../images/f5-okd-check-app-definition-node.png
 
-.. code-block:: json
-   :linenos:
-   :emphasize-lines: 2,20,21
+#. To understand and test the new app pay attention to the **NodePort value**,
+   that's the port used to give you access to the app from the outside. Here
+   it's "31670", highlighted above.
 
-   {
-      "kind": "Service",
-       "apiVersion": "v1",
-       "metadata": {
-         "name": "my-service"
-      },
-      "spec": {
-         "selector": {
-            "app": "MyApp"
-         },
-         "ports": [
-            {
-               "protocol": "TCP",
-               "port": 80,
-               "targetPort": 9376,
-               "nodePort": 30061
-            }
-         ],
-         "clusterIP": "10.0.171.239",
-         "loadBalancerIP": "78.11.24.19",
-         "type": "LoadBalancer"
-      },
-      "status": {
-         "loadBalancer": {
-            "ingress": [
-               {
-                  "ip": "146.148.47.155"
-               }
-            ]
-         }
-      }
-   }
+   Now that we have deployed our application sucessfully, we can check our
+   BIG-IP configuration.  From the browser open https://10.1.1.4
 
-Traffic from the external load balancer will be directed at the backend *Pods*,
-though exactly how that works depends on the cloud provider (AWS, GCE, ...).
-Some cloud providers allow the loadBalancerIP to be specified. In those cases,
-the load-balancer will be created with the user-specified loadBalancerIP. If
-the loadBalancerIP field is not specified, an ephemeral IP will be assigned to
-the loadBalancer. If the loadBalancerIP is specified, but the cloud provider
-does not support the feature, the field will be ignored
+   .. warning:: Don't forget to select the proper partition. Previously we
+      checked the "okd" partition. In this case we need to look at
+      the "AS3" partition. This partition was auto created by AS3 and named
+      after the Tenant which happens to be "AS3".
 
-Service proxies
----------------
+   Here you can see a new Virtual Server, "serviceMain" was created,
+   listening on 10.1.1.4:80 in partition "AS3".
 
-Every node in a Kubernetes cluster runs a *kube-proxy*. *kube-proxy* is
-responsible for implementing a form of virtual IP for *Services*
+   .. image:: ../images/f5-container-connector-check-app-bigipconfig-as3.png
 
-Since Kubernetes 1.2,  the iptables proxy is the default behavior (another
-implementation of kube-proxy is the userspace implementation)
+#. Check the Pools to see a new pool and the associated pool members:
+   Local Traffic --> Pools --> "web_pool" --> Members
 
-In this mode, *kube-proxy* watches the Kubernetes *master* for the addition
-and removal of *Service* and *Endpoints* objects. For each*Service*, it
-installs iptables rules which capture traffic to the *Service*’s *cluster IP*
-(which is virtual) and *Port* and redirects that traffic to one of the
-*Service*’s backend sets. For each *Endpoints* object, it installs iptables
-rules which select a backend *Pod*.
+   .. image:: ../images/f5-container-connector-check-app-web-pool.png
 
-By default, the choice of backend is random. Client-IP based session affinity
-can be selected by setting **service.spec.sessionAffinity** to "ClientIP"
-(the default is "None").
+   .. note:: You can see that the pool members listed are all the cluster
+      nodes on the port 31670. (**NodePort mode**)
 
-As with the userspace proxy, the net result is that any traffic bound for the
-*Service*’s IP:Port is proxied to an appropriate backend without the clients
-knowing anything about Kubernetes or *Services* or *Pods*. This should be
-faster and more reliable than the userspace proxy. However, unlike the
-userspace proxier, the iptables proxier cannot automatically retry another
-*Pod* if the one it initially selects does not respond, so it depends on having
-working *readiness probes*. A readiness probe gives you the capability to
-monitor the status of a *pod* via health-checks
+#. Now you can try to access your application via the BIG-IP VS/VIP: UDF-URL
 
-Service discovery
------------------
+   .. image:: ../images/f5-container-connector-access-app.png
 
-The recommended way to implement Service discovery with Kubernetes is the same
-as with Mesos: DNS
+#. Hit Refresh many times and go back to your **BIG-IP** UI, go to Local
+   Traffic --> Pools --> Pool list --> "web_pool" --> Statistics to see that
+   traffic is distributed as expected.
 
-when building a cluster, you can add *add-on* to it. One of the available
-*add-on* is a DNS Server.
+   .. image:: ../images/f5-okd-check-app-bigip-stats-as3.png
 
-The DNS server watches the Kubernetes API for new *Services* and creates a set
-of DNS records for each. If DNS has been enabled throughout the cluster then
-all *Pods* should be able to do name resolution of Services automatically.
+#. Scale the f5-hello-world app
 
-For example, if you have a *Service* called "my-service" in Kubernetes
-Namespace "my-ns" a DNS record for "my-service.my-ns" is created. *Pods* which
-exist in the "my-ns" Namespace should be able to find it by simply doing a name
-lookup for "my-service". *Pods* which exist in other Namespaces must qualify
-the name as "my-service.my-ns". The result of these name lookups is the
-*cluster IP*.
+   .. code-block:: bash
 
-Kubernetes also supports DNS SRV (service) records for named ports. If the
-"my-service.my-ns" *Service* has a port named "http" with protocol TCP, you can
-do a DNS SRV query for "_http._tcp.my-service.my-ns" to discover the port
-number for "http"
+      oc scale --replicas=10 deployment/f5-hello-world-web
+
+#. Check the pods were created
+
+   .. code-block:: bash
+
+      oc get pods
+
+   .. image:: ../images/f5-hello-world-pods-scale10.png
+
+#. Check the pool was updated on BIG-IP:
+
+   .. image:: ../images/f5-hello-world-pool-scale10-node-as3.png
+
+   .. attention:: Why do we still only show 3 pool members?
+
+#. Remove Hello-World from BIG-IP. When using AS3 an extra steps need to be
+   performed. In addion to deleteing the previously created configmap a "blank"
+   declaration needs to be sent to completly remove the application:
+   
+   .. literalinclude:: ../openshift/f5-hello-world-delete-configmap.yaml
+      :language: yaml
+      :linenos:
+      :emphasize-lines: 2,19
+
+   .. code-block:: bash
+
+      oc delete -f f5-hello-world-configmap.yaml
+      oc delete -f f5-hello-world-service-nodeport.yaml
+      oc delete -f f5-hello-world-deployment.yaml
+
+      oc create -f f5-hello-world-delete-configmap.yaml
+      oc delete -f f5-hello-world-delete-configmap.yaml
+
+#. Remove CIS:
+
+   .. code-block:: bash
+
+      oc delete -f f5-nodeport-deployment.yaml
+
+.. important:: Do not skip these clean-up steps. Instead of reusing some of
+   these objects, the next lab we will re-deploy them to avoid conflicts and
+   errors.

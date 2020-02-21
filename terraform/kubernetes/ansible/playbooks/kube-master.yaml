@@ -1,0 +1,67 @@
+---
+
+- name: git Agility Container Lab repo
+  become: no
+  git:
+    repo: https://github.com/f5devcentral/f5-agility-labs-containers.git
+    dest: ~/agilitydocs
+    version: develop
+
+- name: Copy private SSH key to user "ubuntu"
+  become: no
+  copy:
+    src: ~/.ssh/id_rsa
+    dest: ~/.ssh/id_rsa
+    mode: 0600
+
+- name: Reset the kubernetes master
+  shell: |
+    kubeadm reset --force
+    rm -rf /home/ubuntu/.kube
+    rm -rf /root/.kube
+  register: reset_cluster
+
+- name: Initialize master
+  when: reset_cluster is successful
+  shell: "kubeadm init --apiserver-advertise-address={{ private_ip }} --pod-network-cidr=10.244.0.0/16"
+  register: init_cluster
+
+- name: Create kube admin dir (root)
+  file:
+    dest: /root/.kube/
+    state: directory
+
+- name: Create kube admin dir (ubuntu)
+  file:
+    dest: /home/ubuntu/.kube/
+    owner: ubuntu
+    group: ubuntu
+    state: directory
+
+- name: Copy kube admin file (root)
+  copy:
+    src: /etc/kubernetes/admin.conf
+    dest: /root/.kube/config
+    remote_src: yes
+
+- name: Copy kube admin file (ubuntu)
+  copy:
+    src: /etc/kubernetes/admin.conf
+    dest: /home/ubuntu/.kube/config
+    owner: ubuntu
+    group: ubuntu
+    remote_src: yes
+
+- pause:
+   seconds: 90
+
+- name: Setup flannel
+  when: init_cluster is successful
+  shell: "kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml"
+
+- name: Get token to join nodes to the master
+  shell: "kubeadm token create --print-join-command"
+  register: kubeadm_join
+- set_fact:
+   kubeadm_join: "{{ kubeadm_join.stdout }}"
+#- debug: msg={{ hostvars['kube-master1']['kubeadm_join'] }}

@@ -1,62 +1,141 @@
-Lab 2.3 - Setup the Nodes
-=========================
+Lab 2.3 - Deploy Hello-World (ConfigMap w/ AS3)
+===============================================
 
-Once the master is setup and running, we need to join our *nodes* to the
-cluster.
+Now that CIS is up and running, let's deploy an application and leverage CIS.
 
-.. important:: The following commands need to be run on the worker
-   **nodes only** unless otherwise specified.
+For this lab we'll use a simple pre-configured docker image called
+"f5-hello-world". It can be found on docker hub at
+`f5devcentral/f5-hello-world <https://hub.docker.com/r/f5devcentral/f5-hello-world/>`_
 
-#. To join the master we need to run the command highlighted during the master
-   initialization. You'll need to use the command saved to notepad in an
-   earlier step.
+App Deployment
+--------------
 
-   .. warning:: 
-      - This following is just an example!! **DO not cut/paste the one below.**
-        You should have saved this command after successfully initializing the
-        master in the previous lab. Scroll up in your CLI history to find the
-        hash your kube-master1 generated to add nodes.
-      - This command needs to be run on **node1** and **node2** only!
+On **okd-master1** we will create all the required files:
 
-   .. hint:: If you missed the step to save the "kubeadm join..." command from
-      the previous lab, run the following and use the output to join your nodes
-      to the cluster.
+#. Create a file called ``f5-hello-world-deployment.yaml``
 
-      .. code-block:: bash
+   .. tip:: Use the file in ~/agilitydocs/docs/class2/openshift
 
-         kubeadm token create --print-join-command   
+   .. literalinclude:: ../openshift/f5-hello-world-deployment.yaml
+      :language: yaml
+      :linenos:
+      :emphasize-lines: 2,7,20
 
-   .. code-block:: bash
+#. Create a file called ``f5-hello-world-service-cluster.yaml``
 
-      kubeadm join 10.1.10.21:6443 --token 12rmdx.z0cbklfaoixhhdfj --discovery-token-ca-cert-hash sha256:c624989e418d92b8040a1609e493c009df5721f4392e90ac6b066c304cebe673
+   .. tip:: Use the file in ~/agilitydocs/docs/class2/openshift
 
-   The output should be similar to this:
+   .. literalinclude:: ../openshift/f5-hello-world-service-clusterip.yaml
+      :language: yaml
+      :linenos:
+      :emphasize-lines: 2,8-10,17
 
-   .. image:: images/cluster-setup-guide-node-setup-join-master.png
+#. Create a file called ``f5-hello-world-configmap.yaml``
 
-#. To verify the *nodes* have joined the cluster, run the following command
-   on the **kube-master1**:
+   .. tip:: Use the file in ~/agilitydocs/docs/class2/openshift
 
-   .. code-block:: bash
+   .. literalinclude:: ../openshift/f5-hello-world-configmap.yaml
+      :language: yaml
+      :linenos:
+      :emphasize-lines: 2,5,7,8,27,30
 
-      kubectl get nodes
-
-   You should see your cluster (ie *master* + *nodes*)
-
-   .. image:: images/cluster-setup-guide-node-setup-check-nodes.png
-
-#. Verify all the services are started as expected (run on the
-   **kube-master1**) Don't worry about last 5 characters matching on most
-   services, as they are randomly generated:
+#. We can now launch our application:
 
    .. code-block:: bash
 
-      kubectl get pods --all-namespaces
+      oc create -f f5-hello-world-deployment.yaml
+      oc create -f f5-hello-world-service-clusterip.yaml
+      oc create -f f5-hello-world-configmap.yaml
 
-   .. image:: images/cluster-setup-guide-node-setup-check-services.png
+   .. image:: ../images/f5-container-connector-launch-app.png
 
-.. attention:: CONGRATUATIONS! You just did the hardest part of todays lab - building
-   a Kubernetes cluster. While we didn't cover each step in great detail, due
-   to time of other labs we need to complete today, this is one path to the
-   overall steps to build your own cluster with a few linux boxes in your own
-   lab. All this content is publicly online/available at clouddocs.f5.com. 
+#. To check the status of our deployment, you can run the following commands:
+
+   .. code-block:: bash
+
+      oc get pods -o wide
+
+   .. image:: ../images/f5-okd-hello-world-pods.png
+
+   .. code-block:: bash
+
+      oc describe svc f5-hello-world
+        
+   .. image:: ../images/f5-okd-check-app-definition.png
+
+#. To understand and test the new app pay attention to the **Endpoints value**,
+   this shows our 2 instances (defined as replicas in our deployment file) and
+   the overlay network IP assigned to the pod.
+
+   Now that we have deployed our application sucessfully, we can check our
+   BIG-IP configuration. From the browser open https://10.1.1.4
+
+   .. warning:: Don't forget to select the proper partition. Previously we
+      checked the "okd" partition. In this case we need to look at the "AS3"
+      partition. This partition was auto created by AS3 and named after the
+      Tenant which happens to be "AS3".
+
+   Here you can see a new Virtual Server, "serviceMain" was created,
+   listening on 10.1.1.4:80 in partition "AS3".
+
+   .. image:: ../images/f5-container-connector-check-app-bigipconfig-as3.png
+
+#. Check the Pools to see a new pool and the associated pool members:
+   Local Traffic --> Pools --> "web_pool" --> Members
+
+   .. image:: ../images/f5-container-connector-check-app-web-pool-as3.png
+
+   .. note:: You can see that the pool members IP addresses are assigned from
+      the overlay network (**ClusterIP mode**)
+
+#. Now you can try to access your application via the BIG-IP VS/VIP: UDF-URL
+
+   .. image:: ../images/f5-container-connector-access-app.png
+
+#. Hit Refresh many times and go back to your **BIG-IP** UI, go to Local
+   Traffic --> Pools --> Pool list --> "web_pool" --> Statistics to see that
+   traffic is distributed as expected.
+
+   .. image:: ../images/f5-okd-check-app-bigip-stats-clusterip.png
+
+#. Scale the f5-hello-world app
+
+   .. code-block:: bash
+
+      oc scale --replicas=10 deployment/f5-hello-world-web -n default
+
+#. Check the pods were created
+
+   .. code-block:: bash
+
+      oc get pods
+
+   .. image:: ../images/f5-hello-world-pods-scale10.png
+
+#. Check the pool was updated on BIG-IP:
+
+   .. image:: ../images/f5-hello-world-pool-scale10-clusterip.png
+
+   .. attention:: Now we show 10 pool members vs. 2 in the previous lab, why?
+
+#. Remove Hello-World from BIG-IP. When using AS3 an extra steps need to be
+   performed. In addion to deleteing the previously created configmap a "blank"
+   declaration needs to be sent to completly remove the application:
+   
+   .. literalinclude:: ../openshift/f5-hello-world-delete-configmap.yaml
+      :language: yaml
+      :linenos:
+      :emphasize-lines: 2,19
+
+   .. code-block:: bash
+
+      oc delete -f f5-hello-world-configmap.yaml
+      oc delete -f f5-hello-world-service-clusterip.yaml
+      oc delete -f f5-hello-world-deployment.yaml
+      
+      oc create -f f5-hello-world-delete-configmap.yaml
+      oc delete -f f5-hello-world-delete-configmap.yaml
+
+.. attention:: This concludes **Class 2 - CIS and OpenShift**. Feel free to
+   experiment with any of the settings. The lab will be destroyed at the end of
+   the class/day.

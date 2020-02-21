@@ -1,144 +1,241 @@
-Lab 2.1 - Prep Ubuntu
-=====================
+Lab 2.1 - Install & Configure CIS (ClusterIP)
+=============================================
 
-.. note::  This installation will utilize Ubuntu v18.04 (Bionic)
+In the previous moudule we learned about Nodeport Mode. Here we'll learn
+about ClusterIP Mode.
 
-.. important:: The following commands need to be run on all three nodes
-   unless otherwise specified.
+.. seealso::
+   For more information see `BIG-IP Controller Modes <http://clouddocs.f5.com/containers/v2/kubernetes/kctlr-modes.html>`_
 
-#. From the jumpbox open **mRemoteNG** and start a session to each of the
-   following servers. The sessions are pre-configured to connect with the
-   default user “ubuntu”.
+BIG-IP Setup
+------------
 
-   - kube-master1
-   - kube-node1
-   - kube-node2
+With ClusterIP we're utilizing VXLAN to communicate with the application pods.
+To do so we'll need to configure BIG-IP first.
 
-   .. tip:: These sessions should be running from the previous Docker lab.
+.. attention:: 
+   - Be sure to be in the ``Common`` partition before creating the following
+     objects.
 
-   .. image:: images/MremoteNG.png
+     .. image:: ../images/f5-check-partition.png
 
-#. If not already done from the previous Docker lab elevate to "root"
+#. You need to setup a partition that will be used by F5 Container Ingress
+   Service.
+
+   .. note:: This step was performed in the previous module. Verify the
+      "kubernetes" partion exists with the instructions below.
 
    .. code-block:: bash
 
-      su - 
+      # From the CLI:
+      tmsh create auth partition okd
+
+      # From the UI:
+      GoTo System --> Users --> Partition List
+      - Create a new partition called "okd" (use default settings)
+      - Click Finished
+
+   .. image:: ../images/f5-container-connector-bigip-partition-setup.png
+
+#. Create a vxlan tunnel profile
+
+   .. code-block:: bash
+
+      # From the CLI:
+      tmsh create net tunnel vxlan okd-vxlan { app-service none flooding-type multipoint }
+
+      # From the UI:
+      GoTo Network --> Tunnels --> Profiles --> VXLAN
+      - Create a new profile called "okd-vxlan"
+      - Set the Flooding Type = Multipoint
+      - Click Finished
+
+   .. image:: ../images/create-okd-vxlan-profile.png
+
+#. Create a vxlan tunnel
+
+   .. code-block:: bash
+
+      # From the CLI:
+      tmsh create net tunnel tunnel okd-tunnel { app-service none key 0 local-address 10.1.1.4 profile okd-vxlan }
+
+      # From the UI:
+      GoTo Network --> Tunnels --> Tunnel List
+      - Create a new tunnel called "okd-tunnel"
+      - Set the Profile to the one previously created called "okd-vxlan"
+      - set the key = 0
+      - Set the Local Address to 10.1.1.4
+      - Click Finished
+
+   .. image:: ../images/create-okd-vxlan-tunnel.png
+
+#. Create the vxlan tunnel self-ip
+
+   .. tip:: For your SELF-IP subnet, remember it is a /14 and not a /23.
       
-      #When prompted for password enter "default" without the quotes
+      Why? The Self-IP has to know all other /23 subnets are local to this
+      namespace, which includes Master1, Node1, Node2, etc. Each of which have
+      their own /23.
       
-   Your prompt should change to root@ at the start of the line :
+      Many students accidently use /23, doing so would limit the self-ip to
+      only communicate with that subnet. When trying to ping services on other
+      /23 subnets from the BIG-IP for instance, communication will fail as your
+      self-ip doesn't have the proper subnet mask to know the other subnets are
+      local.
+      
+   .. code-block:: bash
+      
+      # From the CLI:
+      tmsh create net self okd-vxlan-selfip { app-service none address 10.131.0.1/14 vlan okd-tunnel allow-service all }
 
-   .. image:: images/rootuser.png
+      # From the UI:
+      GoTo Network --> Self IP List
+      - Create a new Self-IP called "okd-vxlan-selfip"
+      - Set the IP Address to "10.131.0.1".
+      - Set the Netmask to "255.252.0.0"
+      - Set the VLAN / Tunnel to "okd-tunnel" (Created earlier)
+      - Set Port Lockdown to "Allow All"
+      - Click Finished
 
-#. For your convenience we've already added the host IP & names to /etc/hosts.
-   Verify the file
+   .. image:: ../images/create-okd-vxlan-selfip.png
+
+CIS Deployment
+--------------
+
+.. note::
+   - For your convenience the file can be found in
+     /home/ubuntu/agilitydocs/docs/class2/openshift (downloaded earlier in the
+     clone git repo step).
+   - Or you can cut and paste the file below and create your own file.
+   - If you have issues with your yaml and syntax (**indentation MATTERS**),
+     you can try to use an online parser to help you :
+     `Yaml parser <http://codebeautify.org/yaml-validator>`_
+
+#. Next let's explore the f5-hostsubnet.yaml file
 
    .. code-block:: bash
 
-      cat /etc/hosts
+      cd ~/agilitydocs/docs/class2/openshift
 
-   The file should look like this:
+      cat f5-bigip-hostsubnet.yaml
 
-   .. image:: images/ubuntu-hosts-file.png
+   You'll see a config file similar to this:
 
-   If entries are not there add them to the bottom of the file be editing
-   "/etc/hosts" with 'vim'
+   .. literalinclude:: ../openshift/f5-bigip-hostsubnet.yaml
+      :language: yaml
+      :linenos:
+      :emphasize-lines: 2,9
 
-   .. code-block:: bash
+   .. attention:: This YAML file creates an OpenShift Node and the Host is the
+      BIG-IP with an assigned /23 subnet of IP 10.131.0.0 (3 images down).
 
-      vim /etc/hosts
-
-      #cut and paste the following lines to /etc/hosts
-
-      10.1.10.21    kube-master1
-      10.1.10.22    kube-node1
-      10.1.10.23    kube-node2
-
-#. The linux swap file needs to be disabled, this is not the case by default.
-   Again for your convenience we disabled swap. Verify the setting
-
-   .. important:: Running a swap file is incompatible with Kubernetes.  Lets
-      use the linux top command, which allows users to monitor processes and
-      system resource usage
+#. Next let's look at the current cluster, you should see 3 members
+   (1 master, 2 nodes)
 
    .. code-block:: bash
 
-      top
+      oc get hostsubnet
 
-   .. image:: images/top.png
+   .. image:: ../images/F5-OC-HOSTSUBNET1.png
 
-   If you see a number other than "0" you need to run the following commands
-   (press 'q' to quit top)
-
-   .. code-block:: bash
-
-      swapoff -a
-
-      vim /etc/fstab
-
-      #rem out the highlighted line below by adding "#" to the beginning of the line, write and save the file by typing ":wq"
-
-   .. image:: images/disable-swap.png
-
-#. Ensure the OS is up to date, run the following command
-
-   .. tip:: You can skip this step if it was done in the previous Docker lab.
+#. Now create the connector to the BIG-IP device, then look before and after
+   at the attached devices
 
    .. code-block:: bash
 
-      apt update && apt upgrade -y
+      oc create -f f5-bigip-hostsubnet.yaml
 
-      #This can take a few seconds to several minute depending on demand to download the latest updates for the OS.
+   You should see a successful creation of a new OpenShift Node.
 
-#. Install docker-ce
+   .. image:: ../images/F5-OS-NODE.png
 
-   .. attention:: This was done earlier in 
-      `Class 1 / Module1 / Lab 1.1: Install Docker <../../class1/module1/lab1.html>`_
-      . If skipped go back and install Docker by clicking the link.
-
-#. Configure docker to use the correct cgroupdriver
-
-   .. important:: The cgroupdrive for docker and kubernetes have to match. In
-      this lab "cgroupfs" is the correct driver.
-
-   .. note:: This next part can be a bit tricky - just copy/paste the 5 lines
-      below exactly as they are and paste via buffer to the CLI (and press
-      return when done)
+#. At this point nothing has been done to the BIG-IP, this only was done in
+   the OpenShift environment.
 
    .. code-block:: bash
 
-      cat << EOF > /etc/docker/daemon.json
-      {
-      "exec-opts": ["native.cgroupdriver=cgroupfs"]
-      }
-      EOF
+      oc get hostsubnet
 
-   It should look something like this image below:
+   You should now see OpenShift configured to communicate with the BIG-IP
 
-   .. image:: images/goodEOL.png
+   .. image:: ../images/F5-OC-HOSTSUBNET2.png
 
-#. Add the kubernetes repo
+   .. important:: The Subnet assignment, in this case is 10.131.0.0/23, was
+      assigned by the **subnet: "10.131.0.0/23"** line in "HostSubnet" yaml
+      file.
+
+   .. note:: In this lab we're manually assigning a subnet. We have the option
+      to let openshift auto assign ths by removing **subnet: "10.131.0.0/23"**
+      line at the end of the "hostsubnet" yaml file and setting the
+      **assign-subnet: "true"**. It would look like this:
+
+      .. code-block:: yaml
+         :emphasize-lines: 7
+
+         apiVersion: v1
+         kind: HostSubnet
+         metadata:
+            name: openshift-f5-node
+            annotations:
+               pod.network.openshift.io/fixed-vnid-host: "0"
+               pod.network.openshift.io/assign-subnet: "true"
+         host: openshift-f5-node
+         hostIP: 10.1.1.4
+
+#. Now that we have the new BIGIP HostSubnet added we can launch the CIS
+   deployment. It will start the f5-k8s-controller container on one of the
+   worker nodes.
+   
+   .. attention:: This may take around 30sec to get to a running state.
 
    .. code-block:: bash
 
-      curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
+      cd ~/agilitydocs/docs/class2/openshift
 
-      cat <<EOF > /etc/apt/sources.list.d/kubernetes.list
-      deb http://apt.kubernetes.io/ kubernetes-xenial main
-      EOF
+      cat f5-cluster-deployment.yaml
 
-#. Install the kubernetes packages
+   You'll see a config file similar to this:
+
+   .. literalinclude:: ../openshift/f5-cluster-deployment.yaml
+      :language: yaml
+      :linenos:
+      :emphasize-lines: 2,7,17,20,37-40,46-47
+
+#. Create the CIS deployment with the following command
 
    .. code-block:: bash
 
-      apt update && apt install kubelet kubeadm kubectl -y
+      oc create -f f5-cluster-deployment.yaml
 
-Limitations
------------
+#. Verify the deployment "deployed"
 
-.. seealso:: For a full list of the limitations go here:
-   `kubeadm limitations <http://kubernetes.io/docs/getting-started-guides/kubeadm/#limitations>`_
+   .. code-block:: bash
 
-.. important:: The cluster created has a single master, with a single etcd
-   database running on it. This means that if the master fails, your cluster
-   loses its configuration data and will need to be recreated from scratch.
+      oc get deployment k8s-bigip-ctlr --namespace kube-system
+
+   .. image:: ../images/f5-container-connector-launch-deployment-controller.png
+
+#. To locate on which node CIS is running, you can use the following command:
+
+   .. code-block:: bash
+
+      oc get pods -o wide -n kube-system
+
+   .. image:: ../images/F5-CTRL-RUNNING.png
+
+Troubleshooting
+---------------
+
+
+Check the container/pod logs via ``oc`` command. You also have the option of
+checking the Docker container as described in the previos module.
+
+#. Using the full name of your pod as showed in the previous image run the
+   following command:
+
+   .. code-block:: bash
+
+      # For example:
+      oc logs k8s-bigip-ctlr-8c6cf8667-htcgw -n kube-system
+
+   .. image:: ../images/f5-container-connector-check-logs-kubectl.png

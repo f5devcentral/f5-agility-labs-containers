@@ -1,0 +1,6 @@
+#!/bin/bash
+
+#delete container f5-hello-world w/ configmap
+oc delete -f f5-hello-world-configmap.yaml
+oc delete -f f5-hello-world-service-clusterip.yaml
+oc delete -f f5-hello-world-deployment.yaml

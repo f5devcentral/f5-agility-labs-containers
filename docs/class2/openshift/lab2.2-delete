@@ -1,0 +1,6 @@
+#!/bin/bash
+
+#delete container f5-hello-world w/ route
+oc delete -f f5-hello-world-route.yaml
+oc delete -f f5-hello-world-service-clusterip.yaml
+oc delete -f f5-hello-world-deployment.yaml

@@ -1,130 +1,110 @@
-Lab 2.2 - Setup the Master
-==========================
+Lab 2.2 - Deploy Hello-World (Route)
+====================================
 
-The master is the system where the "control plane" components run, including
-etcd (the cluster database) and the API server (which the kubectl CLI
-communicates with). All of these components run in pods started by kubelet
-(which is why we had to setup docker first even on the master node)
 
-.. important:: The following commands need to be run on the **master** only
-   unless otherwise specified.
+Now that CIS is up and running, let's deploy an application and leverage CIS.
 
-#. Switch back to the ssh session connected to kube-master1
+For this lab we'll use a simple pre-configured docker image called 
+"f5-hello-world". It can be found on docker hub at
+`f5devcentral/f5-hello-world <https://hub.docker.com/r/f5devcentral/f5-hello-world/>`_
 
-   .. tip:: This session should be running from the previous if lab.
-      If not simply open **mRemoteNG** and connect via the saved session.
+App Deployment
+--------------
 
-#. Initialize kubernetes
+On **kube-master1** we will create all the required files:
 
-   .. code-block:: bash
+#. Create a file called ``f5-hello-world-deployment.yaml``
 
-      kubeadm init --apiserver-advertise-address=10.1.10.21 --pod-network-cidr=10.244.0.0/16
+   .. tip:: Use the file in ~/agilitydocs/docs/class2/openshift
 
-   .. note::
-      - The IP address used to advertise the master. 10.1.10.0/24 is the
-        network for our control plane. if you don't specify the
-        --apiserver-advertise-address argument, kubeadm will pick the first
-        interface with a default gateway (because it needs internet access).
+   .. literalinclude:: ../openshift/f5-hello-world-deployment.yaml
+      :language: yaml
+      :linenos:
+      :emphasize-lines: 2,7,20
 
-      - 10.244.0.0/16 is the default network used by flannel. We'll setup
-        flannel in a later step.
+#. Create a file called ``f5-hello-world-service-clusterip.yaml``
 
-      - Be patient this step takes a few minutes. The initialization is
-        successful if you see "Your Kubernetes master has initialized
-        successfully!".
+   .. tip:: Use the file in ~/agilitydocs/docs/class2/openshift
 
-   .. image:: images/cluster-setup-guide-kubeadm-init-master.png
+   .. literalinclude:: ../openshift/f5-hello-world-service-clusterip.yaml
+      :language: yaml
+      :linenos:
+      :emphasize-lines: 2,17
 
-   .. important:: 
-      - Be sure to save the highlighted output from this command to notepad.
-        You'll need this information to add your worker nodes and configure
-        user administration.
+#. Create a file called ``f5-hello-world-route.yaml``
 
-      - The "kubeadm join" command is run on the nodes to register themselves
-        with the master. Keep the secret safe since anyone with this token can
-        add an authenticated node to your cluster. This is used for mutual auth
-        between the master and the nodes.
+   .. tip:: Use the file in ~/agilitydocs/docs/class2/openshift
 
-#. Configure kubernetes administration. At this point you should be logged in
-   as root. The following will update both root and ubuntu user accounts for
-   kubernetes administration.
+   .. literalinclude:: ../openshift/f5-hello-world-route.yaml
+      :language: yaml
+      :linenos:
+      :emphasize-lines: 2,7-9,23,24
+
+#. We can now launch our application:
 
    .. code-block:: bash
 
-      mkdir -p $HOME/.kube
-      sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
-      sudo chown $(id -u):$(id -g) $HOME/.kube/config
-      exit
-      mkdir -p $HOME/.kube
-      sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
-      sudo chown $(id -u):$(id -g) $HOME/.kube/config
-      cd $HOME
+      oc create -f f5-hello-world-deployment.yaml
+      oc create -f f5-hello-world-service-clusterip.yaml
+      oc create -f f5-hello-world-route.yaml
 
-#. Verify kubernetes is up and running. You can monitor the services are
-   running by using the following command.
+   .. image:: ../images/f5-container-connector-launch-app-clusterip-route.png
+
+#. To check the status of our deployment, you can run the following commands:
 
    .. code-block:: bash
 
-      kubectl get pods --all-namespaces
+      oc get pods -o wide
 
-   You'll need to run this several times until you see several containers
-   "Running"  It should look like the following:
-
-   .. image:: images/cluster-setup-guide-kubeadmin-init-check.png
-
-   .. note:: corends won't start until the network pod is up and running.
-
-#. Install flannel
+   .. image:: ../images/f5-hello-world-cluster-route-pods.png
 
    .. code-block:: bash
 
-      kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
+      oc describe svc f5-hello-world
 
-   .. note:: You must install a *pod* network add-on so that your *pods* can
-      communicate with each other. **It is necessary to do this before you try
-      to deploy any applications to your cluster**, and before "coredns" will
-      start up.
+   .. image:: ../images/f5-cis-describe-clusterip-route-service.png
 
-#. If everything installs and starts as expected you should have "coredns" and
-   all services status "Running". To check the status of core services, you
-   can run the following command:
+#. To understand and test the new app pay attention to the **Endpoints value**,
+   this shows our 2 instances (defined as replicas in our deployment file) and
+   the overlay network IP assigned to the pod.
+
+   .. warning:: Don't forget to select the "okd" partition or you'll
+      see nothing.
+
+   With "Route" you'll seee two virtual servers defined. "okd_http_vs" and
+   "okd_https_vs", listening on port 80 and 443.
+
+   .. image:: ../images/f5-container-connector-check-app-route-bigipconfig.png
+
+   These Virtual use an LTM Policy to direct traffic based on the host header.
+   You can view this from the BIG-IP GUI at Local Traffic -->
+   Virtual Servers --> Policies and click the Published Policy,
+   "openshift_insecure_routes".
+
+   .. image:: ../images/f5-check-ltm-policy-route.png
+
+#. Check the Pools to see a new pool and the associated pool members:
+   Local Traffic --> Pools --> "openshift_default_f5-hello-world-web"
+   --> Members
+
+   .. image:: ../images/f5-container-connector-check-app-route-pool-clusterip.png
+
+   .. note:: You can see that the pool members IP addresses are assigned from
+      the overlay network (**ClusterIP mode**)
+
+#. To view the application from a browser you'll need to update your host file
+   to point the assigned public IP at "mysite.f5demo.com".
+
+   .. note:: This step can be skipped.
+
+#. Delete Hello-World
 
    .. code-block:: bash
 
-      kubectl get pods --all-namespaces
+      oc delete -f f5-hello-world-route.yaml
+      oc delete -f f5-hello-world-service-clusterip.yaml
+      oc delete -f f5-hello-world-deployment.yaml
 
-   The output should show all services as running.
-
-   .. image:: images/cluster-setup-guide-kubeadmin-init-check-cluster-get-pods.png
-
-   .. important:: Before moving to the next lab, "Setup the Nodes" wait for
-      all system pods to show status “Running”.
-
-#. Additional kubernetes status checks.
-
-   .. code-block:: bash
-
-      kubectl get cs
-
-   .. image:: images/cluster-setup-guide-kubeadmin-init-check-cluster.png
-
-   .. code-block:: bash
-
-      kubectl cluster-info
-      
-   .. image:: images/cluster-setup-guide-kubeadmin-init-check-cluster-info.png
-
-.. hint:: If you made a mistake and need to re-initialize the cluster run
-   the following commands:
-
-   .. code-block:: bash
-
-      # If you followed the instructions you should be currently connected as user **ubuntu**
-      # When prompted for password enter "default" without the quotes
-      su -
-
-      # This resets the master to default settings
-      kubeadm reset --force
-      
-      # This removes the admin references to the broken cluster
-      rm -rf /home/ubuntu/.kube /root/.kube
+   .. important:: Do not skip this step. Instead of reusing some of these
+      objects, the next lab we will re-deploy them to avoid conflicts and
+      errors.
