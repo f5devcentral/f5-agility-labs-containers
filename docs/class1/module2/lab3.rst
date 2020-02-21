@@ -119,8 +119,8 @@ On **kube-master1** we will create all the required files:
    .. attention:: Now we show 10 pool members vs. 2 in the previous lab, why?
 
 #. Remove Hello-World from BIG-IP. When using AS3 an extra steps need to be
-   performed. In addion to deleteing the previously created configmap a "blank"
-   declaration needs to be sent to completly remove the application:
+   performed. In addition to deleting the previously created configmap a
+   "blank" declaration needs to be sent to completly remove the application:
    
    .. literalinclude:: ../kubernetes/f5-hello-world-delete-configmap.yaml
       :language: yaml
