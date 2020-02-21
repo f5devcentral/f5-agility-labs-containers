@@ -66,7 +66,7 @@ On **okd-master1** we will create all the required files:
       oc create -f f5-hello-world-service-nodeport.yaml
       oc create -f f5-hello-world-route.yaml
 
-   .. image:: ../images/f5-container-connector-launch-app.png
+   .. image:: ../images/f5-container-connector-launch-app-route.png
 
 #. To check the status of our deployment, you can run the following commands:
 
@@ -77,21 +77,17 @@ On **okd-master1** we will create all the required files:
 
       oc get pods -o wide
 
-   .. image:: ../images/f5-hello-world-pods.png
+   .. image:: ../images/f5-hello-world-pods-route.png
 
    .. code-block:: bash
 
       oc describe svc f5-hello-world
 
-   .. image:: ../images/f5-container-connector-check-app-definition.png
+   .. image:: ../images/f5-container-connector-check-app-definition-route.png
 
-#. To understand and test the new app you need to pay attention to:
-
-   **The NodePort value**, that's the port used to give you access to the app
-   from the outside. Here it's "32188", highlighted above.
-
-   **The Endpoints**, that's our 2 instances (defined as replicas in our
-   deployment file) and the port assigned to the service: port 8080.
+#. To understand and test the new app pay attention to the **NodePort value**,
+   that's the port used to give you access to the app from the outside. Here
+   it's "30444", highlighted above.
 
    Now that we have deployed our application sucessfully, we can check our
    BIG-IP configuration. From the browser open https://10.1.1.4
@@ -99,29 +95,31 @@ On **okd-master1** we will create all the required files:
    .. warning:: Don't forget to select the "okd" partition or you'll
       see nothing.
 
-   Here you can see a new Virtual Server, "ingress_10.1.1.4_81" was created,
-   listening on 10.1.1.4:80 in partition "okd".
+   With "Route" you'll seee two virtual servers defined. "okd_http_vs" and
+   "okd_https_vs", listening on port 80 and 443.
 
-   .. image:: ../images/f5-container-connector-check-app-bigipconfig.png
+   .. image:: ../images/f5-container-connector-check-app-route-bigipconfig.png
+
+   These Virtual use an LTM Policy to direct traffic based on the host header.
+   You can view this from the BIG-IP GUI at Local Traffic -->
+   Virtual Servers --> Policies and click the Published Policy,
+   "openshift_insecure_routes".
+
+   .. image:: ../images/f5-check-ltm-policy-route.png
 
    Check the Pools to see a new pool and the associated pool members:
-   Local Traffic --> Pools --> "ingress_default_f5-hello-world-web"
+   Local Traffic --> Pools --> "openshift_default_f5-hello-world-web"
    --> Members
 
-   .. image:: ../images/f5-container-connector-check-app-bigipconfig2.png
+   .. image:: ../images/f5-container-connector-check-app-route-pool.png
 
    .. note:: You can see that the pool members listed are all the cluster
-      nodes on the node port 32188. (**NodePort mode**)
+      nodes on the node port 30444. (**NodePort mode**)
 
-#. Now you can try to access your application via the BIG-IP VS/VIP: UDF-URL
+#. To view the application from a browser you'll need to update your host file
+   to point the assigned public IP at "mysite.f5demo.com".
 
-   .. image:: ../images/f5-container-connector-access-app.png
-
-#. Hit Refresh many times and go back to your **BIG-IP** UI, go to Local
-   Traffic --> Pools --> Pool list --> ingress_default_f5-hello-world-web -->
-   Statistics to see that traffic is distributed as expected.
-
-   .. image:: ../images/f5-container-connector-check-app-bigip-stats.png
+   .. note:: This step can be skipped.
 
 #. Delete Hello-World
 

@@ -44,7 +44,7 @@ On **okd-master1** we will create all the required files:
    .. code-block:: bash
 
       oc create -f f5-hello-world-deployment.yaml
-      oc create -f f5-hello-world-service-cluster.yaml
+      oc create -f f5-hello-world-service-clusterip.yaml
       oc create -f f5-hello-world-configmap.yaml
 
    .. image:: ../images/f5-container-connector-launch-app.png
@@ -55,35 +55,35 @@ On **okd-master1** we will create all the required files:
 
       oc get pods -o wide
 
-   .. image:: ../images/f5-hello-world-pods.png
+   .. image:: ../images/f5-okd-hello-world-pods.png
 
    .. code-block:: bash
 
       oc describe svc f5-hello-world
         
-   .. image:: ../images/f5-container-connector-check-app-definition.png
+   .. image:: ../images/f5-okd-check-app-definition.png
 
-#. To understand and test the new app you need to pay attention to:
-
-   **The Endpoints**, this shows our 2 instances (defined as replicas in our
-   deployment file) and the overlay IP assigned to the pod.
+#. To understand and test the new app pay attention to the **Endpoints value**,
+   this shows our 2 instances (defined as replicas in our deployment file) and
+   the overlay network IP assigned to the pod.
 
    Now that we have deployed our application sucessfully, we can check our
-   BIG-IP configuration.  From the browser open https://10.1.1.4
+   BIG-IP configuration. From the browser open https://10.1.1.4
 
-   .. warning:: Don't forget to select the "okd" partition or you'll see
-      nothing.
+   .. warning:: Don't forget to select the proper partition. Previously we
+      checked the "okd" partition. In this case we need to look at the "AS3"
+      partition. This partition was auto created by AS3 and named after the
+      Tenant which happens to be "AS3".
 
-   Here you can see a new Virtual Server, "default_f5-hello-world" was created,
-   listening on 10.1.1.4:80 in partition "okd".
+   Here you can see a new Virtual Server, "serviceMain" was created,
+   listening on 10.1.1.4:80 in partition "AS3".
 
-   .. image:: ../images/f5-container-connector-check-app-bigipconfig.png
+   .. image:: ../images/f5-container-connector-check-app-bigipconfig-as3.png
 
-   Check the Pools to see a new pool and the associated pool members:
-   Local Traffic --> Pools --> "cfgmap_default_f5-hello-world_f5-hello-world"
-   --> Members
+#. Check the Pools to see a new pool and the associated pool members:
+   Local Traffic --> Pools --> "web_pool" --> Members
 
-   .. image:: ../images/f5-container-connector-check-app-bigipconfig3.png
+   .. image:: ../images/f5-container-connector-check-app-web-pool-as3.png
 
    .. note:: You can see that the pool members IP addresses are assigned from
       the overlay network (**ClusterIP mode**)
@@ -93,11 +93,10 @@ On **okd-master1** we will create all the required files:
    .. image:: ../images/f5-container-connector-access-app.png
 
 #. Hit Refresh many times and go back to your **BIG-IP** UI, go to Local
-   Traffic --> Pools --> Pool list -->
-   cfgmap_default_f5-hello-world_f5-hello-world -->
-   Statistics to see that traffic is distributed as expected.
+   Traffic --> Pools --> Pool list --> "web_pool" --> Statistics to see that
+   traffic is distributed as expected.
 
-   .. image:: ../images/f5-container-connector-check-app-bigip-stats-clusterip.png
+   .. image:: ../images/f5-okd-check-app-bigip-stats-clusterip.png
 
 #. Scale the f5-hello-world app
 

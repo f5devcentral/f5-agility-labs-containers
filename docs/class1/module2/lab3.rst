@@ -68,7 +68,7 @@ On **kube-master1** we will create all the required files:
    the flannel IP assigned to the pod.
 
    Now that we have deployed our application sucessfully, we can check our
-   BIG-IP configuration.  From the browser open https://10.1.1.4
+   BIG-IP configuration. From the browser open https://10.1.1.4
 
    .. warning:: Don't forget to select the proper partition. Previously we
       checked the "kubernetes" partition. In this case we need to look at
@@ -80,7 +80,7 @@ On **kube-master1** we will create all the required files:
 
    .. image:: ../images/f5-container-connector-check-app-bigipconfig-as3.png
 
-   Check the Pools to see a new pool and the associated pool members:
+#. Check the Pools to see a new pool and the associated pool members:
    Local Traffic --> Pools --> "web_pool" --> Members
 
    .. image:: ../images/f5-container-connector-check-app-pool-cluster-as3.png

@@ -111,20 +111,6 @@ CIS Deployment
      you can try to use an online parser to help you :
      `Yaml parser <http://codebeautify.org/yaml-validator>`_
 
-#. On okd-master1, log in with an Openshift Client.
-
-   .. note:: Here we're using a user "centos", added when we built the cluster.
-      When prompted for password, enter "centos".
-
-   .. code-block:: bash
-
-      oc login -u centos -n default
-
-   .. image:: ../images/OC-DEMOuser-Login.png
-
-   .. important:: Upon logging in you'll notice access to several projects. In
-      our lab well be working from the default "default".
-
 #. Next let's explore the f5-hostsubnet.yaml file
 
    .. code-block:: bash

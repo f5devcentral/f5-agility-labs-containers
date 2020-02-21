@@ -80,8 +80,6 @@ Explore the OpenShift Cluster
 
 #. Log in with an Openshift Client.
 
-   .. attention:: You can skip this step if done in the previous module.
-
    .. note:: Here we're using a user "centos", added when we built the cluster.
       When prompted for password, enter "centos".
 
@@ -120,10 +118,10 @@ Explore the OpenShift Cluster
 
    .. image:: ../images/oc-get-nodes.png
 
-   .. attention:: If the **node** status shows **NotReady** or
-      **SchedulingDisabled** contact the lab proctor. The node is not passing
-      the health checks performed from the master and Pods cannot be scheduled
-      for placement on the node.
+   .. attention::
+      If the node STATUS shows **NotReady** or **SchedulingDisabled** contact
+      the lab proctor. The node is not passing the health checks performed from
+      the master, therefor pods cannot be scheduled for placement on the node.
 
 #. To get more detailed information about a specific node, including the reason
    for the current condition use the oc describe node command. This does
@@ -144,7 +142,7 @@ Explore the OpenShift Cluster
 
    .. image:: ../images/oc-get-projects.png
 
-   .. note:: You will be using these projects in the lab.
+   .. note:: You will be using the "default" project in this class.
 
 CIS Deployment
 --------------

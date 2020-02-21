@@ -66,7 +66,7 @@ On the **okd-master1** we will create all the required files:
       oc create -f f5-hello-world-service-nodeport.yaml
       oc create -f f5-hello-world-configmap.yaml
       
-   .. image:: ../images/f5-container-connector-launch-app.png
+   .. image:: ../images/f5-okd-launch-configmap-app.png
 
 #. To check the status of our deployment, you can run the following commands:
 
@@ -77,58 +77,54 @@ On the **okd-master1** we will create all the required files:
 
       oc get pods -o wide
 
-   .. image:: ../images/f5-hello-world-pods.png
+   .. image:: ../images/f5-hello-world-pods-configmap.png
 
    .. code-block:: bash
 
       oc describe svc f5-hello-world
         
-   .. image:: ../images/f5-container-connector-check-app-definition-node.png
+   .. image:: ../images/f5-okd-check-app-definition-node.png
 
-#. To understand and test the new app you need to pay attention to: 
-
-   **The NodePort value**, that's the port used to give you access to the app
-   from the outside. Here it's "31268", highlighted above.
-
-   **The Endpoints**, that's our 2 instances (defined as replicas in our
-   deployment file) and the port assigned to the service: port 8080.
+#. To understand and test the new app pay attention to the **NodePort value**,
+   that's the port used to give you access to the app from the outside. Here
+   it's "31670", highlighted above.
 
    Now that we have deployed our application sucessfully, we can check our
    BIG-IP configuration.  From the browser open https://10.1.1.4
 
-   .. warning:: Don't forget to select the "okd" partition or you'll see
-      nothing.
+   .. warning:: Don't forget to select the proper partition. Previously we
+      checked the "okd" partition. In this case we need to look at
+      the "AS3" partition. This partition was auto created by AS3 and named
+      after the Tenant which happens to be "AS3".
 
-   Here you can see a new Virtual Server, "default_f5-hello-world" was created,
-   listening on 10.1.1.4:80 in partition "okd".
+   Here you can see a new Virtual Server, "serviceMain" was created,
+   listening on 10.1.1.4:80 in partition "AS3".
 
-   .. image:: ../images/f5-container-connector-check-app-bigipconfig.png
+   .. image:: ../images/f5-container-connector-check-app-bigipconfig-as3.png
 
-   Check the Pools to see a new pool and the associated pool members:
-   Local Traffic --> Pools --> "cfgmap_default_f5-hello-world_f5-hello-world"
-   --> Members
+#. Check the Pools to see a new pool and the associated pool members:
+   Local Traffic --> Pools --> "web_pool" --> Members
 
-   .. image:: ../images/f5-container-connector-check-app-bigipconfig2.png
+   .. image:: ../images/f5-container-connector-check-app-web-pool.png
 
    .. note:: You can see that the pool members listed are all the cluster
-      nodes on the port 31268. (**NodePort mode**)
+      nodes on the port 31670. (**NodePort mode**)
 
 #. Now you can try to access your application via the BIG-IP VS/VIP: UDF-URL
 
    .. image:: ../images/f5-container-connector-access-app.png
 
 #. Hit Refresh many times and go back to your **BIG-IP** UI, go to Local
-   Traffic --> Pools --> Pool list -->
-   cfgmap_default_f5-hello-world_f5-hello-world -->
-   Statistics to see that traffic is distributed as expected.
+   Traffic --> Pools --> Pool list --> "web_pool" --> Statistics to see that
+   traffic is distributed as expected.
 
-   .. image:: ../images/f5-container-connector-check-app-bigip-stats.png
+   .. image:: ../images/f5-okd-check-app-bigip-stats-as3.png
 
 #. Scale the f5-hello-world app
 
    .. code-block:: bash
 
-      oc scale --replicas=10 deployment/f5-hello-world
+      oc scale --replicas=10 deployment/f5-hello-world-web
 
 #. Check the pods were created
 
@@ -140,7 +136,7 @@ On the **okd-master1** we will create all the required files:
 
 #. Check the pool was updated on BIG-IP:
 
-   .. image:: ../images/f5-hello-world-pool-scale10-node.png
+   .. image:: ../images/f5-hello-world-pool-scale10-node-as3.png
 
    .. attention:: Why do we still only show 3 pool members?
 
