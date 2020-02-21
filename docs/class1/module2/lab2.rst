@@ -47,7 +47,7 @@ On **kube-master1** we will create all the required files:
       kubectl create -f f5-hello-world-service-clusterip.yaml
       kubectl create -f f5-hello-world-ingress.yaml
 
-   .. image:: ../images/f5-container-connector-launch-app.png
+   .. image:: ../images/f5-container-connector-launch-app-ingress2.png
 
 #. To check the status of our deployment, you can run the following commands:
 
@@ -61,12 +61,11 @@ On **kube-master1** we will create all the required files:
 
       kubectl describe svc f5-hello-world
 
-   .. image:: ../images/f5-cis-describe-clusterip-service.png
+   .. image:: ../images/f5-cis-describe-clusterip-service2.png
 
-#. To understand and test the new app you need to pay attention to:
-
-   **The Endpoints**, this shows our 2 instances (defined as replicas in our
-   deployment file) and the flannel IP assigned to the pod.
+#. To understand and test the new app pay attention to the **Endpoints value**,
+   this shows our 2 instances (defined as replicas in our deployment file) and
+   the flannel IP assigned to the pod.
 
    Now that we have deployed our application sucessfully, we can check our
    BIG-IP configuration. From the browser open https://10.1.1.4
@@ -74,16 +73,16 @@ On **kube-master1** we will create all the required files:
    .. warning:: Don't forget to select the "kubernetes" partition or you'll
       see nothing.
 
-   Here you can see a new Virtual Server, "ingress_10.1.1.4_81" was created,
+   Here you can see a new Virtual Server, "ingress_10.1.1.4_80" was created,
    listening on 10.1.1.4:80 in partition "kubernetes".
 
-   .. image:: ../images/f5-container-connector-check-app-bigipconfig.png
+   .. image:: ../images/f5-container-connector-check-app-ingress.png
 
    Check the Pools to see a new pool and the associated pool members:
    Local Traffic --> Pools --> "ingress_default_f5-hello-world-web"
    --> Members
 
-   .. image:: ../images/f5-container-connector-check-app-bigipconfig3.png
+   .. image:: ../images/f5-container-connector-check-app-ingress-pool2.png
 
    .. note:: You can see that the pool members IP addresses are assigned from
       the overlay network (**ClusterIP mode**)
@@ -96,7 +95,7 @@ On **kube-master1** we will create all the required files:
    Traffic --> Pools --> Pool list --> ingress_default_f5-hello-world-web -->
    Statistics to see that traffic is distributed as expected.
 
-   .. image:: ../images/f5-container-connector-check-app-bigip-stats-clusterip.png
+   .. image:: ../images/f5-container-connector-check-app-bigip-stats-ingress-clusterip.png
 
 #. Delete Hello-World
 

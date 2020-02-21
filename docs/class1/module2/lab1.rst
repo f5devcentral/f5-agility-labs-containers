@@ -151,6 +151,8 @@ CIS Deployment
 
       kubectl get nodes
 
+   .. image:: ../images/create-bigip1.png
+
 #. Now that we have the new BIGIP Node added we can launch the CIS deployment.
    It will start the f5-k8s-controller container on one of the worker nodes.
 

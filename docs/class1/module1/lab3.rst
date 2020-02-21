@@ -66,7 +66,7 @@ On **kube-master1** we will create all the required files:
       kubectl create -f f5-hello-world-service-nodeport.yaml
       kubectl create -f f5-hello-world-configmap.yaml
 
-   .. image:: ../images/f5-container-connector-launch-app.png
+   .. image:: ../images/f5-container-connector-launch-configmap-app.png
 
 #. To check the status of our deployment, you can run the following commands:
 
@@ -83,46 +83,42 @@ On **kube-master1** we will create all the required files:
 
       kubectl describe svc f5-hello-world
 
-   .. image:: ../images/f5-container-connector-check-app-definition.png
+   .. image:: ../images/f5-container-connector-check-app-definition-configmap.png
 
-#. To understand and test the new app you need to pay attention to:
-
-   **The NodePort value**, that's the port used to give you access to the app
-   from the outside. Here it's "32188", highlighted above.
-
-   **The Endpoints**, that's our 2 instances (defined as replicas in our
-   deployment file) and the port assigned to the service: port 8080.
+#. To understand and test the new app pay attention to the **NodePort value**,
+   that's the port used to give you access to the app from the outside. Here
+   it's "31233", highlighted above.
 
    Now that we have deployed our application sucessfully, we can check our
    BIG-IP configuration. From the browser open https://10.1.1.4
 
-   .. warning:: Don't forget to select the "kubernetes" partition or you'll
-      see nothing.
+   .. warning:: Don't forget to select the proper partition. Previously we
+      checked the "kubernetes" partition. In this case we need to look at
+      the "AS3" partition. This partition was auto created by AS3 and named
+      after the Tenant which happens to be "AS3".
 
-   Here you can see a new Virtual Server, "default_f5-hello-world" was created,
-   listening on 10.1.1.4:80 in partition "kubernetes".
+   Here you can see a new Virtual Server, "serviceMain" was created,
+   listening on 10.1.1.4:80 in partition "AS3".
 
-   .. image:: ../images/f5-container-connector-check-app-bigipconfig.png
+   .. image:: ../images/f5-container-connector-check-app-bigipconfig-as3.png
 
    Check the Pools to see a new pool and the associated pool members:
-   Local Traffic --> Pools --> "cfgmap_default_f5-hello-world_f5-hello-world"
-   --> Members
+   Local Traffic --> Pools --> "web_pool" --> Members
 
-   .. image:: ../images/f5-container-connector-check-app-bigipconfig2.png
+   .. image:: ../images/f5-container-connector-check-app-pool-as3.png
 
    .. note:: You can see that the pool members listed are all the cluster
-      nodes on the node port 32188. (**NodePort mode**)
+      nodes on the node port 31233. (**NodePort mode**)
 
 #. Now you can try to access your application via the BIG-IP VS/VIP: UDF-URL
 
    .. image:: ../images/f5-container-connector-access-app.png
 
 #. Hit Refresh many times and go back to your **BIG-IP** UI, go to Local
-   Traffic --> Pools --> Pool list -->
-   cfgmap_default_f5-hello-world_f5-hello-world --> Statistics to see that
+   Traffic --> Pools --> Pool list --> "web_pool" --> Statistics to see that
    traffic is distributed as expected.
 
-   .. image:: ../images/f5-container-connector-check-app-bigip-stats.png
+   .. image:: ../images/f5-container-connector-check-app-bigip-stats-as3.png
 
 #. Scale the f5-hello-world app
 
@@ -140,7 +136,7 @@ On **kube-master1** we will create all the required files:
 
 #. Check the pool was updated on BIG-IP:
 
-   .. image:: ../images/f5-hello-world-pool-scale10.png
+   .. image:: ../images/f5-hello-world-pool-scale10-as3.png
 
    .. attention:: Why do we still only show 3 pool members?
 
@@ -161,6 +157,9 @@ On **kube-master1** we will create all the required files:
 
       kubectl create -f f5-hello-world-delete-configmap.yaml
       kubectl delete -f f5-hello-world-delete-configmap.yaml
+
+   .. note:: Be sure to verify the virtual server and "AS3" partition were
+      removed from BIG-IP.
 
 #. Remove CIS:
 
