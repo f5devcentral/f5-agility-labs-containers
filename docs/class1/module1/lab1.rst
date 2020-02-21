@@ -52,6 +52,11 @@ URL: https://10.1.1.4
    .. attention:: This has been done to save time but is documented for
       reference.
 
+   Verify AS3 is installed from the F5 Management Console.  Click iApps -->
+   Package Management LX. If not installed follow the instruction below.
+
+   .. image:: ../images/confirm-as3-installed.png
+
    Click here: `Download latest AS3 <https://github.com/F5Networks/f5-appsvcs-extension/releases>`_
 
    .. code-block:: bash
