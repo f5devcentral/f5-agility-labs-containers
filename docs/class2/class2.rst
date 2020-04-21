@@ -1,5 +1,5 @@
-Class 2: F5 Container Ingress Service & OpenShift
-=================================================
+Class 2: OpenShift with F5 Container Ingress Service
+====================================================
 
 This introductory class covers the following topics:
 

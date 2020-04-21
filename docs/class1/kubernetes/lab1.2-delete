@@ -1,6 +1,6 @@
 #!/bin/bash
 
 #delete container f5-hello-world w/ ingress
-kubectl delete -f f5-hello-world-ingress.yaml
-kubectl delete -f f5-hello-world-service-nodeport.yaml
-kubectl delete -f f5-hello-world-deployment.yaml
+kubectl delete -f ingress-hello-world.yaml
+kubectl delete -f nodeport-service-hello-world.yaml
+kubectl delete -f deployment-hello-world.yaml

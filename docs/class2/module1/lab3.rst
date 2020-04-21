@@ -1,5 +1,5 @@
-Lab 1.3 - Deploy Hello-World (ConfigMap w/ AS3)
-===============================================
+Lab 1.3 - Deploy Hello-World Using ConfigMap w/ AS3
+===================================================
 
 Just like the previous lab we'll deploy the f5-hello-world docker container.
 But instead of using the Route resource we'll use ConfigMap.
@@ -31,29 +31,29 @@ App Deployment
 
 On the **okd-master1** we will create all the required files:
 
-#. Create a file called ``f5-hello-world-deployment.yaml``
+#. Create a file called ``deployment-hello-world.yaml``
 
    .. tip:: Use the file in ~/agilitydocs/docs/class2/openshift
 
-   .. literalinclude:: ../openshift/f5-hello-world-deployment.yaml
+   .. literalinclude:: ../openshift/deployment-hello-world.yaml
       :language: yaml
       :linenos:
       :emphasize-lines: 2,7,20
 
-#. Create a file called ``f5-hello-world-service-nodeport.yaml``
+#. Create a file called ``nodeport-service-hello-world.yaml``
 
    .. tip:: Use the file in ~/agilitydocs/docs/class2/openshift
 
-   .. literalinclude:: ../openshift/f5-hello-world-service-nodeport.yaml
+   .. literalinclude:: ../openshift/nodeport-service-hello-world.yaml
       :language: yaml
       :linenos:
       :emphasize-lines: 2,8-10,17
 
-#. Create a file called ``f5-hello-world-configmap.yaml``
+#. Create a file called ``configmap-hello-world.yaml``
 
    .. tip:: Use the file in ~/agilitydocs/docs/class2/openshift
 
-   .. literalinclude:: ../openshift/f5-hello-world-configmap.yaml
+   .. literalinclude:: ../openshift/configmap-hello-world.yaml
       :language: yaml
       :linenos:
       :emphasize-lines: 2,5,7,8,19,21,27,30,32
@@ -62,9 +62,9 @@ On the **okd-master1** we will create all the required files:
 
    .. code-block:: bash
 
-      oc create -f f5-hello-world-deployment.yaml
-      oc create -f f5-hello-world-service-nodeport.yaml
-      oc create -f f5-hello-world-configmap.yaml
+      oc create -f deployment-hello-world.yaml
+      oc create -f nodeport-service-hello-world.yaml
+      oc create -f configmap-hello-world.yaml
       
    .. image:: ../images/f5-okd-launch-configmap-app.png
 
@@ -144,25 +144,25 @@ On the **okd-master1** we will create all the required files:
    performed. In addition to deleting the previously created configmap a
    "blank" declaration needs to be sent to completly remove the application:
    
-   .. literalinclude:: ../openshift/f5-hello-world-delete-configmap.yaml
+   .. literalinclude:: ../openshift/delete-hello-world.yaml
       :language: yaml
       :linenos:
       :emphasize-lines: 2,19
 
    .. code-block:: bash
 
-      oc delete -f f5-hello-world-configmap.yaml
-      oc delete -f f5-hello-world-service-nodeport.yaml
-      oc delete -f f5-hello-world-deployment.yaml
+      oc delete -f configmap-hello-world.yaml
+      oc delete -f nodeport-service-hello-world.yaml
+      oc delete -f deployment-hello-world.yaml
 
-      oc create -f f5-hello-world-delete-configmap.yaml
-      oc delete -f f5-hello-world-delete-configmap.yaml
+      oc create -f delete-hello-world.yaml
+      oc delete -f delete-hello-world.yaml
 
 #. Remove CIS:
 
    .. code-block:: bash
 
-      oc delete -f f5-nodeport-deployment.yaml
+      oc delete -f nodeport-deployment.yaml
 
 .. important:: Do not skip these clean-up steps. Instead of reusing some of
    these objects, the next lab we will re-deploy them to avoid conflicts and

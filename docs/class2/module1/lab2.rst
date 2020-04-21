@@ -1,5 +1,5 @@
-Lab 1.2 - Deploy Hello-World (Route)
-====================================
+Lab 1.2 - Deploy Hello-World Using Route
+========================================
 
 Now that CIS is up and running, let's deploy an application and leverage CIS.
 
@@ -31,29 +31,29 @@ App Deployment
 
 On **okd-master1** we will create all the required files:
 
-#. Create a file called ``f5-hello-world-deployment.yaml``
+#. Create a file called ``deployment-hello-world.yaml``
 
    .. tip:: Use the file in ~/agilitydocs/docs/class2/openshift
 
-   .. literalinclude:: ../openshift/f5-hello-world-deployment.yaml
+   .. literalinclude:: ../openshift/deployment-hello-world.yaml
       :language: yaml
       :linenos:
       :emphasize-lines: 2,7,20
 
-#. Create a file called ``f5-hello-world-service-nodeport.yaml``
+#. Create a file called ``nodeport-service-hello-world.yaml``
 
    .. tip:: Use the file in ~/agilitydocs/docs/class2/openshift
 
-   .. literalinclude:: ../openshift/f5-hello-world-service-nodeport.yaml
+   .. literalinclude:: ../openshift/nodeport-service-hello-world.yaml
       :language: yaml
       :linenos:
       :emphasize-lines: 2,17
 
-#. Create a file called ``f5-hello-world-route.yaml``
+#. Create a file called ``route-hello-world.yaml``
 
    .. tip:: Use the file in ~/agilitydocs/docs/class2/openshift
 
-   .. literalinclude:: ../openshift/f5-hello-world-route.yaml
+   .. literalinclude:: ../openshift/route-hello-world.yaml
       :language: yaml
       :linenos:
       :emphasize-lines: 2,7-9,23,24
@@ -62,9 +62,9 @@ On **okd-master1** we will create all the required files:
 
    .. code-block:: bash
 
-      oc create -f f5-hello-world-deployment.yaml
-      oc create -f f5-hello-world-service-nodeport.yaml
-      oc create -f f5-hello-world-route.yaml
+      oc create -f deployment-hello-world.yaml
+      oc create -f nodeport-service-hello-world.yaml
+      oc create -f route-hello-world.yaml
 
    .. image:: ../images/f5-container-connector-launch-app-route.png
 
@@ -125,9 +125,9 @@ On **okd-master1** we will create all the required files:
 
    .. code-block:: bash
 
-      oc delete -f f5-hello-world-route.yaml
-      oc delete -f f5-hello-world-service-nodeport.yaml
-      oc delete -f f5-hello-world-deployment.yaml
+      oc delete -f route-hello-world.yaml
+      oc delete -f nodeport-service-hello-world.yaml
+      oc delete -f deployment-hello-world.yaml
 
    .. important:: Do not skip this step. Instead of reusing some of these
       objects, the next lab we will re-deploy them to avoid conflicts and

@@ -1,5 +1,5 @@
-Class 1: F5 Container Ingress Service & Kubernetes
-==================================================
+Class 1: Kubernetes with F5 Container Ingress Service
+=====================================================
 
 This introductory class covers the following topics:
 

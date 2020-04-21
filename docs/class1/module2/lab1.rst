@@ -1,5 +1,5 @@
-Lab 2.1 - Install & Configure CIS (ClusterIP)
-=============================================
+Lab 2.1 - Install & Configure CIS in ClusterIP Mode
+===================================================
 
 In the previous moudule we learned about Nodeport Mode. Here we'll learn
 about ClusterIP Mode.
@@ -114,7 +114,7 @@ CIS Deployment
 
 #. Before deploying CIS in ClusterIP mode we need to configure Big-IP as a node
    in the kubernetes cluster. To do so you'll need to modify
-   "f5-bigip-node.yaml" with the MAC address auto created from the previous
+   "bigip-node.yaml" with the MAC address auto created from the previous
    steps. SSH to BIG-IP and run the following command. You'll want to copy the
    displayed "MAC Address".
 
@@ -124,17 +124,17 @@ CIS Deployment
 
    .. image:: ../images/get-k8s-tunnel-mac-addr.png
 
-#. On the kube-master node edit f5-bigip-node.yaml
+#. On the kube-master node edit bigip-node.yaml
 
    .. note:: If your unfamiliar with VI ask for help.
 
    .. code-block:: bash
 
-      vim ~/agilitydocs/docs/class1/kubernetes/f5-bigip-node.yaml
+      vim ~/agilitydocs/docs/class1/kubernetes/bigip-node.yaml
 
       and edit the highlighted MAC addr line with your addr shown below:
 
-   .. literalinclude:: ../kubernetes/f5-bigip-node.yaml
+   .. literalinclude:: ../kubernetes/bigip-node.yaml
       :language: yaml
       :linenos:
       :emphasize-lines: 9
@@ -143,7 +143,7 @@ CIS Deployment
 
    .. code-block:: bash
 
-      kubectl create -f f5-bigip-node.yaml
+      kubectl create -f bigip-node.yaml
 
 #. Verify "bigip1" node is created:
 
@@ -162,11 +162,11 @@ CIS Deployment
 
       cd ~/agilitydocs/docs/class1/kubernetes
 
-      cat f5-cluster-deployment.yaml
+      cat cluster-deployment.yaml
 
    You'll see a config file similar to this:
 
-   .. literalinclude:: ../kubernetes/f5-cluster-deployment.yaml
+   .. literalinclude:: ../kubernetes/cluster-deployment.yaml
       :language: yaml
       :linenos:
       :emphasize-lines: 2,7,17,20,37-42
@@ -175,7 +175,7 @@ CIS Deployment
 
    .. code-block:: bash
 
-      kubectl create -f f5-cluster-deployment.yaml
+      kubectl create -f cluster-deployment.yaml
 
 #. Verify the deployment "deployed"
 

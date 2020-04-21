@@ -1,6 +1,6 @@
 #!/bin/bash
 
 #create container f5-hello-world w/ route
-oc create -f f5-hello-world-deployment.yaml
-oc create -f f5-hello-world-service-clusterip.yaml
-oc create -f f5-hello-world-route.yaml
+oc create -f deployment-hello-world.yaml
+oc create -f clusterip-service-hello-world.yaml
+oc create -f route-hello-world.yaml

@@ -1,5 +1,5 @@
-Lab 2.1 - Install & Configure CIS (ClusterIP)
-=============================================
+Lab 2.1 - Install & Configure CIS in ClusterIP Mode
+===================================================
 
 In the previous moudule we learned about Nodeport Mode. Here we'll learn
 about ClusterIP Mode.
@@ -117,11 +117,11 @@ CIS Deployment
 
       cd ~/agilitydocs/docs/class2/openshift
 
-      cat f5-bigip-hostsubnet.yaml
+      cat bigip-hostsubnet.yaml
 
    You'll see a config file similar to this:
 
-   .. literalinclude:: ../openshift/f5-bigip-hostsubnet.yaml
+   .. literalinclude:: ../openshift/bigip-hostsubnet.yaml
       :language: yaml
       :linenos:
       :emphasize-lines: 2,9
@@ -143,7 +143,7 @@ CIS Deployment
 
    .. code-block:: bash
 
-      oc create -f f5-bigip-hostsubnet.yaml
+      oc create -f bigip-hostsubnet.yaml
 
    You should see a successful creation of a new OpenShift Node.
 
@@ -192,11 +192,11 @@ CIS Deployment
 
       cd ~/agilitydocs/docs/class2/openshift
 
-      cat f5-cluster-deployment.yaml
+      cat cluster-deployment.yaml
 
    You'll see a config file similar to this:
 
-   .. literalinclude:: ../openshift/f5-cluster-deployment.yaml
+   .. literalinclude:: ../openshift/cluster-deployment.yaml
       :language: yaml
       :linenos:
       :emphasize-lines: 2,7,17,20,37-40,46-47
@@ -205,7 +205,7 @@ CIS Deployment
 
    .. code-block:: bash
 
-      oc create -f f5-cluster-deployment.yaml
+      oc create -f cluster-deployment.yaml
 
 #. Verify the deployment "deployed"
 

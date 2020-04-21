@@ -1,5 +1,5 @@
-Lab 2.3 - Deploy Hello-World (ConfigMap w/ AS3)
-===============================================
+Lab 2.3 - Deploy Hello-World Using ConfigMap w/ AS3
+===================================================
 
 Now that CIS is up and running, let's deploy an application and leverage CIS.
 
@@ -12,29 +12,29 @@ App Deployment
 
 On **kube-master1** we will create all the required files:
 
-#. Create a file called ``f5-hello-world-deployment.yaml``
+#. Create a file called ``deployment-hello-world.yaml``
 
    .. tip:: Use the file in ~/agilitydocs/docs/class1/kubernetes
 
-   .. literalinclude:: ../kubernetes/f5-hello-world-deployment.yaml
+   .. literalinclude:: ../kubernetes/deployment-hello-world.yaml
       :language: yaml
       :linenos:
       :emphasize-lines: 2,7,20
 
-#. Create a file called ``f5-hello-world-service-clusterip.yaml``
+#. Create a file called ``clusterip-service-hello-world.yaml``
 
    .. tip:: Use the file in ~/agilitydocs/docs/class1/kubernetes
 
-   .. literalinclude:: ../kubernetes/f5-hello-world-service-clusterip.yaml
+   .. literalinclude:: ../kubernetes/clusterip-service-hello-world.yaml
       :language: yaml
       :linenos:
       :emphasize-lines: 2,8-10,17
 
-#. Create a file called ``f5-hello-world-configmap.yaml``
+#. Create a file called ``configmap-hello-world.yaml``
 
    .. tip:: Use the file in ~/agilitydocs/docs/class1/kubernetes
 
-   .. literalinclude:: ../kubernetes/f5-hello-world-configmap.yaml
+   .. literalinclude:: ../kubernetes/configmap-hello-world.yaml
       :language: yaml
       :linenos:
       :emphasize-lines: 2,5,7,8,27,30
@@ -43,9 +43,9 @@ On **kube-master1** we will create all the required files:
 
    .. code-block:: bash
 
-      kubectl create -f f5-hello-world-deployment.yaml
-      kubectl create -f f5-hello-world-service-clusterip.yaml
-      kubectl create -f f5-hello-world-configmap.yaml
+      kubectl create -f deployment-hello-world.yaml
+      kubectl create -f clusterip-service-hello-world.yaml
+      kubectl create -f configmap-hello-world.yaml
 
    .. image:: ../images/f5-container-connector-launch-app-clusterip.png
 
@@ -122,19 +122,19 @@ On **kube-master1** we will create all the required files:
    performed. In addition to deleting the previously created configmap a
    "blank" declaration needs to be sent to completly remove the application:
    
-   .. literalinclude:: ../kubernetes/f5-hello-world-delete-configmap.yaml
+   .. literalinclude:: ../kubernetes/delete-hello-world.yaml
       :language: yaml
       :linenos:
       :emphasize-lines: 2,19
 
    .. code-block:: bash
 
-      kubectl delete -f f5-hello-world-configmap.yaml
-      kubectl delete -f f5-hello-world-service-clusterip.yaml
-      kubectl delete -f f5-hello-world-deployment.yaml
+      kubectl delete -f configmap-hello-world.yaml
+      kubectl delete -f clusterip-service-hello-world.yaml
+      kubectl delete -f deployment-hello-world.yaml
       
-      kubectl create -f f5-hello-world-delete-configmap.yaml
-      kubectl delete -f f5-hello-world-delete-configmap.yaml
+      kubectl create -f delete-hello-world.yaml
+      kubectl delete -f delete-hello-world.yaml
 
 .. attention:: This concludes **Class 1 - CIS and Kubernetes**. Feel free to
    experiment with any of the settings. The lab will be destroyed at the end of

@@ -1,5 +1,5 @@
-Lab 2.3 - Deploy Hello-World (ConfigMap w/ AS3)
-===============================================
+Lab 2.3 - Deploy Hello-World Using ConfigMap w/ AS3
+===================================================
 
 Now that CIS is up and running, let's deploy an application and leverage CIS.
 
@@ -12,11 +12,11 @@ App Deployment
 
 On **okd-master1** we will create all the required files:
 
-#. Create a file called ``f5-hello-world-deployment.yaml``
+#. Create a file called ``deployment-hello-world.yaml``
 
    .. tip:: Use the file in ~/agilitydocs/docs/class2/openshift
 
-   .. literalinclude:: ../openshift/f5-hello-world-deployment.yaml
+   .. literalinclude:: ../openshift/deployment-hello-world.yaml
       :language: yaml
       :linenos:
       :emphasize-lines: 2,7,20
@@ -25,16 +25,16 @@ On **okd-master1** we will create all the required files:
 
    .. tip:: Use the file in ~/agilitydocs/docs/class2/openshift
 
-   .. literalinclude:: ../openshift/f5-hello-world-service-clusterip.yaml
+   .. literalinclude:: ../openshift/clusterip-service-hello-world.yaml
       :language: yaml
       :linenos:
       :emphasize-lines: 2,8-10,17
 
-#. Create a file called ``f5-hello-world-configmap.yaml``
+#. Create a file called ``configmap-hello-world.yaml``
 
    .. tip:: Use the file in ~/agilitydocs/docs/class2/openshift
 
-   .. literalinclude:: ../openshift/f5-hello-world-configmap.yaml
+   .. literalinclude:: ../openshift/configmap-hello-world.yaml
       :language: yaml
       :linenos:
       :emphasize-lines: 2,5,7,8,27,30
@@ -43,9 +43,9 @@ On **okd-master1** we will create all the required files:
 
    .. code-block:: bash
 
-      oc create -f f5-hello-world-deployment.yaml
-      oc create -f f5-hello-world-service-clusterip.yaml
-      oc create -f f5-hello-world-configmap.yaml
+      oc create -f deployment-hello-world.yaml
+      oc create -f clusterip-service-hello-world.yaml
+      oc create -f configmap-hello-world.yaml
 
    .. image:: ../images/f5-container-connector-launch-app.png
 
@@ -122,19 +122,19 @@ On **okd-master1** we will create all the required files:
    performed. In addition to deleting the previously created configmap a
    "blank" declaration needs to be sent to completly remove the application:
    
-   .. literalinclude:: ../openshift/f5-hello-world-delete-configmap.yaml
+   .. literalinclude:: ../openshift/delete-hello-world.yaml
       :language: yaml
       :linenos:
       :emphasize-lines: 2,19
 
    .. code-block:: bash
 
-      oc delete -f f5-hello-world-configmap.yaml
-      oc delete -f f5-hello-world-service-clusterip.yaml
-      oc delete -f f5-hello-world-deployment.yaml
+      oc delete -f configmap-hello-world.yaml
+      oc delete -f clusterip-service-hello-world.yaml
+      oc delete -f deployment-hello-world.yaml
       
-      oc create -f f5-hello-world-delete-configmap.yaml
-      oc delete -f f5-hello-world-delete-configmap.yaml
+      oc create -f delete-hello-world.yaml
+      oc delete -f delete-hello-world.yaml
 
 .. attention:: This concludes **Class 2 - CIS and OpenShift**. Feel free to
    experiment with any of the settings. The lab will be destroyed at the end of

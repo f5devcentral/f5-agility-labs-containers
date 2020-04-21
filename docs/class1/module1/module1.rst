@@ -1,5 +1,5 @@
-Module 1: CIS NodePort Mode
-===========================
+Module 1: CIS Using NodePort Mode
+=================================
 
 Overview
 --------

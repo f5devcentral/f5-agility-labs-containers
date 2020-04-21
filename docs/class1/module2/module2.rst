@@ -1,5 +1,5 @@
-Module 2: CIS ClusterIP Mode
-============================
+Module 2: CIS Using ClusterIP Mode
+==================================
 
 Overview
 --------

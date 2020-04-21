@@ -5,13 +5,13 @@ The purpose of these labs is to give you better understanding of...
 
 - Kubernetes with F5 Container Ingress Service (CIS)
    - Introduction to Kubernetes
-   - How to install and use F5 CIS
-   - How to launch a web server with in NodePort & ClusterIP mode
+   - How to install and configure F5 CIS
+   - How to launch a simple web server using NodePort & ClusterIP mode
 
 - OpenShift with F5 Container Ingress Service (CIS)
    - Introduction to OpenShift
-   - How to install and use F5 CIS
-   - How to launch a web server with in NodePort & ClusterIP mode
+   - How to install and configure F5 CIS
+   - How to launch a simple web server using NodePort & ClusterIP mode
 
 .. toctree::
    :maxdepth: 1

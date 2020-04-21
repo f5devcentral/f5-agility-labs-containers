@@ -1,5 +1,5 @@
-Lab 1.1 - Install & Configure CIS (NodePort)
-============================================
+Lab 1.1 - Install & Configure CIS in NodePort Mode
+==================================================
 
 The BIG-IP Controller for Kubernetes installs as a
 `Deployment object <https://kubernetes.io/docs/concepts/workloads/controllers/deployment/>`_
@@ -15,8 +15,8 @@ In this lab we'll use NodePort mode to deploy an application to the BIG-IP.
 BIG-IP Setup
 ------------
 
-Through the Jumpbox, you should have a BIG-IP available at the following
-URL: https://10.1.1.4
+Via UDF you should have access to bigip1. Follow the "Access" drop down to
+"TMUI" and open up the management GUI.
 
 .. attention:: 
    - Connect to your BIG-IP and check it is active and licensed. Its
@@ -32,40 +32,37 @@ URL: https://10.1.1.4
 
      .. image:: ../images/f5-check-partition.png
 
-#. You need to setup a partition that will be used by F5 Container Ingress
-   Service.
+#. First we need to setup a partition that will be used by F5 Container Ingress
+   Service. From the UI GoTo: :menuselection:`System --> Users --> Partition List`
+   
+   - Create a new partition called "kubernetes" (use default settings)
+   - Click Finished
 
    .. code-block:: bash
 
       # From the CLI:
       tmsh create auth partition kubernetes
 
-      # From the UI:
-      GoTo System --> Users --> Partition List
-      - Create a new partition called "kubernetes" (use default settings)
-      - Click Finished
-
    .. image:: ../images/f5-container-connector-bigip-partition-setup.png
 
 #. Install AS3
 
-   .. attention:: This has been done to save time but is documented for
+   .. attention:: This has been done to save time but is documented here for
       reference.
 
-   Verify AS3 is installed from the F5 Management Console.  Click iApps -->
-   Package Management LX. If not installed follow the instruction below.
+   - Verify AS3 is installed from the F5 Management Console.  Click
+     :menuselection:`iApps --> Package Management LX`. If not installed follow
+     the instruction below.
 
-   .. image:: ../images/confirm-as3-installed.png
+     .. image:: ../images/confirm-as3-installed.png
 
-   Click here: `Download latest AS3 <https://github.com/F5Networks/f5-appsvcs-extension/releases>`_
+   - Click here to: `Download latest AS3 <https://github.com/F5Networks/f5-appsvcs-extension/releases>`_
 
-   .. code-block:: bash
+   - From the UI GoTo: :menuselection:`iApps --> Package Management LX`
 
-      # From the UI:
-      GoTo  iApps --> Package Management LX
-      - Click Import
-      - Browse and select downloaded AS3 RPM
-      - Click Upload
+     - Click Import
+     - Browse and select downloaded AS3 RPM
+     - Click Upload
 
    .. seealso:: For more info click here:
       `Application Services 3 Extension Documentation <https://clouddocs.f5.com/products/extensions/f5-appsvcs-extension/latest/>`_
@@ -73,7 +70,8 @@ URL: https://10.1.1.4
 Explore the Kubernetes Cluster
 ------------------------------
 
-#. From the jumpbox start an SSH session with kube-master1.
+#. From your terminal emulator start an SSH session with kube-master1. The IP
+   and port can be found on UDF.
 
 #. "git" the demo files
 
@@ -83,7 +81,7 @@ Explore the Kubernetes Cluster
 
       cd ~/agilitydocs/docs/class1/kubernetes
 
-#. Check the OpenShift nodes
+#. Check the Kubernetes Cluster nodes.
 
    You can manage nodes in your instance using the CLI. The CLI interacts with
    node objects that are representations of actual node hosts. The master uses
@@ -159,7 +157,7 @@ to hide our bigip credentials.
    This class will feature both modes. For more information see
    `BIG-IP Controller Modes <http://clouddocs.f5.com/containers/v2/kubernetes/kctlr-modes.html>`_
 
-   Lets start with **Nodeport mode** ``f5-nodeport-deployment.yaml``
+   Lets start with **Nodeport mode** ``nodeport-deployment.yaml``
 
    .. note:: 
       - For your convenience the file can be found in
@@ -170,7 +168,7 @@ to hide our bigip credentials.
         you can try to use an online parser to help you :
         `Yaml parser <http://codebeautify.org/yaml-validator>`_
 
-   .. literalinclude:: ../kubernetes/f5-nodeport-deployment.yaml
+   .. literalinclude:: ../kubernetes/nodeport-deployment.yaml
       :language: yaml
       :linenos:
       :emphasize-lines: 2,7,17,20,37,39-41
@@ -181,7 +179,7 @@ to hide our bigip credentials.
 
    .. code-block:: bash
 
-      kubectl create -f f5-nodeport-deployment.yaml
+      kubectl create -f nodeport-deployment.yaml
 
 #. Verify the deployment "deployed"
 

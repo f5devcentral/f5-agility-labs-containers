@@ -1,5 +1,5 @@
-Lab 1.2 - Deploy Hello-World (Ingress)
-======================================
+Lab 1.2 - Deploy Hello-World Using Ingress
+==========================================
 
 Now that CIS is up and running, let's deploy an application and leverage CIS.
 
@@ -31,29 +31,29 @@ App Deployment
 
 On **kube-master1** we will create all the required files:
 
-#. Create a file called ``f5-hello-world-deployment.yaml``
+#. Create a file called ``deployment-hello-world.yaml``
 
    .. tip:: Use the file in ~/agilitydocs/docs/class1/kubernetes
 
-   .. literalinclude:: ../kubernetes/f5-hello-world-deployment.yaml
+   .. literalinclude:: ../kubernetes/deployment-hello-world.yaml
       :language: yaml
       :linenos:
       :emphasize-lines: 2,7,20
 
-#. Create a file called ``f5-hello-world-service-nodeport.yaml``
+#. Create a file called ``nodeport-service-hello-world.yaml``
 
    .. tip:: Use the file in ~/agilitydocs/docs/class1/kubernetes
 
-   .. literalinclude:: ../kubernetes/f5-hello-world-service-nodeport.yaml
+   .. literalinclude:: ../kubernetes/nodeport-service-hello-world.yaml
       :language: yaml
       :linenos:
       :emphasize-lines: 2,17
 
-#. Create a file called ``f5-hello-world-ingress.yaml``
+#. Create a file called ``ingress-hello-world.yaml``
 
    .. tip:: Use the file in ~/agilitydocs/docs/class1/kubernetes
 
-   .. literalinclude:: ../kubernetes/f5-hello-world-ingress.yaml
+   .. literalinclude:: ../kubernetes/ingress-hello-world.yaml
       :language: yaml
       :linenos:
       :emphasize-lines: 2,7-9,23,24
@@ -62,9 +62,9 @@ On **kube-master1** we will create all the required files:
 
    .. code-block:: bash
 
-      kubectl create -f f5-hello-world-deployment.yaml
-      kubectl create -f f5-hello-world-service-nodeport.yaml
-      kubectl create -f f5-hello-world-ingress.yaml
+      kubectl create -f deployment-hello-world.yaml
+      kubectl create -f nodeport-service-hello-world.yaml
+      kubectl create -f ingress-hello-world.yaml
 
    .. image:: ../images/f5-container-connector-launch-ingress-app.png
 
@@ -123,9 +123,9 @@ On **kube-master1** we will create all the required files:
 
    .. code-block:: bash
 
-      kubectl delete -f f5-hello-world-ingress.yaml
-      kubectl delete -f f5-hello-world-service-nodeport.yaml
-      kubectl delete -f f5-hello-world-deployment.yaml
+      kubectl delete -f ingress-hello-world.yaml
+      kubectl delete -f nodeport-service-hello-world.yaml
+      kubectl delete -f deployment-hello-world.yaml
 
    .. important:: Do not skip this step. Instead of reusing some of these
       objects, the next lab we will re-deploy them to avoid conflicts and
