@@ -85,41 +85,51 @@ On **kube-master1** we will create all the required files:
 
    .. image:: ../images/f5-container-connector-check-app-definition-ingress.png
 
-#. To understand and test the new app pay attention to the **NodePort value**,
-   that's the port used to give you access to the app from the outside. Here
-   it's "31689", highlighted above.
+   .. attention:: To understand and test the new app pay attention to the
+      **NodePort value**, that's the port used to give you access to the app
+      from the outside. Here it's "31689", highlighted above.
 
-   Now that we have deployed our application sucessfully, we can check our
-   BIG-IP configuration. From the browser open https://10.1.1.4
+#. Now that we have deployed our application sucessfully, we can check the
+   configuration on bigip1. We should still have access to TMUI via UDF go back
+   to the open session.
 
    .. warning:: Don't forget to select the "kubernetes" partition or you'll
       see nothing.
+
+   Goto :menuselection:`Local Traffic --> Virtual Servers`
 
    Here you can see a new Virtual Server, "ingress_10.1.1.4_80" was created,
    listening on 10.1.1.4:80 in partition "kubernetes".
 
    .. image:: ../images/f5-container-connector-check-app-ingress.png
 
-   Check the Pools to see a new pool and the associated pool members:
-   Local Traffic --> Pools --> "ingress_default_f5-hello-world-web"
-   --> Members
+#. Check the Pools to see a new pool and the associated pool members:
+   :menuselection:`Local Traffic --> Pools --> 
+   "ingress_default_f5-hello-world-web" --> Members`
 
    .. image:: ../images/f5-container-connector-check-app-ingress-pool.png
 
    .. note:: You can see that the pool members listed are all the cluster
       nodes on the node port 31689. (**NodePort mode**)
 
-#. Now you can try to access your application via the BIG-IP VS/VIP: UDF-URL
+#. Access your web application via UDF-URL.
+
+   .. note:: This URL can be found on the UDF student portal
 
    .. image:: ../images/f5-container-connector-access-app.png
 
-#. Hit Refresh many times and go back to your **BIG-IP** UI, go to Local
-   Traffic --> Pools --> Pool list --> ingress_default_f5-hello-world-web -->
-   Statistics to see that traffic is distributed as expected.
+#. Hit Refresh many times and go back to your **BIG-IP** UI. Goto:
+   :menuselection:`Local Traffic --> Pools --> Pool list -->
+   ingress_default_f5-hello-world-web --> Statistics`
+   to see that traffic is distributed as expected.
 
    .. image:: ../images/f5-container-connector-check-app-ingress-stats.png
 
 #. Delete Hello-World
+
+   .. important:: Do not skip this step. Instead of reusing some of these
+      objects, the next lab we will re-deploy them to avoid conflicts and
+      errors.
 
    .. code-block:: bash
 
@@ -127,6 +137,4 @@ On **kube-master1** we will create all the required files:
       kubectl delete -f nodeport-service-hello-world.yaml
       kubectl delete -f deployment-hello-world.yaml
 
-   .. important:: Do not skip this step. Instead of reusing some of these
-      objects, the next lab we will re-deploy them to avoid conflicts and
-      errors.
+   .. attention:: Validate the objects are removed via bigip1 TMUI.

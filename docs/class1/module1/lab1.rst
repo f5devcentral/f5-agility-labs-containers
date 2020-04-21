@@ -227,6 +227,8 @@ check the logs of your container, kubectl command or docker command.
 
       ssh kube-node1
 
+      # If directed to, accept the authenticity of the host by selecting "yes" to continue.
+
       sudo docker ps
 
    Here we can see our container ID is "01a7517b50c5"

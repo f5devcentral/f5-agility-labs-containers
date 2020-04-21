@@ -264,6 +264,8 @@ check the logs of your container, oc command or docker command.
 
       ssh okd-node1
 
+      # If directed to, accept the authenticity of the host by selecting "yes" to continue.
+
       sudo docker ps
 
    Here we can see our container ID is "74a566f5778a"

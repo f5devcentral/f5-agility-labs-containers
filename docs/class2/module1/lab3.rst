@@ -85,17 +85,20 @@ On the **okd-master1** we will create all the required files:
         
    .. image:: ../images/f5-okd-check-app-definition-node.png
 
-#. To understand and test the new app pay attention to the **NodePort value**,
-   that's the port used to give you access to the app from the outside. Here
-   it's "31670", highlighted above.
+   .. attention:: To understand and test the new app pay attention to the
+      **NodePort value**, that's the port used to give you access to the app
+      from the outside. Here it's "31670", highlighted above.
 
-   Now that we have deployed our application sucessfully, we can check our
-   BIG-IP configuration.  From the browser open https://10.1.1.4
+#. Now that we have deployed our application sucessfully, we can check the
+   configuration on bigip1. We should still have access to TMUI via UDF go back
+   to the open session.
 
    .. warning:: Don't forget to select the proper partition. Previously we
       checked the "okd" partition. In this case we need to look at
       the "AS3" partition. This partition was auto created by AS3 and named
       after the Tenant which happens to be "AS3".
+
+   Goto :menuselection:`Local Traffic --> Virtual Servers`
 
    Here you can see a new Virtual Server, "serviceMain" was created,
    listening on 10.1.1.4:80 in partition "AS3".
@@ -103,20 +106,22 @@ On the **okd-master1** we will create all the required files:
    .. image:: ../images/f5-container-connector-check-app-bigipconfig-as3.png
 
 #. Check the Pools to see a new pool and the associated pool members:
-   Local Traffic --> Pools --> "web_pool" --> Members
+   :menuselection:`Local Traffic --> Pools --> "web_pool" --> Members`
 
    .. image:: ../images/f5-container-connector-check-app-web-pool.png
 
    .. note:: You can see that the pool members listed are all the cluster
       nodes on the port 31670. (**NodePort mode**)
 
-#. Now you can try to access your application via the BIG-IP VS/VIP: UDF-URL
+#. Access your web application via UDF-URL.
+
+   .. note:: This URL can be found on the UDF student portal
 
    .. image:: ../images/f5-container-connector-access-app.png
 
-#. Hit Refresh many times and go back to your **BIG-IP** UI, go to Local
-   Traffic --> Pools --> Pool list --> "web_pool" --> Statistics to see that
-   traffic is distributed as expected.
+#. Hit Refresh many times and go back to your **BIG-IP** UI, Goto:
+   :menuselection:`Local Traffic --> Pools --> Pool list --> "web_pool" -->
+   Statistics` to see that traffic is distributed as expected.
 
    .. image:: ../images/f5-okd-check-app-bigip-stats-as3.png
 
