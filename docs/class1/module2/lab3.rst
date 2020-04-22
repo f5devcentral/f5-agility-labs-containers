@@ -68,8 +68,8 @@ On **kube-master1** we will create all the required files:
       our deployment file) and the flannel IP assigned to the pod.
 
 #. Now that we have deployed our application sucessfully, we can check the
-   configuration on bigip1. We should still have access to TMUI via UDF go back
-   to the open session.
+   configuration on bigip1. We should still have access to TMUI via UDF. Go
+   back to the open session.
 
    .. warning:: Don't forget to select the proper partition. Previously we
       checked the "kubernetes" partition. In this case we need to look at
@@ -99,9 +99,10 @@ On **kube-master1** we will create all the required files:
    .. image:: ../images/f5-container-connector-access-app.png
 
 
-#. Hit Refresh many times and go back to your **BIG-IP** UI. Goto:
-   :menuselection:`Local Traffic --> Pools --> Pool list --> "web_pool" -->
-   Statistics` to see that traffic is distributed as expected.
+#. Hit Refresh many times and go back to your **BIG-IP** UI.
+
+   Goto: :menuselection:`Local Traffic --> Pools --> Pool list -->
+   "web_pool" --> Statistics` to see that traffic is distributed as expected.
 
    .. image:: ../images/f5-container-connector-check-app-bigip-stats-cluster-as3.png
 
@@ -127,9 +128,13 @@ On **kube-master1** we will create all the required files:
 
    .. attention:: Now we show 10 pool members vs. 3 in the previous lab, why?
 
-#. Remove Hello-World from BIG-IP. When using AS3 an extra step needs to be
-   performed. In addition to deleting the application configmap, a "blank AS3
-   declaration" is required to completely remove the application from BIG-IP.
+#. Remove Hello-World from BIG-IP.
+
+   .. important:: When using AS3 an extra step needs to be performed. In
+      addition to deleting the application configmap, a "blank AS3 declaration"
+      is required to completely remove the application from BIG-IP.
+
+   "Blank AS3 Declartion"
    
    .. literalinclude:: ../kubernetes/delete-hello-world.yaml
       :language: yaml

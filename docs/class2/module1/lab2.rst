@@ -110,9 +110,9 @@ On **okd-master1** we will create all the required files:
 
    .. image:: ../images/f5-check-ltm-policy-route.png
 
-#. Check the Pools to see a new pool and the associated pool members:
-   :menuselection:`Local Traffic --> Pools --> 
-   "openshift_default_f5-hello-world-web" --> Members`
+#. Check the Pools to see a new pool and the associated pool members.
+   
+   GoTo: :menuselection:`Local Traffic --> Pools --> "openshift_default_f5-hello-world-web" --> Members`
 
    .. image:: ../images/f5-container-connector-check-app-route-pool.png
 

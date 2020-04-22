@@ -119,9 +119,10 @@ On **kube-master1** we will create all the required files:
 
    .. image:: ../images/f5-container-connector-access-app.png
 
-#. Hit Refresh many times and go back to your **BIG-IP** UI. Goto:
-   :menuselection:`Local Traffic --> Pools --> Pool list --> "web_pool" -->
-   Statistics` to see that traffic is distributed as expected.
+#. Hit Refresh many times and go back to your **BIG-IP** UI
+
+   Goto: :menuselection:`Local Traffic --> Pools --> Pool list -->
+   "web_pool" --> Statistics` to see that traffic is distributed as expected.
 
    .. image:: ../images/f5-container-connector-check-app-bigip-stats-as3.png
 
@@ -141,15 +142,19 @@ On **kube-master1** we will create all the required files:
 
    .. image:: ../images/f5-hello-world-pods-scale10.png
 
-#. Check the pool was updated on BIG-IP:
+#. Check the pool was updated on bigip1
 
    .. image:: ../images/f5-hello-world-pool-scale10-as3.png
 
    .. attention:: Why do we still only show 3 pool members?
 
-#. Remove Hello-World from BIG-IP. When using AS3 an extra step needs to be
-   performed. In addition to deleting the application configmap, a "blank AS3
-   declaration" is required to completely remove the application from BIG-IP.
+#. Remove Hello-World from BIG-IP. 
+
+   .. important:: When using AS3 an extra step needs to be performed. In
+      addition to deleting the application configmap, a "blank AS3 declaration"
+      is required to completely remove the application from BIG-IP.
+   
+   "Blank AS3 Declartion"
    
    .. literalinclude:: ../kubernetes/delete-hello-world.yaml
       :language: yaml

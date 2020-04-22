@@ -105,12 +105,12 @@ On **kube-master1** we will create all the required files:
 
 #. Delete Hello-World
 
-   .. code-block:: bash
-
    .. important:: Do not skip this step. Instead of reusing some of these
       objects, the next lab we will re-deploy them to avoid conflicts and
       errors.
 
+   .. code-block:: bash
+   
       kubectl delete -f ingress-hello-world.yaml
       kubectl delete -f clusterip-service-hello-world.yaml
       kubectl delete -f deployment-hello-world.yaml

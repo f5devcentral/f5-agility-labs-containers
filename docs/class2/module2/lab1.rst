@@ -39,6 +39,11 @@ Via UDF you should have access to bigip1. Follow the “Access” drop down to
       # From the CLI:
       tmsh create auth partition okd
 
+#. Install AS3 via the management console
+
+   .. attention:: This has been done to save time but is documented here for
+      reference. If needed see Module 1 / Lab 1 for install instructions.
+
 #. Create a vxlan tunnel profile
 
    - GoTo: :menuselection:`Network --> Tunnels --> Profiles --> VXLAN`
@@ -55,12 +60,12 @@ Via UDF you should have access to bigip1. Follow the “Access” drop down to
 
 #. Create a vxlan tunnel
 
-      - GoTo: :menuselection:`Network --> Tunnels --> Tunnel List`
-      - Create a new tunnel called "okd-tunnel"
-      - Set the Profile to the one previously created called "okd-vxlan"
-      - set the key = 0
-      - Set the Local Address to 10.1.1.4
-      - Click Finished
+   - GoTo: :menuselection:`Network --> Tunnels --> Tunnel List`
+   - Create a new tunnel called "okd-tunnel"
+   - Set the Profile to the one previously created called "okd-vxlan"
+   - set the key = 0
+   - Set the Local Address to 10.1.1.4
+   - Click Finished
 
    .. image:: ../images/create-okd-vxlan-tunnel.png
 

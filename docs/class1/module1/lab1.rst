@@ -46,12 +46,10 @@ Via UDF you should have access to bigip1. Follow the "Access" drop down to
       # From the CLI:
       tmsh create auth partition kubernetes
 
-#. Install AS3 via the management console
+#. Verify / Install AS3 via the management console
 
    .. attention:: This has been done to save time but is documented here for
       reference.
-
-   To verify or install
    
    - GoTo: :menuselection:`iApps --> Package Management LX`. If not installed
      follow the instruction below.
@@ -60,7 +58,7 @@ Via UDF you should have access to bigip1. Follow the "Access" drop down to
 
    - Click here to: `Download latest AS3 <https://github.com/F5Networks/f5-appsvcs-extension/releases>`_
 
-   - From the UI GoTo: :menuselection:`iApps --> Package Management LX`
+   - Go back to: :menuselection:`iApps --> Package Management LX`
 
      - Click Import
      - Browse and select downloaded AS3 RPM
