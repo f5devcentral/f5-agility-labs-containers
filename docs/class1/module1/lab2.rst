@@ -96,16 +96,16 @@ On **kube-master1** we will create all the required files:
    .. warning:: Don't forget to select the "kubernetes" partition or you'll
       see nothing.
 
-   Goto :menuselection:`Local Traffic --> Virtual Servers`
+   GoTo: :menuselection:`Local Traffic --> Virtual Servers`
 
    Here you can see a new Virtual Server, "ingress_10.1.1.4_80" was created,
    listening on 10.1.1.4:80 in partition "kubernetes".
 
    .. image:: ../images/f5-container-connector-check-app-ingress.png
 
-#. Check the Pools to see a new pool and the associated pool members:
-   :menuselection:`Local Traffic --> Pools --> 
-   "ingress_default_f5-hello-world-web" --> Members`
+#. Check the Pools to see a new pool and the associated pool members.
+
+   GoTo: :menuselection:`Local Traffic --> Pools --> "ingress_default_f5-hello-world-web" --> Members`
 
    .. image:: ../images/f5-container-connector-check-app-ingress-pool.png
 
@@ -118,10 +118,10 @@ On **kube-master1** we will create all the required files:
 
    .. image:: ../images/f5-container-connector-access-app.png
 
-#. Hit Refresh many times and go back to your **BIG-IP** UI. Goto:
-   :menuselection:`Local Traffic --> Pools --> Pool list -->
-   ingress_default_f5-hello-world-web --> Statistics`
-   to see that traffic is distributed as expected.
+#. To check traffic distribution. Hit Refresh many times on your open browser
+   session. Then go back to the **BIG-IP** UI.
+
+   GoTo: :menuselection:`Local Traffic --> Pools --> Pool list --> ingress_default_f5-hello-world-web --> Statistics`
 
    .. image:: ../images/f5-container-connector-check-app-ingress-stats.png
 

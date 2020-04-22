@@ -63,40 +63,49 @@ On **kube-master1** we will create all the required files:
 
    .. image:: ../images/f5-cis-describe-clusterip2-service.png
 
-#. To understand and test the new app pay attention to the **Endpoints value**,
-   this shows our 2 instances (defined as replicas in our deployment file) and
-   the flannel IP assigned to the pod.
+   .. attention:: To understand and test the new app pay attention to the
+      **Endpoints value**, this shows our 2 instances (defined as replicas in
+      our deployment file) and the flannel IP assigned to the pod.
 
-   Now that we have deployed our application sucessfully, we can check our
-   BIG-IP configuration. From the browser open https://10.1.1.4
+#. Now that we have deployed our application sucessfully, we can check the
+   configuration on bigip1. We should still have access to TMUI via UDF go back
+   to the open session.
 
    .. warning:: Don't forget to select the proper partition. Previously we
       checked the "kubernetes" partition. In this case we need to look at
       the "AS3" partition. This partition was auto created by AS3 and named
       after the Tenant which happens to be "AS3".
 
+   GoTo: :menuselection:`Local Traffic --> Virtual Servers`
+
    Here you can see a new Virtual Server, "serviceMain" was created,
    listening on 10.1.1.4:80 in partition "AS3".
 
    .. image:: ../images/f5-container-connector-check-app-bigipconfig-as3.png
 
-#. Check the Pools to see a new pool and the associated pool members:
-   Local Traffic --> Pools --> "web_pool" --> Members
+#. Check the Pools to see a new pool and the associated pool members.
+
+   GoTo: :menuselection:`Local Traffic --> Pools --> "web_pool" --> Members`
 
    .. image:: ../images/f5-container-connector-check-app-pool-cluster-as3.png
 
    .. note:: You can see that the pool members IP addresses are assigned from
       the overlay network (**ClusterIP mode**)
 
-#. Now you can try to access your application via the BIG-IP VS/VIP: UDF-URL
+#. Access your web application via UDF-URL.
+
+   .. note:: This URL can be found on the UDF student portal
 
    .. image:: ../images/f5-container-connector-access-app.png
 
-#. Hit Refresh many times and go back to your **BIG-IP** UI, go to Local
-   Traffic --> Pools --> Pool list --> web_pool --> Statistics to see that
-   traffic is distributed as expected.
+
+#. Hit Refresh many times and go back to your **BIG-IP** UI. Goto:
+   :menuselection:`Local Traffic --> Pools --> Pool list --> "web_pool" -->
+   Statistics` to see that traffic is distributed as expected.
 
    .. image:: ../images/f5-container-connector-check-app-bigip-stats-cluster-as3.png
+
+   .. note:: Why is all the traffic directed to one pool member?
 
 #. Scale the f5-hello-world app
 
@@ -112,15 +121,15 @@ On **kube-master1** we will create all the required files:
 
    .. image:: ../images/f5-hello-world-pods-scale10.png
 
-#. Check the pool was updated on BIG-IP:
+#. Check the pool was updated on BIG-IP.
 
    .. image:: ../images/f5-hello-world-pool-scale10-as3-clusterip.png
 
-   .. attention:: Now we show 10 pool members vs. 2 in the previous lab, why?
+   .. attention:: Now we show 10 pool members vs. 3 in the previous lab, why?
 
-#. Remove Hello-World from BIG-IP. When using AS3 an extra steps need to be
-   performed. In addition to deleting the previously created configmap a
-   "blank" declaration needs to be sent to completly remove the application:
+#. Remove Hello-World from BIG-IP. When using AS3 an extra step needs to be
+   performed. In addition to deleting the application configmap, a "blank AS3
+   declaration" is required to completely remove the application from BIG-IP.
    
    .. literalinclude:: ../kubernetes/delete-hello-world.yaml
       :language: yaml

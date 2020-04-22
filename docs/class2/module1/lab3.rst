@@ -145,10 +145,10 @@ On the **okd-master1** we will create all the required files:
 
    .. attention:: Why do we still only show 3 pool members?
 
-#. Remove Hello-World from BIG-IP. When using AS3 an extra steps need to be
-   performed. In addition to deleting the previously created configmap a
-   "blank" declaration needs to be sent to completly remove the application:
-   
+#. Remove Hello-World from BIG-IP. When using AS3 an extra step needs to be
+   performed. In addition to deleting the application configmap, a "blank AS3
+   declaration" is required to completely remove the application from BIG-IP.
+
    .. literalinclude:: ../openshift/delete-hello-world.yaml
       :language: yaml
       :linenos:

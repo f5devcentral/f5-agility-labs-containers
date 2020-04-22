@@ -33,26 +33,28 @@ Via UDF you should have access to bigip1. Follow the "Access" drop down to
      .. image:: ../images/f5-check-partition.png
 
 #. First we need to setup a partition that will be used by F5 Container Ingress
-   Service. From the UI GoTo: :menuselection:`System --> Users --> Partition List`
+   Service. 
    
+   - GoTo: :menuselection:`System --> Users --> Partition List`
    - Create a new partition called "kubernetes" (use default settings)
    - Click Finished
+
+   .. image:: ../images/f5-container-connector-bigip-partition-setup.png
 
    .. code-block:: bash
 
       # From the CLI:
       tmsh create auth partition kubernetes
 
-   .. image:: ../images/f5-container-connector-bigip-partition-setup.png
-
-#. Install AS3
+#. Install AS3 via the management console
 
    .. attention:: This has been done to save time but is documented here for
       reference.
 
-   - Verify AS3 is installed from the F5 Management Console.  Click
-     :menuselection:`iApps --> Package Management LX`. If not installed follow
-     the instruction below.
+   To verify or install
+   
+   - GoTo: :menuselection:`iApps --> Package Management LX`. If not installed
+     follow the instruction below.
 
      .. image:: ../images/confirm-as3-installed.png
 

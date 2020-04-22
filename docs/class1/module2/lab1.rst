@@ -10,65 +10,70 @@ about ClusterIP Mode.
 BIG-IP Setup
 ------------
 
-With ClusterIP we're utilizing VXLAN to communicate with the application pods.
-To do so we'll need to configure BIG-IP first.
+Via UDF you should have access to bigip1. Follow the “Access” drop down to
+“TMUI” and open up the management GUI.
 
 .. attention:: 
+   - With ClusterIP we're utilizing VXLAN to communicate with the application
+     pods. To do so we'll need to configure BIG-IP first.
+
    - Be sure to be in the ``Common`` partition before creating the following
      objects.
 
      .. image:: ../images/f5-check-partition.png
 
-#. You need to setup a partition that will be used by F5 Container Ingress
+#. First we need to setup a partition that will be used by F5 Container Ingress
    Service.
 
    .. note:: This step was performed in the previous module. Verify the
-      "kubernetes" partion exists with the instructions below.
+      "kubernetes" partion exists and if not follow the instructions below.
+
+   - GoTo: :menuselection:`System --> Users --> Partition List`
+   - Create a new partition called "kubernetes" (use default settings)
+   - Click Finished
+
+   .. image:: ../images/f5-container-connector-bigip-partition-setup.png
 
    .. code-block:: bash
 
       # From the CLI:
       tmsh create auth partition kubernetes
 
-      # From the UI:
-      GoTo System --> Users --> Partition List
-      - Create a new partition called "kubernetes" (use default settings)
-      - Click Finished
+#. Install AS3 via the management console
 
-   .. image:: ../images/f5-container-connector-bigip-partition-setup.png
+   .. attention:: This has been done to save time but is documented here for
+      reference. If needed see Module 1 / Lab 1 for install instructions.
 
-#. Create a vxlan tunnel profile
+#. Create a vxlan tunnel profile.
+
+   - GoTo: :menuselection:`Network --> Tunnels --> Profiles --> VXLAN`
+   - Create a new profile called "k8s-vxlan"
+   - Set Port = 8472
+   - Set the Flooding Type = none
+   - Click Finished
+   
+   .. image:: ../images/create-k8s-vxlan-profile.png
 
    .. code-block:: bash
 
       # From the CLI:
       tmsh create net tunnels vxlan k8s-vxlan { app-service none port 8472 flooding-type none }
 
-      # From the UI:
-      GoTo Network --> Tunnels --> Profiles --> VXLAN
-      - Create a new profile called "k8s-vxlan"
-      - Set Port = 8472
-      - Set the Flooding Type = none
-      - Click Finished
+#. Create a vxlan tunnel.
 
-   .. image:: ../images/create-k8s-vxlan-profile.png
+   - GoTo: :menuselection:`Network --> Tunnels --> Tunnel List`
+   - Create a new tunnel called "k8s-tunnel"
+   - Set the Profile to the one previously created called "k8s-vxlan"
+   - set the Key = 1
+   - Set the Local Address to 10.1.1.4
+   - Click Finished
 
-#. Create a vxlan tunnel
+   .. image:: ../images/create-k8s-vxlan-tunnel.png
 
    .. code-block:: bash
 
       # From the CLI:
       tmsh create net tunnels tunnel k8s-tunnel { app-service none key 1 local-address 10.1.1.4 profile k8s-vxlan }
-
-      # From the UI:
-      GoTo Network --> Tunnels --> Tunnel List
-      - Create a new tunnel called "k8s-tunnel"
-      - Set the Profile to the one previously created called "k8s-vxlan"
-      - set the Key = 1
-      - Set the Local Address to 10.1.1.4
-      - Click Finished
-
-   .. image:: ../images/create-k8s-vxlan-tunnel.png
 
 #. Create the vxlan tunnel self-ip
 
@@ -83,22 +88,21 @@ To do so we'll need to configure BIG-IP first.
       /24 subnets from the BIG-IP for instance, communication will fail as your
       self-ip doesn't have the proper subnet mask to know the other subnets are
       local.
-      
+
+   - GoTo: :menuselection:`Network --> Self IPs`
+   - Create a new Self-IP called "k8s-vxlan-selfip"
+   - Set the IP Address to "10.244.20.1"
+   - Set the Netmask to "255.255.0.0"
+   - Set the VLAN / Tunnel to "k8s-tunnel" (Created earlier)
+   - Set Port Lockdown to "Allow All"
+   - Click Finished
+
+   .. image:: ../images/create-k8s-vxlan-selfip.png
+
    .. code-block:: bash
       
       # From the CLI:
       tmsh create net self k8s-vxlan-selfip { address 10.244.20.1/16 vlan k8s-tunnel allow-service all }
-
-      # From the UI:
-      GoTo Network --> Self IP List
-      - Create a new Self-IP called "k8s-vxlan-selfip"
-      - Set the IP Address to "10.244.20.1"
-      - Set the Netmask to "255.255.0.0"
-      - Set the VLAN / Tunnel to "k8s-tunnel" (Created earlier)
-      - Set Port Lockdown to "Allow All"
-      - Click Finished
-
-   .. image:: ../images/create-k8s-vxlan-selfip.png
 
 CIS Deployment
 --------------
@@ -115,8 +119,11 @@ CIS Deployment
 #. Before deploying CIS in ClusterIP mode we need to configure Big-IP as a node
    in the kubernetes cluster. To do so you'll need to modify
    "bigip-node.yaml" with the MAC address auto created from the previous
-   steps. SSH to BIG-IP and run the following command. You'll want to copy the
+   steps. SSH to bigip1 and run the following command. You'll want to copy the
    displayed "MAC Address".
+
+   .. note:: "bigip1" IP and Port for SSH can be found on the UDF student
+      portal.
 
    .. code-block:: bash
       
@@ -124,15 +131,14 @@ CIS Deployment
 
    .. image:: ../images/get-k8s-tunnel-mac-addr.png
 
-#. On the kube-master node edit bigip-node.yaml
+#. On the kube-master1 edit bigip-node.yaml and change the highlighted MAC
+   address with your address copied on the previous step.
 
    .. note:: If your unfamiliar with VI ask for help.
 
    .. code-block:: bash
 
       vim ~/agilitydocs/docs/class1/kubernetes/bigip-node.yaml
-
-      and edit the highlighted MAC addr line with your addr shown below:
 
    .. literalinclude:: ../kubernetes/bigip-node.yaml
       :language: yaml
@@ -152,6 +158,9 @@ CIS Deployment
       kubectl get nodes
 
    .. image:: ../images/create-bigip1.png
+
+   .. note:: It's normal for bigip1 to show up as "Unkown" or "NotReady". This
+      status can be ignored.
 
 #. Now that we have the new BIGIP Node added we can launch the CIS deployment.
    It will start the f5-k8s-controller container on one of the worker nodes.

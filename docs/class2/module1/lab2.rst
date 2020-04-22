@@ -103,7 +103,7 @@ On **okd-master1** we will create all the required files:
 
    .. image:: ../images/f5-container-connector-check-app-route-bigipconfig.png
 
-   This Virtual uses an LTM Policy to direct traffic based on the host header.
+   These Virtuals uses an LTM Policy to direct traffic based on the host header.
    You can view this from the BIG-IP GUI at :menuselection:`Local Traffic -->
    Virtual Servers --> Policies` and click the Published Policy,
    "openshift_insecure_routes".

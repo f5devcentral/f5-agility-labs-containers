@@ -13,54 +13,49 @@ BIG-IP Setup
 With ClusterIP we're utilizing VXLAN to communicate with the application pods.
 To do so we'll need to configure BIG-IP first.
 
+Via UDF you should have access to bigip1. Follow the “Access” drop down to
+“TMUI” and open up the management GUI.
+
 .. attention:: 
    - Be sure to be in the ``Common`` partition before creating the following
      objects.
 
      .. image:: ../images/f5-check-partition.png
 
-#. You need to setup a partition that will be used by F5 Container Ingress
+#. First we need to setup a partition that will be used by F5 Container Ingress
    Service.
 
    .. note:: This step was performed in the previous module. Verify the
-      "kubernetes" partion exists with the instructions below.
+      "okd" partion exists with the instructions below.
+ 
+   - GoTo: :menuselection:`System --> Users --> Partition List`
+   - Create a new partition called "okd" (use default settings)
+   - Click Finished
+
+   .. image:: ../images/f5-container-connector-bigip-partition-setup.png
 
    .. code-block:: bash
 
       # From the CLI:
       tmsh create auth partition okd
 
-      # From the UI:
-      GoTo System --> Users --> Partition List
-      - Create a new partition called "okd" (use default settings)
-      - Click Finished
-
-   .. image:: ../images/f5-container-connector-bigip-partition-setup.png
-
 #. Create a vxlan tunnel profile
+
+   - GoTo: :menuselection:`Network --> Tunnels --> Profiles --> VXLAN`
+   - Create a new profile called "okd-vxlan"
+   - Set the Flooding Type = Multipoint
+   - Click Finished
+
+   .. image:: ../images/create-okd-vxlan-profile.png
 
    .. code-block:: bash
 
       # From the CLI:
       tmsh create net tunnel vxlan okd-vxlan { app-service none flooding-type multipoint }
 
-      # From the UI:
-      GoTo Network --> Tunnels --> Profiles --> VXLAN
-      - Create a new profile called "okd-vxlan"
-      - Set the Flooding Type = Multipoint
-      - Click Finished
-
-   .. image:: ../images/create-okd-vxlan-profile.png
-
 #. Create a vxlan tunnel
 
-   .. code-block:: bash
-
-      # From the CLI:
-      tmsh create net tunnel tunnel okd-tunnel { app-service none key 0 local-address 10.1.1.4 profile okd-vxlan }
-
-      # From the UI:
-      GoTo Network --> Tunnels --> Tunnel List
+      - GoTo: :menuselection:`Network --> Tunnels --> Tunnel List`
       - Create a new tunnel called "okd-tunnel"
       - Set the Profile to the one previously created called "okd-vxlan"
       - set the key = 0
@@ -68,6 +63,11 @@ To do so we'll need to configure BIG-IP first.
       - Click Finished
 
    .. image:: ../images/create-okd-vxlan-tunnel.png
+
+   .. code-block:: bash
+
+      # From the CLI:
+      tmsh create net tunnel tunnel okd-tunnel { app-service none key 0 local-address 10.1.1.4 profile okd-vxlan }
 
 #. Create the vxlan tunnel self-ip
 
@@ -83,13 +83,8 @@ To do so we'll need to configure BIG-IP first.
       self-ip doesn't have the proper subnet mask to know the other subnets are
       local.
       
-   .. code-block:: bash
-      
-      # From the CLI:
-      tmsh create net self okd-vxlan-selfip { app-service none address 10.131.0.1/14 vlan okd-tunnel allow-service all }
 
-      # From the UI:
-      GoTo Network --> Self IP List
+      - GoTo: :menuselection:`Network --> Self IPs`
       - Create a new Self-IP called "okd-vxlan-selfip"
       - Set the IP Address to "10.131.0.1".
       - Set the Netmask to "255.252.0.0"
@@ -98,6 +93,11 @@ To do so we'll need to configure BIG-IP first.
       - Click Finished
 
    .. image:: ../images/create-okd-vxlan-selfip.png
+
+   .. code-block:: bash
+      
+      # From the CLI:
+      tmsh create net self okd-vxlan-selfip { app-service none address 10.131.0.1/14 vlan okd-tunnel allow-service all }
 
 CIS Deployment
 --------------
@@ -186,7 +186,7 @@ CIS Deployment
    deployment. It will start the f5-k8s-controller container on one of the
    worker nodes.
    
-   .. attention:: This may take around 30sec to get to a running state.
+   .. attention:: This may take around 30s to get to a running state.
 
    .. code-block:: bash
 
@@ -225,7 +225,6 @@ CIS Deployment
 
 Troubleshooting
 ---------------
-
 
 Check the container/pod logs via ``oc`` command. You also have the option of
 checking the Docker container as described in the previos module.

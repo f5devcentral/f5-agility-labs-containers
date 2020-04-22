@@ -64,40 +64,51 @@ On **kube-master1** we will create all the required files:
 
    .. image:: ../images/f5-cis-describe-clusterip-route-service.png
 
-#. To understand and test the new app pay attention to the **Endpoints value**,
-   this shows our 2 instances (defined as replicas in our deployment file) and
-   the overlay network IP assigned to the pod.
+   .. attention:: To understand and test the new app pay attention to the
+      **Endpoints value**, this shows our 2 instances (defined as replicas in
+      our deployment file) and the overlay network IP assigned to the pod.
+
+#. Now that we have deployed our application sucessfully, we can check the
+   configuration on bigip1. We should still have access to TMUI via UDF go back
+   to the open session.
 
    .. warning:: Don't forget to select the "okd" partition or you'll
       see nothing.
+
+   Goto :menuselection:`Local Traffic --> Virtual Servers`
 
    With "Route" you'll seee two virtual servers defined. "okd_http_vs" and
    "okd_https_vs", listening on port 80 and 443.
 
    .. image:: ../images/f5-container-connector-check-app-route-bigipconfig.png
 
-   These Virtual use an LTM Policy to direct traffic based on the host header.
-   You can view this from the BIG-IP GUI at Local Traffic -->
-   Virtual Servers --> Policies and click the Published Policy,
+   These Virtuals use an LTM Policy to direct traffic based on the host header.
+   You can view this from the BIG-IP GUI at :menuselection:`Local Traffic -->
+   Virtual Servers --> Policies` and click the Published Policy,
    "openshift_insecure_routes".
 
    .. image:: ../images/f5-check-ltm-policy-route.png
 
 #. Check the Pools to see a new pool and the associated pool members:
-   Local Traffic --> Pools --> "openshift_default_f5-hello-world-web"
-   --> Members
+
+   GoTo: :menuselection:`Local Traffic --> Pools -->
+   "openshift_default_f5-hello-world-web" --> Members`
 
    .. image:: ../images/f5-container-connector-check-app-route-pool-clusterip.png
 
    .. note:: You can see that the pool members IP addresses are assigned from
       the overlay network (**ClusterIP mode**)
 
-#. To view the application from a browser you'll need to update your host file
-   to point the assigned public IP at "mysite.f5demo.com".
+#. To view the application from a browser, you'll need to update your local
+   host file, pointing the assigned public IP at "mysite.f5demo.com".
 
    .. note:: This step can be skipped.
 
 #. Delete Hello-World
+
+   .. important:: Do not skip this step. Instead of reusing some of these
+      objects, the next lab we will re-deploy them to avoid conflicts and
+      errors.
 
    .. code-block:: bash
 
@@ -105,6 +116,4 @@ On **kube-master1** we will create all the required files:
       oc delete -f clusterip-service-hello-world.yaml
       oc delete -f deployment-hello-world.yaml
 
-   .. important:: Do not skip this step. Instead of reusing some of these
-      objects, the next lab we will re-deploy them to avoid conflicts and
-      errors.
+   .. attention:: Validate the objects are removed via bigip1 TMUI.

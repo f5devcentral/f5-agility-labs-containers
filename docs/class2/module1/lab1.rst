@@ -36,13 +36,13 @@ Via UDF you should have access to bigip1. Follow the "Access" drop down to
    will be used by F5 Container Ingress Service. From the UI GoTo:
    :menuselection:`System --> Users --> Partition List`
    
-   - Create a new partition called "kubernetes" (use default settings)
+   - Create a new partition called "okd" (use default settings)
    - Click Finished
 
    .. code-block:: bash
 
       # From the CLI:
-      tmsh create auth partition kubernetes
+      tmsh create auth partition okd
 
    .. image:: ../images/f5-container-connector-bigip-partition-setup.png
 
