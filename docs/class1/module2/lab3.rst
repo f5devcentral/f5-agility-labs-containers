@@ -1,11 +1,8 @@
 Lab 2.3 - Deploy Hello-World Using ConfigMap w/ AS3
 ===================================================
 
-Now that CIS is up and running, let's deploy an application and leverage CIS.
-
-For this lab we'll use a simple pre-configured docker image called 
-"f5-hello-world". It can be found on docker hub at
-`f5devcentral/f5-hello-world <https://hub.docker.com/r/f5devcentral/f5-hello-world/>`_
+Just like the previous lab we'll deploy the f5-hello-world docker container.
+But instead of using the Ingress resource we'll use ConfigMap.
 
 App Deployment
 --------------
@@ -68,8 +65,8 @@ On **kube-master1** we will create all the required files:
       our deployment file) and the flannel IP assigned to the pod.
 
 #. Now that we have deployed our application sucessfully, we can check the
-   configuration on bigip1. We should still have access to TMUI via UDF. Go
-   back to the open session.
+   configuration on bigip1. Switch back to the open management session on
+   firefox.
 
    .. warning:: Don't forget to select the proper partition. Previously we
       checked the "kubernetes" partition. In this case we need to look at
@@ -85,19 +82,20 @@ On **kube-master1** we will create all the required files:
 
 #. Check the Pools to see a new pool and the associated pool members.
 
-   GoTo: :menuselection:`Local Traffic --> Pools --> "web_pool" --> Members`
+   GoTo: :menuselection:`Local Traffic --> Pools` and select the
+   "web_pool" pool. Click the Members tab.
 
    .. image:: ../images/f5-container-connector-check-app-pool-cluster-as3.png
 
    .. note:: You can see that the pool members IP addresses are assigned from
       the overlay network (**ClusterIP mode**)
 
-#. Access your web application via UDF-URL.
+#. Access your web application via firefox on the jumpbox.
 
-   .. note:: This URL can be found on the UDF student portal
+   .. note:: Select the "Hello, World" shortcut or type http://10.1.1.4 in the
+      URL field.
 
    .. image:: ../images/f5-container-connector-access-app.png
-
 
 #. Hit Refresh many times and go back to your **BIG-IP** UI.
 
@@ -122,11 +120,13 @@ On **kube-master1** we will create all the required files:
 
    .. image:: ../images/f5-hello-world-pods-scale10.png
 
-#. Check the pool was updated on BIG-IP.
+#. Check the pool was updated on bigip1. GoTo: :menuselection:`Local Traffic --> Pools`
+   and select the "web_pool" pool. Click the Members tab.
 
    .. image:: ../images/f5-hello-world-pool-scale10-as3-clusterip.png
 
-   .. attention:: Now we show 10 pool members vs. 3 in the previous lab, why?
+   .. attention:: Now we show 10 pool members. In module1 the number stayed at
+      3 and didn't change, why?
 
 #. Remove Hello-World from BIG-IP.
 
@@ -134,10 +134,9 @@ On **kube-master1** we will create all the required files:
       addition to deleting the application configmap, a "blank AS3 declaration"
       is required to completely remove the application from BIG-IP.
 
-   "Blank AS3 Declartion"
-   
    .. literalinclude:: ../kubernetes/delete-hello-world.yaml
       :language: yaml
+      :caption: Blank AS3 Declartion
       :linenos:
       :emphasize-lines: 2,19
 
@@ -149,6 +148,9 @@ On **kube-master1** we will create all the required files:
       
       kubectl create -f delete-hello-world.yaml
       kubectl delete -f delete-hello-world.yaml
+
+   .. note:: Be sure to verify the virtual server and "AS3" partition were
+      removed from BIG-IP.
 
 .. attention:: This concludes **Class 1 - CIS and Kubernetes**. Feel free to
    experiment with any of the settings. The lab will be destroyed at the end of

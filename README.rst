@@ -14,6 +14,7 @@ The purpose of these labs is to give you better understanding of...
    - How to launch a simple web server using NodePort & ClusterIP mode
 
 .. attention::
+
    * The lab guide is hosted here:
      https://clouddocs.f5.com/training/community/containers/html/
 

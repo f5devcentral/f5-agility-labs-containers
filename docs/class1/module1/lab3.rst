@@ -90,8 +90,8 @@ On **kube-master1** we will create all the required files:
       from the outside. Here it's "31233", highlighted above.
 
 #. Now that we have deployed our application sucessfully, we can check the
-   configuration on bigip1. We should still have access to TMUI via UDF go back
-   to the open session.
+   configuration on bigip1. Switch back to the open management session on
+   firefox.
 
    .. warning:: Don't forget to select the proper partition. Previously we
       checked the "kubernetes" partition. In this case we need to look at
@@ -105,17 +105,20 @@ On **kube-master1** we will create all the required files:
 
    .. image:: ../images/f5-container-connector-check-app-bigipconfig-as3.png
 
-#. Check the Pools to see a new pool and the associated pool members:
-   :menuselection:`Local Traffic --> Pools --> "web_pool" --> Members`
+#. Check the Pools to see a new pool and the associated pool members.
+
+   GoTo: :menuselection:`Local Traffic --> Pools` and select the
+   "web_pool" pool. Click the Members tab.
 
    .. image:: ../images/f5-container-connector-check-app-pool-as3.png
 
    .. note:: You can see that the pool members listed are all the cluster
       nodes on the node port 31233. (**NodePort mode**)
 
-#. Access your web application via UDF-URL.
+#. Access your web application via firefox on the jumpbox.
 
-   .. note:: This URL can be found on the UDF student portal
+   .. note:: Select the "Hello, World" shortcut or type http://10.1.1.4 in the
+      URL field.
 
    .. image:: ../images/f5-container-connector-access-app.png
 
@@ -142,7 +145,8 @@ On **kube-master1** we will create all the required files:
 
    .. image:: ../images/f5-hello-world-pods-scale10.png
 
-#. Check the pool was updated on bigip1
+#. Check the pool was updated on bigip1. GoTo: :menuselection:`Local Traffic --> Pools`
+   and select the "web_pool" pool. Click the Members tab.
 
    .. image:: ../images/f5-hello-world-pool-scale10-as3.png
 
@@ -154,10 +158,9 @@ On **kube-master1** we will create all the required files:
       addition to deleting the application configmap, a "blank AS3 declaration"
       is required to completely remove the application from BIG-IP.
    
-   "Blank AS3 Declartion"
-   
    .. literalinclude:: ../kubernetes/delete-hello-world.yaml
       :language: yaml
+      :caption: Blank AS3 Declaration
       :linenos:
       :emphasize-lines: 2,19
 

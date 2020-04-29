@@ -1,7 +1,6 @@
 Lab 2.2 - Deploy Hello-World Using Route
 ========================================
 
-
 Now that CIS is up and running, let's deploy an application and leverage CIS.
 
 For this lab we'll use a simple pre-configured docker image called 
@@ -69,8 +68,8 @@ On **kube-master1** we will create all the required files:
       our deployment file) and the overlay network IP assigned to the pod.
 
 #. Now that we have deployed our application sucessfully, we can check the
-   configuration on bigip1. We should still have access to TMUI via UDF go back
-   to the open session.
+   configuration on bigip1. Switch back to the open management session on
+   firefox.
 
    .. warning:: Don't forget to select the "okd" partition or you'll
       see nothing.
@@ -84,25 +83,27 @@ On **kube-master1** we will create all the required files:
 
    These Virtuals use an LTM Policy to direct traffic based on the host header.
    You can view this from the BIG-IP GUI at :menuselection:`Local Traffic -->
-   Virtual Servers --> Policies` and click the Published Policy,
-   "openshift_insecure_routes".
+   Virtual Servers --> Policies` and click :menuselection:`Published Policy -->
+   "openshift_insecure_routes"`
 
    .. image:: ../images/f5-check-ltm-policy-route.png
 
 #. Check the Pools to see a new pool and the associated pool members:
 
-   GoTo: :menuselection:`Local Traffic --> Pools -->
-   "openshift_default_f5-hello-world-web" --> Members`
+   GoTo: :menuselection:`Local Traffic --> Pools` and selec the
+   "openshift_default_f5-hello-world-web" pool. Click the Members tab.
 
    .. image:: ../images/f5-container-connector-check-app-route-pool-clusterip.png
 
    .. note:: You can see that the pool members IP addresses are assigned from
       the overlay network (**ClusterIP mode**)
 
-#. To view the application from a browser, you'll need to update your local
-   host file, pointing the assigned public IP at "mysite.f5demo.com".
+#. Access your web application via firefox on the jumpbox.
 
-   .. note:: This step can be skipped.
+   .. note:: Select the "mysite.f5demo.com" shortcut or type
+      http://mysite.f5demo.com in the URL field.
+
+   .. image:: ../images/f5-container-connector-access-app.png
 
 #. Delete Hello-World
 
@@ -116,4 +117,5 @@ On **kube-master1** we will create all the required files:
       oc delete -f clusterip-service-hello-world.yaml
       oc delete -f deployment-hello-world.yaml
 
-   .. attention:: Validate the objects are removed via bigip1 TMUI.
+   .. attention:: Validate the objects are removed via the management console.
+      :menuselection:`Local Traffic --> Virtual Servers`

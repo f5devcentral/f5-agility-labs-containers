@@ -9,18 +9,20 @@ about ClusterIP Mode.
 
 BIG-IP Setup
 ------------
+With ClusterIP we're utilizing VXLAN to communicate with the application pods.
+To do so we'll need to configure BIG-IP first.
 
-Via UDF you should have access to bigip1. Follow the “Access” drop down to
-“TMUI” and open up the management GUI.
+If not already connected, RDP to the UDF lab "jumpbox" host. Otherwise resume
+previous session.
+
+#. Open firefox and connect to bigip1. For your convenience there's a shortcut
+   on the toolbar. Username and password are: **admin/admin**
 
 .. attention:: 
-   - With ClusterIP we're utilizing VXLAN to communicate with the application
-     pods. To do so we'll need to configure BIG-IP first.
+   Be sure to be in the ``Common`` partition before creating the following
+   objects.
 
-   - Be sure to be in the ``Common`` partition before creating the following
-     objects.
-
-     .. image:: ../images/f5-check-partition.png
+   .. image:: ../images/f5-check-partition.png
 
 #. First we need to setup a partition that will be used by F5 Container Ingress
    Service.
@@ -41,8 +43,8 @@ Via UDF you should have access to bigip1. Follow the “Access” drop down to
 
 #. Install AS3 via the management console
 
-   .. attention:: This has been done to save time but is documented here for
-      reference. If needed see Module 1 / Lab 1 for install instructions.
+   .. attention:: This has been done to save time. If needed see
+      Module 1 / Lab 1 for install instructions.
 
 #. Create a vxlan tunnel profile.
 
@@ -119,17 +121,22 @@ CIS Deployment
 #. Before deploying CIS in ClusterIP mode we need to configure Big-IP as a node
    in the kubernetes cluster. To do so you'll need to modify
    "bigip-node.yaml" with the MAC address auto created from the previous
-   steps. SSH to bigip1 and run the following command. You'll want to copy the
-   displayed "MAC Address".
-
-   .. note:: "bigip1" IP and Port for SSH can be found on the UDF student
-      portal.
+   steps. From the jumpbox terminal SSH to bigip1 and run the following
+   command. You'll want to copy the displayed "MAC Address".
 
    .. code-block:: bash
+
+      ssh admin@10.1.1.4
       
       tmsh show net tunnels tunnel k8s-tunnel all-properties
 
    .. image:: ../images/get-k8s-tunnel-mac-addr.png
+
+#. Exit the bigip SSH session after copying the MAC address.
+
+   .. code-block:: bash
+
+      exit
 
 #. On the kube-master1 edit bigip-node.yaml and change the highlighted MAC
    address with your address copied on the previous step.
@@ -159,11 +166,11 @@ CIS Deployment
 
    .. image:: ../images/create-bigip1.png
 
-   .. note:: It's normal for bigip1 to show up as "Unkown" or "NotReady". This
+   .. note:: It's normal for bigip1 to show up as "Unknown" or "NotReady". This
       status can be ignored.
 
-#. Now that we have the new BIGIP Node added we can launch the CIS deployment.
-   It will start the f5-k8s-controller container on one of the worker nodes.
+#. Now that we have bigip1 added as a Node we can launch the CIS deployment. It
+   will start the f5-k8s-controller container on one of the worker nodes.
 
    .. attention:: This may take around 30sec to get to a running state.
 

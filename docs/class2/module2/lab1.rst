@@ -9,24 +9,26 @@ about ClusterIP Mode.
 
 BIG-IP Setup
 ------------
-
 With ClusterIP we're utilizing VXLAN to communicate with the application pods.
 To do so we'll need to configure BIG-IP first.
 
-Via UDF you should have access to bigip1. Follow the “Access” drop down to
-“TMUI” and open up the management GUI.
+If not already connected, RDP to the UDF lab "jumpbox" host. Otherwise resume
+previous session.
 
-.. attention:: 
-   - Be sure to be in the ``Common`` partition before creating the following
-     objects.
+#. Open firefox and connect to bigip1. For your convenience there's a shortcut
+   on the toolbar. Username and password are: **admin/admin**
 
-     .. image:: ../images/f5-check-partition.png
+   .. attention:: 
+      Be sure to be in the ``Common`` partition before creating the following
+      objects.
+
+      .. image:: ../images/f5-check-partition.png
 
 #. First we need to setup a partition that will be used by F5 Container Ingress
    Service.
 
    .. note:: This step was performed in the previous module. Verify the
-      "okd" partion exists with the instructions below.
+      "okd" partion exists and if not follow the instructions below.
  
    - GoTo: :menuselection:`System --> Users --> Partition List`
    - Create a new partition called "okd" (use default settings)
@@ -41,8 +43,8 @@ Via UDF you should have access to bigip1. Follow the “Access” drop down to
 
 #. Install AS3 via the management console
 
-   .. attention:: This has been done to save time but is documented here for
-      reference. If needed see Module 1 / Lab 1 for install instructions.
+   .. attention:: This has been done to save time. If needed see 
+      Module 1 / Lab 1 for install instructions.
 
 #. Create a vxlan tunnel profile
 
@@ -87,7 +89,6 @@ Via UDF you should have access to bigip1. Follow the “Access” drop down to
       /23 subnets from the BIG-IP for instance, communication will fail as your
       self-ip doesn't have the proper subnet mask to know the other subnets are
       local.
-      
 
       - GoTo: :menuselection:`Network --> Self IPs`
       - Create a new Self-IP called "okd-vxlan-selfip"
@@ -115,6 +116,12 @@ CIS Deployment
    - If you have issues with your yaml and syntax (**indentation MATTERS**),
      you can try to use an online parser to help you :
      `Yaml parser <http://codebeautify.org/yaml-validator>`_
+
+#. SSH to okd-Master1
+
+   .. code-block:: bash
+
+      ssh centos@okd-master1
 
 #. Next let's explore the f5-hostsubnet.yaml file
 
@@ -187,7 +194,7 @@ CIS Deployment
          host: openshift-f5-node
          hostIP: 10.1.1.4
 
-#. Now that we have the new BIGIP HostSubnet added we can launch the CIS
+#. Now that we have added a HostSubnet for bigip1 we can launch the CIS
    deployment. It will start the f5-k8s-controller container on one of the
    worker nodes.
    

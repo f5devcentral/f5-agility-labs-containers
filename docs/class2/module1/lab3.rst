@@ -90,8 +90,8 @@ On the **okd-master1** we will create all the required files:
       from the outside. Here it's "31670", highlighted above.
 
 #. Now that we have deployed our application sucessfully, we can check the
-   configuration on bigip1. We should still have access to TMUI via UDF go back
-   to the open session.
+   configuration on bigip1. Switch back to the open management session on
+   firefox.
 
    .. warning:: Don't forget to select the proper partition. Previously we
       checked the "okd" partition. In this case we need to look at
@@ -105,17 +105,20 @@ On the **okd-master1** we will create all the required files:
 
    .. image:: ../images/f5-container-connector-check-app-bigipconfig-as3.png
 
-#. Check the Pools to see a new pool and the associated pool members:
-   :menuselection:`Local Traffic --> Pools --> "web_pool" --> Members`
+#. Check the Pools to see a new pool and the associated pool members.
+
+   GoTo: :menuselection:`Local Traffic --> Pools` and select the
+   "web_pool" pool. Click the Members tab.
 
    .. image:: ../images/f5-container-connector-check-app-web-pool.png
 
    .. note:: You can see that the pool members listed are all the cluster
       nodes on the port 31670. (**NodePort mode**)
 
-#. Access your web application via UDF-URL.
+#. Access your web application via firefox on the jumpbox.
 
-   .. note:: This URL can be found on the UDF student portal
+   .. note:: Select the "Hello, World" shortcut or type http://10.1.1.4 in the
+      URL field.
 
    .. image:: ../images/f5-container-connector-access-app.png
 
@@ -140,7 +143,8 @@ On the **okd-master1** we will create all the required files:
 
    .. image:: ../images/f5-hello-world-pods-scale10.png
 
-#. Check the pool was updated on bigip1
+#. Check the pool was updated on bigip1. GoTo: :menuselection:`Local Traffic --> Pools`
+   and select the "web_pool" pool. Click the Members tab.
 
    .. image:: ../images/f5-hello-world-pool-scale10-node-as3.png
 
@@ -156,6 +160,7 @@ On the **okd-master1** we will create all the required files:
 
    .. literalinclude:: ../openshift/delete-hello-world.yaml
       :language: yaml
+      :caption: Blank AS3 Declaration
       :linenos:
       :emphasize-lines: 2,19
 
@@ -174,6 +179,5 @@ On the **okd-master1** we will create all the required files:
 
       oc delete -f nodeport-deployment.yaml
 
-.. important:: Do not skip these clean-up steps. Instead of reusing some of
-   these objects, the next lab we will re-deploy them to avoid conflicts and
-   errors.
+.. important:: Do not skip these clean-up steps. Instead of reusing these
+   objects, the next lab we will re-deploy them to avoid conflicts and errors.

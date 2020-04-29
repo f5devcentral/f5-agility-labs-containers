@@ -7,11 +7,10 @@ Getting Started
    INSTRUCTIONS ARE PROVIDED.**
 
 .. important::
-   * **The instructor will provide the necessary details to connect to the lab
-     environment.**
+   * The instructor will provide the necessary details to connect to the lab
+     environment.
 
-   * All work for this lab will be performed exclusively from your PC, a
-     terminal emulator such as PUTTY will be required. 
+   * All work for this lab will be performed exclusively on the lab jumphost.
      
 .. attention::
    * The lab is based on the following UDF Blueprint:

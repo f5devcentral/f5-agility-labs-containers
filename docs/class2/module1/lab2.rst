@@ -29,7 +29,8 @@ To deploy our application, we will need the following definitions:
 App Deployment
 --------------
 
-On **okd-master1** we will create all the required files:
+Back to the SSH session on **okd-master1** we will create all the required
+files:
 
 #. Create a file called ``deployment-hello-world.yaml``
 
@@ -90,11 +91,11 @@ On **okd-master1** we will create all the required files:
       from the outside. Here it's "30444", highlighted above.
 
 #. Now that we have deployed our application sucessfully, we can check the
-   configuration on bigip1. We should still have access to TMUI via UDF go back
-   to the open session.
+   configuration on bigip1. Switch back to the open management session on
+   firefox.
 
-   .. warning:: Don't forget to select the "okd" partition or you'll
-      see nothing.
+   .. warning:: Don't forget to select the "okd" partition or you'll see
+      nothing.
 
    Goto :menuselection:`Local Traffic --> Virtual Servers`
 
@@ -103,26 +104,29 @@ On **okd-master1** we will create all the required files:
 
    .. image:: ../images/f5-container-connector-check-app-route-bigipconfig.png
 
-   These Virtuals uses an LTM Policy to direct traffic based on the host header.
+   These Virtuals use an LTM Policy to direct traffic based on the host header.
    You can view this from the BIG-IP GUI at :menuselection:`Local Traffic -->
-   Virtual Servers --> Policies` and click the Published Policy,
-   "openshift_insecure_routes".
+   Virtual Servers --> Policies` and click :menuselection:`Published Policy -->
+   "openshift_insecure_routes"`
 
    .. image:: ../images/f5-check-ltm-policy-route.png
 
 #. Check the Pools to see a new pool and the associated pool members.
    
-   GoTo: :menuselection:`Local Traffic --> Pools --> "openshift_default_f5-hello-world-web" --> Members`
+   GoTo: :menuselection:`Local Traffic --> Pools` and select the
+   "openshift_default_f5-hello-world-web" pool. Click the Members tab.
 
    .. image:: ../images/f5-container-connector-check-app-route-pool.png
 
    .. note:: You can see that the pool members listed are all the cluster
       nodes on the node port 30444. (**NodePort mode**)
 
-#. To view the application from a browser, you'll need to update your local
-   host file, pointing the assigned public IP at "mysite.f5demo.com".
+#. Access your web application via firefox on the jumpbox.
 
-   .. note:: This step can be skipped.
+   .. note:: Select the "mysite.f5demo.com" shortcut or type
+      http://mysite.f5demo.com in the URL field.
+
+   .. image:: ../images/f5-container-connector-access-app.png
 
 #. Delete Hello-World
 
@@ -136,4 +140,5 @@ On **okd-master1** we will create all the required files:
       oc delete -f nodeport-service-hello-world.yaml
       oc delete -f deployment-hello-world.yaml
    
-   .. attention:: Validate the objects are removed via bigip1 TMUI.
+   .. attention:: Validate the objects are removed via the management console.
+      :menuselection:`Local Traffic --> Virtual Servers`

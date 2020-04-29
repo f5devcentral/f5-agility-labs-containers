@@ -15,24 +15,26 @@ In this lab we'll use NodePort mode to deploy an application to the BIG-IP.
 BIG-IP Setup
 ------------
 
-Via UDF you should have access to bigip1. Follow the "Access" drop down to
-"TMUI" and open up the management GUI.
+Via RDP connect to the UDF lab "jumpbox" host.
 
-.. attention:: 
-   - Connect to your BIG-IP and check it is active and licensed. Its
-     login and password are: **admin/admin**
+#. Open firefox and connect to bigip1. For your convenience there's a shortcut
+   on the toolbar. Username and password are: **admin/admin**
 
-   - If your BIG-IP has no license or its license expired, renew the license.
-     You just need a LTM VE license for this lab. No specific add-ons are
-     required (ask a lab instructor for eval licenses if your license has
-     expired)
+   .. attention::
 
-   - Be sure to be in the ``Common`` partition before creating the following
-     objects.
+      - Connect to your BIG-IP and check it is active and licensed.
 
-     .. image:: ../images/f5-check-partition.png
+      - If your BIG-IP has no license or its license expired, renew the
+        license. You just need a LTM VE license for this lab. No specific
+        add-ons are required (ask a lab instructor for eval licenses if your
+        license has expired)
 
-#. Just like the prevous Kubernetes class we need to setup a partition that
+      - Be sure to be in the ``Common`` partition before creating the following
+        objects.
+
+      .. image:: ../images/f5-check-partition.png
+
+#. Just like the previous Kubernetes class we need to setup a partition that
    will be used by F5 Container Ingress Service.
    
    - GoTo: :menuselection:`System --> Users --> Partition List`
@@ -46,15 +48,20 @@ Via UDF you should have access to bigip1. Follow the "Access" drop down to
       # From the CLI:
       tmsh create auth partition okd
 
-#. Verify / Install AS3 via the management console
+#. Verify AS3 is installed via the management console
 
    .. attention:: This has been done to save time but is documented here for
       reference.
 
-   - GoTo: :menuselection:`iApps --> Package Management LX`. If not installed
-     follow the instruction below.
+   .. seealso:: For more info click here:
+      `Application Services 3 Extension Documentation <https://clouddocs.f5.com/products/extensions/f5-appsvcs-extension/latest/>`_
+
+   - GoTo: :menuselection:`iApps --> Package Management LX`. and confirm
+     "f5-appsvcs" is in the last as shown below.
 
      .. image:: ../images/confirm-as3-installed.png
+
+#. If AS3 is NOT installed follow these steps:
 
    - Click here to: `Download latest AS3 <https://github.com/F5Networks/f5-appsvcs-extension/releases>`_
 
@@ -64,14 +71,14 @@ Via UDF you should have access to bigip1. Follow the "Access" drop down to
      - Browse and select downloaded AS3 RPM
      - Click Upload
 
-   .. seealso:: For more info click here:
-      `Application Services 3 Extension Documentation <https://clouddocs.f5.com/products/extensions/f5-appsvcs-extension/latest/>`_
-
 Explore the OpenShift Cluster
 -----------------------------
 
-#. From your terminal emulator start an SSH session with okd-master1. The IP
-   and port can be found on UDF.
+#. On the jumphost open a terminal and start an SSH session with kube-master1.
+
+   .. code-block:: bash
+
+      ssh centos@okd-master1
 
 #. "git" the demo files
 
@@ -193,7 +200,7 @@ to hide our bigip credentials.
    This class will feature both modes. For more information see
    `BIG-IP Controller Modes <http://clouddocs.f5.com/containers/v2/kubernetes/kctlr-modes.html>`_
 
-   Lets start with **Nodeport mode** ``nodeport-deployment.yaml``
+   Lets start with **Nodeport mode**
 
    .. note:: 
       - For your convenience the file can be found in
@@ -206,6 +213,7 @@ to hide our bigip credentials.
 
    .. literalinclude:: ../openshift/nodeport-deployment.yaml
       :language: yaml
+      :caption: nodeport-deployment.yaml
       :linenos:
       :emphasize-lines: 2,7,17,20,37,39-41
 

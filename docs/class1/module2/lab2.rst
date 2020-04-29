@@ -68,8 +68,8 @@ On **kube-master1** we will create all the required files:
       our deployment file) and the flannel IP assigned to the pod.
 
 #. Now that we have deployed our application sucessfully, we can check the
-   configuration on bigip1. We shoud still have access to TMUI via UDF, go back
-   to the open session.
+   configuration on bigip1. Switch back to the open management session on
+   firefox.
 
    .. warning:: Don't forget to select the "kubernetes" partition or you'll
       see nothing.
@@ -83,21 +83,23 @@ On **kube-master1** we will create all the required files:
 
 #. Check the Pools to see a new pool and the associated pool members.
 
-   GoTo: :menuselection:`Local Traffic --> Pools --> "ingress_default_f5-hello-world-web" --> Members`
+   GoTo: :menuselection:`Local Traffic --> Pools` and select the
+   "ingress_default_f5-hello-world-web" pool. Click the Members tab.
 
    .. image:: ../images/f5-container-connector-check-app-ingress-pool2.png
 
    .. note:: You can see that the pool members IP addresses are assigned from
       the overlay network (**ClusterIP mode**)
 
-#. Access your web application via UDF-URL.
+#. Access your web application via firefox on the jumpbox.
 
-   .. note:: This URL can be found on the UDF student portal
-   
+   .. note:: Select the "Hello, World" shortcut or type http://10.1.1.4 in the
+      URL field.
+
    .. image:: ../images/f5-container-connector-access-app.png
 
-#. To check traffic distribution. Hit Refresh many times on your open browser
-   session. Then go back to the **BIG-IP** UI.
+#. To check traffic distribution, hit Refresh many times on your open browser
+   session. Then go back to the management console open on firefox.
 
    GoTo: :menuselection:`Local Traffic --> Pools --> Pool list --> ingress_default_f5-hello-world-web --> Statistics`
 
@@ -115,4 +117,5 @@ On **kube-master1** we will create all the required files:
       kubectl delete -f clusterip-service-hello-world.yaml
       kubectl delete -f deployment-hello-world.yaml
 
-   .. attention:: Validate the objects are removed via bigip1 TMUI.
+   .. attention:: Validate the objects are removed via the management console.
+      :menuselection:`Local Traffic --> Virtual Servers`
