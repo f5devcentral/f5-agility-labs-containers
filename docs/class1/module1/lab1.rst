@@ -15,14 +15,18 @@ In this lab we'll use NodePort mode to deploy an application to the BIG-IP.
 BIG-IP Setup
 ------------
 
-Via RDP connect to the UDF lab "jumpbox" host.
+Via RDP connect to the UDF lab "jumpbox" host. 
+
+.. note:: Username and password are: **ubuntu/ubuntu**
 
 #. Open firefox and connect to bigip1. For your convenience there's a shortcut
-   on the toolbar. Username and password are: **admin/admin**
+   on the firefox toolbar. 
+   
+   .. note:: Username and password are: **admin/admin**
 
    .. attention::
 
-      - Connect to your BIG-IP and check it is active and licensed.
+      - Check BIG-IP is active and licensed.
 
       - If your BIG-IP has no license or its license expired, renew the
         license. You just need a LTM VE license for this lab. No specific
@@ -48,7 +52,7 @@ Via RDP connect to the UDF lab "jumpbox" host.
       # From the CLI:
       tmsh create auth partition kubernetes
 
-#. Verify AS3 is installed via the management console
+#. Verify AS3 is installed.
 
    .. attention:: This has been done to save time but is documented here for
       reference.
@@ -78,9 +82,16 @@ Explore the Kubernetes Cluster
 
    .. code-block:: bash
 
+      # If directed to, accept the authenticity of the host by typing "yes" and hitting Enter to continue.
+
       ssh kube-master1
 
+   .. image:: ../images/sshtokubemaster1.png
+
 #. "git" the demo files
+
+   .. note:: These files should already be there and upon login updated. If not
+      follow use the following command to clone the repo.
 
    .. code-block:: bash
 
@@ -212,10 +223,11 @@ Troubleshooting
 ---------------
 
 If you need to troubleshoot your container, you have two different ways to
-check the logs of your container, kubectl command or docker command.
+check the logs, kubectl command or docker command.
 
-.. attention:: Depending on your deployment CIS can be running on either
-   kube-node1 or kube-node2.
+.. attention:: Depending on your deployment, CIS can be running on either
+   kube-node1 or kube-node2. In our example above it's running on
+   **kube-node2**
 
 #. Using ``kubectl`` command: you need to use the full name of your pod as
    shown in the previous image.
@@ -223,23 +235,25 @@ check the logs of your container, kubectl command or docker command.
    .. code-block:: bash
 
       # For example:
-      kubectl logs k8s-bigip-ctlr-5b74dd769-x55vx -n kube-system
+      kubectl logs k8s-bigip-ctlr-7469c978f9-6hvbv -n kube-system
 
    .. image:: ../images/f5-container-connector-check-logs-kubectl.png
 
 #. Using docker logs command: From the previous check we know the container
-   is running on kube-node1. On your current session with kube-master1 SSH to
-   kube-node1 first and then run the docker command:
+   is running on kube-node2. On your current session with kube-master1 SSH to
+   kube-node2 first and then run the docker command:
+
+   .. important:: Be sure to check which Node your "connector" is running on.
 
    .. code-block:: bash
 
-      ssh kube-node1
-
-      # If directed to, accept the authenticity of the host by selecting "yes" to continue.
+      # If directed to, accept the authenticity of the host by typing "yes" and hitting Enter to continue.
+      
+      ssh kube-node2
 
       sudo docker ps
 
-   Here we can see our container ID is "01a7517b50c5"
+   Here we can see our container ID is "e7f69e3ad5c6"
 
    .. image:: ../images/f5-container-connector-find-dockerID--controller-container.png
 
@@ -247,22 +261,22 @@ check the logs of your container, kubectl command or docker command.
 
    .. code-block:: bash
 
-      sudo docker logs 01a7517b50c5
+      sudo docker logs e7f69e3ad5c6
 
    .. image:: ../images/f5-container-connector-check-logs-controller-container.png
 
-   .. note:: The log messages here are identical to the log messages displayed
-      in the previous kubectl logs command. 
+   .. important:: The log messages here are identical to the log messages
+      displayed in the previous kubectl logs command. 
 
 #. You can connect to your container with kubectl as well. This is something
    not typically needed but support may direct you to do so.
 
-   .. note:: Exit from your current session with kube-node1 before attempting
-      this command.
+   .. note:: Exit from your current session with **kube-node2** before
+      attempting this command.
 
    .. code-block:: bash
 
-      kubectl exec -it k8s-bigip-ctlr-79fcf97bcc-48qs7 -n kube-system  -- /bin/sh
+      kubectl exec -it k8s-bigip-ctlr-7469c978f9-6hvbv -n kube-system  -- /bin/sh
 
       cd /app
 

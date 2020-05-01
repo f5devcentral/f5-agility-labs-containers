@@ -44,7 +44,7 @@ previous session.
 #. Install AS3 via the management console
 
    .. attention:: This has been done to save time. If needed see
-      Module 1 / Lab 1 for install instructions.
+      `Module1 / Lab 1.1 / Install AS3 Steps <../module1/lab1.html>`_
 
 #. Create a vxlan tunnel profile.
 
@@ -112,7 +112,7 @@ CIS Deployment
 .. note::
    - For your convenience the file can be found in
      /home/ubuntu/agilitydocs/docs/class1/kubernetes (downloaded earlier in the
-     clone git repo step).
+     git clone repo step).
    - Or you can cut and paste the file below and create your own file.
    - If you have issues with your yaml and syntax (**indentation MATTERS**),
      you can try to use an online parser to help you :
@@ -121,34 +121,37 @@ CIS Deployment
 #. Before deploying CIS in ClusterIP mode we need to configure Big-IP as a node
    in the kubernetes cluster. To do so you'll need to modify
    "bigip-node.yaml" with the MAC address auto created from the previous
-   steps. From the jumpbox terminal SSH to bigip1 and run the following
-   command. You'll want to copy the displayed "MAC Address".
+   steps. From the jumpbox terminal run the following command at bigip1. You'll
+   want to copy the displayed "MAC Address".
 
    .. code-block:: bash
 
-      ssh admin@10.1.1.4
-      
-      tmsh show net tunnels tunnel k8s-tunnel all-properties
+      # If directed to, accept the authenticity of the host by typing "yes" and hitting Enter to continue.
+      # The password is "admin"
+
+      ssh admin@10.1.1.4 tmsh show net tunnels tunnel k8s-tunnel all-properties
 
    .. image:: ../images/get-k8s-tunnel-mac-addr.png
 
-#. Exit the bigip SSH session after copying the MAC address.
-
-   .. code-block:: bash
-
-      exit
-
-#. On the kube-master1 edit bigip-node.yaml and change the highlighted MAC
-   address with your address copied on the previous step.
+#. On kube-master1 edit bigip-node.yaml and change the highlighted MAC address
+   with the MAC address copied from the previous step.
 
    .. note:: If your unfamiliar with VI ask for help.
 
    .. code-block:: bash
 
       vim ~/agilitydocs/docs/class1/kubernetes/bigip-node.yaml
+      
+      #Enable insert mode
+      i
+      #Replace MAC addr
+      Hit <ESC> key to exit insert mode
+      #To write and exit file        
+      wq <ENTER>
 
    .. literalinclude:: ../kubernetes/bigip-node.yaml
       :language: yaml
+      :caption: bigip-node.yaml
       :linenos:
       :emphasize-lines: 9
 
@@ -184,6 +187,7 @@ CIS Deployment
 
    .. literalinclude:: ../kubernetes/cluster-deployment.yaml
       :language: yaml
+      :caption: cluster-deployment.yaml
       :linenos:
       :emphasize-lines: 2,7,17,20,37-42
 
@@ -199,7 +203,7 @@ CIS Deployment
 
       kubectl get deployment k8s-bigip-ctlr --namespace kube-system
 
-   .. image:: ../images/f5-container-connector-launch-deployment-controller.png
+   .. image:: ../images/f5-container-connector-launch-deployment-controller2.png
 
 #. To locate on which node CIS is running, you can use the following command:
 
@@ -210,7 +214,7 @@ CIS Deployment
    We can see that our container, in this example, is running on kube-node1
    below.
 
-   .. image:: ../images/f5-container-connector-locate-controller-container.png
+   .. image:: ../images/f5-container-connector-locate-controller-container2.png
 
 Troubleshooting
 ---------------
@@ -224,6 +228,9 @@ of checking the Docker container as described in the previos module.
    .. code-block:: bash
 
       # For example:
-      kubectl logs k8s-bigip-ctlr-deployment-5b74dd769-x55vx -n kube-system
+      kubectl logs k8s-bigip-ctlr-846dcb5958-zzvc8 -n kube-system
 
-   .. image:: ../images/f5-container-connector-check-logs-kubectl.png
+   .. image:: ../images/f5-container-connector-check-logs-kubectl2.png
+
+   .. attention:: You will see **ERROR** in this log output. These errors can
+      be ignored. The lab will work as expected.

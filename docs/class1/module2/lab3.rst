@@ -15,6 +15,7 @@ On **kube-master1** we will create all the required files:
 
    .. literalinclude:: ../kubernetes/deployment-hello-world.yaml
       :language: yaml
+      :caption: deployment-hello-world.yaml
       :linenos:
       :emphasize-lines: 2,7,20
 
@@ -24,6 +25,7 @@ On **kube-master1** we will create all the required files:
 
    .. literalinclude:: ../kubernetes/clusterip-service-hello-world.yaml
       :language: yaml
+      :caption: clusterip-service-hello-world.yaml
       :linenos:
       :emphasize-lines: 2,8-10,17
 
@@ -33,6 +35,7 @@ On **kube-master1** we will create all the required files:
 
    .. literalinclude:: ../kubernetes/configmap-hello-world.yaml
       :language: yaml
+      :caption: configmap-hello-world.yaml
       :linenos:
       :emphasize-lines: 2,5,7,8,27,30
 
@@ -104,7 +107,9 @@ On **kube-master1** we will create all the required files:
 
    .. image:: ../images/f5-container-connector-check-app-bigip-stats-cluster-as3.png
 
-   .. note:: Why is all the traffic directed to one pool member?
+   .. note:: Why is all the traffic directed to one pool member? The answer can
+      be found by instpecting the "serviceMain" virtual service in the
+      management GUI.
 
 #. Scale the f5-hello-world app
 
@@ -125,7 +130,7 @@ On **kube-master1** we will create all the required files:
 
    .. image:: ../images/f5-hello-world-pool-scale10-as3-clusterip.png
 
-   .. attention:: Now we show 10 pool members. In module1 the number stayed at
+   .. attention:: Now we show 10 pool members. In Module1 the number stayed at
       3 and didn't change, why?
 
 #. Remove Hello-World from BIG-IP.

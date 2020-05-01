@@ -37,6 +37,7 @@ On **kube-master1** we will create all the required files:
 
    .. literalinclude:: ../kubernetes/deployment-hello-world.yaml
       :language: yaml
+      :caption: deployment-hello-world.yaml
       :linenos:
       :emphasize-lines: 2,7,20
 
@@ -46,6 +47,7 @@ On **kube-master1** we will create all the required files:
 
    .. literalinclude:: ../kubernetes/nodeport-service-hello-world.yaml
       :language: yaml
+      :caption: nodeport-service-hello-world.yaml
       :linenos:
       :emphasize-lines: 2,8-10,17
 
@@ -55,6 +57,7 @@ On **kube-master1** we will create all the required files:
 
    .. literalinclude:: ../kubernetes/configmap-hello-world.yaml
       :language: yaml
+      :caption: configmap-hello-world.yaml
       :linenos:
       :emphasize-lines: 2,5,7,8,19,21,27,30,32
 
@@ -77,7 +80,7 @@ On **kube-master1** we will create all the required files:
 
       kubectl get pods -o wide
 
-   .. image:: ../images/f5-hello-world-pods.png
+   .. image:: ../images/f5-hello-world-pods2.png
 
    .. code-block:: bash
 
@@ -87,7 +90,7 @@ On **kube-master1** we will create all the required files:
 
    .. attention:: To understand and test the new app pay attention to the
       **NodePort value**, that's the port used to give you access to the app
-      from the outside. Here it's "31233", highlighted above.
+      from the outside. Here it's "32734", highlighted above.
 
 #. Now that we have deployed our application sucessfully, we can check the
    configuration on bigip1. Switch back to the open management session on
@@ -113,7 +116,7 @@ On **kube-master1** we will create all the required files:
    .. image:: ../images/f5-container-connector-check-app-pool-as3.png
 
    .. note:: You can see that the pool members listed are all the cluster
-      nodes on the node port 31233. (**NodePort mode**)
+      node IPs on port 32734. (**NodePort mode**)
 
 #. Access your web application via firefox on the jumpbox.
 
@@ -129,7 +132,9 @@ On **kube-master1** we will create all the required files:
 
    .. image:: ../images/f5-container-connector-check-app-bigip-stats-as3.png
 
-   .. note:: Why is all the traffic directed to one pool member?
+   .. note:: Why is all the traffic directed to one pool member? The answer can
+      be found by instpecting the "serviceMain" virtual service in the
+      management GUI.
    
 #. Scale the f5-hello-world app
 
@@ -174,7 +179,7 @@ On **kube-master1** we will create all the required files:
       kubectl delete -f delete-hello-world.yaml
 
    .. note:: Be sure to verify the virtual server and "AS3" partition were
-      removed from BIG-IP.
+      removed from BIG-IP. This can take up to 30s.
 
 #. Remove CIS:
 

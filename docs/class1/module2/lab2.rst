@@ -18,6 +18,7 @@ On **kube-master1** we will create all the required files:
 
    .. literalinclude:: ../kubernetes/deployment-hello-world.yaml
       :language: yaml
+      :caption: deployment-hello-world.yaml
       :linenos:
       :emphasize-lines: 2,7,20
 
@@ -27,6 +28,7 @@ On **kube-master1** we will create all the required files:
 
    .. literalinclude:: ../kubernetes/clusterip-service-hello-world.yaml
       :language: yaml
+      :caption: clusterip-service-hello-world.yaml
       :linenos:
       :emphasize-lines: 2,17
 
@@ -36,6 +38,7 @@ On **kube-master1** we will create all the required files:
 
    .. literalinclude:: ../kubernetes/ingress-hello-world.yaml
       :language: yaml
+      :caption: ingress-hello-world.yaml
       :linenos:
       :emphasize-lines: 2,7-9,23,24
 
@@ -55,7 +58,7 @@ On **kube-master1** we will create all the required files:
 
       kubectl get pods -o wide
 
-   .. image:: ../images/f5-hello-world-pods.png
+   .. image:: ../images/f5-hello-world-pods3.png
 
    .. code-block:: bash
 
@@ -79,7 +82,7 @@ On **kube-master1** we will create all the required files:
    Here you can see a new Virtual Server, "ingress_10.1.1.4_80" was created,
    listening on 10.1.1.4:80 in partition "kubernetes".
 
-   .. image:: ../images/f5-container-connector-check-app-ingress.png
+   .. image:: ../images/f5-container-connector-check-app-ingress2.png
 
 #. Check the Pools to see a new pool and the associated pool members.
 
@@ -99,7 +102,7 @@ On **kube-master1** we will create all the required files:
    .. image:: ../images/f5-container-connector-access-app.png
 
 #. To check traffic distribution, hit Refresh many times on your open browser
-   session. Then go back to the management console open on firefox.
+   session. Then go back to the open management console on firefox.
 
    GoTo: :menuselection:`Local Traffic --> Pools --> Pool list --> ingress_default_f5-hello-world-web --> Statistics`
 
