@@ -38,6 +38,7 @@ files:
 
    .. literalinclude:: ../openshift/deployment-hello-world.yaml
       :language: yaml
+      :caption: deployment-hello-world.yaml
       :linenos:
       :emphasize-lines: 2,7,20
 
@@ -47,6 +48,7 @@ files:
 
    .. literalinclude:: ../openshift/nodeport-service-hello-world.yaml
       :language: yaml
+      :caption: nodeport-service-hello-world.yaml
       :linenos:
       :emphasize-lines: 2,17
 
@@ -56,6 +58,7 @@ files:
 
    .. literalinclude:: ../openshift/route-hello-world.yaml
       :language: yaml
+      :caption: route-hello-world.yaml
       :linenos:
       :emphasize-lines: 2,7-9,23,24
 
@@ -88,7 +91,7 @@ files:
 
    .. attention:: To understand and test the new app pay attention to the
       **NodePort value**, that's the port used to give you access to the app
-      from the outside. Here it's "30444", highlighted above.
+      from the outside. In this example it's "30459", highlighted above.
 
 #. Now that we have deployed our application sucessfully, we can check the
    configuration on bigip1. Switch back to the open management session on
@@ -119,7 +122,7 @@ files:
    .. image:: ../images/f5-container-connector-check-app-route-pool.png
 
    .. note:: You can see that the pool members listed are all the cluster
-      nodes on the node port 30444. (**NodePort mode**)
+      node IPs on port 30459. (**NodePort mode**)
 
 #. Access your web application via firefox on the jumpbox.
 

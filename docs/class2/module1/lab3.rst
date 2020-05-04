@@ -37,6 +37,7 @@ On the **okd-master1** we will create all the required files:
 
    .. literalinclude:: ../openshift/deployment-hello-world.yaml
       :language: yaml
+      :caption: deployment-hello-world.yaml
       :linenos:
       :emphasize-lines: 2,7,20
 
@@ -46,6 +47,7 @@ On the **okd-master1** we will create all the required files:
 
    .. literalinclude:: ../openshift/nodeport-service-hello-world.yaml
       :language: yaml
+      :caption: nodeport-service-hello-world.yaml
       :linenos:
       :emphasize-lines: 2,8-10,17
 
@@ -55,6 +57,7 @@ On the **okd-master1** we will create all the required files:
 
    .. literalinclude:: ../openshift/configmap-hello-world.yaml
       :language: yaml
+      :caption: configmap-hello-world.yaml
       :linenos:
       :emphasize-lines: 2,5,7,8,19,21,27,30,32
 
@@ -87,7 +90,7 @@ On the **okd-master1** we will create all the required files:
 
    .. attention:: To understand and test the new app pay attention to the
       **NodePort value**, that's the port used to give you access to the app
-      from the outside. Here it's "31670", highlighted above.
+      from the outside. Here it's "30684", highlighted above.
 
 #. Now that we have deployed our application sucessfully, we can check the
    configuration on bigip1. Switch back to the open management session on
@@ -113,14 +116,14 @@ On the **okd-master1** we will create all the required files:
    .. image:: ../images/f5-container-connector-check-app-web-pool.png
 
    .. note:: You can see that the pool members listed are all the cluster
-      nodes on the port 31670. (**NodePort mode**)
+      node IPs on port 30684. (**NodePort mode**)
 
 #. Access your web application via firefox on the jumpbox.
 
    .. note:: Select the "Hello, World" shortcut or type http://10.1.1.4 in the
       URL field.
 
-   .. image:: ../images/f5-container-connector-access-app.png
+   .. image:: ../images/f5-container-connector-access-app2.png
 
 #. Hit Refresh many times and go back to your **BIG-IP** UI
 

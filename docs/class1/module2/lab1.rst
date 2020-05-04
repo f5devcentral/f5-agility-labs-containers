@@ -142,12 +142,10 @@ CIS Deployment
 
       vim ~/agilitydocs/docs/class1/kubernetes/bigip-node.yaml
       
-      #Enable insert mode
-      i
-      #Replace MAC addr
-      Hit <ESC> key to exit insert mode
-      #To write and exit file        
-      wq <ENTER>
+      i           # To enable insert mode and start editing
+                  # Replace the current MAC addr with the one previously copied
+      Hit <ESC>   # To exit insert mode
+      wq <ENTER>  # To write and exit file        
 
    .. literalinclude:: ../kubernetes/bigip-node.yaml
       :language: yaml

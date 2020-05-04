@@ -17,12 +17,16 @@ BIG-IP Setup
 
 Via RDP connect to the UDF lab "jumpbox" host.
 
+.. note:: Username and password are: **ubuntu/ubuntu**
+
 #. Open firefox and connect to bigip1. For your convenience there's a shortcut
-   on the toolbar. Username and password are: **admin/admin**
+   on the toolbar. 
+   
+   .. note:: Username and password are: **admin/admin**
 
    .. attention::
 
-      - Connect to your BIG-IP and check it is active and licensed.
+      - Check BIG-IP is active and licensed.
 
       - If your BIG-IP has no license or its license expired, renew the
         license. You just need a LTM VE license for this lab. No specific
@@ -48,7 +52,7 @@ Via RDP connect to the UDF lab "jumpbox" host.
       # From the CLI:
       tmsh create auth partition okd
 
-#. Verify AS3 is installed via the management console
+#. Verify AS3 is installed.
 
    .. attention:: This has been done to save time but is documented here for
       reference.
@@ -74,13 +78,20 @@ Via RDP connect to the UDF lab "jumpbox" host.
 Explore the OpenShift Cluster
 -----------------------------
 
-#. On the jumphost open a terminal and start an SSH session with kube-master1.
+#. On the jumphost open a terminal and start an SSH session with okd-master1.
 
    .. code-block:: bash
 
+      # If directed to, accept the authenticity of the host by typing "yes" and hitting Enter to continue.
+
       ssh centos@okd-master1
 
+   .. image:: ../images/sshtokubemaster1.png
+
 #. "git" the demo files
+
+   .. note:: These files should already be there and upon login updated. If not
+      use the following command to clone the repo.
 
    .. code-block:: bash
 
@@ -90,8 +101,8 @@ Explore the OpenShift Cluster
 
 #. Log in with an Openshift Client.
 
-   .. note:: Here we're using a user "centos", added when we built the cluster.
-      When prompted for password, enter "centos".
+   .. note:: Here we're using the "centos" user, added when we built the
+      cluster. When prompted for password enter "centos".
 
    .. code-block:: bash
 
@@ -100,7 +111,7 @@ Explore the OpenShift Cluster
    .. image:: ../images/OC-DEMOuser-Login.png
 
    .. important:: Upon logging in you'll notice access to several projects. In
-      our lab well be working from the default "default".
+      our lab we'll be working from the default "default".
 
 #. Check the OpenShift status
 
@@ -114,7 +125,7 @@ Explore the OpenShift Cluster
 
    .. image:: ../images/oc-status.png
 
-#. Check the OpenShift nodes
+#. Check the OpenShift cluster nodes
 
    You can manage nodes in your instance using the CLI. The CLI interacts with
    node objects that are representations of actual node hosts. The master uses
@@ -218,8 +229,9 @@ to hide our bigip credentials.
       :emphasize-lines: 2,7,17,20,37,39-41
 
 #. Once you have your yaml file setup, you can try to launch your deployment.
-   It will start our f5-k8s-controller container on one of our nodes (may take
-   around 30sec to be in a running state):
+   It will start our f5-k8s-controller container on one of our nodes.
+   
+   .. note:: This may take around 30sec to be in a running state.
 
    .. code-block:: bash
 
@@ -250,8 +262,9 @@ Troubleshooting
 If you need to troubleshoot your container, you have two different ways to
 check the logs of your container, oc command or docker command.
 
-.. attention:: Depending on your deployment CIS can be running on either
-   okd-node1 or okd-node2.
+.. attention:: Depending on your deployment, CIS can be running on either
+   okd-node1 or okd-node2. In our example above it's running on
+   **okd-node1**
 
 #. Using ``oc`` command: you need to use the full name of your pod as shown in
    the previous image.
@@ -259,7 +272,7 @@ check the logs of your container, oc command or docker command.
    .. code-block:: bash
 
       # For example:
-      oc logs k8s-bigip-ctlr-667cf78cc7-62wxf -n kube-system
+      oc logs k8s-bigip-ctlr-844dfdc864-669hb -n kube-system
 
    .. image:: ../images/f5-container-connector-check-logs-kubectl.png
 
@@ -267,15 +280,17 @@ check the logs of your container, oc command or docker command.
    is running on okd-node1. On your current session with okd-master1 SSH to
    okd-node1 first and then run the docker command:
 
+   .. important:: Be sure to check which Node your "connector" is running on.
+
    .. code-block:: bash
+
+      # If directed to, accept the authenticity of the host by typing "yes" and hitting Enter to continue.
 
       ssh okd-node1
 
-      # If directed to, accept the authenticity of the host by selecting "yes" to continue.
-
       sudo docker ps
 
-   Here we can see our container ID is "74a566f5778a"
+   Here we can see our container ID is "478749740d29"
 
    .. image:: ../images/f5-container-connector-find-dockerID--controller-container.png
 
@@ -283,7 +298,7 @@ check the logs of your container, oc command or docker command.
 
    .. code-block:: bash
 
-      sudo docker logs 74a566f5778a
+      sudo docker logs 478749740d29
 
    .. image:: ../images/f5-container-connector-check-logs-controller-container.png
 
@@ -298,7 +313,7 @@ check the logs of your container, oc command or docker command.
 
    .. code-block:: bash
 
-      oc exec -it k8s-bigip-ctlr-79fcf97bcc-48qs7 -n kube-system  -- /bin/sh
+      oc exec -it k8s-bigip-ctlr-844dfdc864-669hb -n kube-system -- /bin/sh
 
       cd /app
 

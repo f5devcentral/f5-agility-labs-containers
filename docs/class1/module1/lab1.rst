@@ -91,7 +91,7 @@ Explore the Kubernetes Cluster
 #. "git" the demo files
 
    .. note:: These files should already be there and upon login updated. If not
-      follow use the following command to clone the repo.
+      use the following command to clone the repo.
 
    .. code-block:: bash
 
@@ -99,7 +99,7 @@ Explore the Kubernetes Cluster
 
       cd ~/agilitydocs/docs/class1/kubernetes
 
-#. Check the Kubernetes Cluster nodes.
+#. Check the Kubernetes cluster nodes.
 
    You can manage nodes in your instance using the CLI. The CLI interacts with
    node objects that are representations of actual node hosts. The master uses
@@ -193,8 +193,9 @@ to hide our bigip credentials.
       :emphasize-lines: 2,7,17,20,37,39-41
 
 #. Once you have your yaml file setup, you can try to launch your deployment.
-   It will start our f5-k8s-controller container on one of our nodes (may take
-   around 30sec to be in a running state):
+   It will start our f5-k8s-controller container on one of our nodes.
+   
+   .. note:: This may take around 30sec to be in a running state.
 
    .. code-block:: bash
 

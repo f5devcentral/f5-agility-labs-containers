@@ -15,6 +15,7 @@ On **okd-master1** we will create all the required files:
 
    .. literalinclude:: ../openshift/deployment-hello-world.yaml
       :language: yaml
+      :caption: deployment-hello-world.yaml
       :linenos:
       :emphasize-lines: 2,7,20
 
@@ -24,6 +25,7 @@ On **okd-master1** we will create all the required files:
 
    .. literalinclude:: ../openshift/clusterip-service-hello-world.yaml
       :language: yaml
+      :caption: clusterip-service-hello-world.yaml
       :linenos:
       :emphasize-lines: 2,8-10,17
 
@@ -33,6 +35,7 @@ On **okd-master1** we will create all the required files:
 
    .. literalinclude:: ../openshift/configmap-hello-world.yaml
       :language: yaml
+      :caption: configmap-hello-world.yaml
       :linenos:
       :emphasize-lines: 2,5,7,8,27,30
 
@@ -104,7 +107,9 @@ On **okd-master1** we will create all the required files:
 
    .. image:: ../images/f5-okd-check-app-bigip-stats-clusterip.png
 
-   .. note:: Why is all the traffic directed to one pool member?
+   .. note:: Why is all the traffic directed to one pool member? The answer can
+      be found by instpecting the "serviceMain" virtual service in the
+      management GUI.
 
 #. Scale the f5-hello-world app
 
@@ -112,13 +117,13 @@ On **okd-master1** we will create all the required files:
 
       oc scale --replicas=10 deployment/f5-hello-world-web -n default
 
-#. Check the pods were created
+#. Check that the pods were created
 
    .. code-block:: bash
 
       oc get pods
 
-   .. image:: ../images/f5-hello-world-pods-scale10.png
+   .. image:: ../images/f5-hello-world-pods-scale10-2.png
 
 #. Check the pool was updated on bigip1. GoTo: :menuselection:`Local Traffic --> Pools`
    and select the "web_pool" pool. Click the Members tab.

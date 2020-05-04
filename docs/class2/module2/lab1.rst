@@ -44,12 +44,13 @@ previous session.
 #. Install AS3 via the management console
 
    .. attention:: This has been done to save time. If needed see 
-      Module 1 / Lab 1 for install instructions.
+      `Module1 / Lab 1.1 / Install AS3 Steps <../module1/lab1.html>`_
 
 #. Create a vxlan tunnel profile
 
    - GoTo: :menuselection:`Network --> Tunnels --> Profiles --> VXLAN`
    - Create a new profile called "okd-vxlan"
+   - set Port = 4789
    - Set the Flooding Type = Multipoint
    - Click Finished
 
@@ -58,7 +59,7 @@ previous session.
    .. code-block:: bash
 
       # From the CLI:
-      tmsh create net tunnel vxlan okd-vxlan { app-service none flooding-type multipoint }
+      tmsh create net tunnel vxlan okd-vxlan { app-service none port 4789 flooding-type multipoint }
 
 #. Create a vxlan tunnel
 
@@ -117,9 +118,13 @@ CIS Deployment
      you can try to use an online parser to help you :
      `Yaml parser <http://codebeautify.org/yaml-validator>`_
 
-#. SSH to okd-Master1
+#. On the jumphost open a terminal and start an SSH session with okd-master1.
+
+   .. note:: This session should be up and running from the previous module.
 
    .. code-block:: bash
+
+      # If directed to, accept the authenticity of the host by typing "yes" and hitting Enter to continue.
 
       ssh centos@okd-master1
 
@@ -135,6 +140,7 @@ CIS Deployment
 
    .. literalinclude:: ../openshift/bigip-hostsubnet.yaml
       :language: yaml
+      :caption: bigip-hostsubnet.yaml
       :linenos:
       :emphasize-lines: 2,9
 
@@ -210,6 +216,7 @@ CIS Deployment
 
    .. literalinclude:: ../openshift/cluster-deployment.yaml
       :language: yaml
+      :caption: cluster-deployment.yaml
       :linenos:
       :emphasize-lines: 2,7,17,20,37-40,46-47
 
@@ -233,6 +240,9 @@ CIS Deployment
 
       oc get pods -o wide -n kube-system
 
+   We can see that our container, in this example, is running on okd-node1
+   below.
+
    .. image:: ../images/F5-CTRL-RUNNING.png
 
 Troubleshooting
@@ -247,6 +257,9 @@ checking the Docker container as described in the previos module.
    .. code-block:: bash
 
       # For example:
-      oc logs k8s-bigip-ctlr-8c6cf8667-htcgw -n kube-system
+      oc logs k8s-bigip-ctlr-79b8f9cbd8-smsqs -n kube-system
 
-   .. image:: ../images/f5-container-connector-check-logs-kubectl.png
+   .. image:: ../images/f5-container-connector-check-logs-kubectl2.png
+
+   .. attention:: You will see **ERROR** in this log output. These errors can
+      be ignored. The lab will work as expected.

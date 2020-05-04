@@ -18,6 +18,7 @@ On **kube-master1** we will create all the required files:
 
    .. literalinclude:: ../openshift/deployment-hello-world.yaml
       :language: yaml
+      :caption: deployment-hello-world.yaml
       :linenos:
       :emphasize-lines: 2,7,20
 
@@ -27,6 +28,7 @@ On **kube-master1** we will create all the required files:
 
    .. literalinclude:: ../openshift/clusterip-service-hello-world.yaml
       :language: yaml
+      :caption: clusterip-service-hello-world.yaml
       :linenos:
       :emphasize-lines: 2,17
 
@@ -36,6 +38,7 @@ On **kube-master1** we will create all the required files:
 
    .. literalinclude:: ../openshift/route-hello-world.yaml
       :language: yaml
+      :caption: route-hello-world.yaml
       :linenos:
       :emphasize-lines: 2,7-9,23,24
 
@@ -104,6 +107,8 @@ On **kube-master1** we will create all the required files:
       http://mysite.f5demo.com in the URL field.
 
    .. image:: ../images/f5-container-connector-access-app.png
+
+   .. note:: Why can't we use http://10.1.1.4 to open the web server?
 
 #. Delete Hello-World
 
