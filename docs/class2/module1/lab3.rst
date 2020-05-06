@@ -1,5 +1,5 @@
-Lab 1.3 - Deploy Hello-World (ConfigMap w/ AS3)
-===============================================
+Lab 1.3 - Deploy Hello-World Using ConfigMap w/ AS3
+===================================================
 
 Just like the previous lab we'll deploy the f5-hello-world docker container.
 But instead of using the Route resource we'll use ConfigMap.
@@ -31,30 +31,33 @@ App Deployment
 
 On the **okd-master1** we will create all the required files:
 
-#. Create a file called ``f5-hello-world-deployment.yaml``
+#. Create a file called ``deployment-hello-world.yaml``
 
    .. tip:: Use the file in ~/agilitydocs/docs/class2/openshift
 
-   .. literalinclude:: ../openshift/f5-hello-world-deployment.yaml
+   .. literalinclude:: ../openshift/deployment-hello-world.yaml
       :language: yaml
+      :caption: deployment-hello-world.yaml
       :linenos:
       :emphasize-lines: 2,7,20
 
-#. Create a file called ``f5-hello-world-service-nodeport.yaml``
+#. Create a file called ``nodeport-service-hello-world.yaml``
 
    .. tip:: Use the file in ~/agilitydocs/docs/class2/openshift
 
-   .. literalinclude:: ../openshift/f5-hello-world-service-nodeport.yaml
+   .. literalinclude:: ../openshift/nodeport-service-hello-world.yaml
       :language: yaml
+      :caption: nodeport-service-hello-world.yaml
       :linenos:
       :emphasize-lines: 2,8-10,17
 
-#. Create a file called ``f5-hello-world-configmap.yaml``
+#. Create a file called ``configmap-hello-world.yaml``
 
    .. tip:: Use the file in ~/agilitydocs/docs/class2/openshift
 
-   .. literalinclude:: ../openshift/f5-hello-world-configmap.yaml
+   .. literalinclude:: ../openshift/configmap-hello-world.yaml
       :language: yaml
+      :caption: configmap-hello-world.yaml
       :linenos:
       :emphasize-lines: 2,5,7,8,19,21,27,30,32
 
@@ -62,9 +65,9 @@ On the **okd-master1** we will create all the required files:
 
    .. code-block:: bash
 
-      oc create -f f5-hello-world-deployment.yaml
-      oc create -f f5-hello-world-service-nodeport.yaml
-      oc create -f f5-hello-world-configmap.yaml
+      oc create -f deployment-hello-world.yaml
+      oc create -f nodeport-service-hello-world.yaml
+      oc create -f configmap-hello-world.yaml
       
    .. image:: ../images/f5-okd-launch-configmap-app.png
 
@@ -85,38 +88,47 @@ On the **okd-master1** we will create all the required files:
         
    .. image:: ../images/f5-okd-check-app-definition-node.png
 
-#. To understand and test the new app pay attention to the **NodePort value**,
-   that's the port used to give you access to the app from the outside. Here
-   it's "31670", highlighted above.
+   .. attention:: To understand and test the new app pay attention to the
+      **NodePort value**, that's the port used to give you access to the app
+      from the outside. Here it's "30684", highlighted above.
 
-   Now that we have deployed our application sucessfully, we can check our
-   BIG-IP configuration.  From the browser open https://10.1.1.4
+#. Now that we have deployed our application sucessfully, we can check the
+   configuration on bigip1. Switch back to the open management session on
+   firefox.
 
    .. warning:: Don't forget to select the proper partition. Previously we
       checked the "okd" partition. In this case we need to look at
       the "AS3" partition. This partition was auto created by AS3 and named
       after the Tenant which happens to be "AS3".
 
+   Goto :menuselection:`Local Traffic --> Virtual Servers`
+
    Here you can see a new Virtual Server, "serviceMain" was created,
    listening on 10.1.1.4:80 in partition "AS3".
 
    .. image:: ../images/f5-container-connector-check-app-bigipconfig-as3.png
 
-#. Check the Pools to see a new pool and the associated pool members:
-   Local Traffic --> Pools --> "web_pool" --> Members
+#. Check the Pools to see a new pool and the associated pool members.
+
+   GoTo: :menuselection:`Local Traffic --> Pools` and select the
+   "web_pool" pool. Click the Members tab.
 
    .. image:: ../images/f5-container-connector-check-app-web-pool.png
 
    .. note:: You can see that the pool members listed are all the cluster
-      nodes on the port 31670. (**NodePort mode**)
+      node IPs on port 30684. (**NodePort mode**)
 
-#. Now you can try to access your application via the BIG-IP VS/VIP: UDF-URL
+#. Access your web application via firefox on the jumpbox.
 
-   .. image:: ../images/f5-container-connector-access-app.png
+   .. note:: Select the "Hello, World" shortcut or type http://10.1.1.4 in the
+      URL field.
 
-#. Hit Refresh many times and go back to your **BIG-IP** UI, go to Local
-   Traffic --> Pools --> Pool list --> "web_pool" --> Statistics to see that
-   traffic is distributed as expected.
+   .. image:: ../images/f5-container-connector-access-app2.png
+
+#. Hit Refresh many times and go back to your **BIG-IP** UI
+
+   Goto: :menuselection:`Local Traffic --> Pools --> Pool list -->
+   "web_pool" --> Statistics` to see that traffic is distributed as expected.
 
    .. image:: ../images/f5-okd-check-app-bigip-stats-as3.png
 
@@ -134,36 +146,41 @@ On the **okd-master1** we will create all the required files:
 
    .. image:: ../images/f5-hello-world-pods-scale10.png
 
-#. Check the pool was updated on BIG-IP:
+#. Check the pool was updated on bigip1. GoTo: :menuselection:`Local Traffic --> Pools`
+   and select the "web_pool" pool. Click the Members tab.
 
    .. image:: ../images/f5-hello-world-pool-scale10-node-as3.png
 
    .. attention:: Why do we still only show 3 pool members?
 
-#. Remove Hello-World from BIG-IP. When using AS3 an extra steps need to be
-   performed. In addion to deleteing the previously created configmap a "blank"
-   declaration needs to be sent to completly remove the application:
-   
-   .. literalinclude:: ../openshift/f5-hello-world-delete-configmap.yaml
+#. Remove Hello-World from BIG-IP.
+
+   .. important:: When using AS3 an extra step needs to be performed. In
+      addition to deleting the application configmap, a "blank AS3 declaration"
+      is required to completely remove the application from BIG-IP.
+
+   "Blank AS3 Declartion"
+
+   .. literalinclude:: ../openshift/delete-hello-world.yaml
       :language: yaml
+      :caption: Blank AS3 Declaration
       :linenos:
       :emphasize-lines: 2,19
 
    .. code-block:: bash
 
-      oc delete -f f5-hello-world-configmap.yaml
-      oc delete -f f5-hello-world-service-nodeport.yaml
-      oc delete -f f5-hello-world-deployment.yaml
+      oc delete -f configmap-hello-world.yaml
+      oc delete -f nodeport-service-hello-world.yaml
+      oc delete -f deployment-hello-world.yaml
 
-      oc create -f f5-hello-world-delete-configmap.yaml
-      oc delete -f f5-hello-world-delete-configmap.yaml
+      oc create -f delete-hello-world.yaml
+      oc delete -f delete-hello-world.yaml
 
 #. Remove CIS:
 
    .. code-block:: bash
 
-      oc delete -f f5-nodeport-deployment.yaml
+      oc delete -f nodeport-deployment.yaml
 
-.. important:: Do not skip these clean-up steps. Instead of reusing some of
-   these objects, the next lab we will re-deploy them to avoid conflicts and
-   errors.
+.. important:: Do not skip these clean-up steps. Instead of reusing these
+   objects, the next lab we will re-deploy them to avoid conflicts and errors.

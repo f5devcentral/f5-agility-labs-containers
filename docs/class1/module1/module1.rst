@@ -1,5 +1,5 @@
-Module 1: CIS NodePort Mode
-===========================
+Module 1: CIS Using NodePort Mode
+=================================
 
 Overview
 --------
@@ -24,6 +24,8 @@ Before being able to use F5 CIS, you need to confirm the following:
 - A BIG-IP partition needs to be setup for exclusive use by CIS
 - You need a user with administrative access to this partition
 - Your kubernetes environment must be up and running
+
+.. note:: The following labs will walk you through these prerequisites.
 
 .. toctree::
    :maxdepth: 1

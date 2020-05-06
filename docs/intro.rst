@@ -9,23 +9,19 @@ Getting Started
      jump host.
 
    * All work for this lab will be performed exclusively from the Windows
-     jumpbox via RDP. 
-     
+     jumpbox via RDP.
+
    * No installation or interaction with your local system is required.
 
 .. attention::
-   * The lab is based on Ravello blueprint
-     ``Agility 2018-Containers (Exp 05/27/19)-vtog-2.3.0``
-
-   * To access the lab environment follow this link
-     http://training.f5agility.com
+   * The lab is hosted on F5 UDF environment, and is called "Agility 2020 - CIS / k8s / okd" for anyone wishing to take this lab at a later date.
+     Please work with your F5 Account Team for access.
 
    * Once you have established remote access to your lab jumpbox,
      launch Google Chrome and mRemoteNG (both have shortcuts on the desktop
      and taskbar).
-
-.. image:: /_static/intro/welcome.png
-   :align: center
+.. image:: /_static/intro/welcome2020.png
+   :width: 900
 
 .. tip:: For MAC user, it is recommended to use Microsoft Remote Desktop. You
    may not be able to access your jumpbox otherwise. It is available in the

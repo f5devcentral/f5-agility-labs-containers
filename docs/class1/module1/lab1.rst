@@ -1,5 +1,5 @@
-Lab 1.1 - Install & Configure CIS (NodePort)
-============================================
+Lab 1.1 - Install & Configure CIS in NodePort Mode
+==================================================
 
 The BIG-IP Controller for Kubernetes installs as a
 `Deployment object <https://kubernetes.io/docs/concepts/workloads/controllers/deployment/>`_
@@ -15,67 +15,83 @@ In this lab we'll use NodePort mode to deploy an application to the BIG-IP.
 BIG-IP Setup
 ------------
 
-Through the Jumpbox, you should have a BIG-IP available at the following
-URL: https://10.1.1.4
+Via RDP connect to the UDF lab "jumpbox" host. 
 
-.. attention:: 
-   - Connect to your BIG-IP and check it is active and licensed. Its
-     login and password are: **admin/admin**
+.. note:: Username and password are: **ubuntu/ubuntu**
 
-   - If your BIG-IP has no license or its license expired, renew the license.
-     You just need a LTM VE license for this lab. No specific add-ons are
-     required (ask a lab instructor for eval licenses if your license has
-     expired)
+#. Open firefox and connect to bigip1. For your convenience there's a shortcut
+   on the firefox toolbar. 
+   
+   .. note:: Username and password are: **admin/admin**
 
-   - Be sure to be in the ``Common`` partition before creating the following
-     objects.
+   .. attention::
 
-     .. image:: ../images/f5-check-partition.png
+      - Check BIG-IP is active and licensed.
 
-#. You need to setup a partition that will be used by F5 Container Ingress
-   Service.
+      - If your BIG-IP has no license or its license expired, renew the
+        license. You just need a LTM VE license for this lab. No specific
+        add-ons are required (ask a lab instructor for eval licenses if your
+        license has expired)
+
+      - Be sure to be in the ``Common`` partition before creating the following
+        objects.
+
+      .. image:: ../images/f5-check-partition.png
+
+#. First we need to setup a partition that will be used by F5 Container Ingress
+   Service. 
+   
+   - GoTo: :menuselection:`System --> Users --> Partition List`
+   - Create a new partition called "kubernetes" (use default settings)
+   - Click Finished
+
+   .. image:: ../images/f5-container-connector-bigip-partition-setup.png
 
    .. code-block:: bash
 
       # From the CLI:
       tmsh create auth partition kubernetes
 
-      # From the UI:
-      GoTo System --> Users --> Partition List
-      - Create a new partition called "kubernetes" (use default settings)
-      - Click Finished
+#. Verify AS3 is installed.
 
-   .. image:: ../images/f5-container-connector-bigip-partition-setup.png
-
-#. Install AS3
-
-   .. attention:: This has been done to save time but is documented for
+   .. attention:: This has been done to save time but is documented here for
       reference.
-
-   Verify AS3 is installed from the F5 Management Console.  Click iApps -->
-   Package Management LX. If not installed follow the instruction below.
-
-   .. image:: ../images/confirm-as3-installed.png
-
-   Click here: `Download latest AS3 <https://github.com/F5Networks/f5-appsvcs-extension/releases>`_
-
-   .. code-block:: bash
-
-      # From the UI:
-      GoTo  iApps --> Package Management LX
-      - Click Import
-      - Browse and select downloaded AS3 RPM
-      - Click Upload
 
    .. seealso:: For more info click here:
       `Application Services 3 Extension Documentation <https://clouddocs.f5.com/products/extensions/f5-appsvcs-extension/latest/>`_
 
+   - GoTo: :menuselection:`iApps --> Package Management LX` and confirm
+     "f5-appsvcs" is in the last as shown below.
+
+     .. image:: ../images/confirm-as3-installed.png
+
+#. If AS3 is NOT installed follow these steps:
+
+   - Click here to: `Download latest AS3 <https://github.com/F5Networks/f5-appsvcs-extension/releases>`_
+
+   - Go back to: :menuselection:`iApps --> Package Management LX`
+
+     - Click Import
+     - Browse and select downloaded AS3 RPM
+     - Click Upload
+
 Explore the Kubernetes Cluster
 ------------------------------
 
-#. From the jumpbox start an SSH session with kube-master1.
+#. On the jumphost open a terminal and start an SSH session with kube-master1.
+
+   .. code-block:: bash
+
+      # If directed to, accept the authenticity of the host by typing "yes" and hitting Enter to continue.
+
+      ssh kube-master1
+
+   .. image:: ../images/sshtokubemaster1.png
 
 #. "git" the demo files
+
+   .. note:: These files should already be there and upon login updated. If not
+      use the following command to clone the repo.
 
    .. code-block:: bash
 
@@ -83,7 +99,7 @@ Explore the Kubernetes Cluster
 
       cd ~/agilitydocs/docs/class1/kubernetes
 
-#. Check the OpenShift nodes
+#. Check the Kubernetes cluster nodes.
 
    You can manage nodes in your instance using the CLI. The CLI interacts with
    node objects that are representations of actual node hosts. The master uses
@@ -159,7 +175,7 @@ to hide our bigip credentials.
    This class will feature both modes. For more information see
    `BIG-IP Controller Modes <http://clouddocs.f5.com/containers/v2/kubernetes/kctlr-modes.html>`_
 
-   Lets start with **Nodeport mode** ``f5-nodeport-deployment.yaml``
+   Lets start with **Nodeport mode**
 
    .. note:: 
       - For your convenience the file can be found in
@@ -170,18 +186,20 @@ to hide our bigip credentials.
         you can try to use an online parser to help you :
         `Yaml parser <http://codebeautify.org/yaml-validator>`_
 
-   .. literalinclude:: ../kubernetes/f5-nodeport-deployment.yaml
+   .. literalinclude:: ../kubernetes/nodeport-deployment.yaml
       :language: yaml
+      :caption: nodeport-deployment.yaml
       :linenos:
       :emphasize-lines: 2,7,17,20,37,39-41
 
 #. Once you have your yaml file setup, you can try to launch your deployment.
-   It will start our f5-k8s-controller container on one of our nodes (may take
-   around 30sec to be in a running state):
+   It will start our f5-k8s-controller container on one of our nodes.
+   
+   .. note:: This may take around 30sec to be in a running state.
 
    .. code-block:: bash
 
-      kubectl create -f f5-nodeport-deployment.yaml
+      kubectl create -f nodeport-deployment.yaml
 
 #. Verify the deployment "deployed"
 
@@ -206,10 +224,11 @@ Troubleshooting
 ---------------
 
 If you need to troubleshoot your container, you have two different ways to
-check the logs of your container, kubectl command or docker command.
+check the logs, kubectl command or docker command.
 
-.. attention:: Depending on your deployment CIS can be running on either
-   kube-node1 or kube-node2.
+.. attention:: Depending on your deployment, CIS can be running on either
+   kube-node1 or kube-node2. In our example above it's running on
+   **kube-node2**
 
 #. Using ``kubectl`` command: you need to use the full name of your pod as
    shown in the previous image.
@@ -217,21 +236,25 @@ check the logs of your container, kubectl command or docker command.
    .. code-block:: bash
 
       # For example:
-      kubectl logs k8s-bigip-ctlr-5b74dd769-x55vx -n kube-system
+      kubectl logs k8s-bigip-ctlr-7469c978f9-6hvbv -n kube-system
 
    .. image:: ../images/f5-container-connector-check-logs-kubectl.png
 
 #. Using docker logs command: From the previous check we know the container
-   is running on kube-node1. On your current session with kube-master1 SSH to
-   kube-node1 first and then run the docker command:
+   is running on kube-node2. On your current session with kube-master1 SSH to
+   kube-node2 first and then run the docker command:
+
+   .. important:: Be sure to check which Node your "connector" is running on.
 
    .. code-block:: bash
 
-      ssh kube-node1
+      # If directed to, accept the authenticity of the host by typing "yes" and hitting Enter to continue.
+      
+      ssh kube-node2
 
       sudo docker ps
 
-   Here we can see our container ID is "01a7517b50c5"
+   Here we can see our container ID is "e7f69e3ad5c6"
 
    .. image:: ../images/f5-container-connector-find-dockerID--controller-container.png
 
@@ -239,22 +262,22 @@ check the logs of your container, kubectl command or docker command.
 
    .. code-block:: bash
 
-      sudo docker logs 01a7517b50c5
+      sudo docker logs e7f69e3ad5c6
 
    .. image:: ../images/f5-container-connector-check-logs-controller-container.png
 
-   .. note:: The log messages here are identical to the log messages displayed
-      in the previous kubectl logs command. 
+   .. important:: The log messages here are identical to the log messages
+      displayed in the previous kubectl logs command. 
 
 #. You can connect to your container with kubectl as well. This is something
    not typically needed but support may direct you to do so.
 
-   .. note:: Exit from your current session with kube-node1 before attempting
-      this command.
+   .. note:: Exit from your current session with **kube-node2** before
+      attempting this command.
 
    .. code-block:: bash
 
-      kubectl exec -it k8s-bigip-ctlr-79fcf97bcc-48qs7 -n kube-system  -- /bin/sh
+      kubectl exec -it k8s-bigip-ctlr-7469c978f9-6hvbv -n kube-system  -- /bin/sh
 
       cd /app
 

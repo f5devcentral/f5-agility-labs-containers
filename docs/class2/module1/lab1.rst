@@ -1,5 +1,5 @@
-Lab 1.1 - Install & Configure CIS (NodePort)
-============================================
+Lab 1.1 - Install & Configure CIS in NodePort Mode
+==================================================
 
 The BIG-IP Controller for OpenShift installs as a
 `Deployment object <https://kubernetes.io/docs/concepts/workloads/controllers/deployment/>`_
@@ -15,62 +15,83 @@ In this lab we'll use NodePort mode to deploy an application to the BIG-IP.
 BIG-IP Setup
 ------------
 
-Through the Jumpbox, you should have a BIG-IP available at the following
-URL: https://10.1.1.4
+Via RDP connect to the UDF lab "jumpbox" host.
 
-.. attention:: 
-   - Connect to your BIG-IP and check it is active and licensed. Its
-     login and password are: **admin/admin**
+.. note:: Username and password are: **ubuntu/ubuntu**
 
-   - If your BIG-IP has no license or its license expired, renew the license.
-     You just need a LTM VE license for this lab. No specific add-ons are
-     required (ask a lab instructor for eval licenses if your license has
-     expired)
+#. Open firefox and connect to bigip1. For your convenience there's a shortcut
+   on the toolbar. 
+   
+   .. note:: Username and password are: **admin/admin**
 
-   - Be sure to be in the ``Common`` partition before creating the following
-     objects.
+   .. attention::
 
-     .. image:: ../images/f5-check-partition.png
+      - Check BIG-IP is active and licensed.
 
-#. You need to setup a partition that will be used by F5 Container Ingress
-   Service.
+      - If your BIG-IP has no license or its license expired, renew the
+        license. You just need a LTM VE license for this lab. No specific
+        add-ons are required (ask a lab instructor for eval licenses if your
+        license has expired)
+
+      - Be sure to be in the ``Common`` partition before creating the following
+        objects.
+
+      .. image:: ../images/f5-check-partition.png
+
+#. Just like the previous Kubernetes class we need to setup a partition that
+   will be used by F5 Container Ingress Service.
+   
+   - GoTo: :menuselection:`System --> Users --> Partition List`
+   - Create a new partition called "okd" (use default settings)
+   - Click Finished
+
+   .. image:: ../images/f5-container-connector-bigip-partition-setup.png
 
    .. code-block:: bash
 
       # From the CLI:
       tmsh create auth partition okd
 
-      # From the UI:
-      GoTo System --> Users --> Partition List
-      - Create a new partition called "okd" (use default settings)
-      - Click Finished
+#. Verify AS3 is installed.
 
-   .. image:: ../images/f5-container-connector-bigip-partition-setup.png
-
-#. Install AS3
-
-   .. attention:: This has been done to save time but is documented for
+   .. attention:: This has been done to save time but is documented here for
       reference.
-
-   Click here: `Download latest AS3 <https://github.com/F5Networks/f5-appsvcs-extension/releases>`_
-
-   .. code-block:: bash
-
-      # From the UI:
-      GoTo  iApps --> Package Management LX
-      - Click Import
-      - Browse and select downloaded AS3 RPM
-      - Click Upload
 
    .. seealso:: For more info click here:
       `Application Services 3 Extension Documentation <https://clouddocs.f5.com/products/extensions/f5-appsvcs-extension/latest/>`_
 
+   - GoTo: :menuselection:`iApps --> Package Management LX`. and confirm
+     "f5-appsvcs" is in the last as shown below.
+
+     .. image:: ../images/confirm-as3-installed.png
+
+#. If AS3 is NOT installed follow these steps:
+
+   - Click here to: `Download latest AS3 <https://github.com/F5Networks/f5-appsvcs-extension/releases>`_
+
+   - Go back to: :menuselection:`iApps --> Package Management LX`
+
+     - Click Import
+     - Browse and select downloaded AS3 RPM
+     - Click Upload
+
 Explore the OpenShift Cluster
 -----------------------------
 
-#. From the jumpbox start an SSH session with okd-master1.
+#. On the jumphost open a terminal and start an SSH session with okd-master1.
+
+   .. code-block:: bash
+
+      # If directed to, accept the authenticity of the host by typing "yes" and hitting Enter to continue.
+
+      ssh centos@okd-master1
+
+   .. image:: ../images/sshtokubemaster1.png
 
 #. "git" the demo files
+
+   .. note:: These files should already be there and upon login updated. If not
+      use the following command to clone the repo.
 
    .. code-block:: bash
 
@@ -80,8 +101,8 @@ Explore the OpenShift Cluster
 
 #. Log in with an Openshift Client.
 
-   .. note:: Here we're using a user "centos", added when we built the cluster.
-      When prompted for password, enter "centos".
+   .. note:: Here we're using the "centos" user, added when we built the
+      cluster. When prompted for password enter "centos".
 
    .. code-block:: bash
 
@@ -90,7 +111,7 @@ Explore the OpenShift Cluster
    .. image:: ../images/OC-DEMOuser-Login.png
 
    .. important:: Upon logging in you'll notice access to several projects. In
-      our lab well be working from the default "default".
+      our lab we'll be working from the default "default".
 
 #. Check the OpenShift status
 
@@ -104,7 +125,7 @@ Explore the OpenShift Cluster
 
    .. image:: ../images/oc-status.png
 
-#. Check the OpenShift nodes
+#. Check the OpenShift cluster nodes
 
    You can manage nodes in your instance using the CLI. The CLI interacts with
    node objects that are representations of actual node hosts. The master uses
@@ -190,7 +211,7 @@ to hide our bigip credentials.
    This class will feature both modes. For more information see
    `BIG-IP Controller Modes <http://clouddocs.f5.com/containers/v2/kubernetes/kctlr-modes.html>`_
 
-   Lets start with **Nodeport mode** ``f5-nodeport-deployment.yaml``
+   Lets start with **Nodeport mode**
 
    .. note:: 
       - For your convenience the file can be found in
@@ -201,18 +222,20 @@ to hide our bigip credentials.
         you can try to use an online parser to help you :
         `Yaml parser <http://codebeautify.org/yaml-validator>`_
 
-   .. literalinclude:: ../openshift/f5-nodeport-deployment.yaml
+   .. literalinclude:: ../openshift/nodeport-deployment.yaml
       :language: yaml
+      :caption: nodeport-deployment.yaml
       :linenos:
       :emphasize-lines: 2,7,17,20,37,39-41
 
 #. Once you have your yaml file setup, you can try to launch your deployment.
-   It will start our f5-k8s-controller container on one of our nodes (may take
-   around 30sec to be in a running state):
+   It will start our f5-k8s-controller container on one of our nodes.
+   
+   .. note:: This may take around 30sec to be in a running state.
 
    .. code-block:: bash
 
-      oc create -f f5-nodeport-deployment.yaml
+      oc create -f nodeport-deployment.yaml
 
 #. Verify the deployment "deployed"
 
@@ -239,8 +262,9 @@ Troubleshooting
 If you need to troubleshoot your container, you have two different ways to
 check the logs of your container, oc command or docker command.
 
-.. attention:: Depending on your deployment CIS can be running on either
-   okd-node1 or okd-node2.
+.. attention:: Depending on your deployment, CIS can be running on either
+   okd-node1 or okd-node2. In our example above it's running on
+   **okd-node1**
 
 #. Using ``oc`` command: you need to use the full name of your pod as shown in
    the previous image.
@@ -248,7 +272,7 @@ check the logs of your container, oc command or docker command.
    .. code-block:: bash
 
       # For example:
-      oc logs k8s-bigip-ctlr-667cf78cc7-62wxf -n kube-system
+      oc logs k8s-bigip-ctlr-844dfdc864-669hb -n kube-system
 
    .. image:: ../images/f5-container-connector-check-logs-kubectl.png
 
@@ -256,13 +280,17 @@ check the logs of your container, oc command or docker command.
    is running on okd-node1. On your current session with okd-master1 SSH to
    okd-node1 first and then run the docker command:
 
+   .. important:: Be sure to check which Node your "connector" is running on.
+
    .. code-block:: bash
+
+      # If directed to, accept the authenticity of the host by typing "yes" and hitting Enter to continue.
 
       ssh okd-node1
 
       sudo docker ps
 
-   Here we can see our container ID is "74a566f5778a"
+   Here we can see our container ID is "478749740d29"
 
    .. image:: ../images/f5-container-connector-find-dockerID--controller-container.png
 
@@ -270,7 +298,7 @@ check the logs of your container, oc command or docker command.
 
    .. code-block:: bash
 
-      sudo docker logs 74a566f5778a
+      sudo docker logs 478749740d29
 
    .. image:: ../images/f5-container-connector-check-logs-controller-container.png
 
@@ -285,7 +313,7 @@ check the logs of your container, oc command or docker command.
 
    .. code-block:: bash
 
-      oc exec -it k8s-bigip-ctlr-79fcf97bcc-48qs7 -n kube-system  -- /bin/sh
+      oc exec -it k8s-bigip-ctlr-844dfdc864-669hb -n kube-system -- /bin/sh
 
       cd /app
 

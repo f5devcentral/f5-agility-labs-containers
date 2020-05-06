@@ -1,5 +1,5 @@
-Class 1: F5 Container Ingress Service & Kubernetes
-==================================================
+Class 1: Kubernetes with F5 Container Ingress Service
+=====================================================
 
 This introductory class covers the following topics:
 
@@ -22,6 +22,9 @@ We will leverage the following setup to configure the Kubernetes environment.
    * - **Hostname**
      - **IP-ADDR**
      - **Credentials**
+   * - jumpbox
+     - 10.1.1.5
+     - ubuntu/ubuntu
    * - bigip1
      - 10.1.1.4
      - admin/admin

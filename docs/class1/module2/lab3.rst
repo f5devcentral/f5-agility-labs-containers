@@ -1,41 +1,41 @@
-Lab 2.3 - Deploy Hello-World (ConfigMap w/ AS3)
-===============================================
+Lab 2.3 - Deploy Hello-World Using ConfigMap w/ AS3
+===================================================
 
-Now that CIS is up and running, let's deploy an application and leverage CIS.
-
-For this lab we'll use a simple pre-configured docker image called 
-"f5-hello-world". It can be found on docker hub at
-`f5devcentral/f5-hello-world <https://hub.docker.com/r/f5devcentral/f5-hello-world/>`_
+Just like the previous lab we'll deploy the f5-hello-world docker container.
+But instead of using the Ingress resource we'll use ConfigMap.
 
 App Deployment
 --------------
 
 On **kube-master1** we will create all the required files:
 
-#. Create a file called ``f5-hello-world-deployment.yaml``
+#. Create a file called ``deployment-hello-world.yaml``
 
    .. tip:: Use the file in ~/agilitydocs/docs/class1/kubernetes
 
-   .. literalinclude:: ../kubernetes/f5-hello-world-deployment.yaml
+   .. literalinclude:: ../kubernetes/deployment-hello-world.yaml
       :language: yaml
+      :caption: deployment-hello-world.yaml
       :linenos:
       :emphasize-lines: 2,7,20
 
-#. Create a file called ``f5-hello-world-service-clusterip.yaml``
+#. Create a file called ``clusterip-service-hello-world.yaml``
 
    .. tip:: Use the file in ~/agilitydocs/docs/class1/kubernetes
 
-   .. literalinclude:: ../kubernetes/f5-hello-world-service-clusterip.yaml
+   .. literalinclude:: ../kubernetes/clusterip-service-hello-world.yaml
       :language: yaml
+      :caption: clusterip-service-hello-world.yaml
       :linenos:
       :emphasize-lines: 2,8-10,17
 
-#. Create a file called ``f5-hello-world-configmap.yaml``
+#. Create a file called ``configmap-hello-world.yaml``
 
    .. tip:: Use the file in ~/agilitydocs/docs/class1/kubernetes
 
-   .. literalinclude:: ../kubernetes/f5-hello-world-configmap.yaml
+   .. literalinclude:: ../kubernetes/configmap-hello-world.yaml
       :language: yaml
+      :caption: configmap-hello-world.yaml
       :linenos:
       :emphasize-lines: 2,5,7,8,27,30
 
@@ -43,9 +43,9 @@ On **kube-master1** we will create all the required files:
 
    .. code-block:: bash
 
-      kubectl create -f f5-hello-world-deployment.yaml
-      kubectl create -f f5-hello-world-service-clusterip.yaml
-      kubectl create -f f5-hello-world-configmap.yaml
+      kubectl create -f deployment-hello-world.yaml
+      kubectl create -f clusterip-service-hello-world.yaml
+      kubectl create -f configmap-hello-world.yaml
 
    .. image:: ../images/f5-container-connector-launch-app-clusterip.png
 
@@ -63,40 +63,53 @@ On **kube-master1** we will create all the required files:
 
    .. image:: ../images/f5-cis-describe-clusterip2-service.png
 
-#. To understand and test the new app pay attention to the **Endpoints value**,
-   this shows our 2 instances (defined as replicas in our deployment file) and
-   the flannel IP assigned to the pod.
+   .. attention:: To understand and test the new app pay attention to the
+      **Endpoints value**, this shows our 2 instances (defined as replicas in
+      our deployment file) and the flannel IP assigned to the pod.
 
-   Now that we have deployed our application sucessfully, we can check our
-   BIG-IP configuration. From the browser open https://10.1.1.4
+#. Now that we have deployed our application sucessfully, we can check the
+   configuration on bigip1. Switch back to the open management session on
+   firefox.
 
    .. warning:: Don't forget to select the proper partition. Previously we
       checked the "kubernetes" partition. In this case we need to look at
       the "AS3" partition. This partition was auto created by AS3 and named
       after the Tenant which happens to be "AS3".
 
+   GoTo: :menuselection:`Local Traffic --> Virtual Servers`
+
    Here you can see a new Virtual Server, "serviceMain" was created,
    listening on 10.1.1.4:80 in partition "AS3".
 
    .. image:: ../images/f5-container-connector-check-app-bigipconfig-as3.png
 
-#. Check the Pools to see a new pool and the associated pool members:
-   Local Traffic --> Pools --> "web_pool" --> Members
+#. Check the Pools to see a new pool and the associated pool members.
+
+   GoTo: :menuselection:`Local Traffic --> Pools` and select the
+   "web_pool" pool. Click the Members tab.
 
    .. image:: ../images/f5-container-connector-check-app-pool-cluster-as3.png
 
    .. note:: You can see that the pool members IP addresses are assigned from
       the overlay network (**ClusterIP mode**)
 
-#. Now you can try to access your application via the BIG-IP VS/VIP: UDF-URL
+#. Access your web application via firefox on the jumpbox.
+
+   .. note:: Select the "Hello, World" shortcut or type http://10.1.1.4 in the
+      URL field.
 
    .. image:: ../images/f5-container-connector-access-app.png
 
-#. Hit Refresh many times and go back to your **BIG-IP** UI, go to Local
-   Traffic --> Pools --> Pool list --> web_pool --> Statistics to see that
-   traffic is distributed as expected.
+#. Hit Refresh many times and go back to your **BIG-IP** UI.
+
+   Goto: :menuselection:`Local Traffic --> Pools --> Pool list -->
+   "web_pool" --> Statistics` to see that traffic is distributed as expected.
 
    .. image:: ../images/f5-container-connector-check-app-bigip-stats-cluster-as3.png
+
+   .. note:: Why is all the traffic directed to one pool member? The answer can
+      be found by instpecting the "serviceMain" virtual service in the
+      management GUI.
 
 #. Scale the f5-hello-world app
 
@@ -112,29 +125,37 @@ On **kube-master1** we will create all the required files:
 
    .. image:: ../images/f5-hello-world-pods-scale10.png
 
-#. Check the pool was updated on BIG-IP:
+#. Check the pool was updated on bigip1. GoTo: :menuselection:`Local Traffic --> Pools`
+   and select the "web_pool" pool. Click the Members tab.
 
    .. image:: ../images/f5-hello-world-pool-scale10-as3-clusterip.png
 
-   .. attention:: Now we show 10 pool members vs. 2 in the previous lab, why?
+   .. attention:: Now we show 10 pool members. In Module1 the number stayed at
+      3 and didn't change, why?
 
-#. Remove Hello-World from BIG-IP. When using AS3 an extra steps need to be
-   performed. In addion to deleteing the previously created configmap a "blank"
-   declaration needs to be sent to completly remove the application:
-   
-   .. literalinclude:: ../kubernetes/f5-hello-world-delete-configmap.yaml
+#. Remove Hello-World from BIG-IP.
+
+   .. important:: When using AS3 an extra step needs to be performed. In
+      addition to deleting the application configmap, a "blank AS3 declaration"
+      is required to completely remove the application from BIG-IP.
+
+   .. literalinclude:: ../kubernetes/delete-hello-world.yaml
       :language: yaml
+      :caption: Blank AS3 Declartion
       :linenos:
       :emphasize-lines: 2,19
 
    .. code-block:: bash
 
-      kubectl delete -f f5-hello-world-configmap.yaml
-      kubectl delete -f f5-hello-world-service-clusterip.yaml
-      kubectl delete -f f5-hello-world-deployment.yaml
+      kubectl delete -f configmap-hello-world.yaml
+      kubectl delete -f clusterip-service-hello-world.yaml
+      kubectl delete -f deployment-hello-world.yaml
       
-      kubectl create -f f5-hello-world-delete-configmap.yaml
-      kubectl delete -f f5-hello-world-delete-configmap.yaml
+      kubectl create -f delete-hello-world.yaml
+      kubectl delete -f delete-hello-world.yaml
+
+   .. note:: Be sure to verify the virtual server and "AS3" partition were
+      removed from BIG-IP.
 
 .. attention:: This concludes **Class 1 - CIS and Kubernetes**. Feel free to
    experiment with any of the settings. The lab will be destroyed at the end of

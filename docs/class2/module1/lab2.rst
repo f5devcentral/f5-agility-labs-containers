@@ -1,5 +1,5 @@
-Lab 1.2 - Deploy Hello-World (Route)
-====================================
+Lab 1.2 - Deploy Hello-World Using Route
+========================================
 
 Now that CIS is up and running, let's deploy an application and leverage CIS.
 
@@ -29,32 +29,36 @@ To deploy our application, we will need the following definitions:
 App Deployment
 --------------
 
-On **okd-master1** we will create all the required files:
+Back to the SSH session on **okd-master1** we will create all the required
+files:
 
-#. Create a file called ``f5-hello-world-deployment.yaml``
+#. Create a file called ``deployment-hello-world.yaml``
 
    .. tip:: Use the file in ~/agilitydocs/docs/class2/openshift
 
-   .. literalinclude:: ../openshift/f5-hello-world-deployment.yaml
+   .. literalinclude:: ../openshift/deployment-hello-world.yaml
       :language: yaml
+      :caption: deployment-hello-world.yaml
       :linenos:
       :emphasize-lines: 2,7,20
 
-#. Create a file called ``f5-hello-world-service-nodeport.yaml``
+#. Create a file called ``nodeport-service-hello-world.yaml``
 
    .. tip:: Use the file in ~/agilitydocs/docs/class2/openshift
 
-   .. literalinclude:: ../openshift/f5-hello-world-service-nodeport.yaml
+   .. literalinclude:: ../openshift/nodeport-service-hello-world.yaml
       :language: yaml
+      :caption: nodeport-service-hello-world.yaml
       :linenos:
       :emphasize-lines: 2,17
 
-#. Create a file called ``f5-hello-world-route.yaml``
+#. Create a file called ``route-hello-world.yaml``
 
    .. tip:: Use the file in ~/agilitydocs/docs/class2/openshift
 
-   .. literalinclude:: ../openshift/f5-hello-world-route.yaml
+   .. literalinclude:: ../openshift/route-hello-world.yaml
       :language: yaml
+      :caption: route-hello-world.yaml
       :linenos:
       :emphasize-lines: 2,7-9,23,24
 
@@ -62,9 +66,9 @@ On **okd-master1** we will create all the required files:
 
    .. code-block:: bash
 
-      oc create -f f5-hello-world-deployment.yaml
-      oc create -f f5-hello-world-service-nodeport.yaml
-      oc create -f f5-hello-world-route.yaml
+      oc create -f deployment-hello-world.yaml
+      oc create -f nodeport-service-hello-world.yaml
+      oc create -f route-hello-world.yaml
 
    .. image:: ../images/f5-container-connector-launch-app-route.png
 
@@ -85,50 +89,59 @@ On **okd-master1** we will create all the required files:
 
    .. image:: ../images/f5-container-connector-check-app-definition-route.png
 
-#. To understand and test the new app pay attention to the **NodePort value**,
-   that's the port used to give you access to the app from the outside. Here
-   it's "30444", highlighted above.
+   .. attention:: To understand and test the new app pay attention to the
+      **NodePort value**, that's the port used to give you access to the app
+      from the outside. In this example it's "30459", highlighted above.
 
-   Now that we have deployed our application sucessfully, we can check our
-   BIG-IP configuration. From the browser open https://10.1.1.4
+#. Now that we have deployed our application sucessfully, we can check the
+   configuration on bigip1. Switch back to the open management session on
+   firefox.
 
-   .. warning:: Don't forget to select the "okd" partition or you'll
-      see nothing.
+   .. warning:: Don't forget to select the "okd" partition or you'll see
+      nothing.
+
+   Goto :menuselection:`Local Traffic --> Virtual Servers`
 
    With "Route" you'll seee two virtual servers defined. "okd_http_vs" and
    "okd_https_vs", listening on port 80 and 443.
 
    .. image:: ../images/f5-container-connector-check-app-route-bigipconfig.png
 
-   These Virtual use an LTM Policy to direct traffic based on the host header.
-   You can view this from the BIG-IP GUI at Local Traffic -->
-   Virtual Servers --> Policies and click the Published Policy,
-   "openshift_insecure_routes".
+   These Virtuals use an LTM Policy to direct traffic based on the host header.
+   You can view this from the BIG-IP GUI at :menuselection:`Local Traffic -->
+   Virtual Servers --> Policies` and click :menuselection:`Published Policy -->
+   "openshift_insecure_routes"`
 
    .. image:: ../images/f5-check-ltm-policy-route.png
 
-   Check the Pools to see a new pool and the associated pool members:
-   Local Traffic --> Pools --> "openshift_default_f5-hello-world-web"
-   --> Members
+#. Check the Pools to see a new pool and the associated pool members.
+   
+   GoTo: :menuselection:`Local Traffic --> Pools` and select the
+   "openshift_default_f5-hello-world-web" pool. Click the Members tab.
 
    .. image:: ../images/f5-container-connector-check-app-route-pool.png
 
    .. note:: You can see that the pool members listed are all the cluster
-      nodes on the node port 30444. (**NodePort mode**)
+      node IPs on port 30459. (**NodePort mode**)
 
-#. To view the application from a browser you'll need to update your host file
-   to point the assigned public IP at "mysite.f5demo.com".
+#. Access your web application via firefox on the jumpbox.
 
-   .. note:: This step can be skipped.
+   .. note:: Select the "mysite.f5demo.com" shortcut or type
+      http://mysite.f5demo.com in the URL field.
+
+   .. image:: ../images/f5-container-connector-access-app.png
 
 #. Delete Hello-World
-
-   .. code-block:: bash
-
-      oc delete -f f5-hello-world-route.yaml
-      oc delete -f f5-hello-world-service-nodeport.yaml
-      oc delete -f f5-hello-world-deployment.yaml
 
    .. important:: Do not skip this step. Instead of reusing some of these
       objects, the next lab we will re-deploy them to avoid conflicts and
       errors.
+
+   .. code-block:: bash
+
+      oc delete -f route-hello-world.yaml
+      oc delete -f nodeport-service-hello-world.yaml
+      oc delete -f deployment-hello-world.yaml
+   
+   .. attention:: Validate the objects are removed via the management console.
+      :menuselection:`Local Traffic --> Virtual Servers`

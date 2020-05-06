@@ -1,5 +1,5 @@
-Lab 2.1 - Install & Configure CIS (ClusterIP)
-=============================================
+Lab 2.1 - Install & Configure CIS in ClusterIP Mode
+===================================================
 
 In the previous moudule we learned about Nodeport Mode. Here we'll learn
 about ClusterIP Mode.
@@ -9,66 +9,73 @@ about ClusterIP Mode.
 
 BIG-IP Setup
 ------------
-
 With ClusterIP we're utilizing VXLAN to communicate with the application pods.
 To do so we'll need to configure BIG-IP first.
 
+If not already connected, RDP to the UDF lab "jumpbox" host. Otherwise resume
+previous session.
+
+#. Open firefox and connect to bigip1. For your convenience there's a shortcut
+   on the toolbar. Username and password are: **admin/admin**
+
 .. attention:: 
-   - Be sure to be in the ``Common`` partition before creating the following
-     objects.
+   Be sure to be in the ``Common`` partition before creating the following
+   objects.
 
-     .. image:: ../images/f5-check-partition.png
+   .. image:: ../images/f5-check-partition.png
 
-#. You need to setup a partition that will be used by F5 Container Ingress
+#. First we need to setup a partition that will be used by F5 Container Ingress
    Service.
 
    .. note:: This step was performed in the previous module. Verify the
-      "kubernetes" partion exists with the instructions below.
+      "kubernetes" partion exists and if not follow the instructions below.
+
+   - GoTo: :menuselection:`System --> Users --> Partition List`
+   - Create a new partition called "kubernetes" (use default settings)
+   - Click Finished
+
+   .. image:: ../images/f5-container-connector-bigip-partition-setup.png
 
    .. code-block:: bash
 
       # From the CLI:
       tmsh create auth partition kubernetes
 
-      # From the UI:
-      GoTo System --> Users --> Partition List
-      - Create a new partition called "kubernetes" (use default settings)
-      - Click Finished
+#. Install AS3 via the management console
 
-   .. image:: ../images/f5-container-connector-bigip-partition-setup.png
+   .. attention:: This has been done to save time. If needed see
+      `Module1 / Lab 1.1 / Install AS3 Steps <../module1/lab1.html>`_
 
-#. Create a vxlan tunnel profile
+#. Create a vxlan tunnel profile.
+
+   - GoTo: :menuselection:`Network --> Tunnels --> Profiles --> VXLAN`
+   - Create a new profile called "k8s-vxlan"
+   - Set Port = 8472
+   - Set the Flooding Type = none
+   - Click Finished
+   
+   .. image:: ../images/create-k8s-vxlan-profile.png
 
    .. code-block:: bash
 
       # From the CLI:
       tmsh create net tunnels vxlan k8s-vxlan { app-service none port 8472 flooding-type none }
 
-      # From the UI:
-      GoTo Network --> Tunnels --> Profiles --> VXLAN
-      - Create a new profile called "k8s-vxlan"
-      - Set Port = 8472
-      - Set the Flooding Type = none
-      - Click Finished
+#. Create a vxlan tunnel.
 
-   .. image:: ../images/create-k8s-vxlan-profile.png
+   - GoTo: :menuselection:`Network --> Tunnels --> Tunnel List`
+   - Create a new tunnel called "k8s-tunnel"
+   - Set the Profile to the one previously created called "k8s-vxlan"
+   - set the Key = 1
+   - Set the Local Address to 10.1.1.4
+   - Click Finished
 
-#. Create a vxlan tunnel
+   .. image:: ../images/create-k8s-vxlan-tunnel.png
 
    .. code-block:: bash
 
       # From the CLI:
       tmsh create net tunnels tunnel k8s-tunnel { app-service none key 1 local-address 10.1.1.4 profile k8s-vxlan }
-
-      # From the UI:
-      GoTo Network --> Tunnels --> Tunnel List
-      - Create a new tunnel called "k8s-tunnel"
-      - Set the Profile to the one previously created called "k8s-vxlan"
-      - set the Key = 1
-      - Set the Local Address to 10.1.1.4
-      - Click Finished
-
-   .. image:: ../images/create-k8s-vxlan-tunnel.png
 
 #. Create the vxlan tunnel self-ip
 
@@ -83,22 +90,21 @@ To do so we'll need to configure BIG-IP first.
       /24 subnets from the BIG-IP for instance, communication will fail as your
       self-ip doesn't have the proper subnet mask to know the other subnets are
       local.
-      
+
+   - GoTo: :menuselection:`Network --> Self IPs`
+   - Create a new Self-IP called "k8s-vxlan-selfip"
+   - Set the IP Address to "10.244.20.1"
+   - Set the Netmask to "255.255.0.0"
+   - Set the VLAN / Tunnel to "k8s-tunnel" (Created earlier)
+   - Set Port Lockdown to "Allow All"
+   - Click Finished
+
+   .. image:: ../images/create-k8s-vxlan-selfip.png
+
    .. code-block:: bash
       
       # From the CLI:
       tmsh create net self k8s-vxlan-selfip { address 10.244.20.1/16 vlan k8s-tunnel allow-service all }
-
-      # From the UI:
-      GoTo Network --> Self IP List
-      - Create a new Self-IP called "k8s-vxlan-selfip"
-      - Set the IP Address to "10.244.20.1"
-      - Set the Netmask to "255.255.0.0"
-      - Set the VLAN / Tunnel to "k8s-tunnel" (Created earlier)
-      - Set Port Lockdown to "Allow All"
-      - Click Finished
-
-   .. image:: ../images/create-k8s-vxlan-selfip.png
 
 CIS Deployment
 --------------
@@ -106,7 +112,7 @@ CIS Deployment
 .. note::
    - For your convenience the file can be found in
      /home/ubuntu/agilitydocs/docs/class1/kubernetes (downloaded earlier in the
-     clone git repo step).
+     git clone repo step).
    - Or you can cut and paste the file below and create your own file.
    - If you have issues with your yaml and syntax (**indentation MATTERS**),
      you can try to use an online parser to help you :
@@ -114,28 +120,36 @@ CIS Deployment
 
 #. Before deploying CIS in ClusterIP mode we need to configure Big-IP as a node
    in the kubernetes cluster. To do so you'll need to modify
-   "f5-bigip-node.yaml" with the MAC address auto created from the previous
-   steps. SSH to BIG-IP and run the following command. You'll want to copy the
-   displayed "MAC Address".
+   "bigip-node.yaml" with the MAC address auto created from the previous
+   steps. From the jumpbox terminal run the following command at bigip1. You'll
+   want to copy the displayed "MAC Address".
 
    .. code-block:: bash
-      
-      tmsh show net tunnels tunnel k8s-tunnel all-properties
+
+      # If directed to, accept the authenticity of the host by typing "yes" and hitting Enter to continue.
+      # The password is "admin"
+
+      ssh admin@10.1.1.4 tmsh show net tunnels tunnel k8s-tunnel all-properties
 
    .. image:: ../images/get-k8s-tunnel-mac-addr.png
 
-#. On the kube-master node edit f5-bigip-node.yaml
+#. On kube-master1 edit bigip-node.yaml and change the highlighted MAC address
+   with the MAC address copied from the previous step.
 
    .. note:: If your unfamiliar with VI ask for help.
 
    .. code-block:: bash
 
-      vim ~/agilitydocs/docs/class1/kubernetes/f5-bigip-node.yaml
+      vim ~/agilitydocs/docs/class1/kubernetes/bigip-node.yaml
+      
+      i           # To enable insert mode and start editing
+                  # Replace the current MAC addr with the one previously copied
+      Hit <ESC>   # To exit insert mode
+      wq <ENTER>  # To write and exit file        
 
-      and edit the highlighted MAC addr line with your addr shown below:
-
-   .. literalinclude:: ../kubernetes/f5-bigip-node.yaml
+   .. literalinclude:: ../kubernetes/bigip-node.yaml
       :language: yaml
+      :caption: bigip-node.yaml
       :linenos:
       :emphasize-lines: 9
 
@@ -143,7 +157,7 @@ CIS Deployment
 
    .. code-block:: bash
 
-      kubectl create -f f5-bigip-node.yaml
+      kubectl create -f bigip-node.yaml
 
 #. Verify "bigip1" node is created:
 
@@ -153,8 +167,11 @@ CIS Deployment
 
    .. image:: ../images/create-bigip1.png
 
-#. Now that we have the new BIGIP Node added we can launch the CIS deployment.
-   It will start the f5-k8s-controller container on one of the worker nodes.
+   .. note:: It's normal for bigip1 to show up as "Unknown" or "NotReady". This
+      status can be ignored.
+
+#. Now that we have bigip1 added as a Node we can launch the CIS deployment. It
+   will start the f5-k8s-controller container on one of the worker nodes.
 
    .. attention:: This may take around 30sec to get to a running state.
 
@@ -162,12 +179,13 @@ CIS Deployment
 
       cd ~/agilitydocs/docs/class1/kubernetes
 
-      cat f5-cluster-deployment.yaml
+      cat cluster-deployment.yaml
 
    You'll see a config file similar to this:
 
-   .. literalinclude:: ../kubernetes/f5-cluster-deployment.yaml
+   .. literalinclude:: ../kubernetes/cluster-deployment.yaml
       :language: yaml
+      :caption: cluster-deployment.yaml
       :linenos:
       :emphasize-lines: 2,7,17,20,37-42
 
@@ -175,7 +193,7 @@ CIS Deployment
 
    .. code-block:: bash
 
-      kubectl create -f f5-cluster-deployment.yaml
+      kubectl create -f cluster-deployment.yaml
 
 #. Verify the deployment "deployed"
 
@@ -183,7 +201,7 @@ CIS Deployment
 
       kubectl get deployment k8s-bigip-ctlr --namespace kube-system
 
-   .. image:: ../images/f5-container-connector-launch-deployment-controller.png
+   .. image:: ../images/f5-container-connector-launch-deployment-controller2.png
 
 #. To locate on which node CIS is running, you can use the following command:
 
@@ -194,7 +212,7 @@ CIS Deployment
    We can see that our container, in this example, is running on kube-node1
    below.
 
-   .. image:: ../images/f5-container-connector-locate-controller-container.png
+   .. image:: ../images/f5-container-connector-locate-controller-container2.png
 
 Troubleshooting
 ---------------
@@ -208,6 +226,9 @@ of checking the Docker container as described in the previos module.
    .. code-block:: bash
 
       # For example:
-      kubectl logs k8s-bigip-ctlr-deployment-5b74dd769-x55vx -n kube-system
+      kubectl logs k8s-bigip-ctlr-846dcb5958-zzvc8 -n kube-system
 
-   .. image:: ../images/f5-container-connector-check-logs-kubectl.png
+   .. image:: ../images/f5-container-connector-check-logs-kubectl2.png
+
+   .. attention:: You will see **ERROR** in this log output. These errors can
+      be ignored. The lab will work as expected.

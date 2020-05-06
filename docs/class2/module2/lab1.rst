@@ -1,5 +1,5 @@
-Lab 2.1 - Install & Configure CIS (ClusterIP)
-=============================================
+Lab 2.1 - Install & Configure CIS in ClusterIP Mode
+===================================================
 
 In the previous moudule we learned about Nodeport Mode. Here we'll learn
 about ClusterIP Mode.
@@ -9,65 +9,73 @@ about ClusterIP Mode.
 
 BIG-IP Setup
 ------------
-
 With ClusterIP we're utilizing VXLAN to communicate with the application pods.
 To do so we'll need to configure BIG-IP first.
 
-.. attention:: 
-   - Be sure to be in the ``Common`` partition before creating the following
-     objects.
+If not already connected, RDP to the UDF lab "jumpbox" host. Otherwise resume
+previous session.
 
-     .. image:: ../images/f5-check-partition.png
+#. Open firefox and connect to bigip1. For your convenience there's a shortcut
+   on the toolbar. Username and password are: **admin/admin**
 
-#. You need to setup a partition that will be used by F5 Container Ingress
+   .. attention:: 
+      Be sure to be in the ``Common`` partition before creating the following
+      objects.
+
+      .. image:: ../images/f5-check-partition.png
+
+#. First we need to setup a partition that will be used by F5 Container Ingress
    Service.
 
    .. note:: This step was performed in the previous module. Verify the
-      "kubernetes" partion exists with the instructions below.
+      "okd" partion exists and if not follow the instructions below.
+ 
+   - GoTo: :menuselection:`System --> Users --> Partition List`
+   - Create a new partition called "okd" (use default settings)
+   - Click Finished
+
+   .. image:: ../images/f5-container-connector-bigip-partition-setup.png
 
    .. code-block:: bash
 
       # From the CLI:
       tmsh create auth partition okd
 
-      # From the UI:
-      GoTo System --> Users --> Partition List
-      - Create a new partition called "okd" (use default settings)
-      - Click Finished
+#. Install AS3 via the management console
 
-   .. image:: ../images/f5-container-connector-bigip-partition-setup.png
+   .. attention:: This has been done to save time. If needed see 
+      `Module1 / Lab 1.1 / Install AS3 Steps <../module1/lab1.html>`_
 
 #. Create a vxlan tunnel profile
+
+   - GoTo: :menuselection:`Network --> Tunnels --> Profiles --> VXLAN`
+   - Create a new profile called "okd-vxlan"
+   - set Port = 4789
+   - Set the Flooding Type = Multipoint
+   - Click Finished
+
+   .. image:: ../images/create-okd-vxlan-profile.png
 
    .. code-block:: bash
 
       # From the CLI:
-      tmsh create net tunnel vxlan okd-vxlan { app-service none flooding-type multipoint }
-
-      # From the UI:
-      GoTo Network --> Tunnels --> Profiles --> VXLAN
-      - Create a new profile called "okd-vxlan"
-      - Set the Flooding Type = Multipoint
-      - Click Finished
-
-   .. image:: ../images/create-okd-vxlan-profile.png
+      tmsh create net tunnel vxlan okd-vxlan { app-service none port 4789 flooding-type multipoint }
 
 #. Create a vxlan tunnel
+
+   - GoTo: :menuselection:`Network --> Tunnels --> Tunnel List`
+   - Create a new tunnel called "okd-tunnel"
+   - Set the Profile to the one previously created called "okd-vxlan"
+   - set the key = 0
+   - Set the Local Address to 10.1.1.4
+   - Click Finished
+
+   .. image:: ../images/create-okd-vxlan-tunnel.png
 
    .. code-block:: bash
 
       # From the CLI:
       tmsh create net tunnel tunnel okd-tunnel { app-service none key 0 local-address 10.1.1.4 profile okd-vxlan }
-
-      # From the UI:
-      GoTo Network --> Tunnels --> Tunnel List
-      - Create a new tunnel called "okd-tunnel"
-      - Set the Profile to the one previously created called "okd-vxlan"
-      - set the key = 0
-      - Set the Local Address to 10.1.1.4
-      - Click Finished
-
-   .. image:: ../images/create-okd-vxlan-tunnel.png
 
 #. Create the vxlan tunnel self-ip
 
@@ -82,14 +90,8 @@ To do so we'll need to configure BIG-IP first.
       /23 subnets from the BIG-IP for instance, communication will fail as your
       self-ip doesn't have the proper subnet mask to know the other subnets are
       local.
-      
-   .. code-block:: bash
-      
-      # From the CLI:
-      tmsh create net self okd-vxlan-selfip { app-service none address 10.131.0.1/14 vlan okd-tunnel allow-service all }
 
-      # From the UI:
-      GoTo Network --> Self IP List
+      - GoTo: :menuselection:`Network --> Self IPs`
       - Create a new Self-IP called "okd-vxlan-selfip"
       - Set the IP Address to "10.131.0.1".
       - Set the Netmask to "255.252.0.0"
@@ -98,6 +100,11 @@ To do so we'll need to configure BIG-IP first.
       - Click Finished
 
    .. image:: ../images/create-okd-vxlan-selfip.png
+
+   .. code-block:: bash
+      
+      # From the CLI:
+      tmsh create net self okd-vxlan-selfip { app-service none address 10.131.0.1/14 vlan okd-tunnel allow-service all }
 
 CIS Deployment
 --------------
@@ -111,18 +118,29 @@ CIS Deployment
      you can try to use an online parser to help you :
      `Yaml parser <http://codebeautify.org/yaml-validator>`_
 
+#. On the jumphost open a terminal and start an SSH session with okd-master1.
+
+   .. note:: This session should be up and running from the previous module.
+
+   .. code-block:: bash
+
+      # If directed to, accept the authenticity of the host by typing "yes" and hitting Enter to continue.
+
+      ssh centos@okd-master1
+
 #. Next let's explore the f5-hostsubnet.yaml file
 
    .. code-block:: bash
 
       cd ~/agilitydocs/docs/class2/openshift
 
-      cat f5-bigip-hostsubnet.yaml
+      cat bigip-hostsubnet.yaml
 
    You'll see a config file similar to this:
 
-   .. literalinclude:: ../openshift/f5-bigip-hostsubnet.yaml
+   .. literalinclude:: ../openshift/bigip-hostsubnet.yaml
       :language: yaml
+      :caption: bigip-hostsubnet.yaml
       :linenos:
       :emphasize-lines: 2,9
 
@@ -143,7 +161,7 @@ CIS Deployment
 
    .. code-block:: bash
 
-      oc create -f f5-bigip-hostsubnet.yaml
+      oc create -f bigip-hostsubnet.yaml
 
    You should see a successful creation of a new OpenShift Node.
 
@@ -182,22 +200,23 @@ CIS Deployment
          host: openshift-f5-node
          hostIP: 10.1.1.4
 
-#. Now that we have the new BIGIP HostSubnet added we can launch the CIS
+#. Now that we have added a HostSubnet for bigip1 we can launch the CIS
    deployment. It will start the f5-k8s-controller container on one of the
    worker nodes.
    
-   .. attention:: This may take around 30sec to get to a running state.
+   .. attention:: This may take around 30s to get to a running state.
 
    .. code-block:: bash
 
       cd ~/agilitydocs/docs/class2/openshift
 
-      cat f5-cluster-deployment.yaml
+      cat cluster-deployment.yaml
 
    You'll see a config file similar to this:
 
-   .. literalinclude:: ../openshift/f5-cluster-deployment.yaml
+   .. literalinclude:: ../openshift/cluster-deployment.yaml
       :language: yaml
+      :caption: cluster-deployment.yaml
       :linenos:
       :emphasize-lines: 2,7,17,20,37-40,46-47
 
@@ -205,7 +224,7 @@ CIS Deployment
 
    .. code-block:: bash
 
-      oc create -f f5-cluster-deployment.yaml
+      oc create -f cluster-deployment.yaml
 
 #. Verify the deployment "deployed"
 
@@ -221,11 +240,13 @@ CIS Deployment
 
       oc get pods -o wide -n kube-system
 
+   We can see that our container, in this example, is running on okd-node1
+   below.
+
    .. image:: ../images/F5-CTRL-RUNNING.png
 
 Troubleshooting
 ---------------
-
 
 Check the container/pod logs via ``oc`` command. You also have the option of
 checking the Docker container as described in the previos module.
@@ -236,6 +257,9 @@ checking the Docker container as described in the previos module.
    .. code-block:: bash
 
       # For example:
-      oc logs k8s-bigip-ctlr-8c6cf8667-htcgw -n kube-system
+      oc logs k8s-bigip-ctlr-79b8f9cbd8-smsqs -n kube-system
 
-   .. image:: ../images/f5-container-connector-check-logs-kubectl.png
+   .. image:: ../images/f5-container-connector-check-logs-kubectl2.png
+
+   .. attention:: You will see **ERROR** in this log output. These errors can
+      be ignored. The lab will work as expected.
