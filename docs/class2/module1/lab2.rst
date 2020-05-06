@@ -126,7 +126,7 @@ files:
 
 #. Access your web application via firefox on the jumpbox.
 
-   .. note:: Select the "mysite.f5demo.com" shortcut or type
+   .. note:: Open a new tab and select the "mysite.f5demo.com" shortcut or type
       http://mysite.f5demo.com in the URL field.
 
    .. image:: ../images/f5-container-connector-access-app.png

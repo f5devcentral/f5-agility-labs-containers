@@ -183,6 +183,9 @@ On **kube-master1** we will create all the required files:
 
 #. Remove CIS:
 
+   .. important:: Verify the AS3 partition is removed before running the
+      following command.
+
    .. code-block:: bash
 
       kubectl delete -f nodeport-deployment.yaml

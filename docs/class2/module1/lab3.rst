@@ -176,7 +176,13 @@ On the **okd-master1** we will create all the required files:
       oc create -f delete-hello-world.yaml
       oc delete -f delete-hello-world.yaml
 
+   .. note:: Be sure to verify the virtual server and "AS3" partition were
+      removed from BIG-IP. This can take up to 30s.
+
 #. Remove CIS:
+
+   .. important:: Verify the AS3 partition is removed before running the
+      following command.
 
    .. code-block:: bash
 

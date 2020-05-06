@@ -157,6 +157,13 @@ On **kube-master1** we will create all the required files:
    .. note:: Be sure to verify the virtual server and "AS3" partition were
       removed from BIG-IP.
 
+#. Before starting the next class exit session from kube-master1 back to the
+   jumpbox.
+
+   .. code-block:: bash
+
+      exit
+
 .. attention:: This concludes **Class 1 - CIS and Kubernetes**. Feel free to
    experiment with any of the settings. The lab will be destroyed at the end of
    the class/day.
