@@ -116,7 +116,7 @@ Explore the Kubernetes Cluster
    .. attention::
       If the node STATUS shows **NotReady** or **SchedulingDisabled** contact
       the lab proctor. The node is not passing the health checks performed from
-      the master, therefor pods cannot be scheduled for placement on the node.
+      the master, therefore pods cannot be scheduled for placement on the node.
 
 #. To get more detailed information about a specific node, including the reason
    for the current condition use the kubectl describe node command. This does
