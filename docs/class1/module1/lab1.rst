@@ -80,6 +80,8 @@ Explore the Kubernetes Cluster
 
 #. On the jumphost open a terminal and start an SSH session with kube-master1.
 
+   .. image:: ../images/start-term.png
+
    .. code-block:: bash
 
       # If directed to, accept the authenticity of the host by typing "yes" and hitting Enter to continue.
