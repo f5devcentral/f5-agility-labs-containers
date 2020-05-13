@@ -19,8 +19,8 @@ Via RDP connect to the UDF lab "jumpbox" host.
 
 .. note:: Username and password are: **ubuntu/ubuntu**
 
-#. Open firefox and connect to bigip1. For your convenience there's a shortcut
-   on the firefox toolbar. 
+#. Open firefox and connect to bigip1 management console. For your convenience
+   there's a shortcut on the firefox toolbar. 
    
    .. note:: Username and password are: **admin/admin**
 
@@ -80,6 +80,8 @@ Explore the Kubernetes Cluster
 
 #. On the jumphost open a terminal and start an SSH session with kube-master1.
 
+   .. image:: ../images/start-term.png
+
    .. code-block:: bash
 
       # If directed to, accept the authenticity of the host by typing "yes" and hitting Enter to continue.
@@ -116,7 +118,7 @@ Explore the Kubernetes Cluster
    .. attention::
       If the node STATUS shows **NotReady** or **SchedulingDisabled** contact
       the lab proctor. The node is not passing the health checks performed from
-      the master, therefor pods cannot be scheduled for placement on the node.
+      the master, therefore pods cannot be scheduled for placement on the node.
 
 #. To get more detailed information about a specific node, including the reason
    for the current condition use the kubectl describe node command. This does
@@ -269,11 +271,17 @@ check the logs, kubectl command or docker command.
    .. important:: The log messages here are identical to the log messages
       displayed in the previous kubectl logs command. 
 
+#. Exit kube-node2 back to kube-master1
+
+   .. code-block:: bash
+
+      exit
+
 #. You can connect to your container with kubectl as well. This is something
    not typically needed but support may direct you to do so.
 
-   .. note:: Exit from your current session with **kube-node2** before
-      attempting this command.
+   .. important:: Be sure the previous command to exit **kube-node2** back to
+      kube-master1 was successfull.
 
    .. code-block:: bash
 

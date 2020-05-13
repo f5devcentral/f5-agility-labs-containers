@@ -19,8 +19,8 @@ Via RDP connect to the UDF lab "jumpbox" host.
 
 .. note:: Username and password are: **ubuntu/ubuntu**
 
-#. Open firefox and connect to bigip1. For your convenience there's a shortcut
-   on the toolbar. 
+#. Open firefox and connect to bigip1 management console. For your convenience
+   there's a shortcut on the firefox toolbar. 
    
    .. note:: Username and password are: **admin/admin**
 
@@ -79,6 +79,8 @@ Explore the OpenShift Cluster
 -----------------------------
 
 #. On the jumphost open a terminal and start an SSH session with okd-master1.
+
+   .. image:: ../images/start-term.png
 
    .. code-block:: bash
 
@@ -305,11 +307,17 @@ check the logs of your container, oc command or docker command.
    .. note:: The log messages here are identical to the log messages displayed
       in the previous oc logs command. 
 
+#. Exit okd-node1 back to okd-master1
+
+   .. code-block:: bash
+
+      exit
+
 #. You can connect to your container with kubectl as well. This is something
    not typically needed but support may direct you to do so.
 
-   .. note:: Exit from your current session with okd-node1 before attempting
-      this command.
+   .. important:: Be sure the previous command to exit **okd-node1** back to
+      okd-master1 was successfull.
 
    .. code-block:: bash
 

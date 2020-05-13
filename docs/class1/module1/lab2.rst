@@ -119,8 +119,8 @@ required files and launch them.
 
 #. Access your web application via firefox on the jumpbox.
 
-   .. note:: Select the "Hello, World" shortcut or type http://10.1.1.4 in the
-      URL field.
+   .. note:: Open a new tab and select the "Hello, World" shortcut or type
+      http://10.1.1.4 in the URL field.
 
    .. image:: ../images/f5-container-connector-access-app.png
 
