@@ -9,17 +9,20 @@ Via RDP connect to the UDF lab "jumpbox" host.
 
 .. note:: Username and password are: **ubuntu/ubuntu**
 
-#. On the jumphost open a terminal and start an SSH session with kube-master1.
+On the jumphost open a terminal and start an SSH session with kube-master1.
 
-   .. image:: images/start-term.png
+.. image:: images/start-term.png
 
-   .. code-block:: bash
+.. code-block:: bash
 
-      # If directed to, accept the authenticity of the host by typing "yes" and hitting Enter to continue.
+   # If directed to, accept the authenticity of the host by typing "yes" and hitting Enter to continue.
 
-      ssh kube-master1
+   ssh kube-master1
 
-   .. image:: images/sshtokubemaster1.png 
+.. image:: images/sshtokubemaster1.png 
+
+Remove Flannel
+--------------
 
 #. Show running Flannel pods
 
@@ -46,53 +49,10 @@ Via RDP connect to the UDF lab "jumpbox" host.
    .. note:: Run this command several times until you no longer see the 
       "kube-flannel" pods.
 
-#. Change local directory to the lab calico dir.
-
-   .. code-block:: bash
-
-      cd ~/agilitydocs/docs/class1/kubernetes/calico
-
-#. Install Calico
-
-   a. Download calico manifest
-
-      .. code-block:: bash
-
-         curl https://docs.projectcalico.org/manifests/calico.yaml -O
-
-   #. Modify the manifest with proper POD CIDR
-
-      .. important:: This lab was built with Flannel and the default POD CIDR
-         of 10.244.0.0/24. The calico.yaml manifist uses a different CIDR so 
-         needs to be adjusted.
-
-      .. code-block:: bash
-
-         vim calico.yaml
-
-      .. note:: If unfamiliar with VI the instructor will walk you through the
-         commands.
-
-      Find the "CALICO__IPV4POOL_CIDR variable and uncomment the two lines as
-      shown below. Replace "192.168.0.0/16" with "10.244.0.0/16"
-
-      .. image:: images/updatecidr.png
-
-   #. Apply calico.yaml to the kube cluster
-
-      .. code-block:: bash
-
-         kubectl apply -f calico.yaml
-
-#. Validate Calico pods are installed and running
-
-   .. code-block:: bash
-
-      kubectl get pods -n kube-system
-
-   .. image:: images/calicopods.png
-
 #. Cleanup CIS deployment file.
+
+   .. note:: This step can be skipped but several errors will appear in the
+      CIS pod log.
 
    .. code-block:: bash
 
@@ -106,69 +66,114 @@ Via RDP connect to the UDF lab "jumpbox" host.
 
    .. image:: images/newclusterdeployment.png
 
-   .. note:: This step can be skipped but several errors will appear in the
-      CIS pod log.
+Install Calico
+--------------
 
-#. Set up calico
+#. Change local directory to the lab calico dir.
 
-   a. Retrieve the calicoctl binary
+   .. code-block:: bash
 
-      .. code-block:: bash
+      cd ~/agilitydocs/docs/class1/kubernetes/calico
 
-         curl -O -L https://github.com/projectcalico/calicoctl/releases/download/v3.15.1/calicoctl
+#. Download calico manifest
+
+   .. code-block:: bash
+
+      curl https://docs.projectcalico.org/manifests/calico.yaml -O
+
+#. Modify the manifest with proper POD CIDR
+
+   .. important:: This lab was built with Flannel and the default POD CIDR
+      of 10.244.0.0/16. The calico.yaml manifest uses 192.168.0.0/16 so has
+      to be adjusted.
+
+   .. code-block:: bash
+
+      vim calico.yaml
+
+   .. note:: If unfamiliar with VI the instructor will walk you through the
+      commands.
+
+   Find the "CALICO__IPV4POOL_CIDR variable and uncomment the two lines as
+   shown below. Replace "192.168.0.0/16" with "10.244.0.0/16"
+
+   .. image:: images/updatecidr.png
+
+#. Start Calico on the cluster
+
+   .. code-block:: bash
+
+      kubectl apply -f calico.yaml
+
+#. Validate Calico pods are installed and running
+
+   .. code-block:: bash
+
+      kubectl get pods -n kube-system
+
+   .. image:: images/calicopods.png
+
+Install calicoctl
+-----------------
+
+#. Retrieve the calicoctl binary
+
+   .. code-block:: bash
+
+      curl -O -L https://github.com/projectcalico/calicoctl/releases/download/v3.15.1/calicoctl
          
-         chmod +x calicoctl
+      chmod +x calicoctl
          
-         sudo mv calicoctl /usr/local/bin
+      sudo mv calicoctl /usr/local/bin
 
-   #. Copy the the calicoctl.cfg file to /etc/calico/
+#. Copy the the calicoctl.cfg file to /etc/calico/
 
-      .. literalinclude:: ../../class1/kubernetes/calico/calicoctl.cfg
-         :language: yaml
-         :linenos:
-         :emphasize-lines: 6
+   .. literalinclude:: ../../class1/kubernetes/calico/calicoctl.cfg
+      :language: yaml
+      :linenos:
+      :emphasize-lines: 6
 
-      .. code-block:: bash
+   .. code-block:: bash
 
-         sudo mkdir /etc/calico
+      sudo mkdir /etc/calico
 
-         sudo cp calico/calicoctl.cfg /etc/calico/
+      sudo cp calico/calicoctl.cfg /etc/calico/
    
-   #. Verify calicoctl is properly set up
+#. Verify calicoctl is properly set up
 
-      .. code-block:: bash
+   .. code-block:: bash
 
-         calicoctl get nodes
+      calicoctl get nodes
 
-      .. image:: images/caligetnodes.png
+   .. image:: images/caligetnodes.png
 
-   #. Set up the Calico BGP config
+#. Set up the Calico BGP config
 
-      .. literalinclude:: ../../class1/kubernetes/calico/caliconf.yaml
-         :language: yaml
-         :linenos:
-         :emphasize-lines: 8
+   .. literalinclude:: ../../class1/kubernetes/calico/caliconf.yaml
+      :language: yaml
+      :linenos:
+      :emphasize-lines: 8
 
-      .. code-block:: bash
+   .. code-block:: bash
 
-         calicoctl create -f calico/caliconf.yaml
+      calicoctl create -f calico/caliconf.yaml
 
-   #. Set up the BIG-IP BGP peer
+#. Set up the BIG-IP BGP peer
 
-      .. literalinclude:: ../../class1/kubernetes/calico/calipeer.yaml
-         :language: yaml
-         :linenos:
-         :emphasize-lines: 6,7
+   .. literalinclude:: ../../class1/kubernetes/calico/calipeer.yaml
+      :language: yaml
+      :linenos:
+      :emphasize-lines: 6,7
 
-      .. code-block:: bash
+   .. code-block:: bash
 
-         calicoctl create -f calico/calipeer.yaml
+      calicoctl create -f calico/calipeer.yaml
 
-   #. Verify setup
+#. Verify setup
 
-      .. code-block:: bash
+   .. code-block:: bash
 
-         calicoctl get bgpPeer
+      calicoctl get bgpPeer
 
 Confgure BIG-IP for Calico
 --------------------------
@@ -219,10 +224,10 @@ Confgure BIG-IP for Calico
       neighbor 10.1.1.9 peer-group calico-k8s
 
       #on BIG-IP1, run
-      neighbor 10.1.20.5 peer-group calico-k8s
+      neighbor 10.1.1.24 peer-group calico-k8s
 
       #on BIG-IP2, run
-      neighbor  10.1.20.4 peer-group calico-k8s
+      neighbor  10.1.1.4 peer-group calico-k8s
 
       #save configuration
       write
