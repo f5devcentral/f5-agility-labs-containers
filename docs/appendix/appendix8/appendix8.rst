@@ -56,13 +56,11 @@ Remove Flannel
 
    .. code-block:: bash
 
-      cd ..
-
-      vim cluster-deployment.yaml
+      vim ~/agilitydocs/docs/class1/kubernetes/cluster-deployment.yaml
    
    Remove "--flannel-name=k8s-tunnel" from the bottom of the file. Be sure to 
-   remove the "," on the line above the removed the line. After edit the file
-   should look like the following:
+   remove the "," on the line above the removed the line. After editing the
+   file should look like the following:
 
    .. image:: images/newclusterdeployment.png
 
@@ -95,7 +93,7 @@ Install Calico
       commands.
 
    Find the "CALICO__IPV4POOL_CIDR variable and uncomment the two lines as
-   shown below. Replace "192.168.0.0/16" with "10.244.0.0/16"
+   shown below. Replacing "192.168.0.0/16" with "10.244.0.0/16"
 
    .. image:: images/updatecidr.png
 
@@ -137,7 +135,7 @@ Install calicoctl
 
       sudo mkdir /etc/calico
 
-      sudo cp calico/calicoctl.cfg /etc/calico/
+      sudo cp calicoctl.cfg /etc/calico/
    
 #. Verify calicoctl is properly set up
 
@@ -156,7 +154,7 @@ Install calicoctl
 
    .. code-block:: bash
 
-      calicoctl create -f calico/caliconf.yaml
+      calicoctl create -f caliconf.yaml
 
 #. Set up the BIG-IP BGP peer
 
@@ -167,7 +165,7 @@ Install calicoctl
 
    .. code-block:: bash
 
-      calicoctl create -f calico/calipeer.yaml
+      calicoctl create -f calipeer.yaml
 
 #. Verify setup
 
@@ -175,8 +173,25 @@ Install calicoctl
 
       calicoctl get bgpPeer
 
+#. Change dir back to working lab directory
+
+   .. note:: The necessary kubernetes lab files can be found in this directory.
+
+   .. code-block:: bash
+
+      cd ..
+
+      # or
+
+      cd ~/agilitydocs/docs/class1/kubernetes/
+
 Confgure BIG-IP for Calico
 --------------------------
+
+Open firefox and connect to bigip1 management console. For your convenience
+there's a shortcut on the firefox toolbar. 
+   
+.. note:: Username and password are: **admin/admin**
 
 #. Enable BGP on route domain 0
 
@@ -223,10 +238,10 @@ Confgure BIG-IP for Calico
       neighbor 10.1.1.8 peer-group calico-k8s
       neighbor 10.1.1.9 peer-group calico-k8s
 
-      #on BIG-IP1, run
+      #on BIG-IP 1, run
       neighbor 10.1.1.24 peer-group calico-k8s
 
-      #on BIG-IP2, run
+      #on BIG-IP 2, run
       neighbor  10.1.1.4 peer-group calico-k8s
 
       #save configuration
