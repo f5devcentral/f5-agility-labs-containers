@@ -183,7 +183,7 @@ to hide our bigip credentials.
       - For your convenience the file can be found in
         /home/ubuntu/agilitydocs/docs/class1/kubernetes (downloaded earlier in
         the clone git repo step).
-      - Or you can cut and paste the file below and create your own file.
+      - Or you can copy and paste the file below and create your own file.
       - If you have issues with your yaml and syntax (**indentation MATTERS**),
         you can try to use an online parser to help you :
         `Yaml parser <http://codebeautify.org/yaml-validator>`_
