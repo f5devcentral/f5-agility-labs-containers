@@ -171,7 +171,7 @@ CIS Deployment
       status can be ignored.
 
 #. Just like the previous module where we deployed CIS in NodePort mode we need
-   to create a "secret", "serviceaccount", and clusterrolebinding".
+   to create a "secret", "serviceaccount", and "clusterrolebinding".
 
    .. important:: This step can be skipped if previously done in
       module1(NodePort). Some classes may choose to skip module1.
