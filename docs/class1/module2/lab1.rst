@@ -170,6 +170,18 @@ CIS Deployment
    .. note:: It's normal for bigip1 to show up as "Unknown" or "NotReady". This
       status can be ignored.
 
+#. Just like the previous module where we deployed CIS in NodePort mode we need
+   to create a "secret", "serviceaccount", and "clusterrolebinding".
+
+   .. important:: This step can be skipped if previously done in
+      module1(NodePort). Some classes may choose to skip module1.
+
+   .. code-block:: bash
+
+      kubectl create secret generic bigip-login -n kube-system --from-literal=username=admin --from-literal=password=admin
+      kubectl create serviceaccount k8s-bigip-ctlr -n kube-system
+      kubectl create clusterrolebinding k8s-bigip-ctlr-clusteradmin --clusterrole=cluster-admin --serviceaccount=kube-system:k8s-bigip-ctlr
+
 #. Now that we have bigip1 added as a Node we can launch the CIS deployment. It
    will start the f5-k8s-controller container on one of the worker nodes.
 

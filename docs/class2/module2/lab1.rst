@@ -128,6 +128,18 @@ CIS Deployment
 
       ssh centos@okd-master1
 
+#. Just like the previous module where we deployed CIS in NodePort mode we need
+   to create a "secret", "serviceaccount", and "clusterrolebinding".
+
+   .. important:: This step can be skipped if previously done in
+      module1(NodePort). Some classes may choose to skip module1.
+
+   .. code-block:: bash
+
+      oc create secret generic bigip-login -n kube-system --from-literal=username=admin --from-literal=password=admin
+      oc create serviceaccount k8s-bigip-ctlr -n kube-system
+      oc create clusterrolebinding k8s-bigip-ctlr-clusteradmin --clusterrole=cluster-admin --serviceaccount=kube-system:k8s-bigip-ctlr
+
 #. Next let's explore the f5-hostsubnet.yaml file
 
    .. code-block:: bash
