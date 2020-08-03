@@ -45,3 +45,5 @@ We will leverage the following setup to configure the Kubernetes environment.
      - ubuntu/ubuntu
 
        root/default
+
+Last updated: 20200803
