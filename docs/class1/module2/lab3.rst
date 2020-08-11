@@ -157,13 +157,13 @@ On **kube-master1** we will create all the required files:
    .. note:: Be sure to verify the virtual server and "AS3" partition were
       removed from BIG-IP.
 
-#. Before starting the next class exit session from kube-master1 back to the
-   jumpbox.
+#. **(OPTIONAL)** The next module is optional. If instructed to skip this
+   optional module, be sure to exit your current SSH session with
+   **kube-master1** first. Otherwise click "Next" below.
 
    .. code-block:: bash
 
       exit
 
-.. attention:: This concludes **Class 1 - CIS and Kubernetes**. Feel free to
-   experiment with any of the settings. The lab will be destroyed at the end of
-   the class/day.
+   If instructed to skip Module 3 and start Class 2 click here:
+   `Class 2: OpenShift with Container Ingress Service <../../class2/class2.html>`_
