@@ -39,7 +39,7 @@ previous session.
    .. code-block:: bash
 
       # From the CLI:
-      tmsh create auth partition kubernetes
+      ssh admin@10.1.1.4 tmsh create auth partition kubernetes
 
 #. Install AS3 via the management console
 
@@ -59,7 +59,7 @@ previous session.
    .. code-block:: bash
 
       # From the CLI:
-      tmsh create net tunnels vxlan k8s-vxlan { app-service none port 8472 flooding-type none }
+      ssh admin@10.1.1.4 tmsh create net tunnels vxlan k8s-vxlan { app-service none port 8472 flooding-type none }
 
 #. Create a vxlan tunnel.
 
@@ -75,7 +75,7 @@ previous session.
    .. code-block:: bash
 
       # From the CLI:
-      tmsh create net tunnels tunnel k8s-tunnel { app-service none key 1 local-address 10.1.1.4 profile k8s-vxlan }
+      ssh admin@10.1.1.4 tmsh create net tunnels tunnel k8s-tunnel { app-service none key 1 local-address 10.1.1.4 profile k8s-vxlan }
 
 #. Create the vxlan tunnel self-ip
 
@@ -104,7 +104,7 @@ previous session.
    .. code-block:: bash
       
       # From the CLI:
-      tmsh create net self k8s-vxlan-selfip { address 10.244.20.1/16 vlan k8s-tunnel allow-service all }
+      ssh admin@10.1.1.4 tmsh create net self k8s-vxlan-selfip { address 10.244.20.1/16 vlan k8s-tunnel allow-service all }
 
 CIS Deployment
 --------------
@@ -199,7 +199,7 @@ CIS Deployment
       :language: yaml
       :caption: cluster-deployment.yaml
       :linenos:
-      :emphasize-lines: 2,7,17,20,37-42
+      :emphasize-lines: 2,7,17,20,37,39-41
 
 #. Create the CIS deployment with the following command
 

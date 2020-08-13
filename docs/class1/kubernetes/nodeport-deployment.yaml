@@ -37,6 +37,5 @@ spec:
             "--bigip-url=https://10.1.1.4:8443",
             "--insecure=true",
             "--bigip-partition=kubernetes",
-            "--namespace=default",
             "--pool-member-type=nodeport"
           ]
