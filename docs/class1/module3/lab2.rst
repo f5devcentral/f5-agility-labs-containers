@@ -69,7 +69,7 @@ As before all the necesary files are on **kube-master1** in
 
    .. image:: ../images/nginx-ingress-launch-app.png
 
-#. At this point hello-world is not externally accessable but we can check the
+#. At this point hello-world is not externally accessible but we can check the
    status of our service.
 
    .. code-block:: bash
