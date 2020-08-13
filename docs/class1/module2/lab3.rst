@@ -157,13 +157,12 @@ On **kube-master1** we will create all the required files:
    .. note:: Be sure to verify the virtual server and "AS3" partition were
       removed from BIG-IP.
 
-#. **(OPTIONAL)** The next module is optional. If instructed to skip this
-   optional module, be sure to exit your current SSH session with
-   **kube-master1** first. Otherwise click "Next" below.
-
+#. The next module is **OPTIONAL**. If instructed to skip this module be sure
+   to exit your current SSH session with **kube-master1** first and then click
+   here: `Class 2: OpenShift with Container Ingress Service <../../class2/class2.html>`_
+   to start the OpenShift & CIS Class. Otherwise click "Next" below.
+   
    .. code-block:: bash
 
       exit
-
-   If instructed to skip Module 3 and start Class 2 click here:
-   `Class 2: OpenShift with Container Ingress Service <../../class2/class2.html>`_
+  

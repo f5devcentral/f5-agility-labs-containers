@@ -50,7 +50,7 @@ Via RDP connect to the UDF lab "jumpbox" host.
    .. code-block:: bash
 
       # From the CLI:
-      tmsh create auth partition kubernetes
+      ssh admin@10.1.1.4 tmsh create auth partition kubernetes
 
 #. Verify AS3 is installed.
 
@@ -192,7 +192,7 @@ to hide our bigip credentials.
       :language: yaml
       :caption: nodeport-deployment.yaml
       :linenos:
-      :emphasize-lines: 2,7,17,20,37,39-41
+      :emphasize-lines: 2,7,17,20,37,39-40
 
 #. Once you have your yaml file setup, you can try to launch your deployment.
    It will start our f5-k8s-controller container on one of our nodes.

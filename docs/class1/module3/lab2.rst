@@ -2,8 +2,8 @@ Lab 3.2 - Deploy Hello-World (Again)
 ====================================
 
 In the previous modules we deployed f5-hello-world behind CIS using NodePort
-and ClusterIP with Ingress and ConfigMap w/ AS3. In this lab we will deploy
-the f5-hello-world yet again but behind the NGINX kubernetes ingress
+and ClusterIP modes with Ingress and ConfigMap resources. In this lab we will
+deploy the f5-hello-world, yet again, but behind the NGINX kubernetes ingress
 controller using ClusterIP.
 
 App Deployment
@@ -36,7 +36,7 @@ As before all the necesary files are on **kube-master1** in
 #. Review hello-world service ``clusterip-service-hello-world.yaml``
 
    .. note:: Here we're not interested in the CIS annotation of the file as
-      before. We're simply reusing the same service for Nginx Ingress to create
+      before. We're simply reusing the same service for NGINX Ingress to create
       the proper endpoints.
 
    .. literalinclude:: ../kubernetes/clusterip-service-hello-world.yaml
@@ -45,9 +45,9 @@ As before all the necesary files are on **kube-master1** in
       :linenos:
       :emphasize-lines: 2,4
 
-#. Review hello-world nginx service ``nginx-ingress-hello-world.yaml``
+#. Review hello-world NGINX service ``nginx-ingress-hello-world.yaml``
 
-   .. note:: This create's our app on Nginx. You can see in line 14 and 15 how
+   .. note:: This create's our app on NGINX. You can see in line 14 and 15 how
       we reference the previouly created hello-world service by name and port.
       On line 9 we define the expected host header. Just as before this host is
       in the local host file (/etc/hosts) and will be needed to access to the
@@ -69,23 +69,14 @@ As before all the necesary files are on **kube-master1** in
 
    .. image:: ../images/nginx-ingress-launch-app.png
 
-#. We can view the status of our deployment on the Nginx dashboard via firefox
-   on the jumpbox.
+#. At this point hello-world is not externally accessable but we can check the
+   status of our service.
 
-   .. attention:: The port in the URL will differ from my example. To find the
-      correct port run the following command:
+   .. code-block:: bash
 
-      .. code-block:: bash
+      kubectl describe svc f5-hello-world
 
-         kubectl describe svc nginx-ingress-dashboard -n nginx-ingress
-
-      .. image:: ../images/nginx-dashboard-port.png
-
-   Open firefox and browse to http://10.1.1.7:32837/dashboard.html. On the
-   "HTTP Zones" and HTTP Upstreams" pages we can see the newly deployed web
-   app.
-
-   .. image:: ../images/nginx-hello-world.png
+   .. image:: ../images/hello-world-svc.png
 
 CIS Service & Deployment
 ------------------------
@@ -131,7 +122,7 @@ two files, a service and configmap.
       kubectl create -f cis-service.yaml
       kubectl create -f cis-configmap.yaml
 
-#. To check the status of our deployment, run the following command:
+#. To check the status of our service run the following command:
 
    .. code-block:: bash
 
@@ -141,12 +132,12 @@ two files, a service and configmap.
 
    .. attention:: As the previous modules pointed out we need to focus on the
       **Endpoints value**, this shows our one NGINX instance (defined as
-      replicas in our nginx deployment file) and the flannel IP assigned to the
-      pod. To confirm the nginx endpoint IP use the following command:
+      replicas in our NGINX deployment file) and the flannel IP assigned to the
+      pod. To confirm the NGINX endpoint IP use the following command:
 
       .. code-block:: bash
 
-         kubectl get pod -n nginx-ingress -o wide
+         kubectl get pods -n nginx-ingress -o wide
 
       .. image:: ../images/nginx-pod-ip.png
 
@@ -173,7 +164,7 @@ two files, a service and configmap.
 
    .. image:: ../images/nginx-cis-web_pool.png
 
-   .. note:: You can see that the pool members IP addresse is the nginx pod IP.
+   .. note:: You can see that the pool members IP address is the NGINX pod IP.
 
 #. Access your web application via firefox on the jumpbox.
 
@@ -181,7 +172,7 @@ two files, a service and configmap.
 
    .. image:: ../images/nginx-access-app.png
 
-   .. attention:: In this case you can't simply type the IP for the URL. Nginx
+   .. attention:: In this case you can't simply type the IP for the URL. NGINX
       is looking for a specific HOST header to properly direct the traffic to
       the right application pod.
 

@@ -2,25 +2,26 @@ Lab 3.1 - Deploy the NGINX Ingress Controller
 =============================================
 
 .. important:: The Kubernetes project also has an "NGINX Ingress Controller"
-   that is **DIFFERENT** than the "NGINX Ingress Controller" that
-   is being used in this lab. The Kubernetes `project`_ "NGINX Ingress
-   Controller" is **NOT** supported/developed by NGINX (F5). The
-   "`NGINX Ingress Controller`_" from NGINX (F5) is.
+   that is **DIFFERENT** than the "NGINX Ingress Controller" being used in this
+   lab. The Kubernetes `project`_ "NGINX Ingress Controller" is **NOT**
+   supported/developed by NGINX (F5). The "`NGINX Ingress Controller`_" from
+   NGINX (F5) is.
 
-.. note:: In the lab environment NGINX+ has been already built into an
-   container image and is installed on the worker nodes.
+.. attention:: In this lab were simply using the free version of NGINX.
 
    In a customer environment, an NGINX+ container would need to be built using
    a cert and key from the `NGINX Customer Portal`_.
+
+   Click here to see the `Key Differences`_
 
 NGINX Ingress Controller runs two processes. One is a management plane process
 that subscribes to Kubernetes API events and updates the NGINX configuration
 file and/or API (for NGINX+) as needed. The second process is the data plane
 NGINX or NGINX+ process.
 
-.. note:: In this lab we are using NGINX+ for the data plane. NGINX Ingress
-   can also use open source NGINX with diminished capabilities (lacks enhanced
-   health checks; faster updating of pods).
+.. note:: In this lab we are using NGINX for the data plane. This version has
+   diminished capabilities (lacks enhanced health checks; faster updating of
+   pods).
 
 .. seealso:: The following steps are adapted from
    "`Installing the Ingress Controller`_".
@@ -29,6 +30,9 @@ Prep the Kubernetes Cluster
 ---------------------------
 
 #. On the jumphost open a terminal and start an SSH session with kube-master1.
+
+   .. note:: You should already have an open SSH session with kube-master1 from
+      the previous module. If not follow the instructions below.
 
    .. image:: ../images/start-term.png
 
@@ -105,49 +109,36 @@ Create Common Resources
 Create a Deployment
 -------------------
 
-We will be deploying NGINX+ as a deployment. There are two options:
+We will be deploying NGINX as a deployment. There are two options:
 
 - Deployment. Use a Deployment if you plan to dynamically change the number of
   Ingress controller replicas.
 - DaemonSet. Use a DaemonSet for deploying the Ingress controller on every node
   or a subset of nodes.
 
-#. Modify nginx-plus-ingress.yaml to use local copy of nginx+
-
-   .. code:: bash
-
-      vim deployment/nginx-plus-ingress.yaml
-
-   .. note:: This lab came pre-configured with a working licensed copy of
-      NGINX+. In your environment you **MUST** modify this file to use your
-      working licensed copy of NGINX+, otherwise deploying will fail.
-
 #. Deploy NGINX
 
    .. code:: bash
 
-      kubectl apply -f deployment/nginx-plus-ingress.yaml
+      kubectl apply -f deployment/nginx-ingress.yaml
    
 #. Verify the deployment
 
    .. code:: bash
 
-      kubectl get po -n nginx-ingress
+      kubectl get pods -n nginx-ingress
    
    You should see output similar to:
 
-   .. code:: bash
-   
-      NAME                            READY   STATUS    RESTARTS   AGE
-      nginx-ingress-56454fb6d-c5hl6   1/1     Running   0          44m
-  
-Expose NGINX+ via NodePort
---------------------------
+   .. image:: ../images/nginx-deployment.png
+     
+Expose NGINX via NodePort
+-------------------------
 
 Finally we need to enable external access to the Kubernetes cluster by defining
 a ``service``. We will create a NodePort service to enable access from outside
 the cluster. This will create an ephemeral port that will map to port 80/443 on
-the NGINX+ Ingress Controller.
+the NGINX Ingress Controller.
 
 #. Create NodePort service
 
@@ -161,41 +152,35 @@ the NGINX+ Ingress Controller.
 
       kubectl get svc -n nginx-ingress
 
-   You should see output similar to the following (your port values will be
-   different):
+   .. image:: ../images/nginx-service.png
 
-   .. code:: bash
-
-      ubuntu@kube-master1:~/kubernetes-ingress/deployments$ kubectl get svc -n nginx-ingress
-      NAME            TYPE       CLUSTER-IP     EXTERNAL-IP   PORT(S)                      AGE
-      nginx-ingress   NodePort   10.96.35.249   <none>        80:32164/TCP,443:32562/TCP   6s
-
-   In the example above port 32164 maps to port 80 on NGINX+.
+   In the example above port 32251 maps to port 80 on NGINX.
 
    .. important:: You will have a different port value! Record the value for
       the next lab exercise.
 
-Access NGINX+ From Outside the Cluster
---------------------------------------
+Access NGINX From Outside the Cluster
+-------------------------------------
 
 #. From the Jumpbox open up the Chrome browser and browse to "kube-master1"
    host IP and the previously recorded port.
 
-   ``http://10.1.1.7:32164``
+   ``http://10.1.1.7:32251``
 
    .. warning:: You will have a different port value!
 
    You should see something like this:
 
-   .. image:: ../images/nginx-plus-nodeport.png
+   .. image:: ../images/nginx-nodeport.png
 
    .. note:: NGINX docs state "The default server returns the Not Found page
       with the 404 status code for all requests for domains for which there are
       no Ingress rules defined." We've not yet configured any services to use
-      the NGINX+ Ingress Controller.
+      the NGINX Ingress Controller.
 
-.. _`NGINX Customer Portal`: https://cs.nginx.com
-.. _`Installing the Ingress Controller`: https://docs.nginx.com/nginx-ingress-controller/installation/installation-with-manifests/
-.. _`available`: https://github.com/nginxinc/kubernetes-ingress/blob/master/docs/configmap-and-annotations.md
 .. _`project`: https://github.com/kubernetes/ingress-nginx
 .. _`NGINX Ingress Controller`: https://github.com/nginxinc/kubernetes-ingress
+.. _`NGINX Customer Portal`: https://cs.nginx.com
+.. _`Key Differences`: https://github.com/nginxinc/kubernetes-ingress/blob/master/docs/nginx-ingress-controllers.md
+.. _`Installing the Ingress Controller`: https://docs.nginx.com/nginx-ingress-controller/installation/installation-with-manifests/
+.. _`available`: https://docs.nginx.com/nginx-ingress-controller/configuration/global-configuration/configmap-resource/
