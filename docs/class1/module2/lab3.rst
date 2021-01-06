@@ -135,15 +135,9 @@ On **kube-master1** we will create all the required files:
 
 #. Remove Hello-World from BIG-IP.
 
-   .. important:: When using AS3 an extra step needs to be performed. In
-      addition to deleting the application configmap, a "blank AS3 declaration"
-      is required to completely remove the application from BIG-IP.
-
-   .. literalinclude:: ../kubernetes/delete-hello-world.yaml
-      :language: yaml
-      :caption: Blank AS3 Declartion
-      :linenos:
-      :emphasize-lines: 2,19
+   .. attention:: In older versions of AS3 a "blank AS3 declaration" was
+      required to completely remove the application/declaration from BIG-IP. In
+      AS3 v2.20 and newer this is no longer a requirement.
 
    .. code-block:: bash
 
@@ -151,9 +145,6 @@ On **kube-master1** we will create all the required files:
       kubectl delete -f clusterip-service-hello-world.yaml
       kubectl delete -f deployment-hello-world.yaml
       
-      kubectl create -f delete-hello-world.yaml
-      kubectl delete -f delete-hello-world.yaml
-
    .. note:: Be sure to verify the virtual server and "AS3" partition were
       removed from BIG-IP.
 
