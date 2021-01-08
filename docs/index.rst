@@ -16,7 +16,6 @@ The purpose of these labs is to give you better understanding of...
 - Using F5 Application Services 3 (AS3)
    - Quick intro to consuming a full declarative JSON API programming interface to build F5 objects
 
-
 - Don't worry if you have never heard of NodePort or ClusterIP
    - We will cover each method, and you are free to use either for your enterprise
    - For lack of time we only selected one method per each lab so you can understand the differences
