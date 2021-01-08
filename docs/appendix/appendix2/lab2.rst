@@ -123,8 +123,8 @@ communicates with). All of these components run in pods started by kubelet
       # When prompted for password enter "default" without the quotes
       su -
 
-      # This resets the master to default settings (you may need to run this
-      command on the nodes if a fully functioning cluster is configured)
+      # This resets the master to default settings
+      # You may need to run this command on the "nodes: if a fully functioning cluster is configured
       kubeadm reset --force
       
       # This removes the admin references to the broken cluster
