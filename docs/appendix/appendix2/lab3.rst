@@ -21,10 +21,17 @@ cluster.
    .. hint:: If you missed the step to save the "kubeadm join..." command from
       the previous lab, run the following and use the output to join your nodes
       to the cluster.
-
+   
       .. code-block:: bash
 
          kubeadm token create --print-join-command   
+
+   .. note:: You may need to add the following switch to the join command below
+      on newer versions of kubernetes.
+
+      .. code-block:: bash
+         
+         --discovery-token-unsafe-skip-ca-verification
 
    .. code-block:: bash
 
