@@ -124,7 +124,7 @@ communicates with). All of these components run in pods started by kubelet
       su -
 
       # This resets the master to default settings
-      # You may need to run this command on the "nodes: if a fully functioning cluster is configured
+      # You may need to run this command on the "nodes" if a fully functioning cluster is configured
       kubeadm reset --force
       
       # This removes the admin references to the broken cluster
