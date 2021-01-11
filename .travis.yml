@@ -1,0 +1,14 @@
+before_install:
+    - sudo apt-get -qq update
+    - sudo apt-get install -y python3
+install:
+  - "pip install -r requirements.txt"
+script:
+  - ./containthedocs-build.sh
+language: python
+python:
+  - "3.8"
+services:
+  - docker
+os: linux
+dist: bionic
