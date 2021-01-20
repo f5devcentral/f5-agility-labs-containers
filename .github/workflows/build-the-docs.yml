@@ -1,4 +1,4 @@
-me: Sphinx Build
+name: Sphinx Build
 on: [push]
 jobs:
   build-the-docs:
