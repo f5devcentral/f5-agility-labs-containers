@@ -5,3 +5,4 @@ sphinxcontrib-googleanalytics
 sphinxcontrib-addmetahtml
 sphinxcontrib-nwdiag
 sphinxcontrib-blockdiag
+awscli
