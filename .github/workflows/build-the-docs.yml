@@ -1,5 +1,8 @@
 name: Build the Docs
-on: [push]
+on:
+  push:
+    branches:
+      - develop
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -17,11 +20,10 @@ jobs:
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:
-        aws-access-key-id: ${{ secrets.VTOG_AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.VTOG_AWS_SECRET_ACCESS_KEY }}
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: us-east-1
 
     - name: Copy files to s3
       run: |
-        aws s3 sync /home/runner/work/f5-agility-labs-containers/f5-agility-labs-containers/docs/_build s3://agility-vtog/container-lab
-
+        aws s3 sync --delete /home/runner/work/f5-agility-labs-containers/f5-agility-labs-containers/docs/_build/html/ s3://clouddocs.f5networks.net/training/community/containers/html/
