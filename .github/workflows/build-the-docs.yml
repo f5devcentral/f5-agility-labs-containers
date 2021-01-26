@@ -26,4 +26,4 @@ jobs:
 
     - name: Copy files to s3
       run: |
-        aws s3 sync --delete /home/runner/work/f5-agility-labs-containers/f5-agility-labs-containers/docs/_build/html/ s3://clouddocs.f5networks.net/training/community/containers/html/
+        aws s3 sync --delete $PWD/docs/_build/html/ s3://clouddocs.f5networks.net/training/community/containers/html/
