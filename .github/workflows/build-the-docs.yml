@@ -27,4 +27,4 @@ jobs:
     - name: Copy files to s3 and validate
       run: |
         aws s3 sync --delete $PWD/docs/_build/html/ s3://clouddocs.f5networks.net/training/community/containers/html/
-        aws cloudfront create-invalidation --distribution-id ${{ secrets.AWS_DIST_ID }} --paths /training/community
+        #aws cloudfront create-invalidation --distribution-id ${{ secrets.AWS_DIST_ID }} --paths /training/community
