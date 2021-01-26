@@ -24,6 +24,7 @@ jobs:
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: us-east-1
 
-    - name: Copy files to s3
+    - name: Copy files to s3 and validate
       run: |
         aws s3 sync --delete $PWD/docs/_build/html/ s3://clouddocs.f5networks.net/training/community/containers/html/
+        aws cloudfront create-invalidation --distribution-id ${{ secretes.AWS_DIST_ID }} --paths /training/community
