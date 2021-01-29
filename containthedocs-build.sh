@@ -6,7 +6,7 @@ COMMAND="make -C docs html"
 
 . ./containthedocs-image
 
-sudo rm -rf docs/_build/
+sudo rm -rf docs/_build
 
 exec sudo docker run --rm -i \
   -v "$PWD":"$PWD" --workdir "$PWD" \
