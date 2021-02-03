@@ -108,6 +108,9 @@ On **kube-master1** we will create all the required files:
 
    .. image:: ../images/f5-container-connector-check-app-bigip-stats-ingress-clusterip.png
 
+   .. note:: Are you seeing traffic distribution as shown in the image above?
+      If not why? (HINT: Check the virtual server settings.)
+
 #. Delete Hello-World
 
    .. important:: Do not skip this step. Instead of reusing some of these
