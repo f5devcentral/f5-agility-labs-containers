@@ -106,6 +106,17 @@ Create Common Resources
       snippets/directives can be passed into the ``data`` section or a set of
       NGINX and NGINX+ annotations are `available`_.
 
+#. Create an IngressClass resource
+
+   .. code:: bash
+
+      kubectl apply -f common/ingress-class.yaml
+
+   .. warning:: The Ingress Controller will fail to start without an
+      IngressClass resource.
+   
+   .. note:: For Kubernetes >= 1.18
+
 Create a Deployment
 -------------------
 

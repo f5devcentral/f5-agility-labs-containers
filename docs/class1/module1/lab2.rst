@@ -131,6 +131,9 @@ required files and launch them.
 
    .. image:: ../images/f5-container-connector-check-app-ingress-stats.png
 
+   .. note:: Are you seeing traffic distribution as shown in the image above?
+      If not why? (HINT: Check the virtual server settings.)
+
 #. Delete Hello-World
 
    .. important:: Do not skip this step. Instead of reusing some of these

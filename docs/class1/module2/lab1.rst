@@ -144,8 +144,8 @@ CIS Deployment
       
       i           # To enable insert mode and start editing
                   # Replace the current MAC addr with the one previously copied
-      Hit <ESC>   # To exit insert mode
-      wq <ENTER>  # To write and exit file        
+      <ESC>       # To exit insert mode
+      :wq <ENTER> # To write and exit file        
 
    .. literalinclude:: ../kubernetes/bigip-node.yaml
       :language: yaml

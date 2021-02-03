@@ -39,7 +39,7 @@ previous session.
    .. code-block:: bash
 
       # From the CLI:
-      tmsh create auth partition okd
+      ssh admin@10.1.1.4 tmsh create auth partition okd
 
 #. Install AS3 via the management console
 
@@ -59,7 +59,7 @@ previous session.
    .. code-block:: bash
 
       # From the CLI:
-      tmsh create net tunnel vxlan okd-vxlan { app-service none port 4789 flooding-type multipoint }
+      ssh admin@10.1.1.4 tmsh create net tunnel vxlan okd-vxlan { app-service none port 4789 flooding-type multipoint }
 
 #. Create a vxlan tunnel
 
@@ -75,7 +75,7 @@ previous session.
    .. code-block:: bash
 
       # From the CLI:
-      tmsh create net tunnel tunnel okd-tunnel { app-service none key 0 local-address 10.1.1.4 profile okd-vxlan }
+      ssh admin@10.1.1.4 tmsh create net tunnel tunnel okd-tunnel { app-service none key 0 local-address 10.1.1.4 profile okd-vxlan }
 
 #. Create the vxlan tunnel self-ip
 
@@ -104,7 +104,7 @@ previous session.
    .. code-block:: bash
       
       # From the CLI:
-      tmsh create net self okd-vxlan-selfip { app-service none address 10.131.0.1/14 vlan okd-tunnel allow-service all }
+      ssh admin@10.1.1.4 tmsh create net self okd-vxlan-selfip { app-service none address 10.131.0.1/14 vlan okd-tunnel allow-service all }
 
 CIS Deployment
 --------------
