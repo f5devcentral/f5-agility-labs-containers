@@ -50,7 +50,7 @@ Via RDP connect to the UDF lab "jumpbox" host.
    .. code-block:: bash
 
       # From the CLI:
-      tmsh create auth partition okd
+      ssh admin@10.1.1.4 tmsh create auth partition okd
 
 #. Verify AS3 is installed.
 

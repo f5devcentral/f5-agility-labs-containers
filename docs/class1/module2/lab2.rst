@@ -40,7 +40,7 @@ On **kube-master1** we will create all the required files:
       :language: yaml
       :caption: ingress-hello-world.yaml
       :linenos:
-      :emphasize-lines: 2,7-9,23,24
+      :emphasize-lines: 2,7-9,29,31
 
 #. We can now launch our application:
 

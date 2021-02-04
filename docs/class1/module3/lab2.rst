@@ -57,7 +57,7 @@ As before all the necesary files are on **kube-master1** in
       :language: yaml
       :caption: nginx-ingress-hello-world.yaml
       :linenos:
-      :emphasize-lines: 2,9,14,15
+      :emphasize-lines: 2,9,16,18
 
 #. We can now launch our application:
 
