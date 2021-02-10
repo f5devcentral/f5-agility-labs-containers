@@ -6,14 +6,11 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    env:
+      S3_DIR: containers
 
     steps:
     - uses: actions/checkout@v2
-
-    #- uses: actions/setup-python@v2.2.1
-    #- run: |
-    #    python -m pip install --upgrade pip
-    #    if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
     - run: ./containthedocs-build.sh
 
@@ -24,7 +21,6 @@ jobs:
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: us-east-1
 
-    - name: Copy files to s3 and validate
+    - name: Copy files to s3 (Staging Clouddocs)
       run: |
-        aws s3 sync --delete $PWD/docs/_build/html/ s3://clouddocs.f5networks.net/training/community/containers/html/
-        #aws cloudfront create-invalidation --distribution-id ${{ secrets.AWS_DIST_ID }} --paths /training/community
+        aws s3 sync --delete $PWD/docs/_build/html/ s3://clouddocs.f5networks.net/training/community/$S3_DIR/html/
