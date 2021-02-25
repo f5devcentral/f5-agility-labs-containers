@@ -1,12 +1,8 @@
+.. image:: /_static/intro/AG-2021-light.jpg
+   :align: left
+
 Getting Started
 ===============
-
-Welcome to Agility 2020!
-------------------------
-
-.. image:: /_static/intro/welcome2020.png
-   :width: 900
-   :align: center
 
 .. important::
    * **The Lab MC will provide the necessary details to connect to lab
