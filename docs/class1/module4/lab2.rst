@@ -39,7 +39,7 @@ Test the Application
       Server name: tea-7cd44fcb4d-xfw2x
       Get the cafe-ingress resource to check its reported address:
 
-.. code:: bash
+   .. code:: bash
 
       $ kubectl get ing cafe-ingress
       NAME           HOSTS              ADDRESS         PORTS     AGE
