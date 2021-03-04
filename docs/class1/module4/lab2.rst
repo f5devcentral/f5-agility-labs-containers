@@ -7,7 +7,7 @@ Lab 4.2 - Deploy the Cafe Application
 
       kubectl create -f cafe.yaml
 
-#.  Configure Load Balancing for the Cafe Application. Create a secret with an SSL certificate and a key:
+#. Configure Load Balancing for the Cafe Application. Create a secret with an SSL certificate and a key:
 
    .. code:: bash
 
