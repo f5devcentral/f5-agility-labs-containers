@@ -48,92 +48,85 @@ This lab is using the same BIG-IP setup from Lab 2.1 - Install & Configure CIS i
 CIS Deployment for IngressLink
 --------------
 
-#. Install the CIS Controller for IngressLink
+#. Install the CIS for IngressLink CRD Schema
 
 Create CIS IngressLink Custom Resource definition schema as follows:
 
     kubectl create -f ingresslink-customresourcedefinition.yaml
 
-cis-crd-schema [repo](https://github.com/mdditt2000/kubernetes-1-19/blob/master/cis%202.3/ingresslink/cis/ingresslink/cis-crd-schema/ingresslink-customresourcedefinition.yaml)
+#. Deploy CIS Deployment
 
-Update the bigip address, partition and other details(image, imagePullSecrets, etc) in CIS deployment file and Install CIS Controller in ClusterIP mode as follows:
+   .. note:: Follow Lab 2.1 - Install & Configure CIS in ClusterIP
 
 * Add the following statements to the CIS deployment arguments for Ingresslink
+
+  .. code:: bash
 
     - "--custom-resource-mode=true"
     - "--ingress-link-mode=true"
 
-
-
-   Follow tLab 2.1 - Install & Configure CIS in ClusterIP
-
    .. code:: bash
 
-      kubectl apply -f common/ns-and-sa.yaml
-  
+      kubectl create -f f5-cis-deployment.yaml
 
-#. In this lab environment RBAC is enabled and you will need to enable access
-   from the NGINX Service Account to the Kubernetes API.
 
-   .. code:: bash
+NGINX IC Deployment for IngressLink
+--------------
 
-      kubectl apply -f rbac/rbac.yaml
+### Nginx-Controller Installation
 
-   .. note:: The ``ubuntu`` user is accessing the Kubernetes Cluster as a
-      "Cluster Admin" and has privileges to apply RBAC permissions.
+   #. Create NGINX IC custom resource definitions for VirtualServer and VirtualServerRoute, TransportServer and Policy resources:
 
-Create Common Resources
------------------------
-  
-#. The Ingress Controller will use a "default" SSL certificate for requests
-   that are not configured to use an explicit certificate. The following loads
-   the default certificate into Kubernetes:
+   .. code-block:: bash
 
-   .. code:: bash
+      kubectl apply -f k8s.nginx.org_virtualservers.yaml
+      kubectl apply -f k8s.nginx.org_virtualserverroutes.yaml
+      kubectl apply -f k8s.nginx.org_transportservers.yaml
+      kubectl apply -f k8s.nginx.org_policies.yaml
 
-      kubectl apply -f common/default-server-secret.yaml
-  
-   .. note:: NGINX docs state "For testing purposes we include a self-signed
-      certificate and key that we generated. However, we recommend that you use
-      your own certificate and key."
-
-#. Create a NGINX ConfigMap
+#. Create a namespace and a service account for the Ingress controller:
 
    .. code:: bash
-
-      kubectl apply -f common/nginx-config.yaml
-
-   .. note:: NGINX Ingress Controller makes use of a Kubernetes ConfigMap to
-      store customizations to the NGINX+ configuration. Configuration
-      snippets/directives can be passed into the ``data`` section or a set of
-      NGINX and NGINX+ annotations are `available`_.
-
-#. Create an IngressClass resource
-
-   .. code:: bash
-
-      kubectl apply -f common/ingress-class.yaml
-
-   .. warning:: The Ingress Controller will fail to start without an
-      IngressClass resource.
    
-   .. note:: For Kubernetes >= 1.18
+      kubectl apply -f nginx-config/ns-and-sa.yaml
+   
+#. Create a cluster role and cluster role binding for the service account:
 
-Create a Deployment
--------------------
-
-We will be deploying NGINX as a deployment. There are two options:
-
-- Deployment. Use a Deployment if you plan to dynamically change the number of
-  Ingress controller replicas.
-- DaemonSet. Use a DaemonSet for deploying the Ingress controller on every node
-  or a subset of nodes.
-
-#. Deploy NGINX
+   .. code:: bash
+   
+      kubectl apply -f nginx-config/rbac.yaml
+   
+#. Create a secret with a TLS certificate and a key for the default server in NGINX:
 
    .. code:: bash
 
-      kubectl apply -f deployment/nginx-ingress.yaml
+      kubectl apply -f nginx-config/default-server-secret.yaml
+    
+#. Create a config map for customizing NGINX configuration:
+
+   .. code:: bash
+
+      kubectl apply -f nginx-config/nginx-config.yaml
+    
+   Create an IngressClass resource (for Kubernetes >= 1.18):  
+    
+    kubectl apply -f nginx-config/ingress-class.yaml
+
+#. Use a Deployment. When you run the Ingress Controller by using a Deployment, by default, Kubernetes     
+   will create one Ingress controller pod.
+
+   .. code:: bash
+    
+      kubectl apply -f nginx-config/nginx-ingress.yaml
+  
+#. Create a service for the Ingress Controller pods for ports 80 and 443 as follows:
+
+   .. code:: bash
+
+      kubectl apply -f nginx-config/nginx-service.yaml
+
+Verify the deployment
+-------------------
    
 #. Verify the deployment
 
@@ -144,56 +137,15 @@ We will be deploying NGINX as a deployment. There are two options:
    You should see output similar to:
 
    .. image:: ../images/nginx-deployment.png
-     
-Expose NGINX via NodePort
--------------------------
 
-Finally we need to enable external access to the Kubernetes cluster by defining
-a ``service``. We will create a NodePort service to enable access from outside
-the cluster. This will create an ephemeral port that will map to port 80/443 on
-the NGINX Ingress Controller.
+Create an IngressLink Resource
+-------------------
 
-#. Create NodePort service
+#. Update the ip-address in IngressLink resource and iRule which is created in Step-1. This ip-address 
+   will be used to configure the BIG-IP device to load balance among the Ingress Controller pods.
 
    .. code:: bash
 
-      kubectl create -f service/nodeport.yaml
+      kubectl apply -f vs-ingresslink.yaml
 
-#. Retrieve NodePort 
-
-   .. code:: bash
-
-      kubectl get svc -n nginx-ingress
-
-   .. image:: ../images/nginx-service.png
-
-   In the example above port 32251 maps to port 80 on NGINX.
-
-   .. important:: You will have a different port value! Record the value for
-      the next lab exercise.
-
-Access NGINX From Outside the Cluster
--------------------------------------
-
-#. From the Jumpbox open up the Chrome browser and browse to "kube-master1"
-   host IP and the previously recorded port.
-
-   ``http://10.1.1.7:32251``
-
-   .. warning:: You will have a different port value!
-
-   You should see something like this:
-
-   .. image:: ../images/nginx-nodeport.png
-
-   .. note:: NGINX docs state "The default server returns the Not Found page
-      with the 404 status code for all requests for domains for which there are
-      no Ingress rules defined." We've not yet configured any services to use
-      the NGINX Ingress Controller.
-
-.. _`project`: https://github.com/kubernetes/ingress-nginx
-.. _`NGINX Ingress Controller`: https://github.com/nginxinc/kubernetes-ingress
-.. _`NGINX Customer Portal`: https://cs.nginx.com
-.. _`Key Differences`: https://github.com/nginxinc/kubernetes-ingress/blob/master/docs/nginx-ingress-controllers.md
-.. _`Installing the Ingress Controller`: https://docs.nginx.com/nginx-ingress-controller/installation/installation-with-manifests/
-.. _`available`: https://docs.nginx.com/nginx-ingress-controller/configuration/global-configuration/configmap-resource/
+   .. note: The name of the app label selector in IngressLink resource should match the labels of the nginx-ingress service created in step-3.
