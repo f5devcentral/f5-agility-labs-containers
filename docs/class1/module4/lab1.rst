@@ -5,7 +5,7 @@ The F5 IngressLink is addressing modern app delivery at scale/large. IngressLink
 
 F5 IngressLink is the first true integration between BIG-IP and NGINX technologies. F5 IngressLink was built to support customers with modern, container application workloads that use both BIG-IP Container Ingress Services and NGINX Ingress Controller for Kubernetes. It’s an elegant control plane solution that offers a unified method of working with both technologies from a single interface—offering the best of BIG-IP and NGINX and fostering better collaboration across NetOps and DevOps teams.
 
-.. attention:: This architecture diagram demonstrates the IngressLink solution
+.. This architecture diagram demonstrates the IngressLink solution
 
 .. image:: ../images/ingresslink-architecture-diagram.png
 
@@ -15,17 +15,7 @@ Prep the Kubernetes Cluster
 #. On the jumphost open a terminal and start an SSH session with kube-master1.
 
    .. note:: You should already have an open SSH session with kube-master1 from
-      the previous module. If not follow the instructions below.
-
-   .. image:: ../images/start-term.png
-
-   .. code-block:: bash
-
-      # If directed to, accept the authenticity of the host by typing "yes" and hitting Enter to continue.
-
-      ssh kube-master1
-
-   .. image:: ../images/sshtokubemaster1.png
+      the previous module
 
 As before all the necessary files are on **kube-master1** in 
 ~/agilitydocs/docs/class4/lab-files
@@ -48,9 +38,9 @@ This lab is using the same BIG-IP setup from Lab 2.1 - Install & Configure CIS i
 CIS Deployment for IngressLink
 --------------
 
-#. Install the CIS for IngressLink CRD Schema
+#. Create CIS IngressLink Custom Resource definition schema as follows:
 
-Create CIS IngressLink Custom Resource definition schema as follows:
+.. code:: bash
 
     kubectl create -f ingresslink-customresourcedefinition.yaml
 
