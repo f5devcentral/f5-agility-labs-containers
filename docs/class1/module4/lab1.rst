@@ -19,7 +19,7 @@ Prep the Kubernetes Cluster
 BIG-IP Setup
 ------------
 
-This lab is using the same BIG-IP setup from Lab 2.1 - Install & Configure CIS in ClusterIP. With ClusterIP we're utilizing VXLAN to communicate with the NGINX pods. 
+   This lab is using the same BIG-IP setup from Lab 2.1 - Install & Configure CIS in ClusterIP. With ClusterIP we're utilizing VXLAN to communicate with the NGINX pods. 
 
 #. Add proxy-protocol irule to BIG-IP
 
