@@ -45,8 +45,8 @@ CIS Deployment for IngressLink
 
   .. code:: bash
 
-      - "--custom-resource-mode=true"
-      - "--ingress-link-mode=true"
+      "--custom-resource-mode=true"
+      "--ingress-link-mode=true"
 
 #. Create CIS Controller
 
