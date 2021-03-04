@@ -12,7 +12,7 @@ F5 IngressLink is the first true integration between BIG-IP and NGINX technologi
 Prep the Kubernetes Cluster
 ---------------------------
 
-1. On the jumphost open a terminal and start an SSH session with kube-master1.
+On the jumphost open a terminal and start an SSH session with kube-master1.
 
 You should already have an open SSH session with kube-master1 from the previous module. As before all the necessary files are on **kube-master1** in ~/agilitydocs/docs/class4/lab-files
 
@@ -92,9 +92,11 @@ NGINX IC Deployment for IngressLink
 
       kubectl apply -f nginx-config/nginx-config.yaml
     
-   Create an IngressClass resource (for Kubernetes >= 1.18):  
+#. Create an IngressClass resource (for Kubernetes >= 1.18):
+
+   .. code:: bash
     
-    kubectl apply -f nginx-config/ingress-class.yaml
+      kubectl apply -f nginx-config/ingress-class.yaml
 
 #. Use a Deployment. When you run the Ingress Controller by using a Deployment, by default, Kubernetes     
    will create one Ingress controller pod.
