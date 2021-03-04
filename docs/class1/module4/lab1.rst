@@ -14,7 +14,7 @@ Prep the Kubernetes Cluster
 
 #. On the jumphost open a terminal and start an SSH session with kube-master1.
 
-   .. note:: You should already have an open SSH session with kube-master1 from
+   .. You should already have an open SSH session with kube-master1 from
       the previous module
 
 As before all the necessary files are on **kube-master1** in 
