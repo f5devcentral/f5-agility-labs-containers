@@ -52,7 +52,7 @@ CIS Deployment for IngressLink
 
    .. code:: bash
 
-      kubectl create -f f5-cis-deployment.yaml
+      kubectl create -f cluster-deployment.yaml
 
 NGINX IC Deployment for IngressLink
 --------------

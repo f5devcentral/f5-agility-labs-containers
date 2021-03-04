@@ -30,15 +30,14 @@ spec:
           args: 
             - "--bigip-username=$(BIGIP_USERNAME)"
             - "--bigip-password=$(BIGIP_PASSWORD)"
-            - "--bigip-url=192.168.200.60"
-            - "--bigip-partition=ingresslink"
+            - "--bigip-url=https://10.1.1.4:8443"
+            - "--bigip-partition=kubernetes"
             - "--namespace=nginx-ingress"
             - "--pool-member-type=cluster"
-            - "--flannel-name=fl-vxlan"
+            - "--flannel-name=/Common/k8s-tunnel"
             - "--log-level=DEBUG"
             - "--insecure=true"
             - "--log-as3-response=true"
-            - "--custom-resource-mode=true"
             - "--ingress-link-mode=true"
           command: 
             - /app/bin/k8s-bigip-ctlr
