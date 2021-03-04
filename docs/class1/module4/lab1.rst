@@ -40,11 +40,8 @@ CIS Deployment for IngressLink
 
     kubectl create -f ingresslink-customresourcedefinition.yaml
 
-2. Deploy CIS Deployment Manifest
-
-   .. note:: Follow Lab 2.1 - Install & Configure CIS in ClusterIP
-
-#. Add the following statements to the CIS deployment arguments for Ingresslink
+#. Deploy CIS Deployment Manifest from the Lab 2.1. Add the following statements to the CIS deployment 
+   arguments for Ingresslink
 
   .. code:: bash
 
