@@ -43,10 +43,10 @@ CIS Deployment for IngressLink
 #. Deploy CIS Deployment Manifest from the Lab 2.1. Add the following statements to the CIS deployment 
    arguments for Ingresslink
 
-  .. code:: bash
+   .. code:: bash
 
-      "--custom-resource-mode=true"
-      "--ingress-link-mode=true"
+      - "--custom-resource-mode=true"
+      - "--ingress-link-mode=true"
 
 #. Create CIS Controller
 
