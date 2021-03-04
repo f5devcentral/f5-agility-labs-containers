@@ -34,6 +34,8 @@ Test the Application
       Server name: coffee-7586895968-r26zn
       If your prefer tea:
 
+   .. code:: bash
+
       $ curl --resolve cafe.example.com:$IC_HTTPS_PORT:$IC_IP https://cafe.example.com:$IC_HTTPS_PORT/tea --insecure
       Server address: 10.12.0.19:80
       Server name: tea-7cd44fcb4d-xfw2x
