@@ -12,14 +12,14 @@ F5 IngressLink is the first true integration between BIG-IP and NGINX technologi
 Prep the Kubernetes Cluster
 ---------------------------
 
-#. On the jumphost open a terminal and start an SSH session with kube-master1.
+1. On the jumphost open a terminal and start an SSH session with kube-master1.
 
-   You should already have an open SSH session with kube-master1 from the previous module. As before all the necessary files are on **kube-master1** in ~/agilitydocs/docs/class4/lab-files
+You should already have an open SSH session with kube-master1 from the previous module. As before all the necessary files are on **kube-master1** in ~/agilitydocs/docs/class4/lab-files
 
 BIG-IP Setup
 ------------
 
-   This lab is using the same BIG-IP setup from Lab 2.1 - Install & Configure CIS in ClusterIP. With ClusterIP we're utilizing VXLAN to communicate with the NGINX pods. 
+This lab is using the same BIG-IP setup from Lab 2.1 - Install & Configure CIS in ClusterIP. With ClusterIP we're utilizing VXLAN to communicate with the NGINX pods. 
 
 #. Add proxy-protocol irule to BIG-IP
 
@@ -34,13 +34,13 @@ BIG-IP Setup
 CIS Deployment for IngressLink
 --------------
 
-#. Create CIS IngressLink Custom Resource definition schema as follows:
+1. Create CIS IngressLink Custom Resource definition schema as follows:
 
 .. code:: bash
 
     kubectl create -f ingresslink-customresourcedefinition.yaml
 
-#. Deploy CIS Deployment
+2. Deploy CIS Deployment
 
    .. note:: Follow Lab 2.1 - Install & Configure CIS in ClusterIP
 
@@ -59,9 +59,7 @@ CIS Deployment for IngressLink
 NGINX IC Deployment for IngressLink
 --------------
 
-### Nginx-Controller Installation
-
-   #. Create NGINX IC custom resource definitions for VirtualServer and VirtualServerRoute, TransportServer and Policy resources:
+1. Create NGINX IC custom resource definitions for VirtualServer and VirtualServerRoute, TransportServer and Policy resources:
 
    .. code-block:: bash
 
@@ -70,7 +68,7 @@ NGINX IC Deployment for IngressLink
       kubectl apply -f k8s.nginx.org_transportservers.yaml
       kubectl apply -f k8s.nginx.org_policies.yaml
 
-#. Create a namespace and a service account for the Ingress controller:
+2. Create a namespace and a service account for the Ingress controller:
 
    .. code:: bash
    
