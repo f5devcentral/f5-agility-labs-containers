@@ -36,9 +36,9 @@ CIS Deployment for IngressLink
 
 1. Create CIS IngressLink Custom Resource definition schema as follows:
 
-.. code:: bash
+   .. code:: bash
 
-    kubectl create -f ingresslink-customresourcedefinition.yaml
+      kubectl create -f ingresslink-customresourcedefinition.yaml
 
 #. Deploy CIS Deployment Manifest from the Lab 2.1. Add the following statements to the CIS deployment 
    arguments for Ingresslink
@@ -50,10 +50,9 @@ CIS Deployment for IngressLink
 
 #. Create CIS Controller
 
-       .. code:: bash
+   .. code:: bash
 
       kubectl create -f f5-cis-deployment.yaml
-
 
 NGINX IC Deployment for IngressLink
 --------------
