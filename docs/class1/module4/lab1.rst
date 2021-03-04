@@ -17,8 +17,8 @@ Prep the Kubernetes Cluster
    .. You should already have an open SSH session with kube-master1 from
       the previous module
 
-As before all the necessary files are on **kube-master1** in 
-~/agilitydocs/docs/class4/lab-files
+      As before all the necessary files are on **kube-master1** in 
+      ~/agilitydocs/docs/class4/lab-files
 
 BIG-IP Setup
 ------------
