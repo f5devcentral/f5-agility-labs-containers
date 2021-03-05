@@ -194,13 +194,11 @@ two files, a service and configmap.
       kubectl delete -f clusterip-service-hello-world.yaml
       kubectl delete -f deployment-hello-world.yaml
 
-#. Before starting the next class exit the session from kube-master1 and go
-   back to the jumpbox.
+#. Remove CIS
 
    .. code-block:: bash
 
-      exit
+      kubectl delete -f cluster-deployment.yaml
 
-.. attention:: This concludes **Class 1 - CIS and Kubernetes**. Feel free to
-   experiment with any of the settings. The lab will be destroyed at the end of
-   the class/day.
+.. important:: Do not skip these clean-up steps. Instead of reusing these
+   objects, the next lab we will re-deploy them to avoid conflicts and errors.

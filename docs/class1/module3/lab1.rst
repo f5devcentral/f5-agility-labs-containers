@@ -82,7 +82,17 @@ Configure RBAC
 
 Create Common Resources
 -----------------------
-  
+
+#. Create NGINX IC custom resource definitions for VirtualServer and
+   VirtualServerRoute, TransportServer and Policy resources
+
+   .. code-block:: bash
+   
+      kubectl apply -f common/crds/k8s.nginx.org_virtualservers.yaml
+      kubectl apply -f common/crds/k8s.nginx.org_virtualserverroutes.yaml
+      kubectl apply -f common/crds/k8s.nginx.org_transportservers.yaml
+      kubectl apply -f common/crds/k8s.nginx.org_policies.yaml
+
 #. The Ingress Controller will use a "default" SSL certificate for requests
    that are not configured to use an explicit certificate. The following loads
    the default certificate into Kubernetes:
@@ -113,9 +123,7 @@ Create Common Resources
       kubectl apply -f common/ingress-class.yaml
 
    .. warning:: The Ingress Controller will fail to start without an
-      IngressClass resource.
-   
-   .. note:: For Kubernetes >= 1.18
+      IngressClass resource. This applies to Kubernetes >= v1.18.
 
 Create a Deployment
 -------------------
