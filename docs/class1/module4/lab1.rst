@@ -30,6 +30,18 @@ On the jumphost open a terminal and start an SSH session with kube-master1.
 .. note:: You should already have an open SSH session with kube-master1 from
    the previous module. If not follow the instructions below.
 
+#. Change to the default working directory with all the yaml files
+
+   .. code-block:: bash
+
+      cd ~/agilitydocs/docs/class1/kubernetes/
+
+#. Ensure the previously deployed "CIS clusterIP deployment" is deleted
+
+   .. code-block:: bash
+
+      kubectl delete -f cluster-deployment.yaml
+
 #. Create CIS IngressLink Custom Resource definition schema
 
    .. literalinclude:: ../kubernetes/ingresslink/cis/cis-crd-schema/ingresslink-customresourcedefinition.yaml
@@ -41,6 +53,18 @@ On the jumphost open a terminal and start an SSH session with kube-master1.
    .. code-block:: bash
 
       kubectl create -f ingresslink/cis/cis-crd-schema/ingresslink-customresourcedefinition.yaml
+
+#. Create a service for the Ingress Controller pods for ports 80 and 443
+
+   .. code-block:: bash
+
+      kubectl create -f ingresslink/nginx-config/nginx-service.yaml
+
+#. Verify the service
+
+   .. code-block:: bash
+
+      kubectl describe svc nginx-ingress-ingresslink -n nginx-ingress
 
 #. Inspect the deployment yaml file
    
@@ -88,5 +112,5 @@ Create an IngressLink Resource
 #. Create the ingress link
 
    .. code-block:: bash
-   
+
       kubectl apply -f vs-ingresslink.yaml
