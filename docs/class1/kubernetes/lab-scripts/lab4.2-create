@@ -1,0 +1,6 @@
+#!/bin/bash
+
+#create cafe application
+kubectl create -f cafe-example/cafe.yaml
+kubectl create -f cafe-example/cafe-secret.yaml
+kubectl create -f cafe-example/cafe-ingress.yaml

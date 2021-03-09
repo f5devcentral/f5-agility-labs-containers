@@ -15,7 +15,7 @@ Proxy_Protocol_iRule
 #. In the Name field, type name as "Proxy_Protocol_iRule".
 #. In the Definition field, Copy the following definition
 
-   .. literalinclude:: ../kubernetes/ingresslink/proxy-protocal/Proxy_Protocol_iRule
+   .. literalinclude:: ../kubernetes/ingresslink/Proxy_Protocol_iRule
       :language: tcl
       :caption: Proxy_Protocol_iRule
       :linenos:
@@ -36,35 +36,58 @@ On the jumphost open a terminal and start an SSH session with kube-master1.
 
       cd ~/agilitydocs/docs/class1/kubernetes/
 
-#. Ensure the previously deployed "CIS clusterIP deployment" is deleted
+#. Ensure the previously deployed "CIS ClusterIP deployment" is deleted
 
    .. code-block:: bash
 
       kubectl delete -f cluster-deployment.yaml
 
-#. Create CIS IngressLink Custom Resource definition schema
+   .. attention:: This was most likely done in a previous step but we need to
+      ensure the previous deployment is removed. It does not hurt to run the
+      command again so do so now.
 
-   .. literalinclude:: ../kubernetes/ingresslink/cis/cis-crd-schema/ingresslink-customresourcedefinition.yaml
+#. Review the CIS IngressLink dustom resource definition schema
+
+   .. literalinclude:: ../kubernetes/ingresslink/ingresslink-customresourcedefinition.yaml
       :language: yaml
       :caption: ingresslink-customresourcedefinition.yaml
       :linenos:
       :emphasize-lines: 2,4,6
 
+#. Create the CIS IngressLink custom resource definition
+
    .. code-block:: bash
 
-      kubectl create -f ingresslink/cis/cis-crd-schema/ingresslink-customresourcedefinition.yaml
+      kubectl create -f ingresslink/ingresslink-customresourcedefinition.yaml
 
 #. Create a service for the Ingress Controller pods for ports 80 and 443
 
    .. code-block:: bash
 
-      kubectl create -f ingresslink/nginx-config/nginx-service.yaml
+      kubectl create -f ingresslink/nginx-service.yaml
 
 #. Verify the service
 
    .. code-block:: bash
 
       kubectl describe svc nginx-ingress-ingresslink -n nginx-ingress
+
+#. The default nginx config needs to be updated with proxy-protocol. This is
+   necesary for IngressLink to properly operate.
+
+   .. literalinclude:: ../kubernetes/ingresslink/nginx-config.yaml
+      :language: yaml
+      :caption: nginx-config.yaml
+      :linenos:
+      :emphasize-lines: 7-9
+
+#. Apply the config changes to nginx ingress
+
+   .. code-block:: bash
+
+      kubectl apply -f ingresslink/nginx-config.yaml
+
+   .. hint:: The use of "apply" allows us to modify an already running object.
 
 #. Inspect the deployment yaml file
    
@@ -77,7 +100,7 @@ On the jumphost open a terminal and start an SSH session with kube-master1.
 
    You'll see this difference in the deployment file
 
-   .. literalinclude:: ../kubernetes/ingresslink-deployment.yaml
+   .. literalinclude:: ../kubernetes/ingresslink/ingresslink-deployment.yaml
       :language: yaml
       :caption: ingresslink-deployment.yaml
       :linenos:
@@ -87,7 +110,7 @@ On the jumphost open a terminal and start an SSH session with kube-master1.
 
    .. code-block:: bash
 
-      kubectl create -f ingresslink-deployment.yaml
+      kubectl create -f ingresslink/ingresslink-deployment.yaml
 
 Create an IngressLink Resource
 ------------------------------
@@ -99,7 +122,7 @@ Create an IngressLink Resource
       to configure the BIG-IP device to load balance among the Ingress Controller
       pods.
 
-   .. literalinclude:: ../kubernetes/ingresslink/cis/crd-resource/vs-ingresslink.yaml
+   .. literalinclude:: ../kubernetes/ingresslink/vs-ingresslink.yaml
       :language: yaml
       :caption: vs-ingresslink.yaml
       :linenos:
@@ -113,4 +136,4 @@ Create an IngressLink Resource
 
    .. code-block:: bash
 
-      kubectl apply -f vs-ingresslink.yaml
+      kubectl create -f ingresslink/vs-ingresslink.yaml

@@ -86,6 +86,9 @@ Create Common Resources
 #. Create NGINX IC custom resource definitions for VirtualServer and
    VirtualServerRoute, TransportServer and Policy resources
 
+   .. note:: This step is required for Module 4 - F5 Ingresslink. It has no
+      affect on this module and the basic Nginx Ingress Controller deployment.
+
    .. code-block:: bash
    
       kubectl apply -f common/crds/k8s.nginx.org_virtualservers.yaml
@@ -150,7 +153,10 @@ We will be deploying NGINX as a deployment. There are two options:
    You should see output similar to:
 
    .. image:: ../images/nginx-deployment.png
-     
+   
+   .. attention:: Be patient this step will talk a few minutes before the nginx
+      deployment is "Running" and ready to use.
+
 Expose NGINX via NodePort
 -------------------------
 

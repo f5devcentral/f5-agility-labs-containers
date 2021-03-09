@@ -1,55 +1,84 @@
 Lab 4.2 - Deploy the Cafe Application
 =====================================
 
-#. Create the coffee and the tea deployments and services:
+#. Create the coffee and tea deployments and services
 
    .. code-block:: bash
 
-      kubectl create -f cafe.yaml
+      kubectl create -f cafe-example/cafe.yaml
 
-#. Configure Load Balancing for the Cafe Application. Create a secret with an
-   SSL certificate and a key:
-
-   .. code-block:: bash
-
-      kubectl create -f cafe-secret.yaml
-
-#. Create an Ingress resource:
+#. Create a secret with an SSL CERT and KEY for the Cafe app
 
    .. code-block:: bash
 
-      kubectl create -f cafe-ingress.yaml
+      kubectl create -f cafe-example/cafe-secret.yaml
+
+#. Create the Ingress resource
+
+   .. code-block:: bash
+
+      kubectl create -f cafe-example/cafe-ingress.yaml
 
 Test the Application
 --------------------
 
-#. To access the application, curl the coffee and the tea services. We'll use
-   curl's --insecure option to turn off certificate verification of our
-   self-signed certificate and the --resolve option to set the Host header of a
-   request with cafe.example.com
+To access the application we'll use the browser on the jumpbox.
 
-#. To get coffee:
-
-   .. code-block:: bash
-
-      $ curl --resolve cafe.example.com:$IC_HTTPS_PORT:$IC_IP https://cafe.example.com:$IC_HTTPS_PORT/coffee --insecure
-      Server address: 10.12.0.18:80
-      Server name: coffee-7586895968-r26zn
-      If your prefer tea:
+#. First we'll verify the pool member consist of one IP and it matches the
+   NGINX ingress controller. To find the IP run the following command and take
+   note of the Endpoint IP.
 
    .. code-block:: bash
 
-      $ curl --resolve cafe.example.com:$IC_HTTPS_PORT:$IC_IP https://cafe.example.com:$IC_HTTPS_PORT/tea --insecure
-      Server address: 10.12.0.19:80
-      Server name: tea-7cd44fcb4d-xfw2x
-      Get the cafe-ingress resource to check its reported address:
+      kubectl describe svc nginx-ingress-ingresslink -n nginx-ingress
 
-   .. code-block:: bash
+   .. image:: ../images/nginx-ingresslink-svc.png
 
-      $ kubectl get ing cafe-ingress
-      NAME           HOSTS              ADDRESS         PORTS     AGE
-      cafe-ingress   cafe.example.com   35.239.225.75   80, 443   115s
-      As you can see, the Ingress Controller reported the BIG-IP IP address (configured in IngressLink resource) in the ADDRESS field of the Ingress status
+   .. note:: Your Endpoint/IP will most likely be different.
+
+#. Switch back to the jumpbox and start Firefox. Open the BIGIP mgmt console.
+
+   .. warning:: Don't forget to select the "kubernetes" partition or you'll
+      see nothing.
+
+   GoTo: :menuselection:`Local Traffic --> Virtual Servers`
+
+   Here you can see two new Virtual Servers, "ingress_link_crd_10.1.1.4_80" and
+   "ingress_link_crd_10.1.1.4_443" was created, in partition "kubernetes".
+
+   .. image:: ../images/ingress-link-vs.png
+
+#. Check the Pools to see a new pool and the associated pool members.
+
+   GoTo: :menuselection:`Local Traffic --> Pools` and select either 
+   "nginx_ingress_nginx_ingress_ingresslink" pool. Both have the same pool
+   member but are running on different ports. Click the Members tab.
+
+   .. image:: ../images/ingress-link-pool.png
+
+   .. note:: You can see that the pool member listed is the same Endpoint/IP
+      discovered in the earlier step above.
+
+#. Access your web application via firefox on the jumpbox. Open a new tab and
+   browse to one of the following URL's:
+
+   https://cafe.example.com/tea
+   
+   https://cafe.example.com/coffee
+
+   You should see something similar to the following:
+
+   .. image:: ../images/cafe-example-com-cofee.png
+
+   .. image:: ../images/cafe-example-com-tea.png
+
+   .. attention::
+      
+      Server address: The application pod IP
+
+      Remote addr: The NGINX Ingress IP
+
+      X-Real-IP: The client IP making the request
 
 #. Before starting the next class exit the session from kube-master1 and go
    back to the jumpbox.

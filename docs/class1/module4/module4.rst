@@ -18,9 +18,10 @@ This architecture diagram demonstrates the IngressLink solution
 
 .. image:: ../images/ingresslink-architecture-diagram.png
 
-.. important:: This module and following labs assumes Module2/Lab1 &
-   Module3/Lab1 were atempted and worked without issue. You can review the
-   content here:
+.. important:: This module and following labs assume Module2/Lab1 &
+   Module3/Lab1 were atempted and working without issue. This module reuses the
+   deployed objects. If you haven't done so be sure to attempt these labs now.
+   You can review the content here:
 
    `Lab 2.1 - Install & Configure CIS in ClusterIP Mode <../module2/lab1.html>`_
 
