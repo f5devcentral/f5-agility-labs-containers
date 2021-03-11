@@ -87,7 +87,8 @@ Create Common Resources
    VirtualServerRoute, TransportServer and Policy resources
 
    .. note:: This step is required for Module 4 - F5 IngressLink. It has no
-      affect on this module and the basic Nginx Ingress Controller deployment.
+      affect on this module and the basic Nginx Ingress Controller deployment
+      we're creating.
 
    .. code-block:: bash
    

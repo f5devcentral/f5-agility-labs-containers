@@ -4,10 +4,9 @@ Lab 4.1 - Configure F5 IngressLink with Kubernetes
 BIG-IP Setup
 ------------
 
-As previouly stated vxlan should be configured. In addition to that config
-Proxy Protocol is required by NGINX to provide the applications PODs with the
-original client IPs. Use the following steps to configure the
-Proxy_Protocol_iRule
+When we configure CIS below, NGINX requires "Proxy-Protocol" to provide the
+application POD with the original client IP. The following iRule provides the
+necessary header with IP information.
 
 #. Login to BigIP GUI
 #. On the Main tab go to :menuselection:`Local Traffic --> iRules`
@@ -46,7 +45,7 @@ On the jumphost open a terminal and start an SSH session with kube-master1.
       ensure the previous deployment is removed. It does not hurt to run the
       command again so do so now.
 
-#. Review the CIS IngressLink dustom resource definition schema
+#. Review the CIS IngressLink custom resource definition schema
 
    .. literalinclude:: ../kubernetes/ingresslink/ingresslink-customresourcedefinition.yaml
       :language: yaml
@@ -89,7 +88,7 @@ On the jumphost open a terminal and start an SSH session with kube-master1.
 
    .. hint:: The use of "apply" allows us to modify an already running object.
 
-#. Inspect the deployment yaml file
+#. Inspect the deployment yaml
    
    .. note:: To enable IngressLink you'll notice two additional "args"
 
@@ -106,21 +105,34 @@ On the jumphost open a terminal and start an SSH session with kube-master1.
       :linenos:
       :emphasize-lines: 2,7,20,37,39-41
 
-#. Create CIS deployment
+#. Create the CIS deployment
 
    .. code-block:: bash
 
       kubectl create -f ingresslink/ingresslink-deployment.yaml
 
+#. Verify the new CIS pod is "Running"
+
+   .. code-block:: bash
+
+      kubectl get pods -A
+
+   You should see something similar to the following. Verify a new pod named
+   "K8s-bigip-ctrl..." has started.
+
+   .. image:: ../images/k8s-ingresslink.png
+
+   .. hint:: Note the use of "-A" for all namespaces in the kubectl command.
+
 Create an IngressLink Resource
 ------------------------------
 
-#. Inspect the ingresslink resource
+#. Inspect the IngressLink resource
 
-   .. note:: Ensure the IP ADDR in the IngressLink resource match the required IP.
-      In this lab we're using 10.1.1.4 for the VIP. This ip-address will be used
-      to configure the BIG-IP device to load balance among the Ingress Controller
-      pods.
+   .. attention:: Ensure the IP ADDR in the IngressLink resource matches the
+      required IP. In this lab we're using 10.1.1.4 as the virtual IP. This
+      IP ADDR will be used to configure the BIG-IP device to load balance the
+      Ingress Controller resources.
 
    .. literalinclude:: ../kubernetes/ingresslink/vs-ingresslink.yaml
       :language: yaml
@@ -128,12 +140,48 @@ Create an IngressLink Resource
       :linenos:
       :emphasize-lines: 2,4,7,12
 
-   .. important:: The name of the app label selector in the IngressLink resource
-      should match the labels of the nginx-ingress service created in module3,
-      where we deployed nginx.
+   .. important:: The name of the app label selector in the IngressLink
+      resource should match the labels of the nginx-ingress service created in
+      module 3 where we deployed NGINX.
    
-#. Create the ingress link
+#. Create the IngressLink
 
    .. code-block:: bash
 
       kubectl create -f ingresslink/vs-ingresslink.yaml
+
+#. To validate IngressLink deployment we'll verify the pool member created on
+   BIGIP consist of one IP and it matches the NGINX ingress controller. To find
+   the IP run the following command and take note of the Endpoint IP.
+
+   .. code-block:: bash
+
+      kubectl describe svc nginx-ingress-ingresslink -n nginx-ingress
+
+   .. image:: ../images/nginx-ingresslink-svc.png
+
+   .. note:: Your Endpoint/IP will most likely be different.
+
+#. Switch back to the jumpbox and start Firefox. Open the BIGIP mgmt console.
+
+   .. warning:: Don't forget to select the "kubernetes" partition or you'll
+      see nothing.
+
+   GoTo: :menuselection:`Local Traffic --> Virtual Servers`
+
+   Here you can see two new Virtual Servers, "ingress_link_crd_10.1.1.4_80" and
+   "ingress_link_crd_10.1.1.4_443" was created, in partition "kubernetes".
+
+   .. image:: ../images/ingress-link-vs.png
+
+#. Check the Pools to see a new pool and the associated pool members.
+
+   GoTo: :menuselection:`Local Traffic --> Pools` and select either of the
+   "nginx_ingress_nginx_ingress_ingresslink" pool objects. Both have the same
+   pool member but are running on different ports. Click the Members tab.
+
+   .. image:: ../images/ingress-link-pool.png
+
+   .. note:: You can see that the pool member listed is the same Endpoint/IP
+      discovered in the earlier step above.
+   
