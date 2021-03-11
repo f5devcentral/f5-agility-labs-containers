@@ -5,7 +5,9 @@ BIG-IP Setup
 ------------
 
 When we configure CIS below, NGINX requires "Proxy-Protocol" to provide the
-application POD with the original client IP. The following iRule provides the
+application POD with the original client IP. BIG IP will pass the original
+client IP to NGINX via PROXY PROTOCOL, and NGINX will pass the client IP to the
+application POD via X-Real-IP HTTP header. The following iRule provides the
 necessary header with IP information.
 
 #. Login to BigIP GUI
@@ -45,7 +47,9 @@ On the jumphost open a terminal and start an SSH session with kube-master1.
       ensure the previous deployment is removed. It does not hurt to run the
       command again so do so now.
 
-#. Review the CIS IngressLink custom resource definition schema
+#. Review the CIS IngressLink custom resource definition schema. The schema is
+   used to validate the JSON data during creation and updates so that it can
+   prevent invalid data, or moreover, malicious attacks.
 
    .. literalinclude:: ../kubernetes/ingresslink/ingresslink-customresourcedefinition.yaml
       :language: yaml
@@ -73,6 +77,10 @@ On the jumphost open a terminal and start an SSH session with kube-master1.
 
 #. The default nginx config needs to be updated with proxy-protocol. This is
    necesary for IngressLink to properly operate.
+
+   .. note:: BIG IP will pass the original client IP to NGINX via PROXY
+      PROTOCOL, and NGINX will pass the client IP to the application POD via
+      X-Real-IP HTTP header.
 
    .. literalinclude:: ../kubernetes/ingresslink/nginx-config.yaml
       :language: yaml
