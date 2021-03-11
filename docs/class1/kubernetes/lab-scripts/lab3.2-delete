@@ -1,0 +1,10 @@
+#!/bin/bash
+
+cd ~/agilitydocs/docs/class1/kubernetes
+
+#delete hello world
+kubectl create -f cis-configmap.yaml
+kubectl create -f cis-service.yaml
+kubectl create -f nginx-ingress-hello-world.yaml
+kubectl create -f clusterip-service-hello-world.yaml
+kubectl create -f deployment-hello-world.yaml

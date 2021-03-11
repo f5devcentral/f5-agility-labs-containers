@@ -1,0 +1,13 @@
+#!/bin/bash
+
+cd ~/agilitydocs/docs/class1/kubernetes/
+
+#delete previous CIS deployment
+kubectl delete -f cluster-deployment.yaml
+
+#delete ingresslink service
+kubectl delete -f ingresslink/vs-ingresslink.yaml
+kubectl delete -f ingresslink/ingresslink-deployment.yaml
+kubectl delete -f ingresslink/nginx-config.yaml
+kubectl delete -f ingresslink/nginx-service.yaml
+kubectl delete -f ingresslink/ingresslink-customresourcedefinition.yaml

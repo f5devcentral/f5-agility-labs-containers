@@ -1,0 +1,6 @@
+#!/bin/bash
+
+#delete cafe application
+kubectl delete -f cafe-example/cafe.yaml
+kubectl delete -f cafe-example/cafe-secret.yaml
+kubectl delete -f cafe-example/cafe-ingress.yaml
