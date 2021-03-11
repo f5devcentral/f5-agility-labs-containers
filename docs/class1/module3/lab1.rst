@@ -86,7 +86,7 @@ Create Common Resources
 #. Create NGINX IC custom resource definitions for VirtualServer and
    VirtualServerRoute, TransportServer and Policy resources
 
-   .. note:: This step is required for Module 4 - F5 Ingresslink. It has no
+   .. note:: This step is required for Module 4 - F5 IngressLink. It has no
       affect on this module and the basic Nginx Ingress Controller deployment.
 
    .. code-block:: bash
