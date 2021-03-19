@@ -23,6 +23,6 @@ jobs:
 
     - name: Copy files to s3 (Staging Clouddocs)
       if:
-        github.ref == 'refs/heads/master'
+        github.ref == 'refs/heads/develop'
       run: |
         aws s3 sync --delete $PWD/docs/_build/html/ s3://clouddocs.f5networks.net/training/community/$S3_DIR/html/
