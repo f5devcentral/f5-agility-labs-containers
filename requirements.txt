@@ -1,8 +1,8 @@
-Sphinx<2.0
-git+git://github.com/f5devcentral/f5-sphinx-theme@master#egg=f5_sphinx_theme
+Sphinx>3.5
+f5_sphinx_theme
 recommonmark
+sphinx-copybutton
 sphinxcontrib-googleanalytics
 sphinxcontrib-addmetahtml
 sphinxcontrib-nwdiag
 sphinxcontrib-blockdiag
-awscli

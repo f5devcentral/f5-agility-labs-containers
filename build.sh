@@ -2,5 +2,5 @@
 
 set -x
 
-sudo rm -rf docs/_build
-make -C docs html
+sudo make -C docs clean
+sudo make -C docs html
