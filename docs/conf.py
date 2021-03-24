@@ -177,13 +177,12 @@ todo_include_todos = True
 
 html_theme = 'f5_sphinx_theme'
 html_theme_path = f5_sphinx_theme.get_html_theme_path()
-html_sidebars = {'**': ['searchbox.html', 'localtoc.html', 'globaltoc.html','relations.html']}
+html_sidebars = {'**': ['searchbox.html', 'localtoc.html', 'globaltoc.html']}
 html_theme_options = {
                         'site_name': 'Community Training Classes & Labs',
                         'next_prev_link': True
                      }
-html_last_updated_fmt = '%Y-%m-%d %I:%M:%S'
-
+html_last_updated_fmt = '%Y-%m-%d %H:%M:%S'
 extlinks = {
     'issues':( ("%s/issues/%%s" % github_repo), 'issue ' )
 }
