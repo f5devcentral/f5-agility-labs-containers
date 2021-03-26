@@ -125,8 +125,8 @@ On **kube-master1** we will create all the required files:
 
    .. image:: ../images/f5-hello-world-pods-scale10.png
 
-#. Check the pool was updated on bigip1. GoTo: :menuselection:`Local Traffic --> Pools`
-   and select the "web_pool" pool. Click the Members tab.
+#. Check the pool was updated on bigip1. GoTo: :menuselection:`Local Traffic
+   --> Pools` and select the "web_pool" pool. Click the Members tab.
 
    .. image:: ../images/f5-hello-world-pool-scale10-as3-clusterip.png
 
@@ -144,16 +144,15 @@ On **kube-master1** we will create all the required files:
       kubectl delete -f configmap-hello-world.yaml
       kubectl delete -f clusterip-service-hello-world.yaml
       kubectl delete -f deployment-hello-world.yaml
-      
+
    .. note:: Be sure to verify the virtual server and "AS3" partition were
       removed from BIG-IP.
 
 #. The next modules are **OPTIONAL**. If instructed to skip be sure to exit
-   your current SSH session with **kube-master1** first and then click here:
-   `Class 2: OpenShift with Container Ingress Service <../../class2/class2.html>`_
-   to start the OpenShift & CIS Class. Otherwise click "Next" below.
-   
+   your current SSH session with **kube-master1** first. Then click here to
+   start `Class 2: OpenShift with Container Ingress Service
+   <../../class2/class2.html>`_. Otherwise click "Next" below.
+
    .. code-block:: bash
 
       exit
-  

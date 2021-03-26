@@ -6,12 +6,12 @@ table {
   margin-bottom: 12px;
 }
 
-.section ol.loweralpha > li { 
+.section ol.loweralpha > li {
   list-style: lower-alpha;
   padding-bottom: 5px;
 }
 
-.section ol.upperalpha > li { 
+.section ol.upperalpha > li {
   list-style: upper-alpha;
   padding-bottom: 5px;
 }

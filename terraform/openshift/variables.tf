@@ -25,4 +25,3 @@ variable "vpc_cidr" {
 variable "vpc_subnet" {
   type = list(string)
 }
-

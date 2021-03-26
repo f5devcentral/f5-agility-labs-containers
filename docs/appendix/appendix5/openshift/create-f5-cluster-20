@@ -8,4 +8,3 @@ oc create -f hs-bigip-float-20.yaml
 
 oc create -f cc-bigip1-20.yaml
 oc create -f cc-bigip2-20.yaml
-

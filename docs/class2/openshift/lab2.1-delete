@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#delete kubernetes bigip container connecter w/ clusterip, authentication and RBAC 
+#delete kubernetes bigip container connecter w/ clusterip, authentication and RBAC
 oc delete -f cluster-deployment.yaml
 oc delete -f bigip-hostsubnet.yaml
 oc delete clusterrolebinding k8s-bigip-ctlr-clusteradmin

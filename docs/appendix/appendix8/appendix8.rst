@@ -5,7 +5,7 @@ This appendix will walk through the steps to replace Flannel with Calico.
 
 Expected time to complete: **15 minutes**
 
-Via RDP connect to the UDF lab "jumpbox" host. 
+Via RDP connect to the UDF lab "jumpbox" host.
 
 .. note:: Username and password are: **ubuntu/ubuntu**
 
@@ -19,7 +19,7 @@ On the jumphost open a terminal and start an SSH session with kube-master1.
 
    ssh kube-master1
 
-.. image:: images/sshtokubemaster1.png 
+.. image:: images/sshtokubemaster1.png
 
 Remove Flannel
 --------------
@@ -46,7 +46,7 @@ Remove Flannel
 
    .. image:: images/noflannelpods.png
 
-   .. note:: Run this command several times until you no longer see the 
+   .. note:: Run this command several times until you no longer see the
       "kube-flannel" pods.
 
 #. Cleanup CIS deployment file.
@@ -57,8 +57,8 @@ Remove Flannel
    .. code-block:: bash
 
       vim ~/agilitydocs/docs/class1/kubernetes/cluster-deployment.yaml
-   
-   Remove "--flannel-name=k8s-tunnel" from the bottom of the file. Be sure to 
+
+   Remove "--flannel-name=k8s-tunnel" from the bottom of the file. Be sure to
    remove the "," on the line above the removed the line. After editing the
    file should look like the following:
 
@@ -119,9 +119,9 @@ Install calicoctl
    .. code-block:: bash
 
       curl -O -L https://github.com/projectcalico/calicoctl/releases/download/v3.15.1/calicoctl
-         
+
       chmod +x calicoctl
-         
+
       sudo mv calicoctl /usr/local/bin
 
 #. Copy the the calicoctl.cfg file to /etc/calico/
@@ -136,7 +136,7 @@ Install calicoctl
       sudo mkdir /etc/calico
 
       sudo cp calicoctl.cfg /etc/calico/
-   
+
 #. Verify calicoctl is properly set up
 
    .. code-block:: bash
@@ -189,13 +189,14 @@ Confgure BIG-IP for Calico
 --------------------------
 
 Open firefox and connect to bigip1 management console. For your convenience
-there's a shortcut on the firefox toolbar. 
-   
+there's a shortcut on the firefox toolbar.
+
 .. note:: Username and password are: **admin/admin**
 
 #. Enable BGP on route domain 0
 
-   a. Connect to the BIG-IP GUI and go to :menuselection:`Network --> Route Domains`
+   a. Connect to the BIG-IP GUI and go to
+      :menuselection:`Network --> Route Domains`
    #. Click on "0" to open route domain 0
    #. Under Dynamic Routing Protocols, move "BGP" from Available to Enabled
    #. Click Update
@@ -215,7 +216,7 @@ there's a shortcut on the firefox toolbar.
 #. Configure BGP
 
    .. code-block:: bash
-   
+
       #access the IMI Shell
       imish
 

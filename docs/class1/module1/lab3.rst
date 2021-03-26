@@ -135,7 +135,7 @@ On **kube-master1** we will create all the required files:
    .. note:: Why is all the traffic directed to one pool member? The answer can
       be found by instpecting the "serviceMain" virtual service in the
       management GUI.
-   
+
 #. Scale the f5-hello-world app
 
    .. code-block:: bash
@@ -150,14 +150,14 @@ On **kube-master1** we will create all the required files:
 
    .. image:: ../images/f5-hello-world-pods-scale10.png
 
-#. Check the pool was updated on bigip1. GoTo: :menuselection:`Local Traffic --> Pools`
-   and select the "web_pool" pool. Click the Members tab.
+#. Check the pool was updated on bigip1. GoTo: :menuselection:`Local Traffic
+   --> Pools` and select the "web_pool" pool. Click the Members tab.
 
    .. image:: ../images/f5-hello-world-pool-scale10-as3.png
 
    .. attention:: Why do we still only show 3 pool members?
 
-#. Remove Hello-World from BIG-IP. 
+#. Remove Hello-World from BIG-IP.
 
    .. attention:: In older versions of AS3 a "blank AS3 declaration" was
       required to completely remove the application/declaration from BIG-IP. In

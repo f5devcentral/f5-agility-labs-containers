@@ -148,7 +148,7 @@ Launch Mesos-DNS In Marathon
 .. note:: If you have deployed your instances in a cloud like AWS, it is likely
    that you'll lose your DNS setup after a reboot. If you want to make your
    changes persist, you need to update /etc/dhcp/dhclient.conf to supersede the
-   dhcp setup. More information here: 
+   dhcp setup. More information here:
    `Static DNS server in a EC2 instance <https://aws.amazon.com/premiumsupport/knowledge-center/ec2-static-dns-ubuntu-debian/>`_
 
 Test Mesos-DNS

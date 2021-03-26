@@ -21,7 +21,7 @@ Lab 2.1 - Prep Ubuntu
    .. code-block:: bash
 
       su -
-      
+
       #When prompted for password enter "default" without the quotes
 
 #. For your convenience we've already added the host IP & names to /etc/hosts.
@@ -85,5 +85,5 @@ Lab 2.1 - Prep Ubuntu
    .. code-block:: bash
 
       apt install -y openjdk-8-jdk
-      
+
       export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/

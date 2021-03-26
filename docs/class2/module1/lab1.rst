@@ -20,8 +20,8 @@ Via RDP connect to the UDF lab "jumpbox" host.
 .. note:: Username and password are: **ubuntu/ubuntu**
 
 #. Open firefox and connect to bigip1 management console. For your convenience
-   there's a shortcut on the firefox toolbar. 
-   
+   there's a shortcut on the firefox toolbar.
+
    .. note:: Username and password are: **admin/admin**
 
    .. attention::
@@ -40,7 +40,7 @@ Via RDP connect to the UDF lab "jumpbox" host.
 
 #. Just like the previous Kubernetes class we need to setup a partition that
    will be used by F5 Container Ingress Service.
-   
+
    - GoTo: :menuselection:`System --> Users --> Partition List`
    - Create a new partition called "okd" (use default settings)
    - Click Finished
@@ -215,7 +215,7 @@ to hide our bigip credentials.
 
    Lets start with **Nodeport mode**
 
-   .. note:: 
+   .. note::
       - For your convenience the file can be found in
         /home/ubuntu/agilitydocs/docs/class2/openshift (downloaded earlier in
         the clone git repo step).
@@ -232,7 +232,7 @@ to hide our bigip credentials.
 
 #. Once you have your yaml file setup, you can try to launch your deployment.
    It will start our f5-k8s-controller container on one of our nodes.
-   
+
    .. note:: This may take around 30sec to be in a running state.
 
    .. code-block:: bash
@@ -305,7 +305,7 @@ check the logs of your container, oc command or docker command.
    .. image:: ../images/f5-container-connector-check-logs-controller-container.png
 
    .. note:: The log messages here are identical to the log messages displayed
-      in the previous oc logs command. 
+      in the previous oc logs command.
 
 #. Exit okd-node1 back to okd-master1
 

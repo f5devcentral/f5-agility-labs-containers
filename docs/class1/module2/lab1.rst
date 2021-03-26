@@ -18,7 +18,7 @@ previous session.
 #. Open firefox and connect to bigip1. For your convenience there's a shortcut
    on the toolbar. Username and password are: **admin/admin**
 
-.. attention:: 
+.. attention::
    Be sure to be in the ``Common`` partition before creating the following
    objects.
 
@@ -53,7 +53,7 @@ previous session.
    - Set Port = 8472
    - Set the Flooding Type = none
    - Click Finished
-   
+
    .. image:: ../images/create-k8s-vxlan-profile.png
 
    .. code-block:: bash
@@ -80,11 +80,11 @@ previous session.
 #. Create the vxlan tunnel self-ip
 
    .. tip:: For your SELF-IP subnet, remember it is a /16 and not a /24.
-      
+
       Why? The Self-IP has to know all other /24 subnets are local to this
       namespace, which includes Master1, Node1, Node2, etc. Each of which have
       their own /24.
-      
+
       Many students accidently use /24, doing so would limit the self-ip to
       only communicate with that subnet. When trying to ping services on other
       /24 subnets from the BIG-IP for instance, communication will fail as your
@@ -102,7 +102,7 @@ previous session.
    .. image:: ../images/create-k8s-vxlan-selfip.png
 
    .. code-block:: bash
-      
+
       # From the CLI:
       ssh admin@10.1.1.4 tmsh create net self k8s-vxlan-selfip { address 10.244.20.1/16 vlan k8s-tunnel allow-service all }
 
@@ -141,11 +141,11 @@ CIS Deployment
    .. code-block:: bash
 
       vim ~/agilitydocs/docs/class1/kubernetes/bigip-node.yaml
-      
+
       i           # To enable insert mode and start editing
                   # Replace the current MAC addr with the one previously copied
       <ESC>       # To exit insert mode
-      :wq <ENTER> # To write and exit file        
+      :wq <ENTER> # To write and exit file
 
    .. literalinclude:: ../kubernetes/bigip-node.yaml
       :language: yaml

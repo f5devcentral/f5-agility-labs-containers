@@ -75,7 +75,7 @@ Lab 1.4 - F5 Container Connector Usage
       oc scale --replicas=10 deployment/f5demo -n f5demo
 
    .. note:: It may take time to have your replicas up and running.
-   
+
 #. Don't hesitate to track this by using the following command. To check the
    number of **AVAILABLE** instances:
 
@@ -93,7 +93,7 @@ Validation and Troubleshooting
 ------------------------------
 
 Now that you have HA configured and uploaded the deployment, it is time to
-generate traffic through our BIG-IPs. 
+generate traffic through our BIG-IPs.
 
 Add a virtual IP to the the configmap. You can edit the pool-only.yaml
 configmap. There are multiple ways to edit the configmap which will be covered
@@ -105,8 +105,8 @@ re-apply the deployment
    .. code-block:: bash
 
       oc delete -f pool-only.yaml
-   
-#. Edit the pool-only.yaml and add the bindAddr 
+
+#. Edit the pool-only.yaml and add the bindAddr
 
    vi pool-only.yaml
 
@@ -153,22 +153,22 @@ How do I verify connectivity between the BIG-IP VTEP and the OSE Node?
    .. code-block:: bash
 
       ping -s 1600 -c 4 10.130.0.8
-      
+
 #. Now change the MTU to 1400
 
    .. code-block:: bash
 
       ping -s 1400 -c 4 10.130.0.8
-      
+
    .. note:: When pinging the VTEP IP directly the BIG-IP was L2 adjacent to
-      the device and could send a large MTU.  
-      
-      In the second example, the packet is dropped across the VxLAN tunnel.  
-      
+      the device and could send a large MTU.
+
+      In the second example, the packet is dropped across the VxLAN tunnel.
+
       In the third example, the packet is able to traverse the VxLAN tunnel.
 
 #. In a TMOS shell, do a ``tcpdump`` of the underlay network.
-      
+
    .. tip.. Example showing two-way communication between the BIG-IP VTEP IP
       and the OSE node VTEP IPs.
 
@@ -210,7 +210,7 @@ How do I verify connectivity between the BIG-IP VTEP and the OSE Node?
 
    .. image:: images/success.png
 
-#. Test failover and make sure you can connect to the virtual. 
+#. Test failover and make sure you can connect to the virtual.
 
 .. attention:: **Congratulations** for completing the HA clustering setup.
    Before moving to the next module cleanup the deployed resource:

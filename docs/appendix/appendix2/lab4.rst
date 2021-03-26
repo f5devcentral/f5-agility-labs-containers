@@ -6,7 +6,7 @@ Lab 2.4 - Setup the Kubernetes UI
 .. note:: You have two options to install the UI:
 
    1. Run the included script from the cloned git repo.
-   
+
    2. Manually run each command.
 
    Both options are included below.

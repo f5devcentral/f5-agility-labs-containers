@@ -201,4 +201,3 @@ output "public_ip" {
   aws_instance.okd.*.public_ip
   )
 }
-

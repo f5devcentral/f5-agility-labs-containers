@@ -14,4 +14,3 @@ spec:
     app: redis
     role: master
     tier: backend
-

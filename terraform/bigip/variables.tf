@@ -40,4 +40,3 @@ variable "do_rpm" {
 
 variable "as3_rpm" {
 }
-

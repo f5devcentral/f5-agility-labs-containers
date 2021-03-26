@@ -4,7 +4,7 @@ Lab 3.2 - F5 Container Connector Usage
 Now that our container connector is up and running, let’s deploy an
 application and leverage our F5 CC.
 
-For this lab we'll use a simple pre-configured docker image called 
+For this lab we'll use a simple pre-configured docker image called
 "f5-hello-world". It can be found on docker hub at
 `f5devcentral/f5-hello-world <https://hub.docker.com/r/f5devcentral/f5-hello-world/>`_
 
@@ -58,7 +58,7 @@ From the jumpbox connect to the Marathon UI at http://10.2.10.21:8080 and click
 
    .. warning:: Don’t forget to select the “mesos” partition or you’ll see
       nothing.
-    
+
    You should have something like this:
 
    .. image:: images/f5-container-connector-check-app-on-BIG-IP-VS.png

@@ -15,13 +15,13 @@ In this lab we'll use NodePort mode to deploy an application to the BIG-IP.
 BIG-IP Setup
 ------------
 
-Via RDP connect to the UDF lab "jumpbox" host. 
+Via RDP connect to the UDF lab "jumpbox" host.
 
 .. note:: Username and password are: **ubuntu/ubuntu**
 
 #. Open firefox and connect to bigip1 management console. For your convenience
-   there's a shortcut on the firefox toolbar. 
-   
+   there's a shortcut on the firefox toolbar.
+
    .. note:: Username and password are: **admin/admin**
 
    .. attention::
@@ -39,8 +39,8 @@ Via RDP connect to the UDF lab "jumpbox" host.
       .. image:: ../images/f5-check-partition.png
 
 #. First we need to setup a partition that will be used by F5 Container Ingress
-   Service. 
-   
+   Service.
+
    - GoTo: :menuselection:`System --> Users --> Partition List`
    - Create a new partition called "kubernetes" (use default settings)
    - Click Finished
@@ -179,7 +179,7 @@ to hide our bigip credentials.
 
    Lets start with **Nodeport mode**
 
-   .. note:: 
+   .. note::
       - For your convenience the file can be found in
         /home/ubuntu/agilitydocs/docs/class1/kubernetes (downloaded earlier in
         the clone git repo step).
@@ -196,7 +196,7 @@ to hide our bigip credentials.
 
 #. Once you have your yaml file setup, you can try to launch your deployment.
    It will start our f5-k8s-controller container on one of our nodes.
-   
+
    .. note:: This may take around 30sec to be in a running state.
 
    .. code-block:: bash
@@ -251,7 +251,7 @@ check the logs, kubectl command or docker command.
    .. code-block:: bash
 
       # If directed to, accept the authenticity of the host by typing "yes" and hitting Enter to continue.
-      
+
       ssh kube-node2
 
       sudo docker ps
@@ -269,7 +269,7 @@ check the logs, kubectl command or docker command.
    .. image:: ../images/f5-container-connector-check-logs-controller-container.png
 
    .. important:: The log messages here are identical to the log messages
-      displayed in the previous kubectl logs command. 
+      displayed in the previous kubectl logs command.
 
 #. Exit kube-node2 back to kube-master1
 

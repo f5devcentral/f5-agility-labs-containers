@@ -18,7 +18,7 @@ Lab 1.1 Install Docker
    the user already setup in the MremoteNG settings), let's elevate to root:
 
    .. code-block:: bash
-      
+
       su -
 
       #When prompted for password enter "default" without the quotes

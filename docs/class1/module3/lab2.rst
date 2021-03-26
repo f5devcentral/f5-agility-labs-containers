@@ -9,7 +9,7 @@ controller using ClusterIP.
 App Deployment
 --------------
 
-As before all the necesary files are on **kube-master1** in 
+As before all the necesary files are on **kube-master1** in
 ~/agilitydocs/docs/class1/kubernetes
 
 #. Start SSH session to kube-master1 if not already done so.

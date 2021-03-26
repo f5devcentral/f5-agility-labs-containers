@@ -140,7 +140,7 @@ Lab 1.1 - Prep CentOS
    .. code-block:: bash
 
       sudo docker run --rm hello-world
-   
+
    If everything is working properly you should see the following message
 
    .. image:: images/setup-test-docker.png

@@ -61,14 +61,13 @@ Configure RBAC
 
 #. Create NameSpace and Service Account
 
-   The NGINX Ingress Controller runs in an isolated NameSpace and uses a separate 
-   ServiceAccount for accessing the Kubernetes API. Run this command to create the
-   "nginx-ingress" namespace and service account:
+   The NGINX Ingress Controller runs in an isolated NameSpace and uses a
+   separate ServiceAccount for accessing the Kubernetes API. Run this command
+   to create the "nginx-ingress" namespace and service account:
 
    .. code:: bash
 
       kubectl apply -f common/ns-and-sa.yaml
-  
 
 #. In this lab environment RBAC is enabled and you will need to enable access
    from the NGINX Service Account to the Kubernetes API.
@@ -91,7 +90,7 @@ Create Common Resources
       we're creating.
 
    .. code-block:: bash
-   
+
       kubectl apply -f common/crds/k8s.nginx.org_virtualservers.yaml
       kubectl apply -f common/crds/k8s.nginx.org_virtualserverroutes.yaml
       kubectl apply -f common/crds/k8s.nginx.org_transportservers.yaml
@@ -104,7 +103,7 @@ Create Common Resources
    .. code:: bash
 
       kubectl apply -f common/default-server-secret.yaml
-  
+
    .. note:: NGINX docs state "For testing purposes we include a self-signed
       certificate and key that we generated. However, we recommend that you use
       your own certificate and key."
@@ -144,17 +143,17 @@ We will be deploying NGINX as a deployment. There are two options:
    .. code:: bash
 
       kubectl apply -f deployment/nginx-ingress.yaml
-   
+
 #. Verify the deployment
 
    .. code:: bash
 
       kubectl get pods -n nginx-ingress
-   
+
    You should see output similar to:
 
    .. image:: ../images/nginx-deployment.png
-   
+
    .. attention:: Be patient this step will talk a few minutes before the nginx
       deployment is "Running" and ready to use.
 
@@ -172,7 +171,7 @@ the NGINX Ingress Controller.
 
       kubectl create -f service/nodeport.yaml
 
-#. Retrieve NodePort 
+#. Retrieve NodePort
 
    .. code:: bash
 

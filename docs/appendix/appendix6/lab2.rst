@@ -39,7 +39,7 @@ Setup Zookeeper
       echo 1 > /etc/zookeeper/conf/myid
 
 #. Modify the zookeeper config file on each master
-   
+
    .. code-block:: bash
 
       sed -i /^#server.1/s/#server.1=zookeeper1/server.1=10.2.10.21/ /etc/zookeeper/conf/zoo.cfg
@@ -112,7 +112,7 @@ Start your services
    .. code-block:: bash
 
       systemctl restart zookeeper
-      
+
       systemctl start mesos-master
       systemctl enable mesos-master
 

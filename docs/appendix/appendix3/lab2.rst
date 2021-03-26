@@ -100,7 +100,7 @@ Lab 1.2 - Install Openshift
 #. Enable oc bash completion
 
    .. code-block:: bash
-      
+
       oc completion bash >>/etc/bash_completion.d/oc_completion
 
 #. Add user "centos" to openshift users
