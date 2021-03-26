@@ -40,7 +40,7 @@ the application is running.
    In the previous lab, you created the Deployment and Service separately. This
    step demonstrates creating both the Deployment and the Service from single
    configuration file. A separator of 3 dashes (``---``) is used to separate
-   one resource definition from the next resource definition. 
+   one resource definition from the next resource definition.
 
    From ose-master1, review the following deployment:
    f5-demo-app-route-deployment.yaml

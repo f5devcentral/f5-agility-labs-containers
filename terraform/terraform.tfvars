@@ -32,4 +32,3 @@ bigip_ami_name_filt = "F5 BIGIP-15.0* PAYG-Best 25M*"
 bigip_admin = "admin"
 do_rpm      = "f5-declarative-onboarding-1.9.0-1.noarch.rpm"
 as3_rpm     = "f5-appsvcs-3.16.0-6.noarch.rpm"
-

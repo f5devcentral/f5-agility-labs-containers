@@ -52,7 +52,7 @@ Now we need to creat the f5 configmap of the application for each partition.
       oc create -f f5-hello-world-configmap-10.yaml
 
    **ose-master2**
-   
+
    .. code-block:: bash
 
       oc create -f f5-hello-world-deployment.yaml

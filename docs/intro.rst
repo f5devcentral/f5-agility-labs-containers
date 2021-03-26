@@ -21,7 +21,7 @@ Getting Started
 
    * Once you have established remote access to your lab jumpbox, Firefox
      should automaticaly start. If not a desktop icon has been provided.
-   
+
    .. image:: /_static/intro/jumpbox-start.png
       :width: 900
       :align: center
@@ -35,7 +35,7 @@ Getting Started
    The default keyboard mapping is set to english. If you need to change it,
    follow these steps:
 
-   #. Click on the start menu button and type 'language' in the search field
+   #. Click on the start menu button and type 'language' in the search fieldddddddddddddddddddddddddddddddddddddddddddddddddddddd
    #. Click on 'Change keyboards or other input methods' in the search list
    #. Click on 'Change keyboards...'
    #. Click 'Add...'

@@ -36,5 +36,5 @@ Node in the cluster.
 .. toctree::
    :maxdepth: 1
    :glob:
-   
+
    lab*

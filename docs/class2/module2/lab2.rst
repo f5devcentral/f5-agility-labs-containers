@@ -3,7 +3,7 @@ Lab 2.2 - Deploy Hello-World Using Route
 
 Now that CIS is up and running, let's deploy an application and leverage CIS.
 
-For this lab we'll use a simple pre-configured docker image called 
+For this lab we'll use a simple pre-configured docker image called
 "f5-hello-world". It can be found on docker hub at
 `f5devcentral/f5-hello-world <https://hub.docker.com/r/f5devcentral/f5-hello-world/>`_
 

@@ -11,7 +11,7 @@ cluster.
    initialization. You'll need to use the command saved to notepad in an
    earlier step.
 
-   .. warning:: 
+   .. warning::
       - This following is just an example!! **DO not cut/paste the one below.**
         You should have saved this command after successfully initializing the
         master in the previous lab. Scroll up in your CLI history to find the
@@ -21,16 +21,16 @@ cluster.
    .. hint:: If you missed the step to save the "kubeadm join..." command from
       the previous lab, run the following and use the output to join your nodes
       to the cluster.
-   
+
       .. code-block:: bash
 
-         kubeadm token create --print-join-command   
+         kubeadm token create --print-join-command
 
    .. note:: You may need to add the following switch to the join command below
       on newer versions of kubernetes.
 
       .. code-block:: bash
-         
+
          --discovery-token-unsafe-skip-ca-verification
 
    .. code-block:: bash
@@ -66,4 +66,4 @@ cluster.
    a Kubernetes cluster. While we didn't cover each step in great detail, due
    to time of other labs we need to complete today, this is one path to the
    overall steps to build your own cluster with a few linux boxes in your own
-   lab. All this content is publicly online/available at clouddocs.f5.com. 
+   lab. All this content is publicly online/available at clouddocs.f5.com.

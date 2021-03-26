@@ -288,7 +288,7 @@ resource "null_resource" "tmsh" {
 
     curl -ku $CREDS https://$IP/mgmt/shared/iapp/package-management-tasks -H "Origin: https://$IP" -H 'Content-Type: application/json;charset=UTF-8' --data $do_DATA
     curl -ku $CREDS https://$IP/mgmt/shared/iapp/package-management-tasks -H "Origin: https://$IP" -H 'Content-Type: application/json;charset=UTF-8' --data $as3_DATA
-    
+
     EOF
   }
 }
@@ -355,4 +355,3 @@ output "public_ip" {
 output "password" {
   value = random_string.password.result
 }
-

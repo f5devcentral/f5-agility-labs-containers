@@ -18,7 +18,7 @@ previous session.
 #. Open firefox and connect to bigip1. For your convenience there's a shortcut
    on the toolbar. Username and password are: **admin/admin**
 
-   .. attention:: 
+   .. attention::
       Be sure to be in the ``Common`` partition before creating the following
       objects.
 
@@ -29,7 +29,7 @@ previous session.
 
    .. note:: This step was performed in the previous module. Verify the
       "okd" partion exists and if not follow the instructions below.
- 
+
    - GoTo: :menuselection:`System --> Users --> Partition List`
    - Create a new partition called "okd" (use default settings)
    - Click Finished
@@ -43,7 +43,7 @@ previous session.
 
 #. Install AS3 via the management console
 
-   .. attention:: This has been done to save time. If needed see 
+   .. attention:: This has been done to save time. If needed see
       `Module1 / Lab 1.1 / Install AS3 Steps <../module1/lab1.html>`_
 
 #. Create a vxlan tunnel profile
@@ -80,11 +80,11 @@ previous session.
 #. Create the vxlan tunnel self-ip
 
    .. tip:: For your SELF-IP subnet, remember it is a /14 and not a /23.
-      
+
       Why? The Self-IP has to know all other /23 subnets are local to this
       namespace, which includes Master1, Node1, Node2, etc. Each of which have
       their own /23.
-      
+
       Many students accidently use /23, doing so would limit the self-ip to
       only communicate with that subnet. When trying to ping services on other
       /23 subnets from the BIG-IP for instance, communication will fail as your
@@ -102,7 +102,7 @@ previous session.
    .. image:: ../images/create-okd-vxlan-selfip.png
 
    .. code-block:: bash
-      
+
       # From the CLI:
       ssh admin@10.1.1.4 tmsh create net self okd-vxlan-selfip { app-service none address 10.131.0.1/14 vlan okd-tunnel allow-service all }
 
@@ -215,7 +215,7 @@ CIS Deployment
 #. Now that we have added a HostSubnet for bigip1 we can launch the CIS
    deployment. It will start the f5-k8s-controller container on one of the
    worker nodes.
-   
+
    .. attention:: This may take around 30s to get to a running state.
 
    .. code-block:: bash

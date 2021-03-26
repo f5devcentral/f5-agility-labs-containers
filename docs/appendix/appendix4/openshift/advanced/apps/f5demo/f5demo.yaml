@@ -15,4 +15,3 @@ spec:
         image: kmunson1973/f5demo:1.0.0
         ports:
         - containerPort: 8080
-

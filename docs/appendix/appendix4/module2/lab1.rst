@@ -199,7 +199,7 @@ Container Connector should configure on the BIG-IP.
    If you reload the page every few seconds, you should see the **Server IP**
    address change.  Because there is more than one instance of the application
    running, the BIG-IP load balances the application traffic amongst multiple
-   pods.  
+   pods.
 
 #. Cleanup deployed resources. Remove the OpenShift Deployment, Service and
    ConfigMap resources you created in the previous steps using the OpenShift

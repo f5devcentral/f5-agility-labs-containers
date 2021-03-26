@@ -3,7 +3,7 @@ Lab 2.2 - Deploy Hello-World Using Ingress
 
 Now that CIS is up and running, let's deploy an application and leverage CIS.
 
-For this lab we'll use a simple pre-configured docker image called 
+For this lab we'll use a simple pre-configured docker image called
 "f5-hello-world". It can be found on docker hub at
 `f5devcentral/f5-hello-world <https://hub.docker.com/r/f5devcentral/f5-hello-world/>`_
 
@@ -104,7 +104,8 @@ On **kube-master1** we will create all the required files:
 #. To check traffic distribution, hit Refresh many times on your open browser
    session. Then go back to the open management console on firefox.
 
-   GoTo: :menuselection:`Local Traffic --> Pools --> Pool list --> ingress_default_f5-hello-world-web --> Statistics`
+   GoTo: :menuselection:`Local Traffic --> Pools --> Pool list -->
+   ingress_default_f5-hello-world-web --> Statistics`
 
    .. image:: ../images/f5-container-connector-check-app-bigip-stats-ingress-clusterip.png
 
@@ -118,7 +119,7 @@ On **kube-master1** we will create all the required files:
       errors.
 
    .. code-block:: bash
-   
+
       kubectl delete -f ingress-hello-world.yaml
       kubectl delete -f clusterip-service-hello-world.yaml
       kubectl delete -f deployment-hello-world.yaml

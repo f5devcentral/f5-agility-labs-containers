@@ -68,7 +68,7 @@ On the **okd-master1** we will create all the required files:
       oc create -f deployment-hello-world.yaml
       oc create -f nodeport-service-hello-world.yaml
       oc create -f configmap-hello-world.yaml
-      
+
    .. image:: ../images/f5-okd-launch-configmap-app.png
 
 #. To check the status of our deployment, you can run the following commands:
@@ -85,7 +85,7 @@ On the **okd-master1** we will create all the required files:
    .. code-block:: bash
 
       oc describe svc f5-hello-world
-        
+
    .. image:: ../images/f5-okd-check-app-definition-node.png
 
    .. attention:: To understand and test the new app pay attention to the
@@ -146,8 +146,8 @@ On the **okd-master1** we will create all the required files:
 
    .. image:: ../images/f5-hello-world-pods-scale10.png
 
-#. Check the pool was updated on bigip1. GoTo: :menuselection:`Local Traffic --> Pools`
-   and select the "web_pool" pool. Click the Members tab.
+#. Check the pool was updated on bigip1. GoTo: :menuselection:`Local Traffic
+   --> Pools` and select the "web_pool" pool. Click the Members tab.
 
    .. image:: ../images/f5-hello-world-pool-scale10-node-as3.png
 

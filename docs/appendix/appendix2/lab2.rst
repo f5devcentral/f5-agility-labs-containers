@@ -35,7 +35,7 @@ communicates with). All of these components run in pods started by kubelet
 
    .. image:: images/cluster-setup-guide-kubeadm-init-master.png
 
-   .. important:: 
+   .. important::
       - Be sure to save the highlighted output from this command to notepad.
         You'll need this information to add your worker nodes and configure
         user administration.
@@ -111,7 +111,7 @@ communicates with). All of these components run in pods started by kubelet
    .. code-block:: bash
 
       kubectl cluster-info
-      
+
    .. image:: images/cluster-setup-guide-kubeadmin-init-check-cluster-info.png
 
 .. hint:: If you made a mistake and need to re-initialize the cluster run
@@ -126,6 +126,6 @@ communicates with). All of these components run in pods started by kubelet
       # This resets the master to default settings
       # You may need to run this command on the "nodes" if a fully functioning cluster is configured
       kubeadm reset --force
-      
+
       # This removes the admin references to the broken cluster
       rm -rf /home/ubuntu/.kube /root/.kube

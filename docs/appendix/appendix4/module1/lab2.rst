@@ -10,13 +10,13 @@ Configure VXLAN on Openshift
 ----------------------------
 
 HostSubnets must use valid YAML. You can upload the files individually using
-separate oc create commands. 
+separate oc create commands.
 
 Create one HostSubnet for each BIG-IP device. These will handle health monitor
-traffic. 
+traffic.
 
 Also create one HostSubnet to pass client traffic. You will create the floating
-IP address for the active device in this subnet as shown in the diagram above. 
+IP address for the active device in this subnet as shown in the diagram above.
 
 #. Create new OpenShift HostSubnet's for bigip.
 
@@ -65,7 +65,7 @@ Configure VXLAN on BIG-IP
 -------------------------
 
 .. important:: The BIG-IP OpenShift Controller cannot manage objects in the
-   /Common partition. 
+   /Common partition.
 
    Its recommended to create all HA using the /Common partition
 
@@ -148,7 +148,7 @@ tunnel configuration
 
 #. Check the ocp-tunnel configuration (:menuselection:`Network --> Tunnels -->
    Tunnel List`).
-   
+
    .. note:: The local-address 10.3.10.59 and secondary-address are 10.3.10.60
       for **bigip1** and 10.3.10.61 for **bigip2**. The secondary-address will
       be used to send monitor traffic and the local address will be used by the

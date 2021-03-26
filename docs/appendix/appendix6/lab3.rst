@@ -103,7 +103,7 @@ Connect to Marathon through one of the master (8080) and launch an application.
    - CPU: 0.1
    - Memory: 32M
    - Command: echo TEST; sleep 5
-   
+
    .. image:: images/setup-slave-test-create-application-command-def.png
 
 #. Once it starts, connect to the mesos framework.  Here you should see more

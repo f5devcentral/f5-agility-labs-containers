@@ -8,7 +8,7 @@ Lab 1.1 - Initial BIG-IP HA Setup
    by a F5 Container Connector via any other means (for example, the
    configuration utility, TMOS, or by syncing configuration from another
    device or service group). Doing so may result in disruption of service or
-   unexpected behavior. 
+   unexpected behavior.
 
    The Container Connector for OpenShift uses FDB entries and ARP records to
    identify the Cluster resources associated with BIG-IP Nodes. Because BIG-IP
@@ -103,7 +103,7 @@ each BIG-IP:
    .. image:: images/device-group-sync.png
 
    All synced.
-   
+
    .. note:: The sync-failover configuration is set to manual sync
 
    .. image:: images/synced.png

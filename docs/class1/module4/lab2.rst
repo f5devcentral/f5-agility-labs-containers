@@ -28,12 +28,12 @@ To access the application we'll use the browser on the jumpbox.
    browse to one of the following URL's:
 
    https://cafe.example.com/tea
-   
+
    https://cafe.example.com/coffee
 
    .. note:: If prompted with an SSL certificate warning be sure to accept the
       risk and continue.
-      
+
    You should see something similar to the following:
 
    .. image:: ../images/cafe-example-com-cofee.png
@@ -41,7 +41,7 @@ To access the application we'll use the browser on the jumpbox.
    .. image:: ../images/cafe-example-com-tea.png
 
    .. attention::
-      
+
       Server address: The application pod IP
 
       Remote addr: The NGINX Ingress IP
@@ -50,11 +50,11 @@ To access the application we'll use the browser on the jumpbox.
 
 #. Before starting the next class exit the session from kube-master1 and go
    back to the jumpbox.
-   
+
    .. code-block:: bash
-   
+
       exit
-   
+
 .. attention:: This concludes **Class 1 - CIS and Kubernetes**. Feel free to
    experiment with any of the settings. The lab will be destroyed at the end of
    the class/day.

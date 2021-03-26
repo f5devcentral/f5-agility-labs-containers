@@ -15,7 +15,9 @@ spec:
         ports:
          - containerPort: 8080
            protocol: TCP
+
 ---
+
 apiVersion: v1
 kind: Service
 metadata:
@@ -30,4 +32,3 @@ spec:
     targetPort: 8080
   selector:
     app: f5-demo-app-route
-

@@ -148,4 +148,3 @@ module "okd" {
   vpc_cidr      = var.vpc_cidr
   vpc_subnet    = [aws_subnet.openshift_subnet.id]
 }
-

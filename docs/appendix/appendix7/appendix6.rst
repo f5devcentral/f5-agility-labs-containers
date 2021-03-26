@@ -37,15 +37,15 @@ environment.
    * - mesos-master1
      - 10.2.10.21
      - ubuntu/ubuntu
-    
+
        root/default
    * - mesos-agent1
      - 10.2.10.22
      - ubuntu/ubuntu
-      
+
        root/default
    * - mesos-agent2
      - 10.2.10.23
      - ubuntu/ubuntu
-    
+
        root/default

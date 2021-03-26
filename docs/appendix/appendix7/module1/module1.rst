@@ -7,5 +7,5 @@ Marathon concepts and components
 .. toctree::
    :maxdepth: 1
    :glob:
-   
+
    lab*

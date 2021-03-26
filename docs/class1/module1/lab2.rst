@@ -3,7 +3,7 @@ Lab 1.2 - Deploy Hello-World Using Ingress
 
 Now that CIS is up and running, let's deploy an application and leverage CIS.
 
-For this lab we'll use a simple pre-configured docker image called 
+For this lab we'll use a simple pre-configured docker image called
 "f5-hello-world". It can be found on docker hub at
 `f5devcentral/f5-hello-world <https://hub.docker.com/r/f5devcentral/f5-hello-world/>`_
 
@@ -23,9 +23,9 @@ To deploy our application, we will need the following definitions:
 - Define the **Ingress** resource: this is used to add the necesary annotations
   to define the virtual server settings.
 
-  .. seealso:: 
+  .. seealso::
      `Supported Ingress Annotations <https://clouddocs.f5.com/products/connectors/k8s-bigip-ctlr/v1.11/#ingress-resources>`_
-  
+
 App Deployment
 --------------
 
@@ -127,7 +127,8 @@ required files and launch them.
 #. To check traffic distribution, hit Refresh many times on your open browser
    session. Then go back to the management console open on firefox.
 
-   GoTo: :menuselection:`Local Traffic --> Pools --> Pool list --> ingress_default_f5-hello-world-web --> Statistics`
+   GoTo: :menuselection:`Local Traffic --> Pools --> Pool list -->
+   ingress_default_f5-hello-world-web --> Statistics`
 
    .. image:: ../images/f5-container-connector-check-app-ingress-stats.png
 

@@ -1,5 +1,5 @@
 ---
-  
+
 - name: Update All Packages
   yum:
     name: "*"
@@ -12,4 +12,3 @@
   reboot:
     post_reboot_delay: 180
     reboot_timeout: 900
-

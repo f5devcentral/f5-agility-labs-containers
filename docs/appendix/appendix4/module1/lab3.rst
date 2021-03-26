@@ -80,7 +80,7 @@ Create & Verify CC Deployment
 
       oc get deployment -n kube-system
 
-   .. note:: Check in your lab that you have your two controllers as 
+   .. note:: Check in your lab that you have your two controllers as
       **AVAILABLE**. If Not, you won't be able to do the lab. It may take up to
       10 minutes for them to be available.
 

@@ -1,0 +1,31 @@
+# See https://pre-commit.com for more information
+# See https://pre-commit.com/hooks.html for more hooks
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v3.4.0
+    hooks:
+      - id: check-yaml
+        args: [--allow-multiple-documents]
+      - id: check-added-large-files
+      - id: detect-private-key
+      - id: end-of-file-fixer
+      - id: requirements-txt-fixer
+      - id: trailing-whitespace
+  - repo: https://github.com/python/black
+    rev: 20.8b1
+    hooks:
+      - id: black
+        description: python code formatter
+  - repo: https://github.com/pycqa/flake8
+    rev: 3.9.0
+    hooks:
+      - id: flake8
+        description: enforcing style consistency across Python projects
+        entry: flake8 --max-line-length 128 --max-doc-length 256 --ignore E501
+  - repo: https://github.com/pycqa/doc8
+    rev: 0.9.0a1
+    hooks:
+      - id: doc8
+        description: linting for rst files
+        entry: doc8 --ignore-path docs/_build/ -e rst docs/
+        require_serial: true

@@ -30,5 +30,5 @@ Before being able to use F5 CIS, you need to confirm the following:
 .. toctree::
    :maxdepth: 1
    :glob:
-   
+
    lab*

@@ -22,10 +22,10 @@ Lab 2.1 - Prep Ubuntu
 
    .. code-block:: bash
 
-      su - 
-      
+      su -
+
       #When prompted for password enter "default" without the quotes
-      
+
    Your prompt should change to root@ at the start of the line :
 
    .. image:: images/rootuser.png
@@ -92,7 +92,7 @@ Lab 2.1 - Prep Ubuntu
 
 #. Install docker-ce
 
-   .. attention:: This was done earlier in 
+   .. attention:: This was done earlier in
       `Class 1 / Module1 / Lab 1.1: Install Docker <../../class1/module1/lab1.html>`_
       . If skipped go back and install Docker by clicking the link.
 

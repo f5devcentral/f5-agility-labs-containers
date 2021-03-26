@@ -97,7 +97,7 @@ On the jumphost open a terminal and start an SSH session with kube-master1.
    .. hint:: The use of "apply" allows us to modify an already running object.
 
 #. Inspect the deployment yaml
-   
+
    .. note:: To enable IngressLink you'll notice two additional "args"
 
       .. code-block:: bash
@@ -151,7 +151,7 @@ Create an IngressLink Resource
    .. important:: The name of the app label selector in the IngressLink
       resource should match the labels of the nginx-ingress service created in
       module 3 where we deployed NGINX.
-   
+
 #. Create the IngressLink
 
    .. code-block:: bash
@@ -192,4 +192,3 @@ Create an IngressLink Resource
 
    .. note:: You can see that the pool member listed is the same Endpoint/IP
       discovered in the earlier step above.
-   

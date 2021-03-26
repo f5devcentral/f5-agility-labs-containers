@@ -14,4 +14,3 @@
   gather_facts: no
   tasks:
   - import_tasks: prep-master.yaml
-

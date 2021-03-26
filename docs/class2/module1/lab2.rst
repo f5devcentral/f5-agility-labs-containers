@@ -3,7 +3,7 @@ Lab 1.2 - Deploy Hello-World Using Route
 
 Now that CIS is up and running, let's deploy an application and leverage CIS.
 
-For this lab we'll use a simple pre-configured docker image called 
+For this lab we'll use a simple pre-configured docker image called
 "f5-hello-world". It can be found on docker hub at
 `f5devcentral/f5-hello-world <https://hub.docker.com/r/f5devcentral/f5-hello-world/>`_
 
@@ -23,9 +23,9 @@ To deploy our application, we will need the following definitions:
 - Define the **Route** resource: this is used to add the necesary annotations
   to define the virtual server settings.
 
-  .. seealso:: 
+  .. seealso::
      `Supported Route Annotations <https://clouddocs.f5.com/products/connectors/k8s-bigip-ctlr/v1.11/#supported-route-annotations>`_
-  
+
 App Deployment
 --------------
 
@@ -115,7 +115,7 @@ files:
    .. image:: ../images/f5-check-ltm-policy-route.png
 
 #. Check the Pools to see a new pool and the associated pool members.
-   
+
    GoTo: :menuselection:`Local Traffic --> Pools` and select the
    "openshift_default_f5-hello-world-web" pool. Click the Members tab.
 
@@ -142,6 +142,6 @@ files:
       oc delete -f route-hello-world.yaml
       oc delete -f nodeport-service-hello-world.yaml
       oc delete -f deployment-hello-world.yaml
-   
+
    .. attention:: Validate the objects are removed via the management console.
       :menuselection:`Local Traffic --> Virtual Servers`

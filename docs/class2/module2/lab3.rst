@@ -60,7 +60,7 @@ On **okd-master1** we will create all the required files:
    .. code-block:: bash
 
       oc describe svc f5-hello-world
-        
+
    .. image:: ../images/f5-okd-check-app-definition.png
 
    .. attention:: To understand and test the new app pay attention to the
@@ -125,8 +125,8 @@ On **okd-master1** we will create all the required files:
 
    .. image:: ../images/f5-hello-world-pods-scale10-2.png
 
-#. Check the pool was updated on bigip1. GoTo: :menuselection:`Local Traffic --> Pools`
-   and select the "web_pool" pool. Click the Members tab.
+#. Check the pool was updated on bigip1. GoTo: :menuselection:`Local Traffic
+   --> Pools` and select the "web_pool" pool. Click the Members tab.
 
    .. image:: ../images/f5-hello-world-pool-scale10-clusterip.png
 
@@ -144,7 +144,7 @@ On **okd-master1** we will create all the required files:
       oc delete -f configmap-hello-world.yaml
       oc delete -f clusterip-service-hello-world.yaml
       oc delete -f deployment-hello-world.yaml
-      
+
    .. note:: Be sure to verify the virtual server and "AS3" partition were
       removed from BIG-IP.
 
