@@ -14,6 +14,10 @@ necessary header with IP information.
 #. On the Main tab go to :menuselection:`Local Traffic --> iRules`
 #. Click Create.
 #. In the Name field, type name as "Proxy_Protocol_iRule".
+
+   .. important:: Be sure to use the name as shown. The IngressLink Resource
+      will reference that specific name.
+
 #. In the Definition field, Copy the following definition
 
    .. literalinclude:: ../kubernetes/ingresslink/Proxy_Protocol_iRule

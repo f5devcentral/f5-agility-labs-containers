@@ -19,4 +19,4 @@ The purpose of these labs is to give you better understanding of...
      https://clouddocs.f5.com/training/community/containers/html/
 
    * The lab is based on UDF blueprint
-     ``Agility 2020 - CIS / k8s / okd``
+     ``Containers - Kubernetes & OpenShift Integration with BIG-IP``
