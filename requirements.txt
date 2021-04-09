@@ -1,5 +1,6 @@
 f5_sphinx_theme
 pre-commit
+recommonmark
 sphinx
 sphinx-copybutton
 sphinxcontrib-blockdiag
