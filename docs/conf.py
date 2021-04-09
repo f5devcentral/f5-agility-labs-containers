@@ -173,6 +173,7 @@ todo_include_todos = True
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 
+html4_writer = True
 html_theme = "f5_sphinx_theme"
 html_theme_path = f5_sphinx_theme.get_html_theme_path()
 html_sidebars = {"**": ["searchbox.html", "localtoc.html", "globaltoc.html"]}
