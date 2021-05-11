@@ -99,7 +99,7 @@ Lab 2.1 - Prep Ubuntu
 #. Configure docker to use the correct cgroupdriver
 
    .. important:: The cgroupdrive for docker and kubernetes have to match. In
-      this lab "cgroupfs" is the correct driver.
+      this lab "systemd" is the correct driver.
 
    .. note:: This next part can be a bit tricky - just copy/paste the 5 lines
       below exactly as they are and paste via buffer to the CLI (and press
@@ -109,7 +109,7 @@ Lab 2.1 - Prep Ubuntu
 
       cat << EOF > /etc/docker/daemon.json
       {
-      "exec-opts": ["native.cgroupdriver=cgroupfs"]
+      "exec-opts": ["native.cgroupdriver=systemd"]
       }
       EOF
 

@@ -38,5 +38,5 @@ spec:
             "--insecure=true",
             "--bigip-partition=kubernetes",
             "--pool-member-type=cluster",
-            "--flannel-name=/Common/k8s-tunnel"
+            "--flannel-name=/Common/fl-tunnel"
           ]
