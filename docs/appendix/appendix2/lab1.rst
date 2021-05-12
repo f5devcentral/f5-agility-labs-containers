@@ -93,7 +93,7 @@ Lab 2.1 - Prep Ubuntu
 #. Install docker-ce
 
    .. attention:: This was done earlier in
-      `Class 1 / Module1 / Lab 1.1: Install Docker <../../class1/module1/lab1.html>`_
+      `Appendix 1 / Module1 / Lab 1.1: Install Docker <../appendix1/module1/lab1.html>`_
       . If skipped go back and install Docker by clicking the link.
 
 #. Configure docker to use the correct cgroupdriver
