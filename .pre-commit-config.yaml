@@ -12,12 +12,12 @@ repos:
       - id: requirements-txt-fixer
       - id: trailing-whitespace
   - repo: https://github.com/python/black
-    rev: 20.8b1
+    rev: 21.5b1
     hooks:
       - id: black
         description: python code formatter
   - repo: https://github.com/pycqa/flake8
-    rev: 3.9.0
+    rev: 3.9.2
     hooks:
       - id: flake8
         description: enforcing style consistency across Python projects
