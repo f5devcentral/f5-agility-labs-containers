@@ -4,6 +4,8 @@ Appendix 3: Build an Openshift Cluster
 .. attention:: **THE CLASS BLUEPRINT IS PRE-CONFIGURED WITH A WORKING CLUSTER.
    THIS APPENDIX IS FOR DOCUMENTION PURPOSES ONLY.**
 
+.. important:: These instructions are for OKD 3.11.
+
 In this module, we will build a 3 node cluster (1x master and 2x nodes)
 utilizing CentOS server images.
 
