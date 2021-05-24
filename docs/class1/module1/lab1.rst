@@ -218,7 +218,7 @@ to hide our bigip credentials.
 
       kubectl get pods -o wide -n kube-system
 
-   We can see that our container is running on kube-node1 below.
+   We can see that our container is running on kube-node2 below.
 
    .. image:: ../images/f5-container-connector-locate-controller-container.png
 

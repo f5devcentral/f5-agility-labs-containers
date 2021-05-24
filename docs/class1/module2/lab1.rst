@@ -49,33 +49,33 @@ previous session.
 #. Create a vxlan tunnel profile.
 
    - GoTo: :menuselection:`Network --> Tunnels --> Profiles --> VXLAN`
-   - Create a new profile called "k8s-vxlan"
+   - Create a new profile called "fl-vxlan"
    - Set Port = 8472
    - Set the Flooding Type = none
    - Click Finished
 
-   .. image:: ../images/create-k8s-vxlan-profile.png
+   .. image:: ../images/create-fl-vxlan-profile.png
 
    .. code-block:: bash
 
       # From the CLI:
-      ssh admin@10.1.1.4 tmsh create net tunnels vxlan k8s-vxlan { app-service none port 8472 flooding-type none }
+      ssh admin@10.1.1.4 tmsh create net tunnels vxlan fl-vxlan { app-service none port 8472 flooding-type none }
 
 #. Create a vxlan tunnel.
 
    - GoTo: :menuselection:`Network --> Tunnels --> Tunnel List`
-   - Create a new tunnel called "k8s-tunnel"
-   - Set the Profile to the one previously created called "k8s-vxlan"
+   - Create a new tunnel called "fl-tunnel"
+   - Set the Profile to the one previously created called "fl-vxlan"
    - set the Key = 1
    - Set the Local Address to 10.1.1.4
    - Click Finished
 
-   .. image:: ../images/create-k8s-vxlan-tunnel.png
+   .. image:: ../images/create-fl-vxlan-tunnel.png
 
    .. code-block:: bash
 
       # From the CLI:
-      ssh admin@10.1.1.4 tmsh create net tunnels tunnel k8s-tunnel { app-service none key 1 local-address 10.1.1.4 profile k8s-vxlan }
+      ssh admin@10.1.1.4 tmsh create net tunnels tunnel fl-tunnel { app-service none key 1 local-address 10.1.1.4 profile fl-vxlan }
 
 #. Create the vxlan tunnel self-ip
 
@@ -92,19 +92,19 @@ previous session.
       local.
 
    - GoTo: :menuselection:`Network --> Self IPs`
-   - Create a new Self-IP called "k8s-vxlan-selfip"
+   - Create a new Self-IP called "fl-vxlan-selfip"
    - Set the IP Address to "10.244.20.1"
    - Set the Netmask to "255.255.0.0"
-   - Set the VLAN / Tunnel to "k8s-tunnel" (Created earlier)
+   - Set the VLAN / Tunnel to "fl-tunnel" (Created earlier)
    - Set Port Lockdown to "Allow All"
    - Click Finished
 
-   .. image:: ../images/create-k8s-vxlan-selfip.png
+   .. image:: ../images/create-fl-vxlan-selfip.png
 
    .. code-block:: bash
 
       # From the CLI:
-      ssh admin@10.1.1.4 tmsh create net self k8s-vxlan-selfip { address 10.244.20.1/16 vlan k8s-tunnel allow-service all }
+      ssh admin@10.1.1.4 tmsh create net self fl-vxlan-selfip { address 10.244.20.1/16 vlan fl-tunnel allow-service all }
 
 CIS Deployment
 --------------
@@ -129,9 +129,9 @@ CIS Deployment
       # If directed to, accept the authenticity of the host by typing "yes" and hitting Enter to continue.
       # The password is "admin"
 
-      ssh admin@10.1.1.4 tmsh show net tunnels tunnel k8s-tunnel all-properties
+      ssh admin@10.1.1.4 tmsh show net tunnels tunnel fl-tunnel all-properties
 
-   .. image:: ../images/get-k8s-tunnel-mac-addr.png
+   .. image:: ../images/get-fl-tunnel-mac-addr.png
 
 #. On kube-master1 edit bigip-node.yaml and change the highlighted MAC address
    with the MAC address copied from the previous step.

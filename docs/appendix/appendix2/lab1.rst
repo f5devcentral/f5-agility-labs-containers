@@ -93,13 +93,14 @@ Lab 2.1 - Prep Ubuntu
 #. Install docker-ce
 
    .. attention:: This was done earlier in
-      `Class 1 / Module1 / Lab 1.1: Install Docker <../../class1/module1/lab1.html>`_
+      `Appendix 1 / Module1 / Lab 1.1: Install Docker <../appendix1/module1/lab1.html>`_
       . If skipped go back and install Docker by clicking the link.
 
 #. Configure docker to use the correct cgroupdriver
 
-   .. important:: The cgroupdrive for docker and kubernetes have to match. In
-      this lab "cgroupfs" is the correct driver.
+   .. important:: The cgroupdrive for docker and kubernetes have to match.
+      Kubernetes defaults to "systemd". In this lab "systemd" is the correct
+      driver.
 
    .. note:: This next part can be a bit tricky - just copy/paste the 5 lines
       below exactly as they are and paste via buffer to the CLI (and press
@@ -109,7 +110,7 @@ Lab 2.1 - Prep Ubuntu
 
       cat << EOF > /etc/docker/daemon.json
       {
-      "exec-opts": ["native.cgroupdriver=cgroupfs"]
+      "exec-opts": ["native.cgroupdriver=systemd"]
       }
       EOF
 
