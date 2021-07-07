@@ -17,7 +17,7 @@ spec:
       serviceAccountName: k8s-bigip-ctlr
       containers:
         - name: k8s-bigip-ctlr
-          image: "f5networks/k8s-bigip-ctlr:latest"
+          image: "f5networks/k8s-bigip-ctlr:2.3.0"
           imagePullPolicy: IfNotPresent
           env:
             - name: BIGIP_USERNAME
@@ -40,5 +40,5 @@ spec:
             "--ingress-link-mode=true",
             "--bigip-partition=kubernetes",
             "--pool-member-type=cluster",
-            "--flannel-name=/Common/k8s-tunnel"
+            "--flannel-name=/Common/fl-tunnel"
           ]

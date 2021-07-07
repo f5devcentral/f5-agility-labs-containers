@@ -20,3 +20,6 @@ The purpose of these labs is to give you better understanding of...
 
    * The lab is based on UDF blueprint
      ``Containers - Kubernetes & OpenShift Integration with BIG-IP``
+
+
+TEMP build test.
