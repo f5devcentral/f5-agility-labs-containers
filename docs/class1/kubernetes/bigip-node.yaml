@@ -6,7 +6,7 @@ metadata:
     #Replace IP with Self-IP for your deployment
     flannel.alpha.coreos.com/public-ip: "10.1.1.4"
     #Replace MAC with your BIGIP Flannel VXLAN Tunnel MAC
-    flannel.alpha.coreos.com/backend-data: '{"VtepMAC":"2c:c2:60:23:0c:58"}'
+    flannel.alpha.coreos.com/backend-data: '{"VtepMAC":"02:20:ae:2f:e0:60"}'
     flannel.alpha.coreos.com/backend-type: "vxlan"
     flannel.alpha.coreos.com/kube-subnet-manager: "true"
 spec:

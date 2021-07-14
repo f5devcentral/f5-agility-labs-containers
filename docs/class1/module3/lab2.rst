@@ -89,14 +89,18 @@ two files, a service and configmap.
    .. note:: In this case the labels are important and must match our configmap
       declaration.
 
-   .. important:: The namespace of this service and deploymnent below must
+   .. important:: The namespace of this service and deployment below must
       match due to changes in CIS v2.1.
+
+   .. important:: Starting with CIS v2.2.2, AS3 ConfigMap expects servicePort
+      to match the port (not the nodeport) exposed in the service definition.
+      See line 13 here and line 39 in the AS3 declaration below.
 
    .. literalinclude:: ../kubernetes/cis-service.yaml
       :language: yaml
       :caption: cis-service.yaml
       :linenos:
-      :emphasize-lines: 2,5,7-9,18
+      :emphasize-lines: 2,5,7-9,13,18
 
 #. Review CIS configmap file ``cis-configmap.yaml``
 
@@ -106,14 +110,14 @@ two files, a service and configmap.
    .. important:: The namespace of this deploymnent and service above must
       match due to changes in CIS v2.1.
 
-   .. important:: In all of our AS3 examples you'll notice the declaration is
+   .. tip:: In all of our AS3 examples you'll notice the declaration is
       the same. This make the use of AS3 highly portable.
 
    .. literalinclude:: ../kubernetes/cis-configmap.yaml
       :language: yaml
       :caption: cis-configmap.yaml
       :linenos:
-      :emphasize-lines: 2,5,19,21,32
+      :emphasize-lines: 2,5,19,21,32,39
 
 #. Create the service and deployment
 
