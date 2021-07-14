@@ -117,6 +117,7 @@ Lab 2.1 - Prep Ubuntu
    It should look something like this image below:
 
    .. image:: images/goodEOL.png
+      :scale: 50%
 
 #. Add the kubernetes repo
 
