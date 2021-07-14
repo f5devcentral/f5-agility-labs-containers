@@ -51,17 +51,9 @@ On the jumphost open a terminal and start an SSH session with kube-master1.
       ensure the previous deployment is removed. It does not hurt to run the
       command again so do so now.
 
-#. Review the CIS IngressLink custom resource definition schema. The schema is
-   used to validate the JSON data during creation and updates so that it can
+#. Create the CIS IngressLink custom resource definition. The schema is used
+   to validate the JSON data during creation and updates so that it can
    prevent invalid data, or moreover, malicious attacks.
-
-   .. literalinclude:: ../kubernetes/ingresslink/ingresslink-customresourcedefinition.yaml
-      :language: yaml
-      :caption: ingresslink-customresourcedefinition.yaml
-      :linenos:
-      :emphasize-lines: 2,4,6
-
-#. Create the CIS IngressLink custom resource definition
 
    .. code-block:: bash
 
