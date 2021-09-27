@@ -1,0 +1,8 @@
+---
+
+- name: Prep FCOS
+  hosts: all
+  become: yes
+  tasks:
+  - import_tasks: update-hosts.yaml
+
