@@ -1,1 +1,0 @@
-{"clusterName":"okd4","clusterID":"ec440f5d-f13b-4ec1-8ca0-157edacc9772","infraID":"okd4-jml8z","aws":{"region":"us-east-2","identifier":[{"kubernetes.io/cluster/okd4-jml8z":"owned"},{"openshiftClusterID":"ec440f5d-f13b-4ec1-8ca0-157edacc9772"}],"clusterDomain":"okd4.agility.lab"}}
