@@ -9,7 +9,12 @@ export AWS_CONSOLE_LINK=$(printf https://${AWS_ACCCOUNT_ID}.signin.aws.amazon.co
 export AWS_USER=$( jq -r '.cloudAccounts[].consoleUsername' < ./cloudAccounts.json)
 export AWS_PASSWORD="$(jq -r '.cloudAccounts[].consolePassword' < ./cloudAccounts.json)"
 
-envsubst < ./config.template > ~/.aws/config
+if [ ! -d ~/.aws ]; then
+    mkdir ~/.aws
+    envsubst < ./config.template > ~/.aws/config
+else
+    envsubst < ./config.template > ~/.aws/config
+fi
 
 printf "AWS Access Key ID: \n%s\n\n" ${AWS_ACCESS_KEY_ID}
 printf "AWS Secret key: \n%s\n\n" ${AWS_SECRET_ACCESS_KEY}
