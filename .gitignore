@@ -8,4 +8,6 @@ pdf/*
 terraform.tfstate*
 *.rpm
 *.swp
-ignition/*
+terraform/ignition/*
+cloudAccounts.json
+install_OKD

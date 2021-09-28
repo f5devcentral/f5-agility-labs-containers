@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [[ ! -f $PWD/openshift-install ]]; then
+if [[ ! -f ~/openshift-install ]]; then
     #tar -xzvf openshift-install-linux-4.7.0-0.okd-2021-04-24-103438.tar.gz --exclude='README.md'
     printf "\nDownload and extract the openshift installer for Linux before continuing!"
     printf "\nhttps://github.com/openshift/okd/releases\n"
@@ -23,8 +23,8 @@ printf '  ' >> $PWD/ignition/install-config.yaml && cat ~/.ssh/id_rsa.pub >> $PW
 #sed -i 's/name: okd-.*/'name:\ okd-"$ext"'/' $PWD/ignition/install-config.yaml
 #sed -i 's/cluster_name.*/'cluster-name\ \ =\ \"okd-"$ext"\"'/' $PWD/terraform.tfvars
 
-$PWD/openshift-install create install-config --dir=ignition
-$PWD/openshift-install create manifests --dir=ignition
+~/openshift-install create install-config --dir=ignition
+~/openshift-install create manifests --dir=ignition
 
 rm -f $PWD/ignition/openshift/99_openshift-cluster-api_master-machines-*.yaml
 rm -f $PWD/ignition/openshift/99_openshift-cluster-api_worker-machineset-*.yaml
@@ -33,5 +33,7 @@ sed -i '/privateZone:/,+3 d' $PWD/ignition/manifests/cluster-dns-02-config.yml
 #cp $PWD/okd/ignition/cluster-dns-02-config.yml $PWD/ignition/manifests/cluster-dns-02-config.yml
 #sed -i 's/mastersSchedulable: false/mastersSchedulable: true/' $PWD/ignition/manifests/cluster-scheduler-02-config.yml
 
-$PWD/openshift-install create ignition-configs --dir=ignition
+~/openshift-install create ignition-configs --dir=ignition
 
+#terraform init --upgrade
+#export KUBECONFIG=$PWD/ignition/auth/kubeconfig
