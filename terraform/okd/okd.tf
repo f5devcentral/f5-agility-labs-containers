@@ -190,7 +190,7 @@ resource "null_resource" "wait" {
   provisioner "local-exec" {
 
     command = <<EOF
-    aws ec2 wait instance-status-ok --region ${var.aws_region} --profile ${var.aws_profile} --instance-ids aws_instance.okd-bootstrap.id
+    aws ec2 wait instance-status-ok --region ${var.aws_region} --profile ${var.aws_profile} --instance-ids ${aws_instance.okd-bootstrap.id}
     EOF
   }
 }
@@ -204,7 +204,6 @@ locals {
 resource "aws_instance" "okd-bootstrap" {
   ami                         = data.aws_ami.fcos_ami.id
   instance_type               = "m5.large"
-  count                       = 1
   key_name                    = var.key_name
   vpc_security_group_ids      = [aws_security_group.okd_bootstrap_sg.id]
   iam_instance_profile        = aws_iam_instance_profile.okd_profile.name
