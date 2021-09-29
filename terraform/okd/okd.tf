@@ -186,6 +186,15 @@ resource "aws_iam_instance_profile" "okd_profile" {
 
 # EC2
 
+resource "null_resource" "wait" {
+  provisioner "local-exec" {
+
+    command = <<EOF
+    aws ec2 wait instance-status-ok --region ${var.aws_region} --profile ${var.aws_profile} --instance-ids aws_instance.okd-bootstrap.id
+    EOF
+  }
+}
+
 locals {
   bootstrap-ign = jsonencode({
     "ignition" : { "config" : { "replace" : { "source" : "https://${var.okd_name}-infra.s3.amazonaws.com/bootstrap.ign" } }, "version" : "3.2.0" }
@@ -212,6 +221,11 @@ resource "aws_instance" "okd-bootstrap" {
   depends_on = [
     aws_s3_bucket_object.copy-bootstrap
   ]
+  
+  timeouts {
+    create = "15m"
+    delete = "20m"
+  }
 
   tags = {
     Name = "okd-bootstrap"
@@ -264,8 +278,15 @@ resource "aws_instance" "okd-master" {
   }
 
   depends_on = [
-    aws_s3_bucket_object.copy-master
+    aws_s3_bucket_object.copy-master,
+    aws_instance.okd-bootstrap,
+    null_resource.wait
   ]
+
+  timeouts {
+    create = "15m"
+    delete = "20m"
+  }
 
   tags = {
     Name                                    = "okd-master-${count.index + 1}"
@@ -319,8 +340,15 @@ resource "aws_instance" "okd-worker" {
   }
 
   depends_on = [
-    aws_s3_bucket_object.copy-worker
+    aws_s3_bucket_object.copy-worker,
+    aws_instance.okd-master,
+    null_resource.wait
   ]
+
+  timeouts {
+    create = "15m"
+    delete = "20m"
+  }
 
   tags = {
     Name                                    = "okd-worker-${count.index + 1}"
