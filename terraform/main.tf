@@ -323,7 +323,8 @@ resource "aws_route53_record" "api" {
   type    = "A"
 
   depends_on = [
-    aws_lb.int_lb
+    aws_lb.int_lb,
+    data.aws_route53_zone.private
   ]
 
   alias {
@@ -339,7 +340,8 @@ resource "aws_route53_record" "api-int" {
   type    = "A"
 
   depends_on = [
-    aws_lb.int_lb
+    aws_lb.int_lb,
+    data.aws_route53_zone.private
   ]
 
   alias {
@@ -355,7 +357,8 @@ resource "aws_route53_record" "apps-int" {
   type    = "A"
 
   depends_on = [
-    aws_lb.int_lb
+    aws_lb.int_lb,
+    data.aws_route53_zone.private
   ]
 
   alias {
@@ -364,43 +367,6 @@ resource "aws_route53_record" "apps-int" {
     evaluate_target_health = false
   }
 }
-
-#data "aws_route53_zone" "public" {
-  #name         = var.public_domain
-  #private_zone = false
-#}
-#
-#resource "aws_route53_record" "api-ext" {
-  #zone_id = data.aws_route53_zone.public.zone_id
-  #name    = "api.${var.cluster_name}.${data.aws_route53_zone.public.name}"
-  #type    = "A"
-#
-  #depends_on = [
-    #aws_lb.ext_lb
-  #]
-#
-  #alias {
-    #name                   = aws_lb.ext_lb.dns_name
-    #zone_id                = aws_lb.ext_lb.zone_id
-    #evaluate_target_health = false
-  #}
-#}
-#
-#resource "aws_route53_record" "apps-ext" {
-  #zone_id = data.aws_route53_zone.public.zone_id
-  #name    = "*.apps.${var.cluster_name}.${data.aws_route53_zone.public.name}"
-  #type    = "A"
-#
-  #depends_on = [
-    #aws_lb.ext_lb
-  #]
-#
-  #alias {
-    #name                   = aws_lb.ext_lb.dns_name
-    #zone_id                = aws_lb.ext_lb.zone_id
-    #evaluate_target_health = false
-  #}
-#}
 
 #----- Set default SSH key pair -----
 
