@@ -191,6 +191,7 @@ resource "null_resource" "wait" {
 
     command = <<EOF
     aws ec2 wait instance-status-ok --region ${var.aws_region} --profile ${var.aws_profile} --instance-ids ${aws_instance.okd-bootstrap.id}
+    sleep 120
     EOF
   }
 }
@@ -220,11 +221,6 @@ resource "aws_instance" "okd-bootstrap" {
   depends_on = [
     aws_s3_bucket_object.copy-bootstrap
   ]
-  
-  timeouts {
-    create = "15m"
-    delete = "20m"
-  }
 
   tags = {
     Name = "okd-bootstrap"
@@ -235,21 +231,21 @@ resource "aws_instance" "okd-bootstrap" {
 resource "aws_lb_target_group_attachment" "bootstrap-ext-6443" {
   count            = length(aws_instance.okd-bootstrap)
   target_group_arn = var.ext_tg_6443
-  target_id        = aws_instance.okd-bootstrap[count.index].private_ip
+  target_id        = aws_instance.okd-bootstrap.private_ip
   port             = 6443
 }
 
 resource "aws_lb_target_group_attachment" "bootstrap-int-6443" {
   count            = length(aws_instance.okd-bootstrap)
   target_group_arn = var.int_tg_6443
-  target_id        = aws_instance.okd-bootstrap[count.index].private_ip
+  target_id        = aws_instance.okd-bootstrap.private_ip
   port             = 6443
 }
 
 resource "aws_lb_target_group_attachment" "bootstrap-int-22623" {
   count            = length(aws_instance.okd-bootstrap)
   target_group_arn = var.int_tg_22623
-  target_id        = aws_instance.okd-bootstrap[count.index].private_ip
+  target_id        = aws_instance.okd-bootstrap.private_ip
   port             = 22623
 }
 
@@ -281,11 +277,6 @@ resource "aws_instance" "okd-master" {
     aws_instance.okd-bootstrap,
     null_resource.wait
   ]
-
-  timeouts {
-    create = "15m"
-    delete = "20m"
-  }
 
   tags = {
     Name                                    = "okd-master-${count.index + 1}"
@@ -343,11 +334,6 @@ resource "aws_instance" "okd-worker" {
     aws_instance.okd-master,
     null_resource.wait
   ]
-
-  timeouts {
-    create = "15m"
-    delete = "20m"
-  }
 
   tags = {
     Name                                    = "okd-worker-${count.index + 1}"
