@@ -188,7 +188,7 @@ resource "aws_iam_instance_profile" "okd_profile" {
 
 locals {
   bootstrap-ign = jsonencode({
-    "ignition" : { "config" : { "replace" : { "source" : "https://${var.okd_name}-infra.s3-${var.aws_region}.amazonaws.com/bootstrap.ign" } }, "version" : "3.2.0" }
+    "ignition" : { "config" : { "replace" : { "source" : "https://${var.okd_name}-infra.s3.amazonaws.com/bootstrap.ign" } }, "version" : "3.2.0" }
   })
 }
 
@@ -242,7 +242,7 @@ resource "aws_lb_target_group_attachment" "bootstrap-int-22623" {
 
 locals {
   master-ign = jsonencode({
-    "ignition" : { "config" : { "replace" : { "source" : "https://${var.okd_name}-infra.s3-${var.aws_region}.amazonaws.com/master.ign" } }, "version" : "3.2.0" }
+    "ignition" : { "config" : { "replace" : { "source" : "https://${var.okd_name}-infra.s3.amazonaws.com/master.ign" } }, "version" : "3.2.0" }
   })
 }
 
@@ -264,7 +264,7 @@ resource "aws_instance" "okd-master" {
   }
 
   depends_on = [
-    aws_instance.okd-bootstrap
+    aws_s3_bucket_object.copy-master
   ]
 
   tags = {
@@ -297,7 +297,7 @@ resource "aws_lb_target_group_attachment" "master-int-22623" {
 
 locals {
   worker-ign = jsonencode({
-    "ignition" : { "config" : { "replace" : { "source" : "https://${var.okd_name}-infra.s3-${var.aws_region}.amazonaws.com/worker.ign" } }, "version" : "3.2.0" }
+    "ignition" : { "config" : { "replace" : { "source" : "https://${var.okd_name}-infra.s3.amazonaws.com/worker.ign" } }, "version" : "3.2.0" }
   })
 }
 
@@ -319,7 +319,7 @@ resource "aws_instance" "okd-worker" {
   }
 
   depends_on = [
-    aws_instance.okd-master
+    aws_s3_bucket_object.copy-worker
   ]
 
   tags = {
