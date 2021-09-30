@@ -35,5 +35,7 @@ sed -i '/privateZone:/,+3 d' $PWD/ignition/manifests/cluster-dns-02-config.yml
 
 ~/openshift-install create ignition-configs --dir=ignition
 
-#terraform init --upgrade
-#export KUBECONFIG=$PWD/ignition/auth/kubeconfig
+export KUBECONFIG=$PWD/ignition/auth/kubeconfig
+terraform init --upgrade
+terraform plan
+
