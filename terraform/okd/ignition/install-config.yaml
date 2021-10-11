@@ -27,7 +27,7 @@ networking:
   - 172.30.0.0/16
 platform:
   aws:
-    region: us-east-2
+    region: us-east-1
 publish: Internal
 pullSecret: '{"auths":{"fake":{"auth":"aWQ6cGFzcwo="}}}'
 sshKey: |
