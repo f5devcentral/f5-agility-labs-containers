@@ -310,6 +310,7 @@ resource "aws_route53_zone" "private_zone" {
 
 data "aws_route53_zone" "private" {
   name         = "${var.cluster_name}.${var.public_domain}"
+  vpc_id       = aws_vpc.lab_vpc.id
   private_zone = true
 
   depends_on = [

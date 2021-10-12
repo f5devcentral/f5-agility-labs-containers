@@ -1,13 +1,12 @@
-Appendix 3: Build an Openshift v3 Cluster
+Appendix 9: Build an Openshift v4 Cluster 
 =========================================
 
-.. attention:: **THE CLASS BLUEPRINT IS PRE-CONFIGURED WITH A WORKING CLUSTER.
-   THIS APPENDIX IS FOR DOCUMENTION PURPOSES ONLY.**
+.. important:: These instructions are for OKD 4.7.0.
 
-.. important:: These instructions are for OKD 3.11.
+   `Client tools for OpenShift <https://github.com/openshift/okd/releases/tag/4.7.0-0.okd-2021-09-19-013247>`_
 
-In this module, we will build a 3 node cluster (1x master and 2x nodes)
-utilizing CentOS server images.
+In this module, we will use Terraform to deploy a 5 node cluster (3x master
+and 2x nodes) on AWS utilizing Fedora CoreOS server images.
 
 As a reminder, in this module, our cluster setup is:
 

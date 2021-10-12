@@ -159,7 +159,7 @@ data "aws_iam_policy_document" "instance-assume-role-policy" {
 }
 
 resource "aws_iam_role" "okd-iam-role" {
-  name               = "${var.cluster_name}-okd-iam-role"
+  name_prefix        = "${var.cluster_name}-iam-role"
   assume_role_policy = data.aws_iam_policy_document.instance-assume-role-policy.json
   path               = "/"
 
@@ -180,8 +180,8 @@ resource "aws_iam_role" "okd-iam-role" {
 }
 
 resource "aws_iam_instance_profile" "okd_profile" {
-  name = "${var.cluster_name}-okd-iam-profile"
-  role = aws_iam_role.okd-iam-role.name
+  name_prefix = "${var.cluster_name}-iam-profile"
+  role        = aws_iam_role.okd-iam-role.name
 }
 
 # EC2
