@@ -145,4 +145,3 @@ Via RDP connect to the UDF lab "jumpbox" host.
    
    password = `see hint above`
 
-
