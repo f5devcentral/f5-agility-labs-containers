@@ -9,9 +9,9 @@ Via RDP connect to the UDF lab "jumpbox" host.
 
    .. image:: images/start-term.png
 
-#. "git the OKD Installer and Client tools
+#. "git" the OKD Installer and Client tools
 
-   .. note: These files are preinstalled on the Jumpbox image. If files are
+   .. note:: These files are preinstalled on the Jumpbox image. If files are
       missing use the following instructions.
 
    a. Download the linux client tools
@@ -67,10 +67,10 @@ Via RDP connect to the UDF lab "jumpbox" host.
       
       export KUBECONFIG=$PWD/ignition/auth/kubeconfig
 
-#. Prep terraform
+#. Prep terraform (Run each command one by one)
 
-   .. important:: Be sure to report any errors to the lab team if any errors
-      are returned from running the following commands.
+   .. important:: If any errors are returned from the following commands, be
+      sure to report them to the lab team.
 
    .. code-block:: bash
 
@@ -81,11 +81,11 @@ Via RDP connect to the UDF lab "jumpbox" host.
 #. Deploy cluster
 
    .. attention:: Due to the nature of UDF this process can sometimes errors
-      out and fail. Simply rerun the command below until the process finishes.
+      out and fail. Simply rerun the command until the process finishes.
 
    .. code-block:: bash
 
-      terraform apply -auto-approve
+      terraform apply -auto-approve -parallelism=5
 
 #. Update local hosts file with openshift api info
 
@@ -106,15 +106,18 @@ Via RDP connect to the UDF lab "jumpbox" host.
 
       oc get nodes
 
-#. Once control nodes go active we need to approve the worker nodes CSR's
+#. Once the control nodes go active we need to approve the worker nodes CSR's
 
-   View all the CSR's
+   View all CSR's
 
    .. code-block:: bash
 
-      oc get CSR
+      oc get csr
 
-   Approve any pending CSR'scripts
+   Approve pending CSR's
+
+   .. note:: This command will need to be run twice. Run "oc get csr" between
+      attemtps to see the approved and newly created pending csr's.
 
    .. code-block:: bash
 
@@ -127,4 +130,19 @@ Via RDP connect to the UDF lab "jumpbox" host.
    .. code-block:: bash
       
       watch -n3 oc get co
+
+#. Connect to the openshift web console
+
+   https://console-openshift-console.apps.okd4.agility.lab
+
+   .. hint:: To find the console password
+
+      .. code-block:: bash
+
+         cat ~/agilitydocs/terraform/ignition/auth/kubeadmin-password
+
+   username = kubeadmin
+   
+   password = `see hint above`
+
 
