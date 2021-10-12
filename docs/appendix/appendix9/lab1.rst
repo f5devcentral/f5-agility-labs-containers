@@ -85,13 +85,13 @@ Via RDP connect to the UDF lab "jumpbox" host.
 
    .. code-block:: bash
 
-      terraform apply -auto-approve -parallelism=5
+      terraform apply -auto-approve
 
 #. Update local hosts file with openshift api info
 
-   .. important:: This script finds the external LB's IP and adds an entry to
-      /etc/hosts. This is required to find and connect to the newly created
-      cluster from the jumpbox.
+   .. important:: This script finds the external LB's public IP and adds an
+      entry to /etc/hosts. This is required to find and connect to the newly
+      created cluster from the jumpbox.
 
    .. code-block:: bash
 
@@ -144,4 +144,7 @@ Via RDP connect to the UDF lab "jumpbox" host.
    username = kubeadmin
    
    password = `see hint above`
+
+   .. hint:: The console will not be available until the "console" operator
+      finishes deploying.
 
