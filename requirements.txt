@@ -6,3 +6,4 @@ sphinx-copybutton
 sphinxcontrib-blockdiag
 sphinxcontrib-nwdiag
 sphinxcontrib-serializinghtml
+sphinx-js

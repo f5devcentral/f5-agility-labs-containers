@@ -15,7 +15,7 @@ variable "cidrs" {
 }
 
 data "http" "myIP" {
-  url = "http://ipv4.icanhazip.com"
+  url = "https://api.ipify.org/"
 }
 
 variable "key_name" {
@@ -24,35 +24,25 @@ variable "key_name" {
 variable "public_key_path" {
 }
 
-variable "kube_instance_type" {
+variable "master_inst_type" {
 }
 
-variable "kube_count" {
+variable "master_count" {
 }
 
-variable "okd_instance_type" {
+variable "worker_inst_type" {
 }
 
-variable "okd_count" {
+variable "worker_count" {
 }
 
-variable "bigip_instance_type" {
+variable "public_domain" {
 }
 
-variable "bigip_count" {
+variable "cluster_name" {
 }
 
-variable "bigip_ami_prod_code" {
+data "external" "okd_name" {
+  program = ["bash", "scripts/get_okd_name.sh"]
 }
 
-variable "bigip_ami_name_filt" {
-}
-
-variable "bigip_admin" {
-}
-
-variable "do_rpm" {
-}
-
-variable "as3_rpm" {
-}

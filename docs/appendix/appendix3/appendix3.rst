@@ -1,5 +1,5 @@
-Appendix 3: Build an Openshift Cluster
-======================================
+Appendix 3: Build an Openshift v3 Cluster
+=========================================
 
 .. attention:: **THE CLASS BLUEPRINT IS PRE-CONFIGURED WITH A WORKING CLUSTER.
    THIS APPENDIX IS FOR DOCUMENTION PURPOSES ONLY.**

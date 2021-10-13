@@ -1,20 +1,13 @@
 #--------root/outputs.tf--------
-output "BIGIP_Admin_URL" {
-  value = module.bigip.public_dns
-}
+#output "OKD-Services_IPs" {
+#  value = module.svc.public_ip
+#}
 
-output "BIIGP_Mgmt_IP" {
-  value = module.bigip.public_ip
-}
+#output "OKD-Master_IPs" {
+#  value = module.okd.master-public_ip
+#}
 
-output "BIGIP_Admin_Password" {
-  value = module.bigip.password
-}
+#output "OKD-Worker_IPs" {
+#  value = module.okd.worker-public_ip
+#}
 
-output "KUBE_Cluster_IPs" {
-  value = module.kube.public_ip
-}
-
-output "OKD_Cluster_IPs" {
-  value = module.okd.public_ip
-}

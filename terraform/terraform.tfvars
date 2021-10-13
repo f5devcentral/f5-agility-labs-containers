@@ -1,34 +1,22 @@
 aws_profile = "default"
-aws_region  = "us-west-2"
-vpc_cidr    = "10.1.0.0/16"
+aws_region  = "us-west-1"
+
+vpc_cidr = "10.0.0.0/16"
 
 cidrs = {
-  mgmt1      = "10.1.1.0/24"
-  kubernetes = "10.1.10.0/24"
-  openshift  = "10.1.20.0/24"
+  az1 = "10.0.0.0/20"
+  az2 = "10.0.16.0/20"
+  az3 = "10.0.32.0/20"
 }
 
-key_name            = "container-lab-key"
-public_key_path     = "~/.ssh/id_rsa.pub"
-kube_instance_type  = "t3.medium"
-kube_count          = 3
-okd_instance_type   = "t3.medium"
-okd_count           = 3
-bigip_instance_type = "m5.large"
-bigip_count         = 1
+key_name        = "container-lab-key"
+public_key_path = "~/.ssh/id_rsa.pub"
 
-# BYOL
-#bigip_ami_prod_code  = "6h6xg9ndbxsrp5iyuotryhl0q"
-#bigip_ami_name_filt = "F5 BIGIP-14.1* BYOL-LTM 2Boot*"
+master_inst_type = "m5.xlarge"
+master_count     = 3
+worker_inst_type = "m5.xlarge"
+worker_count     = 2
 
-# PAYG
-bigip_ami_prod_code = "3ouya04g99e5euh4vbxtao1jz"
-bigip_ami_name_filt = "F5 BIGIP-15.0* PAYG-Best 25M*"
-#bigip_ami_name_filt = "F5 BIGIP-14.1* PAYG-Best 25M*"
-#bigip_ami_name_filt  = "F5 Networks BIGIP-14.0* PAYG - Best 25M*"
-#bigip_ami_name_filt  = "F5 Networks BIGIP-13.1* PAYG - Best 25M*"
-#bigip_ami_name_filt  = "F5 Networks Licensed Hourly BIGIP-12.1* Best 25M*"
+public_domain = "agility.lab"
+cluster_name  = "okd4"
 
-bigip_admin = "admin"
-do_rpm      = "f5-declarative-onboarding-1.9.0-1.noarch.rpm"
-as3_rpm     = "f5-appsvcs-3.16.0-6.noarch.rpm"
