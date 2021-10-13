@@ -191,7 +191,7 @@ resource "null_resource" "wait" {
 
     command = <<EOF
     aws ec2 wait instance-status-ok --region ${var.aws_region} --profile ${var.aws_profile} --instance-ids ${aws_instance.okd-bootstrap.id}
-    sleep 240
+    sleep 300
     EOF
   }
 }

@@ -16,21 +16,21 @@ Via RDP connect to the UDF lab "jumpbox" host.
 
    a. Download the linux client tools
  
-      `Client tools for OpenShift <https://github.com/openshift/okd/releases/tag/4.7.0-0.okd-2021-09-19-013247>`_
+      `Client tools for OpenShift <https://github.com/openshift/okd/releases/tag/4.8.0-0.okd-2021-10-10-030117>`_
  
    #. Untar both files
  
       .. code-block:: bash
  
-         tar -xzvf openshift-client-linux-4.7.0-0.okd-2021-09-19-013247.tar.gz
-         tar -zxvf openshift-install-linux-4.7.0-0.okd-2021-09-19-013247.tar.gz
+         tar -xzvf openshift-client-linux-4.8.0-0.okd-2021-10-10-030117.tar.gz
+         tar -zxvf openshift-install-linux-4.8.0-0.okd-2021-10-10-030117.tar.gz
  
    #. Move "oc" & "kubectl" to "/usr/local/bin"
  
       .. code-block:: bash
  
          sudo mv oc /usr/local/bin
-         suod mv kubectl /usr/local/bin
+         sudo mv kubectl /usr/local/bin
    
    #. Move "openshift-install" to user home directory
  
@@ -80,7 +80,7 @@ Via RDP connect to the UDF lab "jumpbox" host.
 
 #. Deploy cluster
 
-   .. attention:: Due to the nature of UDF this process can sometimes errors
+   .. attention:: Due to the nature of UDF this process can sometimes error
       out and fail. Simply rerun the command until the process finishes.
 
    .. code-block:: bash
@@ -97,16 +97,19 @@ Via RDP connect to the UDF lab "jumpbox" host.
 
       ./scripts/update_hosts.sh
 
-#. Once terraform successfully creates all the openshift objects, monitor the
-   process for active control nodes
+#. Once terraform successfully creates all the openshift objects, you can view
+   the the node status.
 
-   .. note:: Run this command several times until all nodes show active.
+   .. note:: Run this command several times until all node status is "Ready".
 
    .. code-block:: bash
 
       oc get nodes
 
-#. Once the control nodes go active we need to approve the worker nodes CSR's
+#. To add the worker nodes to the cluster we need to approve the worker node
+   CSR's.
+
+   .. note:: It may take several minutes before the "Pending" CSR's appear.
 
    View all CSR's
 
@@ -123,9 +126,9 @@ Via RDP connect to the UDF lab "jumpbox" host.
 
       oc get csr -o go-template='{{range .items}}{{if not .status}}{{.metadata.name}}{{"\n"}}{{end}}{{end}}' | xargs --no-run-if-empty oc adm certificate approve 
 
-#. Watch for cluster operators to deploy
+#. Watch for cluster operators deploy.
 
-   .. note:: This process can take up to 30 minutes
+   .. note:: This process can take up to ~10 minutes
 
    .. code-block:: bash
       
