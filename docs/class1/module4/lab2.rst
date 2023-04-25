@@ -48,12 +48,15 @@ To access the application we'll use the browser on the jumpbox.
 
       X-Real-IP: The client IP making the request
 
-#. Before starting the next class exit the session from kube-master1 and go
-   back to the jumpbox.
+#. Before starting the next class run the following commands to clean-up the BIG-IP and exit the session from kube-master1.
 
    .. code-block:: bash
 
+      kubectl delete -f ingresslink/vs-ingresslink.yaml
+      kubectl delete -f ingresslink/ingresslink-deployment.yaml
       exit
+      
+.. attention:: This is a **CRITICAL** step if you're moving on to the next lab.
 
 .. attention:: This concludes **Class 1 - CIS and Kubernetes**. Feel free to
    experiment with any of the settings. The lab will be destroyed at the end of
