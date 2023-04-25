@@ -48,7 +48,7 @@ Prep the Kubernetes Cluster
 
    .. code-block:: bash
 
-      git clone https://github.com/nginxinc/kubernetes-ingress/ ~/kubernetes-ingress
+      git clone https://github.com/nginxinc/kubernetes-ingress/ --branch v2.4.2 ~/kubernetes-ingress
 
 #. Change to the "deployments" directory of the newly cloned repo
 
