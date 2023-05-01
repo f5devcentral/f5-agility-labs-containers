@@ -5,12 +5,12 @@ The BIG-IP Controller for OpenShift installs as a
 `Deployment object <https://kubernetes.io/docs/concepts/workloads/controllers/deployment/>`_
 
 .. seealso:: The official CIS documentation is here:
-   `Install the BIG-IP Controller: Openshift <https://clouddocs.f5.com/containers/v2/openshift/kctlr-openshift-app-install.html>`_
+   `Install the BIG-IP Controller: Openshift <https://clouddocs.f5.com/containers/latest/userguide/openshift/#cis-installation>`_
 
 In this lab we'll use NodePort mode to deploy an application to the BIG-IP.
 
 .. seealso::
-   For more information see `BIG-IP Controller Modes <http://clouddocs.f5.com/containers/v2/kubernetes/kctlr-modes.html>`_
+   For more information see `BIG-IP Deployment Options <https://clouddocs.f5.com/containers/latest/userguide/config-options.html>`_
 
 BIG-IP Setup
 ------------
@@ -173,9 +173,9 @@ CIS Deployment
 .. seealso:: For a more thorough explanation of all the settings and options see
    `F5 Container Ingress Service - Openshift <https://clouddocs.f5.com/containers/v2/openshift/>`_
 
-Now that BIG-IP is licensed and prepped with the "okd" partition, we need to
-define a `Kubernetes deployment <https://kubernetes.io/docs/user-guide/deployments/>`_
-and create a `Kubernetes secret <https://kubernetes.io/docs/user-guide/secrets/>`_
+Now that BIG-IP is licensed and prepped with the "okd" partition, we
+need to define a `Kubernetes deployment <https://docs.okd.io/3.11/dev_guide/deployments/how_deployments_work.html>`_
+and create a `Kubernetes secret <https://docs.okd.io/3.11/dev_guide/secrets.html>`_
 to hide our bigip credentials.
 
 #. Create bigip login secret
@@ -211,7 +211,7 @@ to hide our bigip credentials.
 
 #. At this point we have two deployment mode options, Nodeport or ClusterIP.
    This class will feature both modes. For more information see
-   `BIG-IP Controller Modes <http://clouddocs.f5.com/containers/v2/kubernetes/kctlr-modes.html>`_
+   `BIG-IP Deployment Options <https://clouddocs.f5.com/containers/latest/userguide/config-options.html>`_
 
    Lets start with **Nodeport mode**
 

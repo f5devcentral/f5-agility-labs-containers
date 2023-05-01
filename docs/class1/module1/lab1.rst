@@ -5,12 +5,12 @@ The BIG-IP Controller for Kubernetes installs as a
 `Deployment object <https://kubernetes.io/docs/concepts/workloads/controllers/deployment/>`_
 
 .. seealso:: The official CIS documentation is here:
-   `Install the BIG-IP Controller: Kubernetes <https://clouddocs.f5.com/containers/v2/kubernetes/kctlr-app-install.html>`_
+   `Install the BIG-IP Controller: Kubernetes <https://clouddocs.f5.com/containers/latest/userguide/kubernetes/#cis-installation>`_
 
 In this lab we'll use NodePort mode to deploy an application to the BIG-IP.
 
 .. seealso::
-   For more information see `BIG-IP Controller Modes <http://clouddocs.f5.com/containers/v2/kubernetes/kctlr-modes.html>`_
+   For more information see `BIG-IP Deployment Options <https://clouddocs.f5.com/containers/latest/userguide/config-options.html>`_
 
 BIG-IP Setup
 ------------
@@ -138,8 +138,8 @@ CIS Deployment
    `F5 Container Ingress Services - Kubernetes <https://clouddocs.f5.com/containers/v2/kubernetes/>`_
 
 Now that BIG-IP is licensed and prepped with the "kubernetes" partition, we
-need to define a `Kubernetes deployment <https://kubernetes.io/docs/user-guide/deployments/>`_
-and create a `Kubernetes secret <https://kubernetes.io/docs/user-guide/secrets/>`_
+need to define a `Kubernetes deployment <https://kubernetes.io/docs/concepts/workloads/controllers/deployment/>`_
+and create a `Kubernetes secret <https://kubernetes.io/docs/concepts/configuration/secret/>`_
 to hide our bigip credentials.
 
 #. Create bigip login secret
@@ -175,7 +175,7 @@ to hide our bigip credentials.
 
 #. At this point we have two deployment mode options, Nodeport or ClusterIP.
    This class will feature both modes. For more information see
-   `BIG-IP Controller Modes <http://clouddocs.f5.com/containers/v2/kubernetes/kctlr-modes.html>`_
+   `BIG-IP Controller Modes <https://clouddocs.f5.com/containers/latest/userguide/config-options.html>`_
 
    Lets start with **Nodeport mode**
 
