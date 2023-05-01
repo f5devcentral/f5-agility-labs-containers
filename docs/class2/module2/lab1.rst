@@ -5,7 +5,7 @@ In the previous moudule we learned about Nodeport Mode. Here we'll learn
 about ClusterIP Mode.
 
 .. seealso::
-   For more information see `BIG-IP Controller Modes <http://clouddocs.f5.com/containers/v2/kubernetes/kctlr-modes.html>`_
+   For more information see `BIG-IP Deployment Options <https://clouddocs.f5.com/containers/latest/userguide/config-options.html>`_
 
 BIG-IP Setup
 ------------
