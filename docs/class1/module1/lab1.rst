@@ -61,7 +61,7 @@ Via RDP connect to the UDF lab "jumpbox" host.
       `Application Services 3 Extension Documentation <https://clouddocs.f5.com/products/extensions/f5-appsvcs-extension/latest/>`_
 
    - GoTo: :menuselection:`iApps --> Package Management LX` and confirm
-     "f5-appsvcs" is in the last as shown below.
+     "f5-appsvcs" is in the list as shown below.
 
      .. image:: ../images/confirm-as3-installed.png
 
