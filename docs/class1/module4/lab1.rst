@@ -23,7 +23,6 @@ necessary header with IP information.
    .. literalinclude:: ../kubernetes/ingresslink/Proxy_Protocol_iRule
       :language: tcl
       :caption: Proxy_Protocol_iRule
-      :linenos:
 
 #. Click Finished
 
