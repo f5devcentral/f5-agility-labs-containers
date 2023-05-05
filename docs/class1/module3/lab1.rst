@@ -10,7 +10,7 @@ Lab 3.1 - Deploy the NGINX Ingress Controller
 .. attention:: In this lab were simply using the free version of NGINX.
 
    In a customer environment, an NGINX+ container would need to be built using
-   a cert and key from the `NGINX Customer Portal`_.
+   a cert and key from the `F5 Customer Portal`_.
 
    Click here to see the `Key Differences`_
 
@@ -48,7 +48,7 @@ Prep the Kubernetes Cluster
 
    .. code-block:: bash
 
-      git clone https://github.com/nginxinc/kubernetes-ingress/ ~/kubernetes-ingress
+      git clone https://github.com/nginxinc/kubernetes-ingress/ --branch v2.4.2 ~/kubernetes-ingress
 
 #. Change to the "deployments" directory of the newly cloned repo
 
@@ -205,7 +205,7 @@ Access NGINX From Outside the Cluster
 
 .. _`project`: https://github.com/kubernetes/ingress-nginx
 .. _`NGINX Ingress Controller`: https://github.com/nginxinc/kubernetes-ingress
-.. _`NGINX Customer Portal`: https://cs.nginx.com
-.. _`Key Differences`: https://github.com/nginxinc/kubernetes-ingress/blob/master/docs/nginx-ingress-controllers.md
+.. _`F5 Customer Portal`: https://my.f5.com
+.. _`Key Differences`: https://www.nginx.com/blog/guide-to-choosing-ingress-controller-part-3-open-source-default-commercial/
 .. _`Installing the Ingress Controller`: https://docs.nginx.com/nginx-ingress-controller/installation/installation-with-manifests/
 .. _`available`: https://docs.nginx.com/nginx-ingress-controller/configuration/global-configuration/configmap-resource/
