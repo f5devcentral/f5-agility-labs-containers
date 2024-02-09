@@ -13,7 +13,7 @@ To deploy our application, we will need the following definitions:
   in a container.
 
 - Define the **Service** resource: this is an abstraction which defines a
-  logical set of pods and a policy by which to access them. Expose the service
+  logical set of pods and a policy by which to access them, and exposes the service
   on a port on each node of the cluster (the same port on each node). You’ll
   be able to contact the service on any <NodeIP>:NodePort address. When you set
   the type field to "NodePort", the master will allocate a port from a

@@ -15,9 +15,9 @@ Getting Started
 
 .. attention::
    * For anyone wishing to take this lab at a later date, the lab is hosted on
-     the F5 UDF Environment, and is called **"Containers - Kubernetes &
-     OpenShift Integration with BIG-IP"**. Please work with your F5 Account
-     Team for access.
+     the F5 UDF Environment, and is called
+     **"AppWorld 2024 - F5 NGINX/CIS Ingress Labs"**.
+     Please work with your F5 Account Team for access.
 
    * Once you have established remote access to your lab jumpbox, Firefox
      should automaticaly start. If not a desktop icon has been provided.

@@ -36,9 +36,10 @@ previous session.
 
    .. image:: ../images/f5-container-connector-bigip-partition-setup.png
 
+   # Via the CLI:
+
    .. code-block:: bash
 
-      # From the CLI:
       ssh admin@10.1.1.4 tmsh create auth partition kubernetes
 
 #. Install AS3 via the management console
@@ -56,9 +57,10 @@ previous session.
 
    .. image:: ../images/create-fl-vxlan-profile.png
 
+   # Via the CLI:
+
    .. code-block:: bash
 
-      # From the CLI:
       ssh admin@10.1.1.4 tmsh create net tunnels vxlan fl-vxlan { app-service none port 8472 flooding-type none }
 
 #. Create a vxlan tunnel.
@@ -72,9 +74,10 @@ previous session.
 
    .. image:: ../images/create-fl-vxlan-tunnel.png
 
+   # Via the CLI:
+
    .. code-block:: bash
 
-      # From the CLI:
       ssh admin@10.1.1.4 tmsh create net tunnels tunnel fl-tunnel { app-service none key 1 local-address 10.1.1.4 profile fl-vxlan }
 
 #. Create the vxlan tunnel self-ip
@@ -101,9 +104,10 @@ previous session.
 
    .. image:: ../images/create-fl-vxlan-selfip.png
 
+   # Via the CLI:
+
    .. code-block:: bash
 
-      # From the CLI:
       ssh admin@10.1.1.4 tmsh create net self fl-vxlan-selfip { address 10.244.20.1/16 vlan fl-tunnel allow-service all }
 
 CIS Deployment
@@ -124,10 +128,10 @@ CIS Deployment
    steps. From the jumpbox terminal run the following command at bigip1. You'll
    want to copy the displayed "MAC Address".
 
-   .. code-block:: bash
+   # If directed to, accept the authenticity of the host by typing "yes" and hitting Enter to continue.
+   # The password is "admin"
 
-      # If directed to, accept the authenticity of the host by typing "yes" and hitting Enter to continue.
-      # The password is "admin"
+   .. code-block:: bash
 
       ssh admin@10.1.1.4 tmsh show net tunnels tunnel fl-tunnel all-properties
 
@@ -141,6 +145,8 @@ CIS Deployment
    .. code-block:: bash
 
       vim ~/agilitydocs/docs/class1/kubernetes/bigip-node.yaml
+
+   .. code-block:: bash
 
       i           # To enable insert mode and start editing
                   # Replace the current MAC addr with the one previously copied
@@ -221,8 +227,7 @@ CIS Deployment
 
       kubectl get pods -o wide -n kube-system
 
-   We can see that our container, in this example, is running on kube-node1
-   below.
+   In the example below we can see that our container is running on kube-node2.
 
    .. image:: ../images/f5-container-connector-locate-controller-container2.png
 
@@ -242,5 +247,5 @@ of checking the Docker container as described in the previos module.
 
    .. image:: ../images/f5-container-connector-check-logs-kubectl2.png
 
-   .. attention:: You will see **ERROR** in this log output. These errors can
-      be ignored. The lab will work as expected.
+   .. attention:: Ingore any **ERROR** you might see in this log output.
+      These errors can be ignored. The lab will work as expected.

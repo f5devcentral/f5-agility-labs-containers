@@ -17,7 +17,7 @@ BIG-IP Setup
 
 Via RDP connect to the UDF lab "jumpbox" host.
 
-.. note:: Username and password are: **ubuntu/ubuntu**
+.. note:: Username and password are: **ubuntu/HelloUDF**
 
 #. Open firefox and connect to bigip1 management console. For your convenience
    there's a shortcut on the firefox toolbar.
@@ -47,9 +47,10 @@ Via RDP connect to the UDF lab "jumpbox" host.
 
    .. image:: ../images/f5-container-connector-bigip-partition-setup.png
 
+   # From the CLI:
+
    .. code-block:: bash
 
-      # From the CLI:
       ssh admin@10.1.1.4 tmsh create auth partition kubernetes
 
 #. Verify AS3 is installed.
@@ -82,9 +83,9 @@ Explore the Kubernetes Cluster
 
    .. image:: ../images/start-term.png
 
-   .. code-block:: bash
+#. If prompted, accept the authenticity of the host by typing "yes" and hitting Enter to continue.
 
-      # If directed to, accept the authenticity of the host by typing "yes" and hitting Enter to continue.
+   .. code-block:: bash
 
       ssh kube-master1
 
@@ -235,9 +236,10 @@ check the logs, kubectl command or docker command.
 #. Using ``kubectl`` command: you need to use the full name of your pod as
    shown in the previous image.
 
+   # For example:
+
    .. code-block:: bash
 
-      # For example:
       kubectl logs k8s-bigip-ctlr-7469c978f9-6hvbv -n kube-system
 
    .. image:: ../images/f5-container-connector-check-logs-kubectl.png
@@ -248,9 +250,9 @@ check the logs, kubectl command or docker command.
 
    .. important:: Be sure to check which Node your "connector" is running on.
 
-   .. code-block:: bash
+   # If directed to, accept the authenticity of the host by typing "yes" and hitting Enter to continue.
 
-      # If directed to, accept the authenticity of the host by typing "yes" and hitting Enter to continue.
+   .. code-block:: bash
 
       ssh kube-node2
 

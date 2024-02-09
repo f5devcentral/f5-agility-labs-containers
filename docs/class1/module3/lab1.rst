@@ -7,7 +7,7 @@ Lab 3.1 - Deploy the NGINX Ingress Controller
    supported/developed by NGINX (F5). The "`NGINX Ingress Controller`_" from
    NGINX (F5) is.
 
-.. attention:: In this lab were simply using the free version of NGINX.
+.. attention:: In this lab we're simply using the free version of NGINX.
 
    In a customer environment, an NGINX+ container would need to be built using
    a cert and key from the `F5 Customer Portal`_.
@@ -36,9 +36,9 @@ Prep the Kubernetes Cluster
 
    .. image:: ../images/start-term.png
 
-   .. code-block:: bash
+   # If directed to, accept the authenticity of the host by typing "yes" and hitting Enter to continue.
 
-      # If directed to, accept the authenticity of the host by typing "yes" and hitting Enter to continue.
+   .. code-block:: bash
 
       ssh kube-master1
 

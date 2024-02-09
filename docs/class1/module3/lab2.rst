@@ -47,7 +47,7 @@ As before all the necesary files are on **kube-master1** in
 
 #. Review hello-world NGINX service ``nginx-ingress-hello-world.yaml``
 
-   .. note:: This create's our app on NGINX. You can see in line 14 and 15 how
+   .. note:: This create's our app on NGINX. You can see in line 16 and 18 how
       we reference the previouly created hello-world service by name and port.
       On line 9 we define the expected host header. Just as before this host is
       in the local host file (/etc/hosts) and will be needed to access to the
@@ -150,7 +150,7 @@ two files, a service and configmap.
    firefox.
 
    .. warning:: Don't forget to select the proper partition. In this case we
-      need to look at the "AS3" partition because we're using AS#. This
+      need to look at the "AS3" partition because we're using AS3. This
       partition was auto created by AS3 and named after the Tenant which
       happens to be "AS3".
 

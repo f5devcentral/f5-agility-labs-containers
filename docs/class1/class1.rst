@@ -24,7 +24,7 @@ We will leverage the following setup to configure the Kubernetes environment.
      - **Credentials**
    * - jumpbox
      - 10.1.1.5
-     - ubuntu/ubuntu
+     - ubuntu/HelloUDF
    * - bigip1
      - 10.1.1.4
      - admin/admin
