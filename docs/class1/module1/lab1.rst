@@ -15,14 +15,16 @@ In this lab we'll use NodePort mode to deploy an application to the BIG-IP.
 BIG-IP Setup
 ------------
 
-Via RDP connect to the UDF lab "jumpbox" host.
+#. Go back to the **Deployment** tab of your UDF lab session at https://udf.f5.com 
+   and connect to **BIG-IP1** using the **TMUI** access method.
 
-.. note:: Username and password are: **ubuntu/HelloUDF**
+   .. image:: ../images/TMUI.png
 
-#. Open firefox and connect to bigip1 management console. For your convenience
-   there's a shortcut on the firefox toolbar.
+#. Login with username: **admin** and password: **admin**.
 
-   .. note:: Username and password are: **admin/admin**
+   .. image:: ../images/TMUILogin.png
+
+   .. image:: ../images/TMUILicense.png
 
    .. attention::
 
@@ -41,17 +43,17 @@ Via RDP connect to the UDF lab "jumpbox" host.
 #. First we need to setup a partition that will be used by F5 Container Ingress
    Service.
 
-   - GoTo: :menuselection:`System --> Users --> Partition List`
-   - Create a new partition called "kubernetes" (use default settings)
+   - Browse to: :menuselection:`System --> Users --> Partition List`
+   - Create a new partition called "**kubernetes**" (use default settings)
    - Click Finished
 
    .. image:: ../images/f5-container-connector-bigip-partition-setup.png
 
-   # From the CLI:
+   # Via the CLI:
 
    .. code-block:: bash
 
-      ssh admin@10.1.1.4 tmsh create auth partition kubernetes
+      tmsh create auth partition kubernetes
 
 #. Verify AS3 is installed.
 
@@ -61,16 +63,16 @@ Via RDP connect to the UDF lab "jumpbox" host.
    .. seealso:: For more info click here:
       `Application Services 3 Extension Documentation <https://clouddocs.f5.com/products/extensions/f5-appsvcs-extension/latest/>`_
 
-   - GoTo: :menuselection:`iApps --> Package Management LX` and confirm
-     "f5-appsvcs" is in the list as shown below.
+   - Browse to: :menuselection:`iApps --> Package Management LX` and confirm
+     "*f5-appsvcs*" is in the list as shown below.
 
      .. image:: ../images/confirm-as3-installed.png
 
-#. If AS3 is NOT installed follow these steps:
+#. If *AS3* **is NOT** installed follow these steps:
 
    - Click here to: `Download latest AS3 <https://github.com/F5Networks/f5-appsvcs-extension/releases>`_
 
-   - Go back to: :menuselection:`iApps --> Package Management LX`
+   - Browse back to: :menuselection:`iApps --> Package Management LX`
 
      - Click Import
      - Browse and select downloaded AS3 RPM
@@ -79,22 +81,25 @@ Via RDP connect to the UDF lab "jumpbox" host.
 Explore the Kubernetes Cluster
 ------------------------------
 
-#. On the jumphost open a terminal and start an SSH session with kube-master1.
+#. Go back to the **Deployment** tab of your UDF lab session at https://udf.f5.com 
+   and connect to **kube-master1** using the **WEB SHELL** access method.
 
-   .. image:: ../images/start-term.png
+   .. image:: ../images/WEBSHELL.png
 
-#. If prompted, accept the authenticity of the host by typing "yes" and hitting Enter to continue.
+#. The CLI will appear in a new window or tab.
+   Switch to the **ubuntu** user account using the "**su**" command.
+
+   .. image:: ../images/WEBSHELLroot.png
 
    .. code-block:: bash
 
-      ssh kube-master1
+      su ubuntu
 
-   .. image:: ../images/sshtokubemaster1.png
+#. "**git**" the lab files and set the working directy with the "**cd**" command. 
 
-#. "git" the demo files
+   .. note:: These files should already be there and automatically updated upon login of the ubuntu user account.
 
-   .. note:: These files should already be there and upon login updated. If not
-      use the following command to clone the repo.
+   .. image:: ../images/gitrepo.png
 
    .. code-block:: bash
 
@@ -110,11 +115,11 @@ Explore the Kubernetes Cluster
 
    To list all nodes that are known to the master:
 
+   .. image:: ../images/kube-get-nodes.png
+
    .. code-block:: bash
 
       kubectl get nodes
-
-   .. image:: ../images/kube-get-nodes.png
 
    .. attention::
       If the node STATUS shows **NotReady** or **SchedulingDisabled** contact

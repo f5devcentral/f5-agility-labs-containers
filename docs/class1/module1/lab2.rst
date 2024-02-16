@@ -94,13 +94,20 @@ required files and launch them.
       from the outside. In this example it's "32722", highlighted above.
 
 #. Now that we have deployed our application sucessfully, we can check the
-   configuration on bigip1. Switch back to the open management session on
-   firefox.
+   configuration on BIG-IP1.
+   Go back to the **Deployment** tab of your UDF lab session at https://udf.f5.com 
+   and connect to **BIG-IP1** using the **TMUI** access method.
+
+   .. image:: ../images/TMUI.png
+
+#. Login with username: **admin** and password: **admin**.
+
+   .. image:: ../images/TMUILogin.png
+
+#. Browser to: :menuselection:`Local Traffic --> Virtual Servers` and select the **kubernetes** partition.
 
    .. warning:: Don't forget to select the "kubernetes" partition or you'll
       see nothing.
-
-   GoTo: :menuselection:`Local Traffic --> Virtual Servers`
 
    Here you can see a new Virtual Server, "ingress_10.1.1.4_80" was created,
    listening on 10.1.1.4:80 in partition "kubernetes".
@@ -117,29 +124,40 @@ required files and launch them.
    .. note:: You can see that the pool members listed are all the cluster
       node IPs on port 32722. (**NodePort mode**)
 
-#. Access your web application via firefox on the jumpbox.
+#. Now let's test access to the new web application via **Firefox** on the **jumpbox**.
+   To do this, go back to the **Deployment** tab of your UDF lab session at
+   https://udf.f5.com and connect to **superjump** using the **Firefox** access method.
 
-   .. note:: Open a new tab and select the "Hello, World" shortcut or type
-      http://10.1.1.4 in the URL field.
+   .. note:: The web application is not directly accessible from the public Internet.
+      But the **jumpbox** system is connected to the same internal virtual lab network 
+      and the **Firefox** access method provides *browser-in-a-browser* functionality
+      that allows remote browsing to the new private web site.
+
+   .. image:: ../images/udffirefox.png
+
+#. The *Firefox* application installed on the superjump system's will appear in your browser (i.e., a *browser-in-a-browser*).
+   Find and click on the "**Hello, World**" bookmark/shortcut, or type http://10.1.1.4 in the URL field.
+
+   .. image:: ../images/ffhelloworld.png
 
    .. image:: ../images/f5-container-connector-access-app.png
 
-#. To check traffic distribution, hit Refresh many times on your open browser
-   session. Then go back to the management console open on firefox.
+#. To check traffic distribution, hit *Refresh* many times on your open browser
+   session. Then go back to the BIG-IP TMUI management console.
 
-   GoTo: :menuselection:`Local Traffic --> Pools --> Pool list -->
+   Browse to: :menuselection:`Local Traffic --> Pools --> Pool list -->
    ingress_default_f5-hello-world-web --> Statistics`
 
    .. image:: ../images/f5-container-connector-check-app-ingress-stats.png
 
    .. note:: Are you seeing traffic distribution as shown in the image above?
-      If not why? (HINT: Check the virtual server settings.)
+      If not why? (**HINT**: *Check the virtual server settings... Resources tab...*)
 
 #. Delete Hello-World
 
-   .. important:: Do not skip this step. Instead of reusing some of these
+   .. important:: **Do not skip this step. Instead of reusing some of these
       objects, the next lab we will re-deploy them to avoid conflicts and
-      errors.
+      errors.**
 
    .. code-block:: bash
 
