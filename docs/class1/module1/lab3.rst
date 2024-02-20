@@ -29,7 +29,21 @@ To deploy our application, we will need the following definitions:
 App Deployment
 --------------
 
-On **kube-master1** we will create all the required files:
+We will use the command line on **kube-master1** to create all the
+required files and launch them.
+
+#. Go back to the **Deployment** tab of your UDF lab session at https://udf.f5.com 
+   and connect to **kube-master1** using the **WEB SHELL** access method.
+
+   .. image:: ../images/WEBSHELL.png
+
+#. If required, switch to the **ubuntu** user account using the following "**su**" command.
+
+   .. image:: ../images/WEBSHELLroot.png
+
+   .. code-block:: bash
+
+      su ubuntu
 
 #. Create a file called ``deployment-hello-world.yaml``
 
@@ -98,13 +112,13 @@ On **kube-master1** we will create all the required files:
 
    .. warning:: Don't forget to select the proper partition. Previously we
       checked the "kubernetes" partition. In this case we need to look at
-      the "AS3" partition. This partition was auto created by AS3 and named
-      after the Tenant which happens to be "AS3".
+      the "**AS3**" partition. This partition was auto created by AS3 and named
+      after the Tenant which happens to be "**AS3**".
 
    Goto :menuselection:`Local Traffic --> Virtual Servers`
 
-   Here you can see a new Virtual Server, "serviceMain" was created,
-   listening on 10.1.1.4:80 in partition "AS3".
+   Here you can see a new Virtual Server, "**serviceMain**" was created,
+   listening on **10.1.1.4:80** in partition "**AS3**".
 
    .. image:: ../images/f5-container-connector-check-app-bigipconfig-as3.png
 
@@ -118,14 +132,14 @@ On **kube-master1** we will create all the required files:
    .. note:: You can see that the pool members listed are all the cluster
       node IPs on port 32734. (**NodePort mode**)
 
-#. Access your web application via firefox on the jumpbox.
+#. Access your web application via **Firefox** on the **superjump**.
 
    .. note:: Select the "Hello, World" shortcut or type http://10.1.1.4 in the
       URL field.
 
    .. image:: ../images/f5-container-connector-access-app.png
 
-#. Hit Refresh many times and go back to your **BIG-IP** UI
+#. Hit Refresh many times and go back to your **BIG-IP** TMUI window
 
    Goto: :menuselection:`Local Traffic --> Pools --> Pool list -->
    "web_pool" --> Statistics` to see that traffic is distributed as expected.
@@ -133,8 +147,7 @@ On **kube-master1** we will create all the required files:
    .. image:: ../images/f5-container-connector-check-app-bigip-stats-as3.png
 
    .. note:: Why is all the traffic directed to one pool member? The answer can
-      be found by instpecting the "serviceMain" virtual service in the
-      management GUI.
+      be found by instpecting the "serviceMain" virtual service...
 
 #. Scale the f5-hello-world app
 

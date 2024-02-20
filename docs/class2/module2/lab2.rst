@@ -101,7 +101,7 @@ On **kube-master1** we will create all the required files:
    .. note:: You can see that the pool members IP addresses are assigned from
       the overlay network (**ClusterIP mode**)
 
-#. Access your web application via firefox on the jumpbox.
+#. Access your web application via **Firefox** on the **superjump**.
 
    .. note:: Select the "mysite.f5demo.com" shortcut or type
       http://mysite.f5demo.com in the URL field.

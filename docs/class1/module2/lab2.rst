@@ -71,30 +71,36 @@ On **kube-master1** we will create all the required files:
       our deployment file) and the flannel IP assigned to the pod.
 
 #. Now that we have deployed our application sucessfully, we can check the
-   configuration on bigip1. Switch back to the open management session on
-   firefox.
+   configuration on BIG-IP1. Go back to the **Deployment** tab of your UDF lab session at https://udf.f5.com 
+   and connect to **BIG-IP1** using the **TMUI** access method.
+
+   .. image:: ../images/TMUI.png
+
+#. Login with username: **admin** and password: **admin**.
+
+   .. image:: ../images/TMUILogin.png
+
+#. Browse to: :menuselection:`Local Traffic --> Virtual Servers`
 
    .. warning:: Don't forget to select the "kubernetes" partition or you'll
       see nothing.
 
-   GoTo: :menuselection:`Local Traffic --> Virtual Servers`
-
-   Here you can see a new Virtual Server, "ingress_10.1.1.4_80" was created,
-   listening on 10.1.1.4:80 in partition "kubernetes".
+   Here you can see a new Virtual Server, "**ingress_10.1.1.4_80**" was created,
+   listening on **10.1.1.4:80** in partition "**kubernetes**".
 
    .. image:: ../images/f5-container-connector-check-app-ingress2.png
 
 #. Check the Pools to see a new pool and the associated pool members.
 
-   GoTo: :menuselection:`Local Traffic --> Pools` and select the
-   "ingress_default_f5-hello-world-web" pool. Click the Members tab.
+   Browse to: :menuselection:`Local Traffic --> Pools` and select the
+   "**ingress_default_f5-hello-world-web**" pool. Click the Members tab.
 
    .. image:: ../images/f5-container-connector-check-app-ingress-pool2.png
 
    .. note:: You can see that the pool members IP addresses are assigned from
       the overlay network (**ClusterIP mode**)
 
-#. Access your web application via firefox on the jumpbox.
+#. Access your web application via Firefox on the superjump.
 
    .. note:: Select the "Hello, World" shortcut or type http://10.1.1.4 in the
       URL field.

@@ -124,7 +124,7 @@ files:
    .. note:: You can see that the pool members listed are all the cluster
       node IPs on port 30459. (**NodePort mode**)
 
-#. Access your web application via firefox on the jumpbox.
+#. Access your web application via **Firefox** on the **superjump**.
 
    .. note:: Open a new tab and select the "mysite.f5demo.com" shortcut or type
       http://mysite.f5demo.com in the URL field.

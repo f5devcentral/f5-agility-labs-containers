@@ -15,7 +15,7 @@ In this lab we'll use NodePort mode to deploy an application to the BIG-IP.
 BIG-IP Setup
 ------------
 
-#. Go back to the **Deployment** tab of your UDF lab session at https://udf.f5.com 
+#. Browse to the **Deployment** tab of your UDF lab session at https://udf.f5.com 
    and connect to **BIG-IP1** using the **TMUI** access method.
 
    .. image:: ../images/TMUI.png
@@ -87,7 +87,7 @@ Explore the Kubernetes Cluster
    .. image:: ../images/WEBSHELL.png
 
 #. The CLI will appear in a new window or tab.
-   Switch to the **ubuntu** user account using the "**su**" command.
+   Switch to the **ubuntu** user account using the following "**su**" command.
 
    .. image:: ../images/WEBSHELLroot.png
 

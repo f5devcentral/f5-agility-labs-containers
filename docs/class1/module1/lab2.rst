@@ -29,8 +29,22 @@ To deploy our application, we will need the following definitions:
 App Deployment
 --------------
 
-Back to the terminal and SSH session on **kube-master1** we will create all the
+We will use the command line on **kube-master1** to create all the
 required files and launch them.
+
+#. Go back to the **Deployment** tab of your UDF lab session at https://udf.f5.com 
+   and connect to **kube-master1** using the **WEB SHELL** access method.
+
+   .. image:: ../images/WEBSHELL.png
+
+#. If required, switch to the **ubuntu** user account using the following "**su**" command.
+
+   .. image:: ../images/WEBSHELLroot.png
+
+   .. code-block:: bash
+
+      su ubuntu
+
 
 #. Create a file called ``deployment-hello-world.yaml``
 
@@ -104,7 +118,7 @@ required files and launch them.
 
    .. image:: ../images/TMUILogin.png
 
-#. Browser to: :menuselection:`Local Traffic --> Virtual Servers` and select the **kubernetes** partition.
+#. Browse to: :menuselection:`Local Traffic --> Virtual Servers` and select the **kubernetes** partition.
 
    .. warning:: Don't forget to select the "kubernetes" partition or you'll
       see nothing.
@@ -124,19 +138,19 @@ required files and launch them.
    .. note:: You can see that the pool members listed are all the cluster
       node IPs on port 32722. (**NodePort mode**)
 
-#. Now let's test access to the new web application via **Firefox** on the **jumpbox**.
-   To do this, go back to the **Deployment** tab of your UDF lab session at
+#. Now let's test access to the new web application "*through*"" **Firefox** on the **jumpbox**.
+   To do this, browse back to the **Deployment** tab of your UDF lab session at
    https://udf.f5.com and connect to **superjump** using the **Firefox** access method.
 
    .. note:: The web application is not directly accessible from the public Internet.
-      But the **jumpbox** system is connected to the same internal virtual lab network 
-      and the **Firefox** access method provides *browser-in-a-browser* functionality
-      that allows remote browsing to the new private web site.
+      But since the **jumpbox** system is connected to the same internal virtual lab network 
+      we can use the **Firefox** access method because it provides *browser-in-a-browser*
+      functionality that allows remote browsing to this new private web site.
 
    .. image:: ../images/udffirefox.png
 
 #. The *Firefox* application installed on the superjump system's will appear in your browser (i.e., a *browser-in-a-browser*).
-   Find and click on the "**Hello, World**" bookmark/shortcut, or type http://10.1.1.4 in the URL field.
+   Find and click on the "**Hello, World**" bookmark/shortcut, or type http://10.1.1.4 in the appropriate URL field.
 
    .. image:: ../images/ffhelloworld.png
 
@@ -153,11 +167,7 @@ required files and launch them.
    .. note:: Are you seeing traffic distribution as shown in the image above?
       If not why? (**HINT**: *Check the virtual server settings... Resources tab...*)
 
-#. Delete Hello-World
-
-   .. important:: **Do not skip this step. Instead of reusing some of these
-      objects, the next lab we will re-deploy them to avoid conflicts and
-      errors.**
+#. Delete Hello-World with the following commands in the **kube-master1** WEB SHELL window:
 
    .. code-block:: bash
 
@@ -165,5 +175,9 @@ required files and launch them.
       kubectl delete -f nodeport-service-hello-world.yaml
       kubectl delete -f deployment-hello-world.yaml
 
-   .. attention:: Validate the objects are removed via the management console.
+   .. important:: **Do not skip this step. Instead of reusing some of these
+      objects, the next lab we will re-deploy them to avoid conflicts and
+      errors.**
+
+#. Validate the objects are removed via the BIG-IP TMUI management console:
       :menuselection:`Local Traffic --> Virtual Servers`

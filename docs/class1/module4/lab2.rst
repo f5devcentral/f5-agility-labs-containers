@@ -24,7 +24,7 @@ Test the Application
 
 To access the application we'll use the browser on the jumpbox.
 
-#. Access your web application via firefox on the jumpbox. Open a new tab and
+#. Access your web application via **Firefox** on the **superjump**. Open a new tab and
    browse to one of the following URL's:
 
    https://cafe.example.com/tea
