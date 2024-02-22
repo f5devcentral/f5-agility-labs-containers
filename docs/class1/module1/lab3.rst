@@ -32,12 +32,12 @@ App Deployment
 We will use the command line on **kube-master1** to create all the
 required files and launch them.
 
-#. Go back to the **Deployment** tab of your UDF lab session at https://udf.f5.com 
-   and connect to **kube-master1** using the **WEB SHELL** access method.
+#. Go back to the Web Shell session you opened in the previous task. If you need to open a new
+   session go back to the **Deployment** tab of your UDF lab session at https://udf.f5.com 
+   to connect to **kube-master1** using the **Web Shell** access method, then switch to the **ubuntu** 
+   user account using the "**su**" command:
 
    .. image:: ../images/WEBSHELL.png
-
-#. If required, switch to the **ubuntu** user account using the following "**su**" command.
 
    .. image:: ../images/WEBSHELLroot.png
 
@@ -107,7 +107,7 @@ required files and launch them.
       from the outside. Here it's "32734", highlighted above.
 
 #. Now that we have deployed our application sucessfully, we can check the
-   configuration on bigip1. Switch back to the open management session on
+   configuration on BIG-IP1. Switch back to the open management session on
    firefox.
 
    .. warning:: Don't forget to select the proper partition. Previously we
@@ -115,7 +115,7 @@ required files and launch them.
       the "**AS3**" partition. This partition was auto created by AS3 and named
       after the Tenant which happens to be "**AS3**".
 
-   Goto :menuselection:`Local Traffic --> Virtual Servers`
+   Browse to :menuselection:`Local Traffic --> Virtual Servers`
 
    Here you can see a new Virtual Server, "**serviceMain**" was created,
    listening on **10.1.1.4:80** in partition "**AS3**".
@@ -124,7 +124,7 @@ required files and launch them.
 
 #. Check the Pools to see a new pool and the associated pool members.
 
-   GoTo: :menuselection:`Local Traffic --> Pools` and select the
+   Browse to: :menuselection:`Local Traffic --> Pools` and select the
    "web_pool" pool. Click the Members tab.
 
    .. image:: ../images/f5-container-connector-check-app-pool-as3.png
@@ -141,7 +141,7 @@ required files and launch them.
 
 #. Hit Refresh many times and go back to your **BIG-IP** TMUI window
 
-   Goto: :menuselection:`Local Traffic --> Pools --> Pool list -->
+   Browse to: :menuselection:`Local Traffic --> Pools --> Pool list -->
    "web_pool" --> Statistics` to see that traffic is distributed as expected.
 
    .. image:: ../images/f5-container-connector-check-app-bigip-stats-as3.png
@@ -163,7 +163,7 @@ required files and launch them.
 
    .. image:: ../images/f5-hello-world-pods-scale10.png
 
-#. Check the pool was updated on bigip1. GoTo: :menuselection:`Local Traffic
+#. Check the pool was updated on BIG-IP1. Browse to: :menuselection:`Local Traffic
    --> Pools` and select the "web_pool" pool. Click the Members tab.
 
    .. image:: ../images/f5-hello-world-pool-scale10-as3.png

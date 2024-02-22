@@ -26,11 +26,11 @@ URL: https://10.1.1.245
 
    .. code-block:: bash
 
-      # From the CLI:
+      # Via the CLI:
       tmsh create auth partition mesos
 
       # From the UI:
-      GoTo System --> Users --> Partition List
+      Browse to System --> Users --> Partition List
       - Create a new partition called "mesos" (use default settings)
       - Click Finished
 

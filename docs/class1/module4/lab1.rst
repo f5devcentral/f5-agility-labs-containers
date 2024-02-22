@@ -10,10 +10,17 @@ client IP to NGINX via PROXY PROTOCOL, and NGINX will pass the client IP to the
 application POD via X-Real-IP HTTP header. The following iRule provides the
 necessary header with IP information.
 
-#. Login to BigIP GUI
+#. Go back to the TMUI session you opened in a previous task. If you need to open a new
+   session go back to the **Deployment** tab of your UDF lab session at https://udf.f5.com 
+   and connect to **BIG-IP1** using the **TMUI** access method (*username*: **admin** and *password*: **admin**)
+
+   .. image:: ../images/TMUI.png
+
+   .. image:: ../images/TMUILogin.png
+
 #. On the Main tab go to :menuselection:`Local Traffic --> iRules`
-#. Click Create.
-#. In the Name field, type name as "Proxy_Protocol_iRule".
+#. Click **Create**.
+#. In the Name field, type name as "**Proxy_Protocol_iRule**".
 
    .. important:: Be sure to use the name as shown. The IngressLink Resource
       will reference that specific name.
@@ -24,15 +31,23 @@ necessary header with IP information.
       :language: tcl
       :caption: Proxy_Protocol_iRule
 
-#. Click Finished
+#. Click **Finished**
 
 Configure CIS
 -------------
 
-On the jumphost open a terminal and start an SSH session with kube-master1.
+#. Go back to the Web Shell session you opened in the previous task. If you need to open a new
+   session go back to the **Deployment** tab of your UDF lab session at https://udf.f5.com 
+   to connect to **kube-master1** using the **Web Shell** access method, then switch to the **ubuntu** 
+   user account using the "**su**" command:
 
-.. note:: You should already have an open SSH session with kube-master1 from
-   the previous module. If not follow the instructions below.
+   .. image:: ../images/WEBSHELL.png
+
+   .. image:: ../images/WEBSHELLroot.png
+
+   .. code-block:: bash
+
+      su ubuntu
 
 #. Change to the default working directory with all the yaml files
 
@@ -165,22 +180,28 @@ Create an IngressLink Resource
 
    .. note:: Your Endpoint/IP will most likely be different.
 
-#. Switch back to the jumpbox and start Firefox. Open the BIGIP mgmt console.
+#. Go back to the TMUI session you opened in a previous task. If you need to open a new
+   session go back to the **Deployment** tab of your UDF lab session at https://udf.f5.com 
+   and connect to **BIG-IP1** using the **TMUI** access method (*username*: **admin** and *password*: **admin**)
+
+   .. image:: ../images/TMUI.png
+
+   .. image:: ../images/TMUILogin.png
+
+#. Browse to: :menuselection:`Local Traffic --> Virtual Servers`
 
    .. warning:: Don't forget to select the "kubernetes" partition or you'll
-      see nothing.
+   see nothing.
 
-   GoTo: :menuselection:`Local Traffic --> Virtual Servers`
-
-   Here you can see two new Virtual Servers, "ingress_link_crd_10.1.1.4_80" and
-   "ingress_link_crd_10.1.1.4_443" was created, in partition "kubernetes".
+   Here you can see two new Virtual Servers, "**ingress_link_crd_10.1.1.4_80**" and
+   "**ingress_link_crd_10.1.1.4_443**" was created, in partition "**kubernetes**".
 
    .. image:: ../images/ingress-link-vs.png
 
 #. Check the Pools to see a new pool and the associated pool members.
 
-   GoTo: :menuselection:`Local Traffic --> Pools` and select either of the
-   "nginx_ingress_nginx_ingress_ingresslink" pool objects. Both have the same
+   Browse to: :menuselection:`Local Traffic --> Pools` and select either of the
+   "**nginx_ingress_nginx_ingress_ingresslink**" pool objects. Both have the same
    pool member but are running on different ports. Click the Members tab.
 
    .. image:: ../images/ingress-link-pool.png

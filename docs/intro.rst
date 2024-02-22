@@ -108,4 +108,4 @@ This is a multi-step process that will involve:
    |    :width: 800px                                  |
    +---------------------------------------------------+
 
-#. The *Documentation* tab will appear. Here you can find the URL for this lab guide.
+#. The *Documentation* tab will appear. Click on the **Deployment** tab to view your virutal lab machines.

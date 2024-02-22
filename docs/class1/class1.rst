@@ -22,7 +22,7 @@ We will leverage the following setup to configure the Kubernetes environment.
    * - **Hostname**
      - **IP-ADDR**
      - **Credentials**
-   * - jumpbox
+   * - superjump
      - 10.1.1.5
      - ubuntu/HelloUDF
    * - bigip1

@@ -40,10 +40,17 @@ BIG-IP Setup
 
       .. image:: ../images/f5-check-partition.png
 
-#. First we need to setup a partition that will be used by F5 Container Ingress
-   Service.
+#. Create a **partition**, which is requiredfor F5 Container Ingress Service.
 
    - Browse to: :menuselection:`System --> Users --> Partition List`
+
+      .. attention::
+
+         - Be sure to be in the ``Common`` partition before creating the following
+         objects.
+
+         .. image:: ../images/f5-check-partition.png
+            
    - Create a new partition called "**kubernetes**" (use default settings)
    - Click Finished
 
@@ -82,7 +89,7 @@ Explore the Kubernetes Cluster
 ------------------------------
 
 #. Go back to the **Deployment** tab of your UDF lab session at https://udf.f5.com 
-   and connect to **kube-master1** using the **WEB SHELL** access method.
+   and connect to **kube-master1** using the **Web Shell** access method.
 
    .. image:: ../images/WEBSHELL.png
 

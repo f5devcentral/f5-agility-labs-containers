@@ -100,7 +100,7 @@ On **kube-master1** we will create all the required files:
    .. note:: You can see that the pool members IP addresses are assigned from
       the overlay network (**ClusterIP mode**)
 
-#. Access your web application via Firefox on the superjump.
+#. Access your web application via **Firefox** on the **superjump**.
 
    .. note:: Select the "Hello, World" shortcut or type http://10.1.1.4 in the
       URL field.
@@ -108,10 +108,9 @@ On **kube-master1** we will create all the required files:
    .. image:: ../images/f5-container-connector-access-app.png
 
 #. To check traffic distribution, hit Refresh many times on your open browser
-   session. Then go back to the open management console on firefox.
+   session. Then go back to the open BIG-IP TMUI management console on firefox.
 
-   GoTo: :menuselection:`Local Traffic --> Pools --> Pool list -->
-   ingress_default_f5-hello-world-web --> Statistics`
+   Browse to: :menuselection:`Local Traffic --> Pools --> Pool list --> ingress_default_f5-hello-world-web --> Statistics`
 
    .. image:: ../images/f5-container-connector-check-app-bigip-stats-ingress-clusterip.png
 

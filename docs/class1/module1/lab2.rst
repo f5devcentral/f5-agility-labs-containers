@@ -32,12 +32,12 @@ App Deployment
 We will use the command line on **kube-master1** to create all the
 required files and launch them.
 
-#. Go back to the **Deployment** tab of your UDF lab session at https://udf.f5.com 
-   and connect to **kube-master1** using the **WEB SHELL** access method.
+#. Go back to the Web Shell session you opened in the previous task. If you need to open a new
+   session go back to the **Deployment** tab of your UDF lab session at https://udf.f5.com 
+   to connect to **kube-master1** using the **Web Shell** access method, then switch to the **ubuntu** 
+   user account using the "**su**" command:
 
    .. image:: ../images/WEBSHELL.png
-
-#. If required, switch to the **ubuntu** user account using the following "**su**" command.
 
    .. image:: ../images/WEBSHELLroot.png
 
@@ -109,12 +109,11 @@ required files and launch them.
 
 #. Now that we have deployed our application sucessfully, we can check the
    configuration on BIG-IP1.
-   Go back to the **Deployment** tab of your UDF lab session at https://udf.f5.com 
-   and connect to **BIG-IP1** using the **TMUI** access method.
+   Go back to the TMUI session you opened in a previous task. If you need to open a new
+   session go back to the **Deployment** tab of your UDF lab session at https://udf.f5.com 
+   and connect to **BIG-IP1** using the **TMUI** access method (*username*: **admin** and *password*: **admin**)
 
    .. image:: ../images/TMUI.png
-
-#. Login with username: **admin** and password: **admin**.
 
    .. image:: ../images/TMUILogin.png
 
@@ -130,7 +129,7 @@ required files and launch them.
 
 #. Check the Pools to see a new pool and the associated pool members.
 
-   GoTo: :menuselection:`Local Traffic --> Pools` and select the
+   Browse to: :menuselection:`Local Traffic --> Pools` and select the
    "ingress_default_f5-hello-world-web" pool. Click the Members tab.
 
    .. image:: ../images/f5-container-connector-check-app-ingress-pool.png
@@ -138,12 +137,12 @@ required files and launch them.
    .. note:: You can see that the pool members listed are all the cluster
       node IPs on port 32722. (**NodePort mode**)
 
-#. Now let's test access to the new web application "*through*"" **Firefox** on the **jumpbox**.
+#. Now let's test access to the new web application "*through*"" **Firefox** on **superjump**.
    To do this, browse back to the **Deployment** tab of your UDF lab session at
    https://udf.f5.com and connect to **superjump** using the **Firefox** access method.
 
    .. note:: The web application is not directly accessible from the public Internet.
-      But since the **jumpbox** system is connected to the same internal virtual lab network 
+      But since the **superjump** system is connected to the same internal virtual lab network 
       we can use the **Firefox** access method because it provides *browser-in-a-browser*
       functionality that allows remote browsing to this new private web site.
 
@@ -167,7 +166,7 @@ required files and launch them.
    .. note:: Are you seeing traffic distribution as shown in the image above?
       If not why? (**HINT**: *Check the virtual server settings... Resources tab...*)
 
-#. Delete Hello-World with the following commands in the **kube-master1** WEB SHELL window:
+#. Delete Hello-World with the following commands in the **kube-master1** Web Shell window:
 
    .. code-block:: bash
 

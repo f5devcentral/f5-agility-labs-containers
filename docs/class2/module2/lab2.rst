@@ -71,16 +71,16 @@ On **kube-master1** we will create all the required files:
       our deployment file) and the overlay network IP assigned to the pod.
 
 #. Now that we have deployed our application sucessfully, we can check the
-   configuration on bigip1. Switch back to the open management session on
+   configuration on BIG-IP1. Switch back to the open management session on
    firefox.
 
-   .. warning:: Don't forget to select the "okd" partition or you'll
+   .. warning:: Don't forget to select the "**okd**" partition or you'll
       see nothing.
 
-   Goto :menuselection:`Local Traffic --> Virtual Servers`
+   Browse to :menuselection:`Local Traffic --> Virtual Servers`
 
-   With "Route" you'll seee two virtual servers defined. "okd_http_vs" and
-   "okd_https_vs", listening on port 80 and 443.
+   With "*Route*" you'll seee two virtual servers defined. "**okd_http_vs**" and
+   "**okd_https_vs**", listening on port **80** and **443**.
 
    .. image:: ../images/f5-container-connector-check-app-route-bigipconfig.png
 
@@ -93,8 +93,8 @@ On **kube-master1** we will create all the required files:
 
 #. Check the Pools to see a new pool and the associated pool members:
 
-   GoTo: :menuselection:`Local Traffic --> Pools` and selec the
-   "openshift_default_f5-hello-world-web" pool. Click the Members tab.
+   Browse to: :menuselection:`Local Traffic --> Pools` and selec the
+   "**openshift_default_f5-hello-world-web**" pool. Click the Members tab.
 
    .. image:: ../images/f5-container-connector-check-app-route-pool-clusterip.png
 
