@@ -11,7 +11,7 @@ set SOURCEDIR=.
 set BUILDDIR=_build
 set SPHINXPROJ=F5AgilityLabs
 
-if "%1" == "" goto help
+if "%1" == "" Browse to help
 
 %SPHINXBUILD% >NUL 2>NUL
 if errorlevel 9009 (
@@ -27,7 +27,7 @@ if errorlevel 9009 (
 )
 
 %SPHINXBUILD% -M %1 %SOURCEDIR% %BUILDDIR% %SPHINXOPTS%
-goto end
+Browse to end
 
 :help
 %SPHINXBUILD% -M help %SOURCEDIR% %BUILDDIR% %SPHINXOPTS%

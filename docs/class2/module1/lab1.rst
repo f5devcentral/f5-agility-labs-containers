@@ -15,14 +15,16 @@ In this lab we'll use NodePort mode to deploy an application to the BIG-IP.
 BIG-IP Setup
 ------------
 
-Via RDP connect to the UDF lab "jumpbox" host.
+#. Browse to the **Deployment** tab of your UDF lab session at https://udf.f5.com 
+   and connect to **BIG-IP1** using the **TMUI** access method.
 
-.. note:: Username and password are: **ubuntu/ubuntu**
+   .. image:: ../images/TMUI.png
 
-#. Open firefox and connect to bigip1 management console. For your convenience
-   there's a shortcut on the firefox toolbar.
+#. Login with username: **admin** and password: **admin**.
 
-   .. note:: Username and password are: **admin/admin**
+   .. image:: ../images/TMUILogin.png
+
+   .. image:: ../images/TMUILicense.png
 
    .. attention::
 
@@ -41,15 +43,15 @@ Via RDP connect to the UDF lab "jumpbox" host.
 #. Just like the previous Kubernetes class we need to setup a partition that
    will be used by F5 Container Ingress Service.
 
-   - GoTo: :menuselection:`System --> Users --> Partition List`
-   - Create a new partition called "okd" (use default settings)
-   - Click Finished
+   - Browse to: :menuselection:`System --> Users --> Partition List`
+   - Create a new partition called "**okd**" (use default settings)
+   - Click **Finished**
 
    .. image:: ../images/f5-container-connector-bigip-partition-setup.png
 
    .. code-block:: bash
 
-      # From the CLI:
+      # Via the CLI:
       ssh admin@10.1.1.4 tmsh create auth partition okd
 
 #. Verify AS3 is installed.
@@ -60,8 +62,8 @@ Via RDP connect to the UDF lab "jumpbox" host.
    .. seealso:: For more info click here:
       `Application Services 3 Extension Documentation <https://clouddocs.f5.com/products/extensions/f5-appsvcs-extension/latest/>`_
 
-   - GoTo: :menuselection:`iApps --> Package Management LX`. and confirm
-     "f5-appsvcs" is in the last as shown below.
+   - Browse to: :menuselection:`iApps --> Package Management LX`. and confirm
+     "**f5-appsvcs**" is in the last as shown below.
 
      .. image:: ../images/confirm-as3-installed.png
 
@@ -71,24 +73,24 @@ Via RDP connect to the UDF lab "jumpbox" host.
 
    - Go back to: :menuselection:`iApps --> Package Management LX`
 
-     - Click Import
-     - Browse and select downloaded AS3 RPM
-     - Click Upload
+     - Click **Import**
+     - Browse and select the downloaded AS3 RPM
+     - Click **Upload**
 
 Explore the OpenShift Cluster
 -----------------------------
 
-#. On the jumphost open a terminal and start an SSH session with okd-master1.
+#. Go to the **Deployment** tab of your UDF lab session at https://udf.f5.com 
+   to connect to **okd-master1** using the **Web Shell** access method, then switch to the **centos** 
+   user account using the "**su**" command:
 
-   .. image:: ../images/start-term.png
+   .. image:: ../images/OKDWEBSHELL.png
+
+   .. image:: ../images/OKDWEBSHELLroot.png
 
    .. code-block:: bash
 
-      # If directed to, accept the authenticity of the host by typing "yes" and hitting Enter to continue.
-
-      ssh centos@okd-master1
-
-   .. image:: ../images/sshtokubemaster1.png
+      su centos
 
 #. "git" the demo files
 
@@ -103,8 +105,8 @@ Explore the OpenShift Cluster
 
 #. Log in with an Openshift Client.
 
-   .. note:: Here we're using the "centos" user, added when we built the
-      cluster. When prompted for password enter "centos".
+   .. note:: Here we're using the "**centos**" user, added when we built the
+      cluster. When prompted for password enter "**centos**".
 
    .. code-block:: bash
 
@@ -173,7 +175,7 @@ CIS Deployment
 .. seealso:: For a more thorough explanation of all the settings and options see
    `F5 Container Ingress Service - Openshift <https://clouddocs.f5.com/containers/v2/openshift/>`_
 
-Now that BIG-IP is licensed and prepped with the "okd" partition, we
+Now that BIG-IP is licensed and prepped with the "**okd**" partition, we
 need to define a `Kubernetes deployment <https://docs.okd.io/3.11/dev_guide/deployments/how_deployments_work.html>`_
 and create a `Kubernetes secret <https://docs.okd.io/3.11/dev_guide/secrets.html>`_
 to hide our bigip credentials.
@@ -278,8 +280,8 @@ check the logs of your container, oc command or docker command.
 
    .. image:: ../images/f5-container-connector-check-logs-kubectl.png
 
-#. Using docker logs command: From the previous check we know the container
-   is running on okd-node1. On your current session with okd-master1 SSH to
+#. Using **docker logs** command: From the previous check we know the container
+   is running on *okd-node1* (yours could be *okd-node2*). On your current session with okd-master1, SSH to
    okd-node1 first and then run the docker command:
 
    .. important:: Be sure to check which Node your "connector" is running on.
@@ -290,9 +292,11 @@ check the logs of your container, oc command or docker command.
 
       ssh okd-node1
 
+   .. code-block:: bash
+
       sudo docker ps
 
-   Here we can see our container ID is "478749740d29"
+   In this example, we can see our container ID is "*478749740d29*"
 
    .. image:: ../images/f5-container-connector-find-dockerID--controller-container.png
 
@@ -322,6 +326,8 @@ check the logs of your container, oc command or docker command.
    .. code-block:: bash
 
       oc exec -it k8s-bigip-ctlr-844dfdc864-669hb -n kube-system -- /bin/sh
+
+   .. code-block:: bash
 
       cd /app
 

@@ -29,8 +29,21 @@ To deploy our application, we will need the following definitions:
 App Deployment
 --------------
 
-Back to the SSH session on **okd-master1** we will create all the required
+Back on **okd-master1** we will create all the required
 files:
+
+#. Go back to the Web Shell session you opened in a previous task. If you need to open a new
+   session go to the **Deployment** tab of your UDF lab session at https://udf.f5.com 
+   to connect to **okd-master1** using the **Web Shell** access method, then switch to the **centos** 
+   user account using the "**su**" command:
+
+   .. image:: ../images/OKDWEBSHELL.png
+
+   .. image:: ../images/OKDWEBSHELLroot.png
+
+   .. code-block:: bash
+
+      su centos
 
 #. Create a file called ``deployment-hello-world.yaml``
 
@@ -94,29 +107,33 @@ files:
       from the outside. In this example it's "30459", highlighted above.
 
 #. Now that we have deployed our application sucessfully, we can check the
-   configuration on bigip1. Switch back to the open management session on
-   firefox.
+   configuration on BIG-IP1. Go back to the TMUI session you opened in a previous task. If you need to open a new
+   session go back to the **Deployment** tab of your UDF lab session at https://udf.f5.com 
+   and connect to **BIG-IP1** using the **TMUI** access method (*username*: **admin** and *password*: **admin**)
+
+   .. image:: ../images/TMUI.png
+
+   .. image:: ../images/TMUILogin.png
+
+   Browse to :menuselection:`Local Traffic --> Virtual Servers`
 
    .. warning:: Don't forget to select the "okd" partition or you'll see
       nothing.
 
-   Goto :menuselection:`Local Traffic --> Virtual Servers`
-
-   With "Route" you'll seee two virtual servers defined. "okd_http_vs" and
-   "okd_https_vs", listening on port 80 and 443.
+   With "*Route*" you'll seee two virtual servers defined. "**okd_http_vs**" and
+   "**okd_https_vs**", listening on port **80** and **443**.
 
    .. image:: ../images/f5-container-connector-check-app-route-bigipconfig.png
 
    These Virtuals use an LTM Policy to direct traffic based on the host header.
-   You can view this from the BIG-IP GUI at :menuselection:`Local Traffic -->
-   Virtual Servers --> Policies` and click :menuselection:`Published Policy -->
-   "openshift_insecure_routes"`
+   You can view this from the BIG-IP GUI at :menuselection:`Local Traffic --> Policies`
+   and click :menuselection:`Published Policy --> "openshift_insecure_routes"`
 
    .. image:: ../images/f5-check-ltm-policy-route.png
 
 #. Check the Pools to see a new pool and the associated pool members.
 
-   GoTo: :menuselection:`Local Traffic --> Pools` and select the
+   Browse to: :menuselection:`Local Traffic --> Pools` and select the
    "openshift_default_f5-hello-world-web" pool. Click the Members tab.
 
    .. image:: ../images/f5-container-connector-check-app-route-pool.png
@@ -124,7 +141,7 @@ files:
    .. note:: You can see that the pool members listed are all the cluster
       node IPs on port 30459. (**NodePort mode**)
 
-#. Access your web application via firefox on the jumpbox.
+#. Access your web application via **Firefox** on the **superjump**.
 
    .. note:: Open a new tab and select the "mysite.f5demo.com" shortcut or type
       http://mysite.f5demo.com in the URL field.

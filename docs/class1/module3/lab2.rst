@@ -12,11 +12,20 @@ App Deployment
 As before all the necesary files are on **kube-master1** in
 ~/agilitydocs/docs/class1/kubernetes
 
-#. Start SSH session to kube-master1 if not already done so.
+#. Go back to the Web Shell session you opened in the previous task. If you need to open a new
+   session go back to the **Deployment** tab of your UDF lab session at https://udf.f5.com 
+   to connect to **kube-master1** using the **Web Shell** access method, then switch to the **ubuntu** 
+   user account using the "**su**" command:
 
-   .. note:: You should have an open session from previous lab.
+   .. image:: ../images/WEBSHELL.png
 
-#. Change working directory to the yaml file repository.
+   .. image:: ../images/WEBSHELLroot.png
+
+   .. code-block:: bash
+
+      su ubuntu
+
+#. Set the working directy with the yaml file repository with the following "**cd**" command. 
 
    .. code-block:: bash
 
@@ -47,7 +56,7 @@ As before all the necesary files are on **kube-master1** in
 
 #. Review hello-world NGINX service ``nginx-ingress-hello-world.yaml``
 
-   .. note:: This create's our app on NGINX. You can see in line 14 and 15 how
+   .. note:: This create's our app on NGINX. You can see in line 16 and 18 how
       we reference the previouly created hello-world service by name and port.
       On line 9 we define the expected host header. Just as before this host is
       in the local host file (/etc/hosts) and will be needed to access to the
@@ -146,31 +155,37 @@ two files, a service and configmap.
       .. image:: ../images/nginx-pod-ip.png
 
 #. Now that we have deployed our application sucessfully, we can check the
-   configuration on bigip1. Switch back to the open management session on
-   firefox.
+   configuration on BIG-IP1. 
+   Go back to the TMUI session you opened in a previous task. If you need to open a new
+   session go back to the **Deployment** tab of your UDF lab session at https://udf.f5.com 
+   and connect to **BIG-IP1** using the **TMUI** access method (*username*: **admin** and *password*: **admin**)
+
+   .. image:: ../images/TMUI.png
+
+   .. image:: ../images/TMUILogin.png
+
+#. Browse to: :menuselection:`Local Traffic --> Virtual Servers`
 
    .. warning:: Don't forget to select the proper partition. In this case we
-      need to look at the "AS3" partition because we're using AS#. This
+      need to look at the "**AS3**" partition because we're using AS3. This
       partition was auto created by AS3 and named after the Tenant which
-      happens to be "AS3".
-
-   GoTo: :menuselection:`Local Traffic --> Virtual Servers`
-
-   Here you can see a new Virtual Server, "serviceMain" was created,
-   listening on 10.1.1.4:80 in partition "AS3".
+      happens to be "**AS3**".
 
    .. image:: ../images/f5-container-connector-check-app-bigipconfig-as3.png
 
+   Here you can see a new Virtual Server, "**serviceMain**" was created,
+   listening on **10.1.1.4:80** in partition "**AS3**".
+
 #. Check the Pools to see a new pool and the associated pool members.
 
-   GoTo: :menuselection:`Local Traffic --> Pools` and select the
+   Browse to: :menuselection:`Local Traffic --> Pools` and select the
    "web_pool" pool. Click the Members tab.
 
    .. image:: ../images/nginx-cis-web_pool.png
 
    .. note:: You can see that the pool members IP address is the NGINX pod IP.
 
-#. Access your web application via firefox on the jumpbox.
+#. Access your web application via **Firefox** on the **superjump**.
 
    .. note:: Select the "mysite.f5demo.com" shortcut.
 

@@ -68,41 +68,40 @@ On **kube-master1** we will create all the required files:
       our deployment file) and the flannel IP assigned to the pod.
 
 #. Now that we have deployed our application sucessfully, we can check the
-   configuration on bigip1. Switch back to the open management session on
-   firefox.
+   configuration on BIG-IP1. Switch back to the open BIG-IP1 TMUI management session.
 
    .. warning:: Don't forget to select the proper partition. Previously we
       checked the "kubernetes" partition. In this case we need to look at
-      the "AS3" partition. This partition was auto created by AS3 and named
-      after the Tenant which happens to be "AS3".
+      the "**AS3**" partition. This partition was auto created by AS3 and named
+      after the Tenant which happens to be "**AS3**".
 
-   GoTo: :menuselection:`Local Traffic --> Virtual Servers`
+   Browse to: :menuselection:`Local Traffic --> Virtual Servers`
 
-   Here you can see a new Virtual Server, "serviceMain" was created,
-   listening on 10.1.1.4:80 in partition "AS3".
+   Here you can see a new Virtual Server, "**serviceMain**" was created,
+   listening on **10.1.1.4:80** in partition "*AS3*".
 
    .. image:: ../images/f5-container-connector-check-app-bigipconfig-as3.png
 
 #. Check the Pools to see a new pool and the associated pool members.
 
-   GoTo: :menuselection:`Local Traffic --> Pools` and select the
-   "web_pool" pool. Click the Members tab.
+   Browse to: :menuselection:`Local Traffic --> Pools` and select the
+   "**web_pool**" pool. Click the Members tab.
 
    .. image:: ../images/f5-container-connector-check-app-pool-cluster-as3.png
 
    .. note:: You can see that the pool members IP addresses are assigned from
       the overlay network (**ClusterIP mode**)
 
-#. Access your web application via firefox on the jumpbox.
+#. Access your web application via **Firefox** on the **superjump**.
 
-   .. note:: Select the "Hello, World" shortcut or type http://10.1.1.4 in the
+   .. note:: Select the "**Hello, World**" shortcut or type **http://10.1.1.4** in the
       URL field.
 
    .. image:: ../images/f5-container-connector-access-app.png
 
 #. Hit Refresh many times and go back to your **BIG-IP** UI.
 
-   Goto: :menuselection:`Local Traffic --> Pools --> Pool list -->
+   Browse to: :menuselection:`Local Traffic --> Pools --> Pool list -->
    "web_pool" --> Statistics` to see that traffic is distributed as expected.
 
    .. image:: ../images/f5-container-connector-check-app-bigip-stats-cluster-as3.png
@@ -125,7 +124,7 @@ On **kube-master1** we will create all the required files:
 
    .. image:: ../images/f5-hello-world-pods-scale10.png
 
-#. Check the pool was updated on bigip1. GoTo: :menuselection:`Local Traffic
+#. Check the pool was updated on BIG-IP1. Browse to: :menuselection:`Local Traffic
    --> Pools` and select the "web_pool" pool. Click the Members tab.
 
    .. image:: ../images/f5-hello-world-pool-scale10-as3-clusterip.png
