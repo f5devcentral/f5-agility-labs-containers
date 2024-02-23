@@ -1,6 +1,19 @@
 Lab 4.2 - Deploy the Cafe Application
 =====================================
 
+#. Go back to the Web Shell session you opened in the previous task. If you need to open a new
+   session go back to the **Deployment** tab of your UDF lab session at https://udf.f5.com 
+   to connect to **kube-master1** using the **Web Shell** access method, then switch to the **ubuntu** 
+   user account using the "**su**" command:
+
+   .. image:: ../images/WEBSHELL.png
+
+   .. image:: ../images/WEBSHELLroot.png
+
+   .. code-block:: bash
+
+      su ubuntu
+
 #. Create the coffee and tea deployments and services
 
    .. code-block:: bash
@@ -22,14 +35,24 @@ Lab 4.2 - Deploy the Cafe Application
 Test the Application
 --------------------
 
-To access the application we'll use the browser on the jumpbox.
+Now let's test access to the new web application "*through*"" **Firefox** on **superjump**.
 
-#. Access your web application via firefox on the jumpbox. Open a new tab and
-   browse to one of the following URL's:
+#. Go back to the Firefox session you opened in a previous task. If you need to open a new session,
+   browse back to the **Deployment** tab of your UDF lab session at
+   https://udf.f5.com and connect to **superjump** using the **Firefox** access method.
 
-   https://cafe.example.com/tea
+   .. note:: The web application is not directly accessible from the public Internet.
+      But since the **superjump** system is connected to the same internal virtual lab network 
+      we can use the **Firefox** access method because it provides *browser-in-a-browser*
+      functionality that allows remote browsing to this new private web site.
 
-   https://cafe.example.com/coffee
+   .. image:: ../images/udffirefox.png
+
+#. Open a new tab an browse to one of the following URL's:
+
+   - https://cafe.example.com/tea
+
+   - https://cafe.example.com/coffee
 
    .. note:: If prompted with an SSL certificate warning be sure to accept the
       risk and continue.
@@ -54,7 +77,6 @@ To access the application we'll use the browser on the jumpbox.
 
       kubectl delete -f ingresslink/vs-ingresslink.yaml
       kubectl delete -f ingresslink/ingresslink-deployment.yaml
-      exit
       
 .. attention:: This is a **CRITICAL** step if you're moving on to the next lab.
 

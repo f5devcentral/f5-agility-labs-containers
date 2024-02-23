@@ -10,7 +10,7 @@ To deploy our application, we will need the following definitions:
   in a container.
 
 - Define the **Service** resource: this is an abstraction which defines a
-  logical set of pods and a policy by which to access them. Expose the service
+  logical set of pods and a policy by which to access them, and exposes the service
   on a port on each node of the cluster (the same port on each node). You’ll
   be able to contact the service on any <NodeIP>:NodePort address. When you set
   the type field to "NodePort", the master will allocate a port from a
@@ -29,7 +29,21 @@ To deploy our application, we will need the following definitions:
 App Deployment
 --------------
 
-On **kube-master1** we will create all the required files:
+We will use the command line on **kube-master1** to create all the
+required files and launch them.
+
+#. Go back to the Web Shell session you opened in the previous task. If you need to open a new
+   session go back to the **Deployment** tab of your UDF lab session at https://udf.f5.com 
+   to connect to **kube-master1** using the **Web Shell** access method, then switch to the **ubuntu** 
+   user account using the "**su**" command:
+
+   .. image:: ../images/WEBSHELL.png
+
+   .. image:: ../images/WEBSHELLroot.png
+
+   .. code-block:: bash
+
+      su ubuntu
 
 #. Create a file called ``deployment-hello-world.yaml``
 
@@ -93,24 +107,24 @@ On **kube-master1** we will create all the required files:
       from the outside. Here it's "32734", highlighted above.
 
 #. Now that we have deployed our application sucessfully, we can check the
-   configuration on bigip1. Switch back to the open management session on
+   configuration on BIG-IP1. Switch back to the open management session on
    firefox.
 
    .. warning:: Don't forget to select the proper partition. Previously we
       checked the "kubernetes" partition. In this case we need to look at
-      the "AS3" partition. This partition was auto created by AS3 and named
-      after the Tenant which happens to be "AS3".
+      the "**AS3**" partition. This partition was auto created by AS3 and named
+      after the Tenant which happens to be "**AS3**".
 
-   Goto :menuselection:`Local Traffic --> Virtual Servers`
+   Browse to :menuselection:`Local Traffic --> Virtual Servers`
 
-   Here you can see a new Virtual Server, "serviceMain" was created,
-   listening on 10.1.1.4:80 in partition "AS3".
+   Here you can see a new Virtual Server, "**serviceMain**" was created,
+   listening on **10.1.1.4:80** in partition "**AS3**".
 
    .. image:: ../images/f5-container-connector-check-app-bigipconfig-as3.png
 
 #. Check the Pools to see a new pool and the associated pool members.
 
-   GoTo: :menuselection:`Local Traffic --> Pools` and select the
+   Browse to: :menuselection:`Local Traffic --> Pools` and select the
    "web_pool" pool. Click the Members tab.
 
    .. image:: ../images/f5-container-connector-check-app-pool-as3.png
@@ -118,23 +132,22 @@ On **kube-master1** we will create all the required files:
    .. note:: You can see that the pool members listed are all the cluster
       node IPs on port 32734. (**NodePort mode**)
 
-#. Access your web application via firefox on the jumpbox.
+#. Access your web application via **Firefox** on the **superjump**.
 
    .. note:: Select the "Hello, World" shortcut or type http://10.1.1.4 in the
       URL field.
 
    .. image:: ../images/f5-container-connector-access-app.png
 
-#. Hit Refresh many times and go back to your **BIG-IP** UI
+#. Hit Refresh many times and go back to your **BIG-IP** TMUI window
 
-   Goto: :menuselection:`Local Traffic --> Pools --> Pool list -->
+   Browse to: :menuselection:`Local Traffic --> Pools --> Pool list -->
    "web_pool" --> Statistics` to see that traffic is distributed as expected.
 
    .. image:: ../images/f5-container-connector-check-app-bigip-stats-as3.png
 
    .. note:: Why is all the traffic directed to one pool member? The answer can
-      be found by instpecting the "serviceMain" virtual service in the
-      management GUI.
+      be found by instpecting the "serviceMain" virtual service...
 
 #. Scale the f5-hello-world app
 
@@ -150,7 +163,7 @@ On **kube-master1** we will create all the required files:
 
    .. image:: ../images/f5-hello-world-pods-scale10.png
 
-#. Check the pool was updated on bigip1. GoTo: :menuselection:`Local Traffic
+#. Check the pool was updated on BIG-IP1. Browse to: :menuselection:`Local Traffic
    --> Pools` and select the "web_pool" pool. Click the Members tab.
 
    .. image:: ../images/f5-hello-world-pool-scale10-as3.png

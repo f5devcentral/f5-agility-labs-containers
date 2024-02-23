@@ -93,15 +93,14 @@ On the **okd-master1** we will create all the required files:
       from the outside. Here it's "30684", highlighted above.
 
 #. Now that we have deployed our application sucessfully, we can check the
-   configuration on bigip1. Switch back to the open management session on
-   firefox.
+   configuration on BIG-IP1. Switch back to the open TMUI management session.
 
    .. warning:: Don't forget to select the proper partition. Previously we
-      checked the "okd" partition. In this case we need to look at
-      the "AS3" partition. This partition was auto created by AS3 and named
-      after the Tenant which happens to be "AS3".
+      checked the "*okd*" partition. In this case we need to look at
+      the "**AS3**" partition. This partition was auto created by AS3 and named
+      after the Tenant which happens to be "**AS3**".
 
-   Goto :menuselection:`Local Traffic --> Virtual Servers`
+   Browse to :menuselection:`Local Traffic --> Virtual Servers`
 
    Here you can see a new Virtual Server, "serviceMain" was created,
    listening on 10.1.1.4:80 in partition "AS3".
@@ -110,7 +109,7 @@ On the **okd-master1** we will create all the required files:
 
 #. Check the Pools to see a new pool and the associated pool members.
 
-   GoTo: :menuselection:`Local Traffic --> Pools` and select the
+   Browse to: :menuselection:`Local Traffic --> Pools` and select the
    "web_pool" pool. Click the Members tab.
 
    .. image:: ../images/f5-container-connector-check-app-web-pool.png
@@ -118,7 +117,7 @@ On the **okd-master1** we will create all the required files:
    .. note:: You can see that the pool members listed are all the cluster
       node IPs on port 30684. (**NodePort mode**)
 
-#. Access your web application via firefox on the jumpbox.
+#. Access your web application via **Firefox** on the **superjump**.
 
    .. note:: Select the "Hello, World" shortcut or type http://10.1.1.4 in the
       URL field.
@@ -127,7 +126,7 @@ On the **okd-master1** we will create all the required files:
 
 #. Hit Refresh many times and go back to your **BIG-IP** UI
 
-   Goto: :menuselection:`Local Traffic --> Pools --> Pool list -->
+   Browse to: :menuselection:`Local Traffic --> Pools --> Pool list -->
    "web_pool" --> Statistics` to see that traffic is distributed as expected.
 
    .. image:: ../images/f5-okd-check-app-bigip-stats-as3.png
@@ -146,7 +145,7 @@ On the **okd-master1** we will create all the required files:
 
    .. image:: ../images/f5-hello-world-pods-scale10.png
 
-#. Check the pool was updated on bigip1. GoTo: :menuselection:`Local Traffic
+#. Check the pool was updated on BIG-IP1. Browse to: :menuselection:`Local Traffic
    --> Pools` and select the "web_pool" pool. Click the Members tab.
 
    .. image:: ../images/f5-hello-world-pool-scale10-node-as3.png

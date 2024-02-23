@@ -22,9 +22,9 @@ We will leverage the following setup to configure the OpenShift environment.
    * - **Hostname**
      - **IP-ADDR**
      - **Credentials**
-   * - jumpbox
-     - 10.1.1.5
-     - ubuntu/ubuntu
+   * - superjump
+     - 10.1.1.6
+     - ubuntu/HelloUDF
    * - bigip1
      - 10.1.1.4
      - admin/admin

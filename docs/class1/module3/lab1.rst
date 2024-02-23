@@ -7,7 +7,7 @@ Lab 3.1 - Deploy the NGINX Ingress Controller
    supported/developed by NGINX (F5). The "`NGINX Ingress Controller`_" from
    NGINX (F5) is.
 
-.. attention:: In this lab were simply using the free version of NGINX.
+.. attention:: In this lab we're simply using the free version of NGINX.
 
    In a customer environment, an NGINX+ container would need to be built using
    a cert and key from the `F5 Customer Portal`_.
@@ -29,30 +29,24 @@ NGINX or NGINX+ process.
 Prep the Kubernetes Cluster
 ---------------------------
 
-#. On the jumphost open a terminal and start an SSH session with kube-master1.
+#. Go back to the Web Shell session you opened in the previous task. If you need to open a new
+   session go back to the **Deployment** tab of your UDF lab session at https://udf.f5.com 
+   to connect to **kube-master1** using the **Web Shell** access method, then switch to the **ubuntu** 
+   user account using the "**su**" command:
 
-   .. note:: You should already have an open SSH session with kube-master1 from
-      the previous module. If not follow the instructions below.
+   .. image:: ../images/WEBSHELL.png
 
-   .. image:: ../images/start-term.png
+   .. image:: ../images/WEBSHELLroot.png
 
    .. code-block:: bash
 
-      # If directed to, accept the authenticity of the host by typing "yes" and hitting Enter to continue.
+      su ubuntu
 
-      ssh kube-master1
-
-   .. image:: ../images/sshtokubemaster1.png
-
-#. "git" the NGINX ingress controller repo
+#. "**git**" the NGINX ingress controller repo and set the working directy with the "**cd**" command. 
 
    .. code-block:: bash
 
       git clone https://github.com/nginxinc/kubernetes-ingress/ --branch v2.4.2 ~/kubernetes-ingress
-
-#. Change to the "deployments" directory of the newly cloned repo
-
-   .. code:: bash
 
       cd ~/kubernetes-ingress/deployments/
 
@@ -171,7 +165,7 @@ the NGINX Ingress Controller.
 
       kubectl create -f service/nodeport.yaml
 
-#. Retrieve NodePort
+#. Retrieve and record the **NodePort** number that follows "*80:*"
 
    .. code:: bash
 
@@ -187,21 +181,28 @@ the NGINX Ingress Controller.
 Access NGINX From Outside the Cluster
 -------------------------------------
 
-#. From the Jumpbox open up the Chrome browser and browse to "kube-master1"
-   host IP and the previously recorded port.
+#. Go back to your UDF **superjump -> Firefox** access window and "browse" to
+   the *kube-master1*'s internal host IP address (10.1.1.7) with the previously recorded port.
+   For example: 
 
-   ``http://10.1.1.7:32251``
+     ``http://10.1.1.7:32251``
 
    .. warning:: You will have a different port value!
 
-   You should see something like this:
+   You should expect to see something like this:
 
    .. image:: ../images/nginx-nodeport.png
 
-   .. note:: NGINX docs state "The default server returns the Not Found page
+   .. note::
+      
+      The 404 error is expected since we've not yet configured any services to use the NGINX Ingress Controller.
+
+      As explained in the NGINX docs:
+
+      "*The default server returns the Not Found page
       with the 404 status code for all requests for domains for which there are
-      no Ingress rules defined." We've not yet configured any services to use
-      the NGINX Ingress Controller.
+      no Ingress rules defined.*"
+      
 
 .. _`project`: https://github.com/kubernetes/ingress-nginx
 .. _`NGINX Ingress Controller`: https://github.com/nginxinc/kubernetes-ingress

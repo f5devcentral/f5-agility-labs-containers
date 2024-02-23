@@ -13,7 +13,7 @@ To deploy our application, we will need the following definitions:
   in a container.
 
 - Define the **Service** resource: this is an abstraction which defines a
-  logical set of pods and a policy by which to access them. Expose the service
+  logical set of pods and a policy by which to access them, and exposes the service
   on a port on each node of the cluster (the same port on each node). You’ll
   be able to contact the service on any <NodeIP>:NodePort address. When you set
   the type field to "NodePort", the master will allocate a port from a
@@ -29,8 +29,22 @@ To deploy our application, we will need the following definitions:
 App Deployment
 --------------
 
-Back to the terminal and SSH session on **kube-master1** we will create all the
+We will use the command line on **kube-master1** to create all the
 required files and launch them.
+
+#. Go back to the Web Shell session you opened in the previous task. If you need to open a new
+   session go back to the **Deployment** tab of your UDF lab session at https://udf.f5.com 
+   to connect to **kube-master1** using the **Web Shell** access method, then switch to the **ubuntu** 
+   user account using the "**su**" command:
+
+   .. image:: ../images/WEBSHELL.png
+
+   .. image:: ../images/WEBSHELLroot.png
+
+   .. code-block:: bash
+
+      su ubuntu
+
 
 #. Create a file called ``deployment-hello-world.yaml``
 
@@ -94,13 +108,19 @@ required files and launch them.
       from the outside. In this example it's "32722", highlighted above.
 
 #. Now that we have deployed our application sucessfully, we can check the
-   configuration on bigip1. Switch back to the open management session on
-   firefox.
+   configuration on BIG-IP1.
+   Go back to the TMUI session you opened in a previous task. If you need to open a new
+   session go back to the **Deployment** tab of your UDF lab session at https://udf.f5.com 
+   and connect to **BIG-IP1** using the **TMUI** access method (*username*: **admin** and *password*: **admin**)
+
+   .. image:: ../images/TMUI.png
+
+   .. image:: ../images/TMUILogin.png
+
+#. Browse to: :menuselection:`Local Traffic --> Virtual Servers` and select the **kubernetes** partition.
 
    .. warning:: Don't forget to select the "kubernetes" partition or you'll
       see nothing.
-
-   GoTo: :menuselection:`Local Traffic --> Virtual Servers`
 
    Here you can see a new Virtual Server, "ingress_10.1.1.4_80" was created,
    listening on 10.1.1.4:80 in partition "kubernetes".
@@ -109,7 +129,7 @@ required files and launch them.
 
 #. Check the Pools to see a new pool and the associated pool members.
 
-   GoTo: :menuselection:`Local Traffic --> Pools` and select the
+   Browse to: :menuselection:`Local Traffic --> Pools` and select the
    "ingress_default_f5-hello-world-web" pool. Click the Members tab.
 
    .. image:: ../images/f5-container-connector-check-app-ingress-pool.png
@@ -117,29 +137,36 @@ required files and launch them.
    .. note:: You can see that the pool members listed are all the cluster
       node IPs on port 32722. (**NodePort mode**)
 
-#. Access your web application via firefox on the jumpbox.
+#. Now let's test access to the new web application "*through*"" **Firefox** on **superjump**.
+   To do this, browse back to the **Deployment** tab of your UDF lab session at
+   https://udf.f5.com and connect to **superjump** using the **Firefox** access method.
 
-   .. note:: Open a new tab and select the "Hello, World" shortcut or type
-      http://10.1.1.4 in the URL field.
+   .. note:: The web application is not directly accessible from the public Internet.
+      But since the **superjump** system is connected to the same internal virtual lab network 
+      we can use the **Firefox** access method because it provides *browser-in-a-browser*
+      functionality that allows remote browsing to this new private web site.
+
+   .. image:: ../images/udffirefox.png
+
+#. The *Firefox* application installed on the superjump system's will appear in your browser (i.e., a *browser-in-a-browser*).
+   Find and click on the "**Hello, World**" bookmark/shortcut, or type http://10.1.1.4 in the appropriate URL field.
+
+   .. image:: ../images/ffhelloworld.png
 
    .. image:: ../images/f5-container-connector-access-app.png
 
-#. To check traffic distribution, hit Refresh many times on your open browser
-   session. Then go back to the management console open on firefox.
+#. To check traffic distribution, hit *Refresh* many times on your open browser
+   session. Then go back to the BIG-IP TMUI management console.
 
-   GoTo: :menuselection:`Local Traffic --> Pools --> Pool list -->
+   Browse to: :menuselection:`Local Traffic --> Pools --> Pool list -->
    ingress_default_f5-hello-world-web --> Statistics`
 
    .. image:: ../images/f5-container-connector-check-app-ingress-stats.png
 
    .. note:: Are you seeing traffic distribution as shown in the image above?
-      If not why? (HINT: Check the virtual server settings.)
+      If not why? (**HINT**: *Check the virtual server settings... Resources tab...*)
 
-#. Delete Hello-World
-
-   .. important:: Do not skip this step. Instead of reusing some of these
-      objects, the next lab we will re-deploy them to avoid conflicts and
-      errors.
+#. Delete Hello-World with the following commands in the **kube-master1** Web Shell window:
 
    .. code-block:: bash
 
@@ -147,5 +174,9 @@ required files and launch them.
       kubectl delete -f nodeport-service-hello-world.yaml
       kubectl delete -f deployment-hello-world.yaml
 
-   .. attention:: Validate the objects are removed via the management console.
+   .. important:: **Do not skip this step. Instead of reusing some of these
+      objects, the next lab we will re-deploy them to avoid conflicts and
+      errors.**
+
+#. Validate the objects are removed via the BIG-IP TMUI management console:
       :menuselection:`Local Traffic --> Virtual Servers`

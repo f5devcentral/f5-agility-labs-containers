@@ -12,17 +12,13 @@ BIG-IP Setup
 With ClusterIP we're utilizing VXLAN to communicate with the application pods.
 To do so we'll need to configure BIG-IP first.
 
-If not already connected, RDP to the UDF lab "jumpbox" host. Otherwise resume
-previous session.
+#. Go back to the TMUI session you opened in a previous task. If you need to open a new
+   session go back to the **Deployment** tab of your UDF lab session at https://udf.f5.com 
+   and connect to **BIG-IP1** using the **TMUI** access method (*username*: **admin** and *password*: **admin**)
 
-#. Open firefox and connect to bigip1. For your convenience there's a shortcut
-   on the toolbar. Username and password are: **admin/admin**
+   .. image:: ../images/TMUI.png
 
-.. attention::
-   Be sure to be in the ``Common`` partition before creating the following
-   objects.
-
-   .. image:: ../images/f5-check-partition.png
+   .. image:: ../images/TMUILogin.png
 
 #. First we need to setup a partition that will be used by F5 Container Ingress
    Service.
@@ -30,15 +26,22 @@ previous session.
    .. note:: This step was performed in the previous module. Verify the
       "kubernetes" partion exists and if not follow the instructions below.
 
-   - GoTo: :menuselection:`System --> Users --> Partition List`
-   - Create a new partition called "kubernetes" (use default settings)
-   - Click Finished
+   - Browse to: :menuselection:`System --> Users --> Partition List`
+      .. attention::
+         Be sure to be in the **Common** partition before creating the following
+         objects.
+
+      .. image:: ../images/f5-check-partition.png
+
+   - Create a new partition called "**kubernetes**" (*use default settings*)
+   - Click **Finished**
 
    .. image:: ../images/f5-container-connector-bigip-partition-setup.png
 
+   # Via the CLI:
+
    .. code-block:: bash
 
-      # From the CLI:
       ssh admin@10.1.1.4 tmsh create auth partition kubernetes
 
 #. Install AS3 via the management console
@@ -48,38 +51,41 @@ previous session.
 
 #. Create a vxlan tunnel profile.
 
-   - GoTo: :menuselection:`Network --> Tunnels --> Profiles --> VXLAN`
-   - Create a new profile called "fl-vxlan"
-   - Set Port = 8472
-   - Set the Flooding Type = none
-   - Click Finished
+   - Browse to: :menuselection:`Network --> Tunnels --> Profiles --> VXLAN`
+   - Create a new profile called "**fl-vxlan**"
+   - Put a checkmark in the **Custom** checkbox to set the *Port* and *Flooding Type* values
+   - Set Port = **8472**
+   - Set the Flooding Type = **None**
+   - Click **Finished**
 
    .. image:: ../images/create-fl-vxlan-profile.png
 
+   # Via the CLI:
+
    .. code-block:: bash
 
-      # From the CLI:
       ssh admin@10.1.1.4 tmsh create net tunnels vxlan fl-vxlan { app-service none port 8472 flooding-type none }
 
 #. Create a vxlan tunnel.
 
-   - GoTo: :menuselection:`Network --> Tunnels --> Tunnel List`
-   - Create a new tunnel called "fl-tunnel"
-   - Set the Profile to the one previously created called "fl-vxlan"
-   - set the Key = 1
-   - Set the Local Address to 10.1.1.4
-   - Click Finished
+   - Browse to: :menuselection:`Network --> Tunnels --> Tunnel List`
+   - Create a new tunnel called "**fl-tunnel**"
+   - Set the Profile to the one previously created called "**fl-vxlan**"
+   - set the Key = **1**
+   - Set the Local Address to **10.1.1.4**
+   - Click **Finished**
 
    .. image:: ../images/create-fl-vxlan-tunnel.png
 
+   # Via the CLI:
+
    .. code-block:: bash
 
-      # From the CLI:
       ssh admin@10.1.1.4 tmsh create net tunnels tunnel fl-tunnel { app-service none key 1 local-address 10.1.1.4 profile fl-vxlan }
 
 #. Create the vxlan tunnel self-ip
 
-   .. tip:: For your SELF-IP subnet, remember it is a /16 and not a /24.
+   .. tip:: For your SELF-IP subnet, remember it is a /**16** and not a /24.
 
       Why? The Self-IP has to know all other /24 subnets are local to this
       namespace, which includes Master1, Node1, Node2, etc. Each of which have
@@ -91,19 +97,20 @@ previous session.
       self-ip doesn't have the proper subnet mask to know the other subnets are
       local.
 
-   - GoTo: :menuselection:`Network --> Self IPs`
-   - Create a new Self-IP called "fl-vxlan-selfip"
-   - Set the IP Address to "10.244.20.1"
-   - Set the Netmask to "255.255.0.0"
-   - Set the VLAN / Tunnel to "fl-tunnel" (Created earlier)
-   - Set Port Lockdown to "Allow All"
-   - Click Finished
+   - Browse to: :menuselection:`Network --> Self IPs`
+   - Create a new Self-IP called "**fl-vxlan-selfip**"
+   - Set the IP Address to "**10.244.20.1**"
+   - Set the Netmask to "**255.255.0.0**"
+   - Set the VLAN / Tunnel to "**fl-tunnel**" (*Created earlier*)
+   - Set Port Lockdown to "**Allow All**"
+   - Click **Finished**
 
    .. image:: ../images/create-fl-vxlan-selfip.png
 
+   # Via the CLI:
+
    .. code-block:: bash
 
-      # From the CLI:
       ssh admin@10.1.1.4 tmsh create net self fl-vxlan-selfip { address 10.244.20.1/16 vlan fl-tunnel allow-service all }
 
 CIS Deployment
@@ -120,27 +127,50 @@ CIS Deployment
 
 #. Before deploying CIS in ClusterIP mode we need to configure Big-IP as a node
    in the kubernetes cluster. To do so you'll need to modify
-   "bigip-node.yaml" with the MAC address auto created from the previous
-   steps. From the jumpbox terminal run the following command at bigip1. You'll
-   want to copy the displayed "MAC Address".
+   "*bigip-node.yaml*" with the MAC address auto created from the previous
+   steps. Go back to the Web Shell session you opened in the previous task. If you need to open a new
+   session go back to the **Deployment** tab of your UDF lab session at https://udf.f5.com 
+   to connect to **kube-master1** using the **Web Shell** access method, then switch to the **ubuntu** 
+   user account using the "**su**" command:
+
+   .. image:: ../images/WEBSHELL.png
+
+   .. image:: ../images/WEBSHELLroot.png
 
    .. code-block:: bash
 
-      # If directed to, accept the authenticity of the host by typing "yes" and hitting Enter to continue.
-      # The password is "admin"
+      su ubuntu
+
+#. From the Web Shell window (*command line of kube-master1*) run the following command
+   to obtain the MAC address from BIG-IP1. You'll want to copy the displayed "**MAC Address**" value.
+
+   .. note:: If prompted, accept the authenticity of the host by typing "yes" and hitting Enter to continue.
+      The password is "**admin**"
+
+   .. code-block:: bash
 
       ssh admin@10.1.1.4 tmsh show net tunnels tunnel fl-tunnel all-properties
 
    .. image:: ../images/get-fl-tunnel-mac-addr.png
 
-#. On kube-master1 edit bigip-node.yaml and change the highlighted MAC address
-   with the MAC address copied from the previous step.
+   .. tip:: 
+      
+      This command returns only the desired MAC address:
+
+      .. code-block:: bash
+         
+         ssh admin@10.1.1.4 tmsh show net tunnels tunnel fl-tunnel all-properties | grep MAC | cut -c 33-51
+
+#. In the Web Shell window (*command line of kube-master1*), edit the **bigip-node.yaml**
+   file to change the highlighted MAC address with the MAC address copied from the previous step.
 
    .. note:: If your unfamiliar with VI ask for help.
 
    .. code-block:: bash
 
       vim ~/agilitydocs/docs/class1/kubernetes/bigip-node.yaml
+
+   .. code-block:: bash
 
       i           # To enable insert mode and start editing
                   # Replace the current MAC addr with the one previously copied
@@ -182,7 +212,7 @@ CIS Deployment
       kubectl create serviceaccount k8s-bigip-ctlr -n kube-system
       kubectl create clusterrolebinding k8s-bigip-ctlr-clusteradmin --clusterrole=cluster-admin --serviceaccount=kube-system:k8s-bigip-ctlr
 
-#. Now that we have bigip1 added as a Node we can launch the CIS deployment. It
+#. Now that we have BIG-IP1 added as a Node we can launch the CIS deployment. It
    will start the f5-k8s-controller container on one of the worker nodes.
 
    .. attention:: This may take around 30sec to get to a running state.
@@ -221,8 +251,7 @@ CIS Deployment
 
       kubectl get pods -o wide -n kube-system
 
-   We can see that our container, in this example, is running on kube-node1
-   below.
+   In the example below we can see that our container is running on kube-node2.
 
    .. image:: ../images/f5-container-connector-locate-controller-container2.png
 
@@ -242,5 +271,5 @@ of checking the Docker container as described in the previos module.
 
    .. image:: ../images/f5-container-connector-check-logs-kubectl2.png
 
-   .. attention:: You will see **ERROR** in this log output. These errors can
-      be ignored. The lab will work as expected.
+   .. attention:: Ingore any **ERROR** you might see in this log output.
+      These errors can be ignored. The lab will work as expected.

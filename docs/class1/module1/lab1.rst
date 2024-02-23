@@ -15,14 +15,16 @@ In this lab we'll use NodePort mode to deploy an application to the BIG-IP.
 BIG-IP Setup
 ------------
 
-Via RDP connect to the UDF lab "jumpbox" host.
+#. Browse to the **Deployment** tab of your UDF lab session at https://udf.f5.com 
+   and connect to **BIG-IP1** using the **TMUI** access method.
 
-.. note:: Username and password are: **ubuntu/ubuntu**
+   .. image:: ../images/TMUI.png
 
-#. Open firefox and connect to bigip1 management console. For your convenience
-   there's a shortcut on the firefox toolbar.
+#. Login with username: **admin** and password: **admin**.
 
-   .. note:: Username and password are: **admin/admin**
+   .. image:: ../images/TMUILogin.png
+
+   .. image:: ../images/TMUILicense.png
 
    .. attention::
 
@@ -38,19 +40,27 @@ Via RDP connect to the UDF lab "jumpbox" host.
 
       .. image:: ../images/f5-check-partition.png
 
-#. First we need to setup a partition that will be used by F5 Container Ingress
-   Service.
+#. Create a **partition**, which is requiredfor F5 Container Ingress Service.
 
-   - GoTo: :menuselection:`System --> Users --> Partition List`
-   - Create a new partition called "kubernetes" (use default settings)
+   - Browse to: :menuselection:`System --> Users --> Partition List`
+
+      .. attention::
+
+         - Be sure to be in the ``Common`` partition before creating the following
+         objects.
+
+         .. image:: ../images/f5-check-partition.png
+            
+   - Create a new partition called "**kubernetes**" (use default settings)
    - Click Finished
 
    .. image:: ../images/f5-container-connector-bigip-partition-setup.png
 
+   # Via the CLI:
+
    .. code-block:: bash
 
-      # From the CLI:
-      ssh admin@10.1.1.4 tmsh create auth partition kubernetes
+      tmsh create auth partition kubernetes
 
 #. Verify AS3 is installed.
 
@@ -60,16 +70,16 @@ Via RDP connect to the UDF lab "jumpbox" host.
    .. seealso:: For more info click here:
       `Application Services 3 Extension Documentation <https://clouddocs.f5.com/products/extensions/f5-appsvcs-extension/latest/>`_
 
-   - GoTo: :menuselection:`iApps --> Package Management LX` and confirm
-     "f5-appsvcs" is in the list as shown below.
+   - Browse to: :menuselection:`iApps --> Package Management LX` and confirm
+     "*f5-appsvcs*" is in the list as shown below.
 
      .. image:: ../images/confirm-as3-installed.png
 
-#. If AS3 is NOT installed follow these steps:
+#. If *AS3* **is NOT** installed follow these steps:
 
    - Click here to: `Download latest AS3 <https://github.com/F5Networks/f5-appsvcs-extension/releases>`_
 
-   - Go back to: :menuselection:`iApps --> Package Management LX`
+   - Browse back to: :menuselection:`iApps --> Package Management LX`
 
      - Click Import
      - Browse and select downloaded AS3 RPM
@@ -78,22 +88,25 @@ Via RDP connect to the UDF lab "jumpbox" host.
 Explore the Kubernetes Cluster
 ------------------------------
 
-#. On the jumphost open a terminal and start an SSH session with kube-master1.
+#. Go back to the **Deployment** tab of your UDF lab session at https://udf.f5.com 
+   and connect to **kube-master1** using the **Web Shell** access method.
 
-   .. image:: ../images/start-term.png
+   .. image:: ../images/WEBSHELL.png
+
+#. The CLI will appear in a new window or tab.
+   Switch to the **ubuntu** user account using the following "**su**" command.
+
+   .. image:: ../images/WEBSHELLroot.png
 
    .. code-block:: bash
 
-      # If directed to, accept the authenticity of the host by typing "yes" and hitting Enter to continue.
+      su ubuntu
 
-      ssh kube-master1
+#. "**git**" the lab files and set the working directy with the "**cd**" command. 
 
-   .. image:: ../images/sshtokubemaster1.png
+   .. note:: These files should already be there and automatically updated upon login of the ubuntu user account.
 
-#. "git" the demo files
-
-   .. note:: These files should already be there and upon login updated. If not
-      use the following command to clone the repo.
+   .. image:: ../images/gitrepo.png
 
    .. code-block:: bash
 
@@ -109,11 +122,11 @@ Explore the Kubernetes Cluster
 
    To list all nodes that are known to the master:
 
+   .. image:: ../images/kube-get-nodes.png
+
    .. code-block:: bash
 
       kubectl get nodes
-
-   .. image:: ../images/kube-get-nodes.png
 
    .. attention::
       If the node STATUS shows **NotReady** or **SchedulingDisabled** contact
@@ -235,9 +248,10 @@ check the logs, kubectl command or docker command.
 #. Using ``kubectl`` command: you need to use the full name of your pod as
    shown in the previous image.
 
+   # For example:
+
    .. code-block:: bash
 
-      # For example:
       kubectl logs k8s-bigip-ctlr-7469c978f9-6hvbv -n kube-system
 
    .. image:: ../images/f5-container-connector-check-logs-kubectl.png
@@ -248,9 +262,9 @@ check the logs, kubectl command or docker command.
 
    .. important:: Be sure to check which Node your "connector" is running on.
 
-   .. code-block:: bash
+   # If directed to, accept the authenticity of the host by typing "yes" and hitting Enter to continue.
 
-      # If directed to, accept the authenticity of the host by typing "yes" and hitting Enter to continue.
+   .. code-block:: bash
 
       ssh kube-node2
 
