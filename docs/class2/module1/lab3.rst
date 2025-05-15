@@ -93,7 +93,7 @@ On the **ocp-provisioner** we will create all the required files:
       from the outside. Here it's "30684", highlighted above.
 
 #. Now that we have deployed our application sucessfully, we can check the
-   configuration on BIG-IP1. Switch back to the open TMUI management session.
+   configuration on bigip. Switch back to the open TMUI management session.
 
    .. warning:: Don't forget to select the proper partition. Previously we
       checked the "*okd*" partition. In this case we need to look at
@@ -145,7 +145,7 @@ On the **ocp-provisioner** we will create all the required files:
 
    .. image:: ../images/f5-hello-world-pods-scale10.png
 
-#. Check the pool was updated on BIG-IP1. Browse to: :menuselection:`Local Traffic
+#. Check the pool was updated on bigip. Browse to: :menuselection:`Local Traffic
    --> Pools` and select the "web_pool" pool. Click the Members tab.
 
    .. image:: ../images/f5-hello-world-pool-scale10-node-as3.png
