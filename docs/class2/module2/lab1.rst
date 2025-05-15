@@ -14,17 +14,15 @@ To do so we'll need to configure BIG-IP first.
 
 #. Go back to the TMUI session you opened in a previous task. If you need to open a new
    session go back to the **Deployment** tab of your UDF lab session at https://udf.f5.com 
-   and connect to **BIG-IP1** using the **TMUI** access method (*username*: **admin** and *password*: **admin**)
+   and connect to **BIG-IP1** using the **TMUI** access method (*username*: **admin** and *password*: **F5site02@**)
 
-   .. image:: ../images/TMUI.png
-
-   .. image:: ../images/TMUILogin.png
+   .. image:: ../images/udf-access-bigip-tmui.png
 
 #. First we need to setup a partition that will be used by F5 Container Ingress
    Service.
 
    .. note:: This step was performed in the previous module. Verify the
-      "okd" partion exists and if not follow the instructions below.
+      "ocp" partion exists and if not follow the instructions below.
 
    - Browse to: :menuselection:`System --> Users --> Partition List`
    .. attention::
@@ -33,81 +31,18 @@ To do so we'll need to configure BIG-IP first.
 
    .. image:: ../images/f5-check-partition.png
 
-   - Create a new partition called "**okd**" (use default settings)
+   - Create a new partition called "**ocp**" (use default settings)
    - Click **Finished**
 
-   .. image:: ../images/f5-container-connector-bigip-partition-setup.png
+   .. image:: ../images/udf-ocp-partition.png
 
-   .. code-block:: bash
 
-      # Via the CLI:
-      ssh admin@10.1.1.4 tmsh create auth partition okd
 
 #. Install AS3 via the management console
 
    .. attention:: This has been done to save time. If needed see
       `Module1 / Lab 1.1 / Install AS3 Steps <../module1/lab1.html>`_
 
-#. Create a vxlan tunnel profile
-
-   - Browse to: :menuselection:`Network --> Tunnels --> Profiles --> VXLAN`
-   - Create a new profile called "**okd-vxlan**"
-   - Put a checkmark in the **Custom** checkbox to set the *Port* and *Flooding Type* values
-   - set Port = **4789**
-   - Set the Flooding Type = **Multipoint**
-   - Click **Finished**
-
-   .. image:: ../images/create-okd-vxlan-profile.png
-
-   .. code-block:: bash
-
-      # Via the CLI:
-      ssh admin@10.1.1.4 tmsh create net tunnel vxlan okd-vxlan { app-service none port 4789 flooding-type multipoint }
-
-#. Create a vxlan tunnel
-
-   - Browse to: :menuselection:`Network --> Tunnels --> Tunnel List`
-   - Put a checkmark in the **Custom** checkbox to set the *Port* and *Flooding Type* values
-   - Set the Profile to the one previously created called "**okd-vxlan**"
-   - set the key = **0**
-   - Set the Local Address to **10.1.1.4**
-   - Click **Finished**
-
-   .. image:: ../images/create-okd-vxlan-tunnel.png
-
-   .. code-block:: bash
-
-      # Via the CLI:
-      ssh admin@10.1.1.4 tmsh create net tunnel tunnel okd-tunnel { app-service none key 0 local-address 10.1.1.4 profile okd-vxlan }
-
-#. Create the vxlan tunnel self-ip
-
-   .. tip:: For your SELF-IP subnet, remember it is a /14 and not a /23.
-
-      Why? The Self-IP has to know all other /23 subnets are local to this
-      namespace, which includes Master1, Node1, Node2, etc. Each of which have
-      their own /23.
-
-      Many students accidently use /23, doing so would limit the self-ip to
-      only communicate with that subnet. When trying to ping services on other
-      /23 subnets from the BIG-IP for instance, communication will fail as your
-      self-ip doesn't have the proper subnet mask to know the other subnets are
-      local.
-
-      - Browse to: :menuselection:`Network --> Self IPs`
-      - Create a new Self-IP called "**okd-vxlan-selfip**"
-      - Set the IP Address to "**10.131.0.1**".
-      - Set the Netmask to "**255.252.0.0**"
-      - Set the VLAN / Tunnel to "**okd-tunnel**" (Created earlier)
-      - Set Port Lockdown to "**Allow All**"
-      - Click **Finished**
-
-   .. image:: ../images/create-okd-vxlan-selfip.png
-
-   .. code-block:: bash
-
-      # Via the CLI:
-      ssh admin@10.1.1.4 tmsh create net self okd-vxlan-selfip { app-service none address 10.131.0.1/14 vlan okd-tunnel allow-service all }
 
 CIS Deployment
 --------------
@@ -123,16 +58,13 @@ CIS Deployment
 
 #. Go back to the Web Shell session you opened in a previous task. If you need to open a new
    session go back to the **Deployment** tab of your UDF lab session at https://udf.f5.com 
-   to connect to **okd-master1** using the **Web Shell** access method, then switch to the **centos** 
-   user account using the "**su**" command:
+   to connect to **ocp-provisioner** using the **Web Shell** access method, then su to cloud-user:
 
-   .. image:: ../images/OKDWEBSHELL.png
-
-   .. image:: ../images/OKDWEBSHELLroot.png
+   .. image:: ../images/udf-access-ocp-provisioner
 
    .. code-block:: bash
 
-      su centos
+      su - cloud-user
 
 #. Just like the previous module where we deployed CIS in NodePort mode we need
    to create a "**secret**", "**serviceaccount**", and "**clusterrolebinding**".
@@ -145,78 +77,6 @@ CIS Deployment
       oc create secret generic bigip-login -n kube-system --from-literal=username=admin --from-literal=password=admin
       oc create serviceaccount k8s-bigip-ctlr -n kube-system
       oc create clusterrolebinding k8s-bigip-ctlr-clusteradmin --clusterrole=cluster-admin --serviceaccount=kube-system:k8s-bigip-ctlr
-
-#. Next let's explore the f5-hostsubnet.yaml file
-
-   .. code-block:: bash
-
-      cd ~/agilitydocs/docs/class2/openshift
-
-      cat bigip-hostsubnet.yaml
-
-   You'll see a config file similar to this:
-
-   .. literalinclude:: ../openshift/bigip-hostsubnet.yaml
-      :language: yaml
-      :caption: bigip-hostsubnet.yaml
-      :linenos:
-      :emphasize-lines: 2,9
-
-   .. attention:: This YAML file creates an OpenShift Node and the Host is the
-      BIG-IP with an assigned /23 subnet of IP 10.131.0.0 (3 images down).
-
-#. Next let's look at the current cluster, you should see 3 members
-   (1 master, 2 nodes)
-
-   .. code-block:: bash
-
-      oc get hostsubnet
-
-   .. image:: ../images/F5-OC-HOSTSUBNET1.png
-
-#. Now create the connector to the BIG-IP device, then look before and after
-   at the attached devices
-
-   .. code-block:: bash
-
-      oc create -f bigip-hostsubnet.yaml
-
-   You should see a successful creation of a new OpenShift Node.
-
-   .. image:: ../images/F5-OS-NODE.png
-
-#. At this point nothing has been done to the BIG-IP, this only was done in
-   the OpenShift environment.
-
-   .. code-block:: bash
-
-      oc get hostsubnet
-
-   You should now see OpenShift configured to communicate with the BIG-IP
-
-   .. image:: ../images/F5-OC-HOSTSUBNET2.png
-
-   .. important:: The Subnet assignment, in this case is 10.131.0.0/23, was
-      assigned by the **subnet: "10.131.0.0/23"** line in "HostSubnet" yaml
-      file.
-
-   .. note:: In this lab we're manually assigning a subnet. We have the option
-      to let openshift auto assign ths by removing **subnet: "10.131.0.0/23"**
-      line at the end of the "hostsubnet" yaml file and setting the
-      **assign-subnet: "true"**. It would look like this:
-
-      .. code-block:: yaml
-         :emphasize-lines: 7
-
-         apiVersion: v1
-         kind: HostSubnet
-         metadata:
-            name: openshift-f5-node
-            annotations:
-               pod.network.openshift.io/fixed-vnid-host: "0"
-               pod.network.openshift.io/assign-subnet: "true"
-         host: openshift-f5-node
-         hostIP: 10.1.1.4
 
 #. Now that we have added a HostSubnet for BIG-IP1 we can launch the CIS
    deployment. It will start the f5-k8s-controller container on one of the
@@ -248,7 +108,7 @@ CIS Deployment
 
    .. code-block:: bash
 
-      oc get deployment k8s-bigip-ctlr --namespace kube-system
+      oc get deployment k8s-bigip-ctlr-deployment --namespace kube-system
 
    .. image:: ../images/f5-container-connector-launch-deployment-controller.png
 

@@ -7,7 +7,7 @@ But instead of using the Route resource we'll use ConfigMap.
 App Deployment
 --------------
 
-On **okd-master1** we will create all the required files:
+On **ocp-provisioner** we will create all the required files:
 
 #. Create a file called ``deployment-hello-world.yaml``
 
@@ -95,7 +95,7 @@ On **okd-master1** we will create all the required files:
 
 #. Access your web application via **Firefox** on the **superjump**.
 
-   .. note:: Select the "Hello, World" shortcut or type http://10.1.1.4 in the
+   .. note:: Select the "Hello, World" shortcut or type http://10.1.10.101 in the
       URL field.
 
    .. image:: ../images/f5-container-connector-access-app.png
