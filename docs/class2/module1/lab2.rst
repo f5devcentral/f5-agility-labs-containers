@@ -33,7 +33,7 @@ App Deployment
    session go to the **Deployment** tab of your UDF lab session at https://udf.f5.com 
    to connect to **ocp-provisioner** using the **Web Shell** access method, then su to cloud-user:
 
-   .. image:: ../images/udf-access-ocp-provisioner
+   .. image:: ../images/udf-access-ocp-provisioner.png
 
    .. code-block:: bash
 
