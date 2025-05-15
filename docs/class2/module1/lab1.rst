@@ -38,7 +38,7 @@ BIG-IP Setup
    - Create a new partition called "**ocp**" (use default settings)
    - Click **Finished**
 
-   .. image:: ../images/f5-container-connector-bigip-partition-setup.png
+   .. image:: ../images/udf-ocp-partition.png
 
 
 #. Verify AS3 is installed.
