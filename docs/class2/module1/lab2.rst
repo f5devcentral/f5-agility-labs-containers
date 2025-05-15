@@ -29,21 +29,15 @@ To deploy our application, we will need the following definitions:
 App Deployment
 --------------
 
-Back on **okd-master1** we will create all the required
-files:
-
 #. Go back to the Web Shell session you opened in a previous task. If you need to open a new
    session go to the **Deployment** tab of your UDF lab session at https://udf.f5.com 
-   to connect to **okd-master1** using the **Web Shell** access method, then switch to the **centos** 
-   user account using the "**su**" command:
+   to connect to **ocp-provisioner** using the **Web Shell** access method, then su to cloud-user:
 
-   .. image:: ../images/OKDWEBSHELL.png
-
-   .. image:: ../images/OKDWEBSHELLroot.png
+   .. image:: ../images/udf-access-ocp-provisioner
 
    .. code-block:: bash
 
-      su centos
+      su - cloud-user
 
 #. Create a file called ``deployment-hello-world.yaml``
 
@@ -106,14 +100,27 @@ files:
       **NodePort value**, that's the port used to give you access to the app
       from the outside. In this example it's "30459", highlighted above.
 
+#. One last change needs to be made before we can test our published site.  We need to login to our Firefox
+   container and edit the host file.
+
+   .. code-block:: bash
+
+      podman exec -it firefox sh
+
+   .. code-block:: bash
+
+      vi /etc/hosts
+
+   .. code-block:: bash
+
+      10.1.10.101 mysite.f5demo.com
+
 #. Now that we have deployed our application sucessfully, we can check the
-   configuration on BIG-IP1. Go back to the TMUI session you opened in a previous task. If you need to open a new
+   configuration on bigip. Go back to the TMUI session you opened in a previous task. If you need to open a new
    session go back to the **Deployment** tab of your UDF lab session at https://udf.f5.com 
-   and connect to **BIG-IP1** using the **TMUI** access method (*username*: **admin** and *password*: **admin**)
+   and connect to **bigip** using the **TMUI** access method (*username*: **admin** and *password*: **F5site02@**)
 
-   .. image:: ../images/TMUI.png
-
-   .. image:: ../images/TMUILogin.png
+   .. image:: ../images/udf-access-bigip-tmui.png
 
    Browse to :menuselection:`Local Traffic --> Virtual Servers`
 

@@ -16,24 +16,15 @@ BIG-IP Setup
 ------------
 
 #. Browse to the **Deployment** tab of your UDF lab session at https://udf.f5.com 
-   and connect to **BIG-IP1** using the **TMUI** access method.
+   and connect to **bigip** using the **TMUI** access method.
 
-   .. image:: ../images/TMUI.png
+   .. image:: ../images/udf-access-bigip-tmui.png
 
-#. Login with username: **admin** and password: **admin**.
+#. Login with username: **admin** and password: **F5site02@**.
 
-   .. image:: ../images/TMUILogin.png
-
-   .. image:: ../images/TMUILicense.png
+   .. image:: ../images/udf-bigip-loginscreen.png
 
    .. attention::
-
-      - Check BIG-IP is active and licensed.
-
-      - If your BIG-IP has no license or its license expired, renew the
-        license. You just need a LTM VE license for this lab. No specific
-        add-ons are required (ask a lab instructor for eval licenses if your
-        license has expired)
 
       - Be sure to be in the ``Common`` partition before creating the following
         objects.
@@ -44,15 +35,11 @@ BIG-IP Setup
    will be used by F5 Container Ingress Service.
 
    - Browse to: :menuselection:`System --> Users --> Partition List`
-   - Create a new partition called "**okd**" (use default settings)
+   - Create a new partition called "**ocp**" (use default settings)
    - Click **Finished**
 
    .. image:: ../images/f5-container-connector-bigip-partition-setup.png
 
-   .. code-block:: bash
-
-      # Via the CLI:
-      ssh admin@10.1.1.4 tmsh create auth partition okd
 
 #. Verify AS3 is installed.
 
@@ -81,16 +68,13 @@ Explore the OpenShift Cluster
 -----------------------------
 
 #. Go to the **Deployment** tab of your UDF lab session at https://udf.f5.com 
-   to connect to **okd-master1** using the **Web Shell** access method, then switch to the **centos** 
-   user account using the "**su**" command:
+   to connect to **ocp-provisioner** using the **Web Shell** access method, then su to cloud-user:
 
-   .. image:: ../images/OKDWEBSHELL.png
-
-   .. image:: ../images/OKDWEBSHELLroot.png
+   .. image:: ../images/udf-access-ocp-provisioner.png
 
    .. code-block:: bash
 
-      su centos
+      su - cloud-user
 
 #. "git" the demo files
 
@@ -102,20 +86,6 @@ Explore the OpenShift Cluster
       git clone -b develop https://github.com/f5devcentral/f5-agility-labs-containers.git ~/agilitydocs
 
       cd ~/agilitydocs/docs/class2/openshift
-
-#. Log in with an Openshift Client.
-
-   .. note:: Here we're using the "**centos**" user, added when we built the
-      cluster. When prompted for password enter "**centos**".
-
-   .. code-block:: bash
-
-      oc login -u centos -n default
-
-   .. image:: ../images/OC-DEMOuser-Login.png
-
-   .. important:: Upon logging in you'll notice access to several projects. In
-      our lab we'll be working from the default "default".
 
 #. Check the OpenShift status
 
@@ -155,7 +125,7 @@ Explore the OpenShift Cluster
 
    .. code-block:: bash
 
-      oc describe node okd-master1
+      oc describe node master-1
 
    .. image:: ../images/oc-describe-node.png
 
@@ -267,8 +237,7 @@ If you need to troubleshoot your container, you have two different ways to
 check the logs of your container, oc command or docker command.
 
 .. attention:: Depending on your deployment, CIS can be running on either
-   okd-node1 or okd-node2. In our example above it's running on
-   **okd-node1**
+   master-1 or master-2. 
 
 #. Using ``oc`` command: you need to use the full name of your pod as shown in
    the previous image.
@@ -280,57 +249,3 @@ check the logs of your container, oc command or docker command.
 
    .. image:: ../images/f5-container-connector-check-logs-kubectl.png
 
-#. Using **docker logs** command: From the previous check we know the container
-   is running on *okd-node1* (yours could be *okd-node2*). On your current session with okd-master1, SSH to
-   okd-node1 first and then run the docker command:
-
-   .. important:: Be sure to check which Node your "connector" is running on.
-
-   .. code-block:: bash
-
-      # If directed to, accept the authenticity of the host by typing "yes" and hitting Enter to continue.
-
-      ssh okd-node1
-
-   .. code-block:: bash
-
-      sudo docker ps
-
-   In this example, we can see our container ID is "*478749740d29*"
-
-   .. image:: ../images/f5-container-connector-find-dockerID--controller-container.png
-
-   Now we can check our container logs:
-
-   .. code-block:: bash
-
-      sudo docker logs 478749740d29
-
-   .. image:: ../images/f5-container-connector-check-logs-controller-container.png
-
-   .. note:: The log messages here are identical to the log messages displayed
-      in the previous oc logs command.
-
-#. Exit okd-node1 back to okd-master1
-
-   .. code-block:: bash
-
-      exit
-
-#. You can connect to your container with kubectl as well. This is something
-   not typically needed but support may direct you to do so.
-
-   .. important:: Be sure the previous command to exit **okd-node1** back to
-      okd-master1 was successfull.
-
-   .. code-block:: bash
-
-      oc exec -it k8s-bigip-ctlr-844dfdc864-669hb -n kube-system -- /bin/sh
-
-   .. code-block:: bash
-
-      cd /app
-
-      ls -la
-
-      exit

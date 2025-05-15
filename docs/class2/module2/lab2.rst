@@ -10,7 +10,7 @@ For this lab we'll use a simple pre-configured docker image called
 App Deployment
 --------------
 
-On **kube-master1** we will create all the required files:
+On **ocp-provisioner** we will create all the required files:
 
 #. Create a file called ``deployment-hello-world.yaml``
 
@@ -74,13 +74,13 @@ On **kube-master1** we will create all the required files:
    configuration on BIG-IP1. Switch back to the open management session on
    firefox.
 
-   .. warning:: Don't forget to select the "**okd**" partition or you'll
+   .. warning:: Don't forget to select the "**ocp**" partition or you'll
       see nothing.
 
    Browse to :menuselection:`Local Traffic --> Virtual Servers`
 
-   With "*Route*" you'll seee two virtual servers defined. "**okd_http_vs**" and
-   "**okd_https_vs**", listening on port **80** and **443**.
+   With "*Route*" you'll seee two virtual servers defined. "**ocp_http_vs**" and
+   "**ocp_https_vs**", listening on port **80** and **443**.
 
    .. image:: ../images/f5-container-connector-check-app-route-bigipconfig.png
 
@@ -108,7 +108,7 @@ On **kube-master1** we will create all the required files:
 
    .. image:: ../images/f5-container-connector-access-app.png
 
-   .. note:: Why can't we use http://10.1.1.4 to open the web server?
+   .. note:: Why can't we use http://10.1.10.101 to open the web server?
 
 #. Delete Hello-World
 
