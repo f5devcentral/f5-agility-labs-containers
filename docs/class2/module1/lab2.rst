@@ -101,7 +101,7 @@ App Deployment
       from the outside. In this example it's "30459", highlighted above.
 
 #. One last change needs to be made before we can test our published site.  We need to login to our Firefox
-   container and edit the host file.
+   container and edit the host file by adding **10.1.10.101 mysite.f5demo.com** to it.
 
    .. code-block:: bash
 
@@ -124,11 +124,11 @@ App Deployment
 
    Browse to :menuselection:`Local Traffic --> Virtual Servers`
 
-   .. warning:: Don't forget to select the "okd" partition or you'll see
+   .. warning:: Don't forget to select the "ocp" partition or you'll see
       nothing.
 
-   With "*Route*" you'll seee two virtual servers defined. "**okd_http_vs**" and
-   "**okd_https_vs**", listening on port **80** and **443**.
+   With "*Route*" you'll seee two virtual servers defined. "**ocp_http_vs**" and
+   "**ocp_https_vs**", listening on port **80** and **443**.
 
    .. image:: ../images/f5-container-connector-check-app-route-bigipconfig.png
 

@@ -14,7 +14,7 @@ To do so we'll need to configure BIG-IP first.
 
 #. Go back to the TMUI session you opened in a previous task. If you need to open a new
    session go back to the **Deployment** tab of your UDF lab session at https://udf.f5.com 
-   and connect to **BIG-IP1** using the **TMUI** access method (*username*: **admin** and *password*: **F5site02@**)
+   and connect to **bigip** using the **TMUI** access method (*username*: **admin** and *password*: **F5site02@**)
 
    .. image:: ../images/udf-access-bigip-tmui.png
 
@@ -60,7 +60,7 @@ CIS Deployment
    session go back to the **Deployment** tab of your UDF lab session at https://udf.f5.com 
    to connect to **ocp-provisioner** using the **Web Shell** access method, then su to cloud-user:
 
-   .. image:: ../images/udf-access-ocp-provisioner
+   .. image:: ../images/udf-access-ocp-provisioner.png
 
    .. code-block:: bash
 
@@ -78,7 +78,7 @@ CIS Deployment
       oc create serviceaccount k8s-bigip-ctlr -n kube-system
       oc create clusterrolebinding k8s-bigip-ctlr-clusteradmin --clusterrole=cluster-admin --serviceaccount=kube-system:k8s-bigip-ctlr
 
-#. Now that we have added a HostSubnet for BIG-IP1 we can launch the CIS
+#. Now that we have added a HostSubnet for bigip we can launch the CIS
    deployment. It will start the f5-k8s-controller container on one of the
    worker nodes.
 
