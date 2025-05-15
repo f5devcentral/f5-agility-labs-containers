@@ -22,24 +22,6 @@ We will leverage the following setup to configure the OpenShift environment.
    * - **Hostname**
      - **IP-ADDR**
      - **Credentials**
-   * - superjump
-     - 10.1.1.6
-     - ubuntu/HelloUDF
    * - bigip1
      - 10.1.1.4
-     - admin/admin
-   * - okd-master1
-     - 10.1.1.10
-     - centos/centos
-
-       root/default
-   * - okd-node1
-     - 10.1.1.11
-     - centos/centos
-
-       root/default
-   * - okd-node2
-     - 10.1.1.12
-     - centos/centos
-
-       root/default
+     - admin/F5site02@

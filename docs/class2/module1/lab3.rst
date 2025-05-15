@@ -29,7 +29,7 @@ To deploy our application, we will need the following definitions:
 App Deployment
 --------------
 
-On the **okd-master1** we will create all the required files:
+On the **ocp-provisioner** we will create all the required files:
 
 #. Create a file called ``deployment-hello-world.yaml``
 
@@ -117,12 +117,12 @@ On the **okd-master1** we will create all the required files:
    .. note:: You can see that the pool members listed are all the cluster
       node IPs on port 30684. (**NodePort mode**)
 
-#. Access your web application via **Firefox** on the **superjump**.
+#. Access your web application via **Firefox** on the **ocp-provisioner**.
 
-   .. note:: Select the "Hello, World" shortcut or type http://10.1.1.4 in the
+   .. note:: Select the "Hello, World" shortcut or type http://10.1.10.101 in the
       URL field.
 
-   .. image:: ../images/f5-container-connector-access-app2.png
+   .. image:: ../images/udf-step8-webpage.png
 
 #. Hit Refresh many times and go back to your **BIG-IP** UI
 
