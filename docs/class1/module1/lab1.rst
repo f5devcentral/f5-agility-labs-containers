@@ -20,7 +20,7 @@ BIG-IP Setup
 
    .. image:: ../images/TMUI.png
 
-#. Login with username: **admin** and password: **admin**.
+#. Login with username: **admin** and password: **F5site02@**.
 
    .. image:: ../images/TMUILogin.png
 
@@ -102,15 +102,11 @@ Explore the Kubernetes Cluster
 
       su ubuntu
 
-#. "**git**" the lab files and set the working directy with the "**cd**" command. 
+#. Set the working directy with the "**cd**" command. 
 
-   .. note:: These files should already be there and automatically updated upon login of the ubuntu user account.
-
-   .. image:: ../images/gitrepo.png
+   .. note:: All the files in the working directory are available upon login of the ubuntu user account.
 
    .. code-block:: bash
-
-      git clone -b develop https://github.com/f5devcentral/f5-agility-labs-containers.git ~/agilitydocs
 
       cd ~/agilitydocs/docs/class1/kubernetes
 
@@ -159,7 +155,7 @@ to hide our bigip credentials.
 
    .. code-block:: bash
 
-      kubectl create secret generic bigip-login -n kube-system --from-literal=username=admin --from-literal=password=admin
+      kubectl create secret generic bigip-login -n kube-system --from-literal=username=admin --from-literal=password=F5site02@
 
    You should see something similar to this:
 
