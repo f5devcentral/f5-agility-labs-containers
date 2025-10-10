@@ -17,7 +17,7 @@ spec:
       serviceAccountName: k8s-bigip-ctlr
       containers:
         - name: k8s-bigip-ctlr
-          image: "f5networks/k8s-bigip-ctlr:2.4.1"
+          image: "f5networks/k8s-bigip-ctlr:latest"
           imagePullPolicy: IfNotPresent
           env:
             - name: BIGIP_USERNAME
@@ -34,9 +34,13 @@ spec:
           args: [
             "--bigip-username=$(BIGIP_USERNAME)",
             "--bigip-password=$(BIGIP_PASSWORD)",
-            "--bigip-url=https://10.1.1.4:8443",
+            "--bigip-url=10.1.1.5",
             "--insecure=true",
             "--bigip-partition=kubernetes",
             "--pool-member-type=cluster",
-            "--flannel-name=/Common/fl-tunnel"
+            "--flannel-name=/Common/fl-tunnel",
+            "--log-as3-response=true",
+            "--agent=as3",
+            "--as3-validation=false",
+            "--custom-resource-mode=true"
           ]

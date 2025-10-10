@@ -122,8 +122,8 @@ required files and launch them.
    .. warning:: Don't forget to select the "kubernetes" partition or you'll
       see nothing.
 
-   Here you can see a new Virtual Server, "ingress_10.1.1.4_80" was created,
-   listening on 10.1.1.4:80 in partition "kubernetes".
+   Here you can see a new Virtual Server, "ingress_10.1.10.101_80" was created,
+   listening on 10.1.10.101:80 in partition "kubernetes".
 
    .. image:: ../images/f5-container-connector-check-app-ingress.png
 
@@ -149,7 +149,7 @@ required files and launch them.
    .. image:: ../images/udffirefox.png
 
 #. The *Firefox* application installed on the superjump system's will appear in your browser (i.e., a *browser-in-a-browser*).
-   Find and click on the "**Hello, World**" bookmark/shortcut, or type http://10.1.1.4 in the appropriate URL field.
+   Find and click on the "**Hello, World**" bookmark/shortcut, or type http://10.1.10.101 in the appropriate URL field.
 
    .. image:: ../images/ffhelloworld.png
 

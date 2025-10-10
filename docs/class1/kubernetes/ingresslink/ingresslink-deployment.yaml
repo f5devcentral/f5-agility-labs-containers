@@ -34,7 +34,7 @@ spec:
           args: [
             "--bigip-username=$(BIGIP_USERNAME)",
             "--bigip-password=$(BIGIP_PASSWORD)",
-            "--bigip-url=https://10.1.1.4:8443",
+            "--bigip-url=10.1.1.5",
             "--insecure=true",
             "--custom-resource-mode=true",
             "--bigip-partition=kubernetes",
