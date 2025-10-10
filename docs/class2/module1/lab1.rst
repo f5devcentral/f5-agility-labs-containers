@@ -154,7 +154,7 @@ to hide our bigip credentials.
 
    .. code-block:: bash
 
-      oc create secret generic bigip-login -n kube-system --from-literal=username=admin --from-literal=password=admin
+      oc create secret generic bigip-login -n kube-system --from-literal=username=admin --from-literal=password=F5site02@
 
    You should see something similar to this:
 
