@@ -96,14 +96,14 @@ On the **ocp-provisioner** we will create all the required files:
    configuration on bigip. Switch back to the open TMUI management session.
 
    .. warning:: Don't forget to select the proper partition. Previously we
-      checked the "*okd*" partition. In this case we need to look at
+      checked the "*ocp*" partition. In this case we need to look at
       the "**AS3**" partition. This partition was auto created by AS3 and named
       after the Tenant which happens to be "**AS3**".
 
    Browse to :menuselection:`Local Traffic --> Virtual Servers`
 
    Here you can see a new Virtual Server, "serviceMain" was created,
-   listening on 10.1.1.4:80 in partition "AS3".
+   listening on 10.1.10.101:80 in partition "AS3".
 
    .. image:: ../images/f5-container-connector-check-app-bigipconfig-as3.png
 
