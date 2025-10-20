@@ -100,7 +100,7 @@ On **kube-master1** we will create all the required files:
    .. note:: You can see that the pool members IP addresses are assigned from
       the overlay network (**ClusterIP mode**)
 
-#. Access your web application via **Firefox** on the **superjump**.
+#. Access your web application via **Firefox** on the **ocp-provioner**.
 
    .. note:: Select the "Hello, World" shortcut or type http://10.1.10.101 in the
       URL field.

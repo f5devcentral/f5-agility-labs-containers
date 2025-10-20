@@ -22,24 +22,24 @@ We will leverage the following setup to configure the Kubernetes environment.
    * - **Hostname**
      - **IP-ADDR**
      - **Credentials**
-   * - superjump
-     - 10.1.1.5
+   * - ocp-provisioner
+     - 10.1.1.4
      - ubuntu/HelloUDF
    * - bigip1
-     - 10.1.1.4
-     - admin/admin
+     - 10.1.1.5
+     - admin/F5site02@
    * - kube-master1
-     - 10.1.1.7
+     - 10.1.1.11
      - ubuntu/ubuntu
 
        root/default
    * - kube-node1
-     - 10.1.1.8
+     - 10.1.1.12
      - ubuntu/ubuntu
 
        root/default
    * - kube-node2
-     - 10.1.1.9
+     - 10.1.1.13
      - ubuntu/ubuntu
 
        root/default

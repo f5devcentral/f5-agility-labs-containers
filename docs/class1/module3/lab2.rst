@@ -185,7 +185,7 @@ two files, a service and configmap.
 
    .. note:: You can see that the pool members IP address is the NGINX pod IP.
 
-#. Access your web application via **Firefox** on the **superjump**.
+#. Access your web application via **Firefox** on the **ocp-provisioner**.
 
    .. note:: Select the "mysite.f5demo.com" shortcut.
 

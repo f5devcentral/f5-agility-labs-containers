@@ -132,7 +132,7 @@ required files and launch them.
    .. note:: You can see that the pool members listed are all the cluster
       node IPs on port 32734. (**NodePort mode**)
 
-#. Access your web application via **Firefox** on the **superjump**.
+#. Access your web application via **Firefox** on the **ocp-provisioner**.
 
    .. note:: Select the "Hello, World" shortcut or type http://10.1.10.101 in the
       URL field.
