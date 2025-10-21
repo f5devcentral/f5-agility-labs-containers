@@ -76,7 +76,7 @@ On **kube-master1** we will create all the required files:
 
    .. image:: ../images/TMUI.png
 
-#. Login with username: **admin** and password: **admin**.
+#. Login with username: **admin** and password: **F5site02@**.
 
    .. image:: ../images/TMUILogin.png
 

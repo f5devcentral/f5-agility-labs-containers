@@ -46,9 +46,9 @@ Prep the Kubernetes Cluster
 
    .. code-block:: bash
 
-      git clone https://github.com/nginxinc/kubernetes-ingress/ --branch v2.4.2 ~/kubernetes-ingress
+      git clone https://github.com/nginxinc/kubernetes-ingress/ --branch v5.2.1 ~/kubernetes-ingress
 
-      cd ~/kubernetes-ingress/deployments/
+      cd ~/kubernetes-ingress
 
 Configure RBAC
 --------------
@@ -61,14 +61,14 @@ Configure RBAC
 
    .. code:: bash
 
-      kubectl apply -f common/ns-and-sa.yaml
+      kubectl apply -f deployments/common/ns-and-sa.yaml
 
 #. In this lab environment RBAC is enabled and you will need to enable access
    from the NGINX Service Account to the Kubernetes API.
 
    .. code:: bash
 
-      kubectl apply -f rbac/rbac.yaml
+      kubectl apply -f deployments/rbac/rbac.yaml
 
    .. note:: The ``ubuntu`` user is accessing the Kubernetes Cluster as a
       "Cluster Admin" and has privileges to apply RBAC permissions.
@@ -85,10 +85,7 @@ Create Common Resources
 
    .. code-block:: bash
 
-      kubectl apply -f common/crds/k8s.nginx.org_virtualservers.yaml
-      kubectl apply -f common/crds/k8s.nginx.org_virtualserverroutes.yaml
-      kubectl apply -f common/crds/k8s.nginx.org_transportservers.yaml
-      kubectl apply -f common/crds/k8s.nginx.org_policies.yaml
+      kubectl apply -f deploy/crds.yaml
 
 #. The Ingress Controller will use a "default" SSL certificate for requests
    that are not configured to use an explicit certificate. The following loads
@@ -96,7 +93,7 @@ Create Common Resources
 
    .. code:: bash
 
-      kubectl apply -f common/default-server-secret.yaml
+      kubectl apply -f examples/shared-examples/default-server-secret/default-server-secret.yaml
 
    .. note:: NGINX docs state "For testing purposes we include a self-signed
       certificate and key that we generated. However, we recommend that you use
@@ -106,7 +103,7 @@ Create Common Resources
 
    .. code:: bash
 
-      kubectl apply -f common/nginx-config.yaml
+      kubectl apply -f deployments/common/nginx-config.yaml
 
    .. note:: NGINX Ingress Controller makes use of a Kubernetes ConfigMap to
       store customizations to the NGINX+ configuration. Configuration
@@ -117,7 +114,7 @@ Create Common Resources
 
    .. code:: bash
 
-      kubectl apply -f common/ingress-class.yaml
+      kubectl apply -f deployments/common/ingress-class.yaml
 
    .. warning:: The Ingress Controller will fail to start without an
       IngressClass resource. This applies to Kubernetes >= v1.18.
@@ -136,7 +133,7 @@ We will be deploying NGINX as a deployment. There are two options:
 
    .. code:: bash
 
-      kubectl apply -f deployment/nginx-ingress.yaml
+      kubectl apply -f deployments/deployment/nginx-ingress.yaml
 
 #. Verify the deployment
 
@@ -163,7 +160,7 @@ the NGINX Ingress Controller.
 
    .. code:: bash
 
-      kubectl create -f service/nodeport.yaml
+      kubectl create -f deployments/service/nodeport.yaml
 
 #. Retrieve and record the **NodePort** number that follows "*80:*"
 
