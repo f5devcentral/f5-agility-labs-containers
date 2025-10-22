@@ -187,7 +187,7 @@ two files, a service and configmap.
 
 #. Access your web application via **Firefox** on the **ocp-provisioner**.
 
-   .. note:: Select the "mysite.f5demo.com" shortcut.
+   .. note:: Enter "mysite.f5demo.com" in the URL box.
 
    .. image:: ../images/nginx-access-app.png
 

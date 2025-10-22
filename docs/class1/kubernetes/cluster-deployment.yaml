@@ -42,5 +42,5 @@ spec:
             "--log-as3-response=true",
             "--agent=as3",
             "--as3-validation=false",
-            "--custom-resource-mode=true"
+            "--custom-resource-mode=false"
           ]

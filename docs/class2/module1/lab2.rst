@@ -114,6 +114,7 @@ App Deployment
    .. code-block:: bash
 
       10.1.10.101 mysite.f5demo.com
+      exit
 
 #. Now that we have deployed our application sucessfully, we can check the
    configuration on bigip. Go back to the TMUI session you opened in a previous task. If you need to open a new

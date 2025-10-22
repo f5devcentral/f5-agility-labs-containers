@@ -14,7 +14,7 @@ To do so we'll need to configure BIG-IP first.
 
 #. Go back to the TMUI session you opened in a previous task. If you need to open a new
    session go back to the **Deployment** tab of your UDF lab session at https://udf.f5.com 
-   and connect to **BIG-IP1** using the **TMUI** access method (*username*: **admin** and *password*: **admin**)
+   and connect to **BIG-IP1** using the **TMUI** access method (*username*: **admin** and *password*: **F5site02@**)
 
    .. image:: ../images/TMUI.png
 
@@ -145,7 +145,7 @@ CIS Deployment
    to obtain the MAC address from BIG-IP1. You'll want to copy the displayed "**MAC Address**" value.
 
    .. note:: If prompted, accept the authenticity of the host by typing "yes" and hitting Enter to continue.
-      The password is "**admin**"
+      The password is "**F5site02@**"
 
    .. code-block:: bash
 
@@ -208,7 +208,7 @@ CIS Deployment
 
    .. code-block:: bash
 
-      kubectl create secret generic bigip-login -n kube-system --from-literal=username=admin --from-literal=password=admin
+      kubectl create secret generic bigip-login -n kube-system --from-literal=username=admin --from-literal=password=F5site02@
       kubectl create serviceaccount k8s-bigip-ctlr -n kube-system
       kubectl create clusterrolebinding k8s-bigip-ctlr-clusteradmin --clusterrole=cluster-admin --serviceaccount=kube-system:k8s-bigip-ctlr
 
