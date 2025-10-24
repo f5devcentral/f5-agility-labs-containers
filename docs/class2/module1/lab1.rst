@@ -154,7 +154,7 @@ to hide our bigip credentials.
 
    .. code-block:: bash
 
-      oc create secret generic bigip-login -n kube-system --from-literal=username=admin --from-literal=password=admin
+      oc create secret generic bigip-login -n kube-system --from-literal=username=admin --from-literal=password=F5site02@
 
    You should see something similar to this:
 
@@ -215,7 +215,7 @@ to hide our bigip credentials.
 
    .. code-block:: bash
 
-      oc get deployment k8s-bigip-ctlr --namespace kube-system
+      oc get deployment k8s-bigip-deployment --namespace kube-system
 
    .. image:: ../images/f5-container-connector-launch-node-deployment-controller.png
 

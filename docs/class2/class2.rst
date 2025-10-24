@@ -23,5 +23,5 @@ We will leverage the following setup to configure the OpenShift environment.
      - **IP-ADDR**
      - **Credentials**
    * - bigip1
-     - 10.1.1.4
+     - 10.1.1.5
      - admin/F5site02@

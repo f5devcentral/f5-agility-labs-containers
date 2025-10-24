@@ -174,7 +174,7 @@ two files, a service and configmap.
    .. image:: ../images/f5-container-connector-check-app-bigipconfig-as3.png
 
    Here you can see a new Virtual Server, "**serviceMain**" was created,
-   listening on **10.1.1.4:80** in partition "**AS3**".
+   listening on **10.1.10.101:80** in partition "**AS3**".
 
 #. Check the Pools to see a new pool and the associated pool members.
 
@@ -185,9 +185,9 @@ two files, a service and configmap.
 
    .. note:: You can see that the pool members IP address is the NGINX pod IP.
 
-#. Access your web application via **Firefox** on the **superjump**.
+#. Access your web application via **Firefox** on the **ocp-provisioner**.
 
-   .. note:: Select the "mysite.f5demo.com" shortcut.
+   .. note:: Enter "mysite.f5demo.com" in the URL box.
 
    .. image:: ../images/nginx-access-app.png
 

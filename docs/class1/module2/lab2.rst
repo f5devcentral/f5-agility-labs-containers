@@ -76,7 +76,7 @@ On **kube-master1** we will create all the required files:
 
    .. image:: ../images/TMUI.png
 
-#. Login with username: **admin** and password: **admin**.
+#. Login with username: **admin** and password: **F5site02@**.
 
    .. image:: ../images/TMUILogin.png
 
@@ -85,24 +85,24 @@ On **kube-master1** we will create all the required files:
    .. warning:: Don't forget to select the "kubernetes" partition or you'll
       see nothing.
 
-   Here you can see a new Virtual Server, "**ingress_10.1.1.4_80**" was created,
-   listening on **10.1.1.4:80** in partition "**kubernetes**".
+   Here you can see a new Virtual Server, "**ingress_10.1.10.101_80**" was created,
+   listening on **10.1.10.101:80** in partition "**kubernetes**".
 
    .. image:: ../images/f5-container-connector-check-app-ingress2.png
 
 #. Check the Pools to see a new pool and the associated pool members.
 
    Browse to: :menuselection:`Local Traffic --> Pools` and select the
-   "**ingress_default_f5-hello-world-web**" pool. Click the Members tab.
+   "**ingress_default_f5_hello_world_web_f5_hello_world_web_8080**" pool. Click the Members tab.
 
    .. image:: ../images/f5-container-connector-check-app-ingress-pool2.png
 
    .. note:: You can see that the pool members IP addresses are assigned from
       the overlay network (**ClusterIP mode**)
 
-#. Access your web application via **Firefox** on the **superjump**.
+#. Access your web application via **Firefox** on the **ocp-provioner**.
 
-   .. note:: Select the "Hello, World" shortcut or type http://10.1.1.4 in the
+   .. note:: Select the "Hello, World" shortcut or type http://10.1.10.101 in the
       URL field.
 
    .. image:: ../images/f5-container-connector-access-app.png
@@ -110,7 +110,7 @@ On **kube-master1** we will create all the required files:
 #. To check traffic distribution, hit Refresh many times on your open browser
    session. Then go back to the open BIG-IP TMUI management console on firefox.
 
-   Browse to: :menuselection:`Local Traffic --> Pools --> Pool list --> ingress_default_f5-hello-world-web --> Statistics`
+   Browse to: :menuselection:`Local Traffic --> Pools --> Pool list --> ingress_default_f5_hello_world_web_f5_hello_world_web_8080 --> Statistics`
 
    .. image:: ../images/f5-container-connector-check-app-bigip-stats-ingress-clusterip.png
 

@@ -122,34 +122,34 @@ required files and launch them.
    .. warning:: Don't forget to select the "kubernetes" partition or you'll
       see nothing.
 
-   Here you can see a new Virtual Server, "ingress_10.1.1.4_80" was created,
-   listening on 10.1.1.4:80 in partition "kubernetes".
+   Here you can see a new Virtual Server, "ingress_10.1.10.101_80" was created,
+   listening on 10.1.10.101:80 in partition "kubernetes".
 
    .. image:: ../images/f5-container-connector-check-app-ingress.png
 
 #. Check the Pools to see a new pool and the associated pool members.
 
    Browse to: :menuselection:`Local Traffic --> Pools` and select the
-   "ingress_default_f5-hello-world-web" pool. Click the Members tab.
+   "ingress_default_f5_hello_world_web_f5_hello_world_web_8080" pool. Click the Members tab.
 
    .. image:: ../images/f5-container-connector-check-app-ingress-pool.png
 
    .. note:: You can see that the pool members listed are all the cluster
       node IPs on port 32722. (**NodePort mode**)
 
-#. Now let's test access to the new web application "*through*"" **Firefox** on **superjump**.
+#. Now let's test access to the new web application "*through*"" **Firefox** on **ocp-provisioner**.
    To do this, browse back to the **Deployment** tab of your UDF lab session at
-   https://udf.f5.com and connect to **superjump** using the **Firefox** access method.
+   https://udf.f5.com and connect to **ocp-provisioner** using the **Firefox** access method.
 
    .. note:: The web application is not directly accessible from the public Internet.
-      But since the **superjump** system is connected to the same internal virtual lab network 
+      But since the **ocp-provisioner** system is connected to the same internal virtual lab network 
       we can use the **Firefox** access method because it provides *browser-in-a-browser*
       functionality that allows remote browsing to this new private web site.
 
    .. image:: ../images/udffirefox.png
 
-#. The *Firefox* application installed on the superjump system's will appear in your browser (i.e., a *browser-in-a-browser*).
-   Find and click on the "**Hello, World**" bookmark/shortcut, or type http://10.1.1.4 in the appropriate URL field.
+#. The *Firefox* application installed on the ocp-provisioner system's will appear in your browser (i.e., a *browser-in-a-browser*).
+   Find and click on the "**Hello, World**" bookmark/shortcut, or type http://10.1.10.101 in the appropriate URL field.
 
    .. image:: ../images/ffhelloworld.png
 
@@ -159,7 +159,7 @@ required files and launch them.
    session. Then go back to the BIG-IP TMUI management console.
 
    Browse to: :menuselection:`Local Traffic --> Pools --> Pool list -->
-   ingress_default_f5-hello-world-web --> Statistics`
+   ingress_default_f5_hello_world_web_f5_hello_world_web_8080 --> Statistics`
 
    .. image:: ../images/f5-container-connector-check-app-ingress-stats.png
 
