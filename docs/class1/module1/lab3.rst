@@ -118,7 +118,7 @@ required files and launch them.
    Browse to :menuselection:`Local Traffic --> Virtual Servers`
 
    Here you can see a new Virtual Server, "**serviceMain**" was created,
-   listening on **10.1.1.4:80** in partition "**AS3**".
+   listening on **10.1.10.101:80** in partition "**AS3**".
 
    .. image:: ../images/f5-container-connector-check-app-bigipconfig-as3.png
 
@@ -132,9 +132,9 @@ required files and launch them.
    .. note:: You can see that the pool members listed are all the cluster
       node IPs on port 32734. (**NodePort mode**)
 
-#. Access your web application via **Firefox** on the **superjump**.
+#. Access your web application via **Firefox** on the **ocp-provisioner**.
 
-   .. note:: Select the "Hello, World" shortcut or type http://10.1.1.4 in the
+   .. note:: Select the "Hello, World" shortcut or type http://10.1.10.101 in the
       URL field.
 
    .. image:: ../images/f5-container-connector-access-app.png

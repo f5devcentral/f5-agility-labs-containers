@@ -14,7 +14,7 @@ To do so we'll need to configure BIG-IP first.
 
 #. Go back to the TMUI session you opened in a previous task. If you need to open a new
    session go back to the **Deployment** tab of your UDF lab session at https://udf.f5.com 
-   and connect to **BIG-IP1** using the **TMUI** access method (*username*: **admin** and *password*: **admin**)
+   and connect to **BIG-IP1** using the **TMUI** access method (*username*: **admin** and *password*: **F5site02@**)
 
    .. image:: ../images/TMUI.png
 
@@ -42,7 +42,7 @@ To do so we'll need to configure BIG-IP first.
 
    .. code-block:: bash
 
-      ssh admin@10.1.1.4 tmsh create auth partition kubernetes
+      ssh admin@10.1.1.5 tmsh create auth partition kubernetes
 
 #. Install AS3 via the management console
 
@@ -64,7 +64,7 @@ To do so we'll need to configure BIG-IP first.
 
    .. code-block:: bash
 
-      ssh admin@10.1.1.4 tmsh create net tunnels vxlan fl-vxlan { app-service none port 8472 flooding-type none }
+      ssh admin@10.1.1.5 tmsh create net tunnels vxlan fl-vxlan { app-service none port 8472 flooding-type none }
 
 #. Create a vxlan tunnel.
 
@@ -72,7 +72,7 @@ To do so we'll need to configure BIG-IP first.
    - Create a new tunnel called "**fl-tunnel**"
    - Set the Profile to the one previously created called "**fl-vxlan**"
    - set the Key = **1**
-   - Set the Local Address to **10.1.1.4**
+   - Set the Local Address to **10.1.10.101**
    - Click **Finished**
 
    .. image:: ../images/create-fl-vxlan-tunnel.png
@@ -81,7 +81,7 @@ To do so we'll need to configure BIG-IP first.
 
    .. code-block:: bash
 
-      ssh admin@10.1.1.4 tmsh create net tunnels tunnel fl-tunnel { app-service none key 1 local-address 10.1.1.4 profile fl-vxlan }
+      ssh admin@10.1.1.5 tmsh create net tunnels tunnel fl-tunnel { app-service none key 1 local-address 10.1.10.101 profile fl-vxlan }
 
 #. Create the vxlan tunnel self-ip
 
@@ -99,7 +99,7 @@ To do so we'll need to configure BIG-IP first.
 
    - Browse to: :menuselection:`Network --> Self IPs`
    - Create a new Self-IP called "**fl-vxlan-selfip**"
-   - Set the IP Address to "**10.244.20.1**"
+   - Set the IP Address to "**10.42.20.1**"
    - Set the Netmask to "**255.255.0.0**"
    - Set the VLAN / Tunnel to "**fl-tunnel**" (*Created earlier*)
    - Set Port Lockdown to "**Allow All**"
@@ -111,7 +111,7 @@ To do so we'll need to configure BIG-IP first.
 
    .. code-block:: bash
 
-      ssh admin@10.1.1.4 tmsh create net self fl-vxlan-selfip { address 10.244.20.1/16 vlan fl-tunnel allow-service all }
+      ssh admin@10.1.1.5 tmsh create net self fl-vxlan-selfip { address 10.42.20.1/16 vlan fl-tunnel allow-service all }
 
 CIS Deployment
 --------------
@@ -145,11 +145,11 @@ CIS Deployment
    to obtain the MAC address from BIG-IP1. You'll want to copy the displayed "**MAC Address**" value.
 
    .. note:: If prompted, accept the authenticity of the host by typing "yes" and hitting Enter to continue.
-      The password is "**admin**"
+      The password is "**F5site02@**"
 
    .. code-block:: bash
 
-      ssh admin@10.1.1.4 tmsh show net tunnels tunnel fl-tunnel all-properties
+      ssh admin@10.1.1.5 tmsh show net tunnels tunnel fl-tunnel all-properties
 
    .. image:: ../images/get-fl-tunnel-mac-addr.png
 
@@ -159,7 +159,7 @@ CIS Deployment
 
       .. code-block:: bash
          
-         ssh admin@10.1.1.4 tmsh show net tunnels tunnel fl-tunnel all-properties | grep MAC | cut -c 33-51
+         ssh admin@10.1.1.5 tmsh show net tunnels tunnel fl-tunnel all-properties | grep MAC | cut -c 33-51
 
 #. In the Web Shell window (*command line of kube-master1*), edit the **bigip-node.yaml**
    file to change the highlighted MAC address with the MAC address copied from the previous step.
@@ -208,7 +208,7 @@ CIS Deployment
 
    .. code-block:: bash
 
-      kubectl create secret generic bigip-login -n kube-system --from-literal=username=admin --from-literal=password=admin
+      kubectl create secret generic bigip-login -n kube-system --from-literal=username=admin --from-literal=password=F5site02@
       kubectl create serviceaccount k8s-bigip-ctlr -n kube-system
       kubectl create clusterrolebinding k8s-bigip-ctlr-clusteradmin --clusterrole=cluster-admin --serviceaccount=kube-system:k8s-bigip-ctlr
 

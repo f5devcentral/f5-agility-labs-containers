@@ -74,7 +74,7 @@ CIS Deployment
 
    .. code-block:: bash
 
-      oc create secret generic bigip-login -n kube-system --from-literal=username=admin --from-literal=password=admin
+      oc create secret generic bigip-login -n kube-system --from-literal=username=admin --from-literal=password=F5site02@
       oc create serviceaccount k8s-bigip-ctlr -n kube-system
       oc create clusterrolebinding k8s-bigip-ctlr-clusteradmin --clusterrole=cluster-admin --serviceaccount=kube-system:k8s-bigip-ctlr
 

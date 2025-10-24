@@ -20,7 +20,7 @@ BIG-IP Setup
 
    .. image:: ../images/TMUI.png
 
-#. Login with username: **admin** and password: **admin**.
+#. Login with username: **admin** and password: **F5site02@**.
 
    .. image:: ../images/TMUILogin.png
 
@@ -102,15 +102,11 @@ Explore the Kubernetes Cluster
 
       su ubuntu
 
-#. "**git**" the lab files and set the working directy with the "**cd**" command. 
+#. Set the working directy with the "**cd**" command. 
 
-   .. note:: These files should already be there and automatically updated upon login of the ubuntu user account.
-
-   .. image:: ../images/gitrepo.png
+   .. note:: All the files in the working directory are available upon login of the ubuntu user account.
 
    .. code-block:: bash
-
-      git clone -b develop https://github.com/f5devcentral/f5-agility-labs-containers.git ~/agilitydocs
 
       cd ~/agilitydocs/docs/class1/kubernetes
 
@@ -159,7 +155,7 @@ to hide our bigip credentials.
 
    .. code-block:: bash
 
-      kubectl create secret generic bigip-login -n kube-system --from-literal=username=admin --from-literal=password=admin
+      kubectl create secret generic bigip-login -n kube-system --from-literal=username=admin --from-literal=password=F5site02@
 
    You should see something similar to this:
 
@@ -220,7 +216,7 @@ to hide our bigip credentials.
 
    .. code-block:: bash
 
-      kubectl get deployment k8s-bigip-ctlr --namespace kube-system
+      kubectl get deployment k8s-bigip-ctlr-deployment --namespace kube-system
 
    .. image:: ../images/f5-container-connector-launch-deployment-controller.png
 
@@ -255,54 +251,3 @@ check the logs, kubectl command or docker command.
       kubectl logs k8s-bigip-ctlr-7469c978f9-6hvbv -n kube-system
 
    .. image:: ../images/f5-container-connector-check-logs-kubectl.png
-
-#. Using docker logs command: From the previous check we know the container
-   is running on kube-node2. On your current session with kube-master1 SSH to
-   kube-node2 first and then run the docker command:
-
-   .. important:: Be sure to check which Node your "connector" is running on.
-
-   # If directed to, accept the authenticity of the host by typing "yes" and hitting Enter to continue.
-
-   .. code-block:: bash
-
-      ssh kube-node2
-
-      sudo docker ps
-
-   Here we can see our container ID is "e7f69e3ad5c6"
-
-   .. image:: ../images/f5-container-connector-find-dockerID--controller-container.png
-
-   Now we can check our container logs:
-
-   .. code-block:: bash
-
-      sudo docker logs e7f69e3ad5c6
-
-   .. image:: ../images/f5-container-connector-check-logs-controller-container.png
-
-   .. important:: The log messages here are identical to the log messages
-      displayed in the previous kubectl logs command.
-
-#. Exit kube-node2 back to kube-master1
-
-   .. code-block:: bash
-
-      exit
-
-#. You can connect to your container with kubectl as well. This is something
-   not typically needed but support may direct you to do so.
-
-   .. important:: Be sure the previous command to exit **kube-node2** back to
-      kube-master1 was successfull.
-
-   .. code-block:: bash
-
-      kubectl exec -it k8s-bigip-ctlr-7469c978f9-6hvbv -n kube-system  -- /bin/sh
-
-      cd /app
-
-      ls -la
-
-      exit

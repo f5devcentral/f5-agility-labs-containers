@@ -1,47 +1,61 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: k8s-bigip-ctlr
+  name: k8s-bigip-ctlr-deployment
   namespace: kube-system
 spec:
+  # DO NOT INCREASE REPLICA COUNT
   replicas: 1
   selector:
     matchLabels:
-      app: k8s-bigip-ctlr
+      app: k8s-bigip-ctlr-deployment
   template:
     metadata:
-      name: k8s-bigip-ctlr
       labels:
-        app: k8s-bigip-ctlr
+        app: k8s-bigip-ctlr-deployment
     spec:
-      serviceAccountName: k8s-bigip-ctlr
+      # Name of the Service Account bound to a Cluster Role with the required
+      # permissions
       containers:
-        - name: k8s-bigip-ctlr
-          image: "f5networks/k8s-bigip-ctlr:2.4.1"
-          imagePullPolicy: IfNotPresent
+        - name: cntr-ingress-svcs
+          image: registry.connect.redhat.com/f5networks/cntr-ingress-svcs:latest
           env:
             - name: BIGIP_USERNAME
               valueFrom:
                 secretKeyRef:
+                  # Replace with the name of the Secret containing your login
+                  # credentials
                   name: bigip-login
                   key: username
             - name: BIGIP_PASSWORD
               valueFrom:
                 secretKeyRef:
+                  # Replace with the name of the Secret containing your login
+                  # credentials
                   name: bigip-login
                   key: password
           command: ["/app/bin/k8s-bigip-ctlr"]
           args: [
-            "--bigip-username=$(BIGIP_USERNAME)",
-            "--bigip-password=$(BIGIP_PASSWORD)",
-            "--bigip-url=https://10.1.1.4:8443",
-            "--insecure=true",
-            "--bigip-partition=okd",
-            "--namespace=default",
-            "--manage-routes=true",
-            "--route-vserver-addr=10.1.1.4",
-            "--route-http-vserver=okd_http_vs",
-            "--route-https-vserver=okd_https_vs",
-            "--route-label=hello-world",
-            "--pool-member-type=nodeport"
+            # See the k8s-bigip-ctlr documentation for information about
+            # all config options
+            # https://clouddocs.f5.com/containers/latest/
+              "--bigip-username=$(BIGIP_USERNAME)",
+              "--bigip-password=$(BIGIP_PASSWORD)",
+              "--bigip-url=10.1.1.5",
+              "--bigip-partition=ocp",
+              "--namespace=default",
+              "--pool-member-type=nodeport",
+              "--enable-ipv6=false",
+              #"--openshift-sdn-name=/Common/openshift_vxlan",
+              "--log-level=DEBUG",
+              "--insecure=true",
+              "--manage-routes=true",
+              "--route-vserver-addr=10.1.10.101",
+              "--route-http-vserver=ocp_http_vs",
+              "--route-https-vserver=ocp_https_vs",        
+              #"--override-as3-declaration=default/cafe-override",
+              "--as3-validation=true",
+              "--log-as3-response=true",
+              "--disable-teems=true",
           ]
+      serviceAccountName: k8s-bigip-ctlr
