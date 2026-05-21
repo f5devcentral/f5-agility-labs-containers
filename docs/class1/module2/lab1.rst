@@ -113,6 +113,16 @@ To do so we'll need to configure BIG-IP first.
 
       ssh admin@10.1.1.5 tmsh create net self fl-vxlan-selfip { address 10.42.20.1/16 vlan fl-tunnel allow-service all }
 
+#. Create route to Flannel network
+
+   - Browse to: :menuselection:`Network --> Routes`
+   - Create a new route called "**flannel_route**"
+   - Set the Destination to "**10.244.0.0**"
+   - Set the Netmask to "**255.255.0.0**"
+   - Set the Resource to "Use VLAN / Tunnle"
+   - Set the VLAN / Tunnel to "**fl-tunnel**" (*Created earlier*)
+   - Click **Finished**
+
 CIS Deployment
 --------------
 
