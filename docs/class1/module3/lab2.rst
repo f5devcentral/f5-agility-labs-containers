@@ -174,7 +174,7 @@ two files, a service and configmap.
    .. image:: ../images/f5-container-connector-check-app-bigipconfig-as3.png
 
    Here you can see a new Virtual Server, "**serviceMain**" was created,
-   listening on **10.1.10.101:80** in partition "**AS3**".
+   listening on **10.1.1.4:80** in partition "**AS3**".
 
 #. Check the Pools to see a new pool and the associated pool members.
 
