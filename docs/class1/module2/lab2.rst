@@ -85,8 +85,8 @@ On **kube-master1** we will create all the required files:
    .. warning:: Don't forget to select the "kubernetes" partition or you'll
       see nothing.
 
-   Here you can see a new Virtual Server, "**ingress_10.1.10.101_80**" was created,
-   listening on **10.1.10.101:80** in partition "**kubernetes**".
+   Here you can see a new Virtual Server, "**ingress_10.1.1.4_80**" was created,
+   listening on **10.1.1.4:80** in partition "**kubernetes**".
 
    .. image:: ../images/f5-container-connector-check-app-ingress2.png
 
@@ -102,7 +102,7 @@ On **kube-master1** we will create all the required files:
 
 #. Access your web application via **Firefox** on the **ocp-provioner**.
 
-   .. note:: Select the "Hello, World" shortcut or type http://10.1.10.101 in the
+   .. note:: Select the "Hello, World" shortcut or type http://10.1.1.4 in the
       URL field.
 
    .. image:: ../images/f5-container-connector-access-app.png
