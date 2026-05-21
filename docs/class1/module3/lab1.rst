@@ -178,7 +178,7 @@ the NGINX Ingress Controller.
 Access NGINX From Outside the Cluster
 -------------------------------------
 
-#. Go back to your UDF **ocp-provisioner -> Firefox** access window and "browse" to
+#. Go back to your UDF **superjump -> Firefox** access window and "browse" to
    the *kube-master1*'s internal host IP address (10.1.1.11) with the previously recorded port.
    For example: 
 
