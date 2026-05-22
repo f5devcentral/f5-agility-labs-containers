@@ -35,14 +35,14 @@ Lab 4.2 - Deploy the Cafe Application
 Test the Application
 --------------------
 
-Now let's test access to the new web application "*through*"" **Firefox** on **ocp-provisioner**.
+Now let's test access to the new web application "*through*"" **Firefox** on **superjump**.
 
 #. Go back to the Firefox session you opened in a previous task. If you need to open a new session,
    browse back to the **Deployment** tab of your UDF lab session at
-   https://udf.f5.com and connect to **ocp-provisioner** using the **Firefox** access method.
+   https://udf.f5.com and connect to **superjump** using the **Firefox** access method.
 
    .. note:: The web application is not directly accessible from the public Internet.
-      But since the **ocp-provisioner** system is connected to the same internal virtual lab network 
+      But since the **superjump** system is connected to the same internal virtual lab network 
       we can use the **Firefox** access method because it provides *browser-in-a-browser*
       functionality that allows remote browsing to this new private web site.
 

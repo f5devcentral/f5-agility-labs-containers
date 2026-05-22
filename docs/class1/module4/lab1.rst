@@ -148,7 +148,7 @@ Create an IngressLink Resource
 #. Inspect the IngressLink resource
 
    .. attention:: Ensure the IP ADDR in the IngressLink resource matches the
-      required IP. In this lab we're using 10.1.10.101 as the virtual IP. This
+      required IP. In this lab we're using 10.1.1.4 as the virtual IP. This
       IP ADDR will be used to configure the BIG-IP device to load balance the
       Ingress Controller resources.
 
@@ -193,8 +193,8 @@ Create an IngressLink Resource
    .. warning:: Don't forget to select the "kubernetes" partition or you'll
    see nothing.
 
-   Here you can see two new Virtual Servers, "**ingress_link_crd_10.1.10.101_80**" and
-   "**ingress_link_crd_10.1.10.101_443**" was created, in partition "**kubernetes**".
+   Here you can see two new Virtual Servers, "**ingress_link_crd_10_1_1_4_80**" and
+   "**ingress_link_crd_10_1_1_4_443**" was created, in partition "**kubernetes**".
 
    .. image:: ../images/ingress-link-vs.png
 
