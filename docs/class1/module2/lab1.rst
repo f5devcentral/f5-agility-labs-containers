@@ -42,7 +42,7 @@ To do so we'll need to configure BIG-IP first.
 
    .. code-block:: bash
 
-      ssh admin@10.1.1.5 tmsh create auth partition kubernetes
+      ssh admin@10.1.1.4 tmsh create auth partition kubernetes
 
 #. Install AS3 via the management console
 
@@ -64,7 +64,7 @@ To do so we'll need to configure BIG-IP first.
 
    .. code-block:: bash
 
-      ssh admin@10.1.1.5 tmsh create net tunnels vxlan fl-vxlan { app-service none port 8472 flooding-type none }
+      ssh admin@10.1.1.4 tmsh create net tunnels vxlan fl-vxlan { app-service none port 8472 flooding-type none }
 
 #. Create a vxlan tunnel.
 
@@ -72,7 +72,7 @@ To do so we'll need to configure BIG-IP first.
    - Create a new tunnel called "**fl-tunnel**"
    - Set the Profile to the one previously created called "**fl-vxlan**"
    - set the Key = **1**
-   - Set the Local Address to **10.1.10.101**
+   - Set the Local Address to **10.1.1.4**
    - Click **Finished**
 
    .. image:: ../images/create-fl-vxlan-tunnel.png
@@ -81,7 +81,7 @@ To do so we'll need to configure BIG-IP first.
 
    .. code-block:: bash
 
-      ssh admin@10.1.1.5 tmsh create net tunnels tunnel fl-tunnel { app-service none key 1 local-address 10.1.10.101 profile fl-vxlan }
+      ssh admin@10.1.1.4 tmsh create net tunnels tunnel fl-tunnel { app-service none key 1 local-address 10.1.1.4 profile fl-vxlan }
 
 #. Create the vxlan tunnel self-ip
 
@@ -111,7 +111,7 @@ To do so we'll need to configure BIG-IP first.
 
    .. code-block:: bash
 
-      ssh admin@10.1.1.5 tmsh create net self fl-vxlan-selfip { address 10.42.20.1/16 vlan fl-tunnel allow-service all }
+      ssh admin@10.1.1.4 tmsh create net self fl-vxlan-selfip { address 10.42.20.1/16 vlan fl-tunnel allow-service all }
 
 #. Create route to Flannel network
 
@@ -159,7 +159,7 @@ CIS Deployment
 
    .. code-block:: bash
 
-      ssh admin@10.1.1.5 tmsh show net tunnels tunnel fl-tunnel all-properties
+      ssh admin@10.1.1.4 tmsh show net tunnels tunnel fl-tunnel all-properties
 
    .. image:: ../images/get-fl-tunnel-mac-addr.png
 
@@ -169,7 +169,7 @@ CIS Deployment
 
       .. code-block:: bash
          
-         ssh admin@10.1.1.5 tmsh show net tunnels tunnel fl-tunnel all-properties | grep MAC | cut -c 33-51
+         ssh admin@10.1.1.4 tmsh show net tunnels tunnel fl-tunnel all-properties | grep MAC | cut -c 33-51
 
 #. In the Web Shell window (*command line of kube-master1*), edit the **bigip-node.yaml**
    file to change the highlighted MAC address with the MAC address copied from the previous step.
