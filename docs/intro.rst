@@ -26,9 +26,6 @@ The image below represents an overview of the lab environment, which is comprise
 * kube-master1
 * kube-node1
 * kube-node2
-* okd-master1
-* okd-node1
-* okd-node2
 
 .. image:: /_static/intro/udf-start.png
    :width: 900

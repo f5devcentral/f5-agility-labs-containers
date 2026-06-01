@@ -1,6 +1,0 @@
-#!/bin/bash
-
-#create container f5-hello-world w/ configmap
-oc create -f deployment-hello-world.yaml
-oc create -f nodeport-service-hello-world.yaml
-oc create -f configmap-hello-world.yaml

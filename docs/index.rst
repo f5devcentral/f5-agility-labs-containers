@@ -9,12 +9,6 @@ The purpose of these labs is to give you better understanding of...
   - How to install and use F5 CIS
   - How to launch a web server and use NodePort configuration
 
-- **OpenShift with F5 Container Ingress Service (CIS)**
-
-  - Introduction to OpenShift
-  - How to install and use F5 CIS
-  - How to launch a web server and use ClusterIP configuration
-
 - **Using F5 Application Services 3 (AS3)**
 
   - Quick intro to consuming a full declarative JSON API programming interface
