@@ -18,7 +18,7 @@ BIG-IP Setup
 #. Browse to the **Deployment** tab of your UDF lab session at https://udf.f5.com 
    and connect to **BIG-IP1** using the **TMUI** access method.
 
-   .. image:: ../images/TMUI.png
+   .. image:: ../images/udf-start.png
 
 #. Login with username: **admin** and password: **F5site02@**.
 
