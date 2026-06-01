@@ -137,18 +137,18 @@ required files and launch them.
    .. note:: You can see that the pool members listed are all the cluster
       node IPs on port 32722. (**NodePort mode**)
 
-#. Now let's test access to the new web application "*through*"" **Firefox** on **ocp-provisioner**.
+#. Now let's test access to the new web application "*through*"" **Firefox** on **superjump**.
    To do this, browse back to the **Deployment** tab of your UDF lab session at
-   https://udf.f5.com and connect to **ocp-provisioner** using the **Firefox** access method.
+   https://udf.f5.com and connect to **superjump** using the **Firefox** access method.
 
    .. note:: The web application is not directly accessible from the public Internet.
-      But since the **ocp-provisioner** system is connected to the same internal virtual lab network 
+      But since the **superjump** system is connected to the same internal virtual lab network 
       we can use the **Firefox** access method because it provides *browser-in-a-browser*
       functionality that allows remote browsing to this new private web site.
 
    .. image:: ../images/udffirefox.png
 
-#. The *Firefox* application installed on the ocp-provisioner system's will appear in your browser (i.e., a *browser-in-a-browser*).
+#. The *Firefox* application installed on the superjump system's will appear in your browser (i.e., a *browser-in-a-browser*).
    Find and click on the "**Hello, World**" bookmark/shortcut, or type http://10.1.1.4 in the appropriate URL field.
 
    .. image:: ../images/ffhelloworld.png
