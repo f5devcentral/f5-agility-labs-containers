@@ -46,7 +46,7 @@ Prep the Kubernetes Cluster
 
    .. code-block:: bash
 
-      git clone https://github.com/nginxinc/kubernetes-ingress/ --branch v5.2.1 ~/kubernetes-ingress
+      git clone https://github.com/nginxinc/kubernetes-ingress/ --branch v2.4.2 ~/kubernetes-ingress
 
       cd ~/kubernetes-ingress
 
