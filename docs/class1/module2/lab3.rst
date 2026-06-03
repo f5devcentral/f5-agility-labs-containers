@@ -145,12 +145,14 @@ On **kube-master1** we will create all the required files:
       kubectl delete -f deployment-hello-world.yaml
 
    .. note:: Be sure to verify the virtual server and "AS3" partition were
-      removed from BIG-IP.
+      removed from BIG-IP.  If necessary, run the following command to remove any remaining AS3 declaration:
+
+   .. code-block:: bash
+      curl -sku admin:F5site02@ -X DELETE https://10.1.1.4:8443/mgmt/shared/appsvcs/declare/AS3
+
 
 #. The next modules are **OPTIONAL**. If instructed to skip be sure to exit
-   your current SSH session with **kube-master1** first. Then click here to
-   start `Class 2: OpenShift with Container Ingress Service
-   <../../class2/class2.html>`_. Otherwise click "Next" below.
+   your current SSH session with **kube-master1** first. Otherwise click "Next" below.
 
    .. code-block:: bash
 
