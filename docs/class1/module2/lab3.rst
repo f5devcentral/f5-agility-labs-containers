@@ -148,6 +148,7 @@ On **kube-master1** we will create all the required files:
       removed from BIG-IP.  If necessary, run the following command to remove any remaining AS3 declaration:
 
    .. code-block:: bash
+      
       curl -sku admin:F5site02@ -X DELETE https://10.1.1.4:8443/mgmt/shared/appsvcs/declare/AS3
 
 
